@@ -1,0 +1,11 @@
+﻿
+ New things:
+ 1. Sizes logic. Now matters only GraphArea::ContentSize
+ 2. Now all vertices and edges positioned in GraphArea using TOP-LEFT corner as the position coordinates (previously coordinates was pointing at the object center)
+
+
+Add edge labels - labels on path
+http://www.codeproject.com/Articles/30090/Text-On-A-Path-in-WPF
+
+Use DrawVisual for edges at least... performance
+

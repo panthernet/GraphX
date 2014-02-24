@@ -1,0 +1,1 @@
+﻿This example shows how to configure and create graph using automatic methods.

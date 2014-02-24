@@ -1,0 +1,200 @@
+﻿RELEASE 2.0.2
++ Fixed labels rendering for parallel edges. Now they are displayed separately for each edge.
++ Fixed async calculations being broken due to LogicCore property became dependency
++ Some code refactoring. Minor performance improvements.
+
+RELEASE 2.0.1
++ Added GraphArea::AddCustomChildControl() and GraphArea::RemoveCustomChildControl() methods to make the possibility to add any custom controls that are not vertex or edge.
++ Added ZoomControl::ToContentRectangle() method which translates screen rectangle coordinates to content rectangle coordinates
++ Added correct endpoints rendering for parallel edges on a rectangular vertex shape (thanks ro bleibold)
++ Added some hooks for ZoomControl to notify Presenter::RenderTransform on scale/translation changes. Now bindings to that property are correctly refreshed.
++ Added additional handling of custom objects in GraphArea (eg. clearing)
++ Added dependency property for GraphArea::LogicCore
++ Added new property GraphArea::EnableVisualPropsRecovery. Gets or sets if visual properties such as edge dash style or vertex shape should be automaticaly reapplied to visuals when graph is regenerated.
+	Turning this off can save a bit of performance if you don't use custom values.
++ Added new property GraphArea::EnableVisualPropsApply. Gets or sets if visual properties such as edge dash style or vertex shape should be automaticaly applied to newly added visuals which are added using AddVertex() or AddEdge() or similar methods.
+	Turning this off can save a bit of performance if you don't use custom values and making many manual edge/vertex create or remove operations.
++ Added GraphArea::SetVerticesHighlight() and GraphArea::SetEdgesHighlight() methods for easier highlight feature handling.
++ Improved some showcase code
++ Improved GraphArea code performance (slightly)
++ Fixed minimap rectangle drag issue
++ Fixed issue with ZoomControl area selection by Ctrl+Alt+Click
++ Fixed issue with GraphArea::VertexSelected event
++ Fixed issue with inproper overlap removal work (that issue affected some algorithms vis) using new coordinates system
++ Fixed issue with incorrect rendering of parallel edges (thanks to bleibold)
+- GraphArea::Children property has been hidden. Use EdgesList and VertexList properties and corresponding methods instead.
+
+
+RELEASE 2.0: PORT-READY Edition
++ Spearated GraphX into the 3 projects: GraphX.Common, GraphX.Logic and GraphX.Controls. Each project serves its own purpose.
+  * *GraphX.Logic* contains all the logic and algorithms 
+  * *GraphX.Common* contains common objects between logic and visual controls
+  * *GraphX.Controls* contains visual controls and all associated classes
++ Added GraphArea.LogicCore property that must be set in order to be able to work with GraphArea
++ Added parallel edges logic call in *GraphArea.UpdateAllEdges()* method
++ Added some code improvements and corrections, made some classes internal, abstract or sealed
++ Added *EdgeControl::AlignLabelsToEdges* and *EdgeControl::LabelVerticalOffset* properties that implements edge labels alignment to edges at different angles.
+	Labels now can be placed at the same angle as edge is drawn and optionaly offseted up or down to not overlap the edge itself.
++ Added some recently implemented features to Showcase app
++ Added optional param to *GraphArea::GenerateAllEdges()* that enables GraphArea layout update before edges calculation. True by default.
++ Added minimap from Zoombox to ZoomControl and changed some of its features.
++ Added new method *ZoomControl::ZoomToContent()* that should be used instead of ZoomTo() method
++ Added *ZoomControl* display in VS design view with minimap preview
++ Slightly improved rendering performance for large graphs
++ Fixed long living issue with zoom content resize and vertex drag which involves following global changes:
+	+ Correct GraphArea size rectangle can now be only determined by *GraphArea::ContentSize* property which contains rectangle that includes all visuals. GraphArea visual size is ALWAYS fixed at (10,10).
+	+ Now all vertices and edges positioned in *GraphArea* using TOP-LEFT corner as the position coordinates (previously coordinates was pointing at the object center).
+	+ ZoomControl now closely tied with GraphX, though it can be made universal
++ Fixed edge labels rendering issue
++ Fixed some showcase app exceptions
++ Fixed edge labeling showcase example
++ Fixed GraphArea in design diplay mode
++ Fixed ParameterizedLayoutAlgorithm exception (thanks to thinkJD)
++ Fixed parallel edges calculations in case of opposite-directed edges (thanks to thinkJD)
++ Fixed invalid parallel edges detection in some cases (thanks to bleibold)
+- Image export currently supports only *ZoomControl* visible area export
+- Moved *ImageType* enum into *GraphX* namespace
+- Moved all properties associated with logic from GraphArea to *GXLogicCore* class
+- Removed *Zoombox* from project completely (now only *ZoomControl* is supported and being actively enchanced)
+
+
+RELEASE 1.0.1
++ Changed *ExportToImage()* parameters: added *useZoomControlSurface* param that enables zoom control parent visual space to be used for export instead *whole GraphArea* panel.
+	Using this technique it is possible to export graphs with negative vertices coordinates.
++ Added common interface *IZoomControl* for all included Zoom controls
++ Added new method *GraphArea.GenerateGraph()* that accepts only optional parameters and will use internal *GraphArea.Graph* property as the source (assuming it was already set earlier or exception will be thrown)
++ Added new method *GraphArea.SetVerticesDrag()* that controls edge drag mode for all vertices that are added into the GraphArea
++ Added new method *GraphArea.SetVerticesMathShape()* that sets math shape for all vertices that are added into the GraphArea
++ Added Windows Forms interop compatibility mode. You must specify *GraphArea.EnableWinFormsHostingMode* property for this to work.
++ Added edge parallelization as the post-process algorithm
+	+ Added *GraphArea.EnableParallelEdges* and *GraphArea.ParallelEdgeDistance* properties
+	+ Added *EdgeControl.CanBeParallel* property
++ Fixed some code definitions
+
+RELEASE 1.0.0
++ Added optional automatic ID assignment for data edges and vertices when using *Area.GenerateGraph()* method. Only absent IDs are assigned with unique values
++ Addded *VertexControl.MathShape* property which affects how edge connectors are rendered on the vertices
+	+ Added types are: rectangle, circle, diamond, triangle
++ Added new mouse over animation *ScaleControlAnimation*
++ Added new *GraphArea.DeleteAnimation* and corresponding animation logic
++ Added new *GraphArea.MouseOverAnimation* and corresponding animation logic
++ Added MouseEnter/Leave edge events for *GraphArea* and fixed some old ones
++ Added some new animations for newly implemented animation types
++ Added *GraphArea.SideExpansionSize* property which sets additional space around graph area. Created for scale animation to not being cut by area borders.
++ Fixed potential *EventOptions* memory leak
++ Fixed mistype in *GraphArea.DefaultEdgeRoutingAlgorithm* name
++ Redesigned Themed Graph templates for better visual experience. Now they are cool :)
+- Removed *VertexControl.MouseOverAnimation* animation property
+- Removed MainVertex logic as it is not universal. Removed corr. param from *GraphArea.GenerateGraph()* method.
+
+BETA 0.9.5
++ Added *GraphArea.SaveAsImage()* method that supports different image formats
++ Added *GraphArea.UseNativeObjectArrange* property. True by default. If set to False it will use different coordinates handling that helps to soften vertex drag issues to the top and left area sides.
++ Added *GraphArea.Translation* property. It is needed to get correct translation coordinates when determining object position from the mouse coordinates.
++ Added new *VertexControl.PositionChanged* event along with the new *VertexControl.EventOptions* property that allows enable/disable and do tracking of the vertex control position change and other events.
++ Added imported *CompoundFDP* layout algorithm (from Graph#)
++ Added new *PathFinder* edge routing algorithm first preview
++ Added *ZoomControl.UseAbsoluteZoomOnMouseWheel* property to enable absolute coord zooming by mousewheel
++ Added some commented samples for old *ZoomControl* as dragging is good with it right now.
++ Added additional params into *VertexControl* constructor.
++ Added new save/load procedures using *YAXLib* serialization
++ Added some new GraphX unique exception types along with the new validation checks
++ Fixed *GraphAreaBase* arrange calculation to include edge routing points into the formula
++ Fixed *ZoomControl* Fill and Fit features with new arrange mode
++ Fixed vertex dragging example in Showcase app to correctly add vertices with different scaling and *GraphArea* panel size.
++ Fixed odd edge routing calculation of endpoints (connector points). Now it looks much better when dragging vertex with *UpdateEdgesOnMove* flag set.
++ Fixed Showcase app tooltips implementation to always update them on show.
++ Fixed *ZoomControl* content rendering when not using native arrange mode (still doesn't accurate)
++ Fixed *ExportToImage()* image rendering when not using native arrange mode
++ Fixed *ExportToImage()* parameters handling
++ Improved Zoombox rendering speed
++ Improved rendering performance a bit. Overal performance improvement and tweaks.
++ Made *GraphArea.SetX / SetY* to set *FinalX* and *FinalY* attached props by default with the same value. Now all external animation coord routines needs optional param *alsoSetFinal* set to False if they are dealing with X and Y coords only.
++ Made *GraphArea.TopLeft* property visible
++ Made animation launch algorithm to be able to launch vertex and edge animations independently.
++ Removed *VertexControl.IsTracePositionEnabled*. Moved functionality into *EventOptions* property.
++ Removed redundant *OnGraphGenerateFinished()* call
++ Renamed external namespaces by adding lead GraphX name (external lib compatibility issues resolved)
++ Reworked *EdgeControl* vertex position tracing to use *VertexControl* trace implementation instead.
+
+
+BETA 0.9.4
++ Added Xceed *Zoombox* control into the library. The old one is still there for compatibility and stuff...
++ Added optional params into *EdgeControl* constructor
++ Added *GraphArea.GetVertexPositions* method
++ Added ability to area-select vertices using zoom control fuctionality
++ Added visual vertex search and display example, manual edge drawing example in Dynamic Graph tab
++ Added *VertexControl.GetPosition()* method that returns Point coordinates of the control in GraphArea panel
++ Added methods to print *GraphArea* and export it as PNG image, updated Showcase app
++ Added tooltips to Showcase app -> Edge Routing Graph -> edge bundling params and adjusted edge bundling example to produce more visible result
++ Made *EdgeControl.DashStyle* property as DependencyProperty
++ Made relative mouse wheel zoom default for *Zoombox* control
++ Made edge arrow template object mandatory. Now it can be excluded from the EdgeControl template.
++ Fixed Showcase app -> Edge Routing Graph -> edge bundling relayout
++ Fixed edges rendering when ShowArrows and ShowLabel properties has been changed
+
+BETA 0.9.3.1
++ Fixed extensive edges rendering
+
+BETA 0.9.3
++ Added smooth curves support for all algorithms using *GraphArea.UseEdgeCurving* property.False by default. Specifies that edge curving technique must be used to display graph edges.
++ Added edge bundling support
++ Added looped edges support
++ Added dashed edges support
++ Added parameters classes for all edge routing algorithms
++ Added *GraphArea.RemoveVertex* and *GraphArea.RemoveEdge* methods
++ Added edge labels support
++ Added showcase graph for edge routing examples
++ Added showcase graph for dynamic operations examples (selection, addition, removal etc.)
++ Added support for dynamic edge routing while dragging vertices
++ Added optional parameter to *GraphArea.Relayout()* and *GraphArea.GenerateGraph()* methods to generate all possible edges if none are present or update existing edges after calculations are done.
++ Added *bool UpdateEdgesOnMove* property to *DragBehaviour* to update edge routing while dragging vertex. By default this is False resulting in better performance as edges are redrawn only after dragging is finished.
++ Fixed edges drawed above vertices
++ Fixed *GraphArea.GenerateGraphFinished* event call
++ Too many other changes to document all of them. Read updated documentation for the most latest info.
+
+Some of the breaking changes
++ Edge base class replaced by *EdgeBase<TVertex>* that implements all essential properties by default
++ Vertex base class replaced by *VertexBase* that implements all essential properties by default
++ GraphState property *VisibleEdges* type changed to *List<TEdge>*. Route points no longer stored in *EdgeControl*, they are stored in *EdgeBase* instead.
++ Edge and vertex data objects IDs is now of type INT32
++ Removed *IMoveAnimation* interface. Use *MoveAnimationBase* class instead as the base class.
++ Reworked move animation mechanics to batch-execute. All methods and logic changed. See documentation on the web site for more info.
++ *DragBehaviour* no longer require X and Y attached properties which has been removed.
+
+BETA 0.9.2
++ SimpleER algorithm optimizations
++ Some showcase behaviour fixes
+
+BETA 0.9.1
++ Added some documentation
++ Added disposable interfaces
++ Added main vertex template example
++ Improved templated example
+
+BETA 0.9.0
+*** CORE ***
++ Added in-memory graph state storage including data objects
++ Added async graph generation and relayout
++ Added calculation events such as RelayoutFinished
+
+*** SHOWCASE ***
++ Added layout and state saving examples
++ Added async loading indicator
+
+DEV v0.8.3
+*** CORE ***
++ Added SimpleER edge routing algorithm
++ Added external and default edge routing support
+
+DEV v0.8.2
+*** CORE ***
++ Optimized external layout algorithms handling
++ Optimized Graph# source classes
+
+
+DEV v0.8.1
+*** CORE ***
++ Added props for GraphArea default algo optional parameters
++ Added property UseCtrlForMouseWheel for ZoomControl
+

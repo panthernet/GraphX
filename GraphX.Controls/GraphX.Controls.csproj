@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D2E33FEE-6689-4BB4-A95C-1B5C327A1E8F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GraphX.Controls</RootNamespace>
+    <AssemblyName>GraphX.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;USECANVAS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="QuickGraph">
+      <HintPath>..\DLL\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Serialization">
+      <HintPath>..\DLL\QuickGraph.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Documents\AIV.cs">
+      <Link>Properties\AIV.cs</Link>
+    </Compile>
+    <Compile Include="Animations\DeleteFadeAnimation.cs" />
+    <Compile Include="Animations\DeleteShrinkAnimation.cs" />
+    <Compile Include="Animations\MouseOverScaleAnimation.cs" />
+    <Compile Include="Animations\MoveAnimationBase.cs" />
+    <Compile Include="Animations\MoveFadeAnimation.cs" />
+    <Compile Include="Animations\MoveSimpleAnimation.cs" />
+    <Compile Include="Behaviours\DragBehaviour.cs" />
+    <Compile Include="Behaviours\HighlightBehaviour.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\VisibilityToBoolConverter.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventArgs.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventHandler.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\DoubleHelper.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\PointHelper.cs" />
+    <Compile Include="Controls\ZoomControl\ViewFinderDisplay.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\VisualTreeHelperEx.cs" />
+    <Compile Include="CustomHelper.cs" />
+    <Compile Include="DesignerExampleData\EdgeDataExample.cs" />
+    <Compile Include="DesignerExampleData\VertexDataExample.cs" />
+    <Compile Include="Controls\EdgeControl.cs" />
+    <Compile Include="Controls\EdgeLabelControl.cs" />
+    <Compile Include="Enums\DeleteAnimation.cs" />
+    <Compile Include="Enums\EdgeDashStyle.cs" />
+    <Compile Include="Enums\MouseOverAnimation.cs" />
+    <Compile Include="Enums\MoveAnimation.cs" />
+    <Compile Include="Controls\GraphArea.cs" />
+    <Compile Include="Controls\GraphAreaBase.cs" />
+    <Compile Include="Controls\IZoomControl.cs" />
+    <Compile Include="GeometryHelper.cs" />
+    <Compile Include="Models\AnimationFactory.cs" />
+    <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
+    <Compile Include="Models\ControlEventArgs.cs" />
+    <Compile Include="Models\EdgeEventOptions.cs" />
+    <Compile Include="Models\EdgeSelectedEventArgs.cs" />
+    <Compile Include="Models\EdgeSelectedEventHandler.cs" />
+    <Compile Include="Models\IBidirectionalControlAnimation.cs" />
+    <Compile Include="Models\IGraphArea.cs" />
+    <Compile Include="Models\IGraphControl.cs" />
+    <Compile Include="Models\IOneWayControlAnimation.cs" />
+    <Compile Include="Models\RemoveControlEventHandler.cs" />
+    <Compile Include="Models\StateStorage.cs" />
+    <Compile Include="Models\VertexEventOptions.cs" />
+    <Compile Include="Models\VertexMovedEventArgs.cs" />
+    <Compile Include="Models\VertexPositionChangedEH.cs" />
+    <Compile Include="Models\VertexPositionEventArgs.cs" />
+    <Compile Include="Models\VertexSelectedEventArgs.cs" />
+    <Compile Include="Models\VertexSelectedEventHandler.cs" />
+    <Compile Include="PrintHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controls\VertexControl.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ContentSizeChangedHandler.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />
+    <Compile Include="Controls\ZoomControl\ZoomContentPresenter.cs" />
+    <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ZoomControlModes.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ZoomViewModifierMode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\help_black.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphX.Common\GraphX.Common.csproj">
+      <Project>{eebd4ef2-4649-4f36-8fda-b1ba071a19be}</Project>
+      <Name>GraphX.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="signature.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
