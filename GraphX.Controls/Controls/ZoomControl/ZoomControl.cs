@@ -1396,7 +1396,7 @@ namespace GraphX.Controls
             if (_presenter == null)
                 return;
             var c = IsContentGraphArea ? GraphAreaContent.ContentSize.Size : ContentVisual.DesiredSize;
-            var deltaZoom = Math.Min( ActualWidth / (c.Width), ActualHeight / (c.Height));
+            var deltaZoom = Math.Min(MaxZoom,Math.Min( ActualWidth / (c.Width), ActualHeight / (c.Height)));
             var initialTranslate = IsContentGraphArea ? GetGraphTranslate() : GetInitialTranslate(c.Width, c.Height);
             DoZoomAnimation(deltaZoom, initialTranslate.X * deltaZoom, initialTranslate.Y * deltaZoom);
         }
