@@ -42,8 +42,8 @@ namespace GraphX
                     new RenderTargetBitmap(
                                     //(int)surface.ActualWidth,
                                     //(int)surface.ActualHeight,
-                    (int)(vis as UIElement).DesiredSize.Width + 100,
-                    (int)(vis as UIElement).DesiredSize.Height + 100,
+                    (int)((vis as UIElement).DesiredSize.Width * (imgdpi / DefaultDPI) + 100),
+                    (int)((vis as UIElement).DesiredSize.Height * (imgdpi / DefaultDPI) + 100),
                     imgdpi,
                     imgdpi,
                     pixelFormat);
