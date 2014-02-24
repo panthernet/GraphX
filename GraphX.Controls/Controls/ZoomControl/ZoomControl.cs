@@ -1230,6 +1230,18 @@ namespace GraphX.Controls
         #endregion
 
         #region Animation
+
+        public event EventHandler ZoomAnimationCompleted;
+
+        private void OnZoomAnimationCompleted()
+        {
+            if (ZoomAnimationCompleted != null)
+                ZoomAnimationCompleted(this, EventArgs.Empty);
+        }
+
+
+
+
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
         {
             _isZooming = isZooming;
@@ -1269,6 +1281,7 @@ namespace GraphX.Controls
                                                SetValue(ZoomProperty, zoom);
                                                _isZooming = false;
                                                UpdateViewport();
+                                               OnZoomAnimationCompleted();
                                            };
             }
             BeginAnimation(dp, animation, HandoffBehavior.Compose);
