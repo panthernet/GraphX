@@ -98,6 +98,7 @@
     <Compile Include="Animations\MoveSimpleAnimation.cs" />
     <Compile Include="Behaviours\DragBehaviour.cs" />
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
+    <Compile Include="Controls\VertexLabelControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventArgs.cs" />

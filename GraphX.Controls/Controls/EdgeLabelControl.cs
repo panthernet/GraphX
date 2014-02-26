@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -30,9 +32,24 @@ namespace GraphX
 
         public EdgeLabelControl()
         {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
             VerticalAlignment = VerticalAlignment.Top;
+        }
+
+        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
+        {
+            //TODO optimize parent call by calling it once from constructor
+            var edgeControl = GetEdgeControl(VisualParent);
+            if(edgeControl == null || !edgeControl.ShowLabel) return;
+            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            {
+                UpdateLayout();
+                UpdatePosition();
+            } 
+            else Arrange(LastKnownRectSize);
         }
 
         private static EdgeControl GetEdgeControl(DependencyObject parent)
@@ -46,24 +63,17 @@ namespace GraphX
             return null;
         }
 
-        private static double GetAngleBetweenPoints(Point point1, Point point2)
-        {
-            return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);
-        }
 
-        private static double GetDistanceBetweenPoints(Point point1, Point point2)
-        {
-            return Math.Sqrt(Math.Pow(point2.X - point1.X, 2) + Math.Pow(point2.Y - point1.Y, 2));
-        }
 
         private static double GetLabelDistance(double edgeLength)
         {
             return edgeLength / 2;  // set the label halfway the length of the edge
         }
 
-        private void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
+        internal void UpdatePosition()
         {
-            
+            if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
+
            // if (!IsLoaded)
            //     return;
             var edgeControl = GetEdgeControl(VisualParent);
@@ -91,25 +101,27 @@ namespace GraphX
             var routingInfo = edgeControl.Edge as IRoutingInfo;
             if (routingInfo != null) 
             {
-                var routePoints = routingInfo.RoutingPoints;
+                var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToArray();
+
                 if (routePoints == null)
                 {
                     // the edge is a single segment (p1,p2)
-                    edgeLength = GetLabelDistance(GetDistanceBetweenPoints(p1, p2));
+                    edgeLength = GetLabelDistance(MathHelper.GetDistanceBetweenPoints(p1, p2));
                 }
                 else
                 {
+
                     // the edge has one or more segments
                     // compute the total length of all the segments
                     edgeLength = 0;
                     var rplen = routePoints.Length;
                     for (var i = 0; i <= rplen; ++i)
                         if (i == 0)
-                            edgeLength += GetDistanceBetweenPoints(p1, routePoints[0]);
+                            edgeLength += MathHelper.GetDistanceBetweenPoints(p1, routePoints[0]);
                         else if (i == rplen)
-                            edgeLength += GetDistanceBetweenPoints(routePoints[rplen - 1], p2);
+                            edgeLength += MathHelper.GetDistanceBetweenPoints(routePoints[rplen - 1], p2);
                         else
-                            edgeLength += GetDistanceBetweenPoints(routePoints[i - 1], routePoints[i]);
+                            edgeLength += MathHelper.GetDistanceBetweenPoints(routePoints[i - 1], routePoints[i]);
                     // find the line segment where the half distance is located
                     edgeLength = GetLabelDistance(edgeLength);
                     var newp1 = p1;
@@ -118,11 +130,11 @@ namespace GraphX
                     {
                         double lengthOfSegment;
                         if (i == 0)
-                            lengthOfSegment = GetDistanceBetweenPoints(newp1 = p1, newp2 = routePoints[0]);
+                            lengthOfSegment = MathHelper.GetDistanceBetweenPoints(newp1 = p1, newp2 = routePoints[0]);
                         else if (i == rplen)
-                            lengthOfSegment = GetDistanceBetweenPoints(newp1 = routePoints[rplen - 1], newp2 = p2);
+                            lengthOfSegment = MathHelper.GetDistanceBetweenPoints(newp1 = routePoints[rplen - 1], newp2 = p2);
                         else
-                            lengthOfSegment = GetDistanceBetweenPoints(newp1 = routePoints[i - 1], newp2 = routePoints[i]);
+                            lengthOfSegment = MathHelper.GetDistanceBetweenPoints(newp1 = routePoints[i - 1], newp2 = routePoints[i]);
                         if (lengthOfSegment >= edgeLength)
                             break;
                         edgeLength -= lengthOfSegment;
@@ -139,43 +151,29 @@ namespace GraphX
 
             // move it "edgLength" on the segment
             double tmpAngle;
-            var angleBetweenPoints = tmpAngle = GetAngleBetweenPoints(p1, p2);
+            var angleBetweenPoints = tmpAngle = MathHelper.GetAngleBetweenPoints(p1, p2);
             //set angle in degrees
             if (edgeControl.AlignLabelsToEdges)
             {
                 if (p1.X > p2.X)
-                    tmpAngle = GetAngleBetweenPoints(p2, p1);
+                    tmpAngle = MathHelper.GetAngleBetweenPoints(p2, p1);
                 Angle = -tmpAngle * 180 / Math.PI;
             }
   
             p.Offset(edgeLength * Math.Cos(angleBetweenPoints), -edgeLength * Math.Sin(angleBetweenPoints));
             if(edgeControl.AlignLabelsToEdges)
-                p = RotatePoint(new Point(p.X, p.Y - edgeControl.LabelVerticalOffset), p, Angle);
+                p = MathHelper.RotatePoint(new Point(p.X, p.Y - edgeControl.LabelVerticalOffset), p, Angle);
             //optimized offset here
             /*float x = 12.5f, y = 12.5f;
             double sin = Math.Sin(angleBetweenPoints);
             double cos = Math.Cos(angleBetweenPoints);
             double sign = sin * cos / Math.Abs(sin * cos);
             p.Offset(x * sin * sign + edgeLength * cos, y * cos * sign - edgeLength * sin);*/
-            Arrange(new Rect(p, desiredSize));
+            LastKnownRectSize = new Rect(p, desiredSize);
+            Arrange(LastKnownRectSize);
         }
 
-        private static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInDegrees)
-        {
-            var angleInRadians = angleInDegrees * (Math.PI / 180);
-            var cosTheta = Math.Cos(angleInRadians);
-            var sinTheta = Math.Sin(angleInRadians);
-            return new Point
-            {
-                X =
-                    (int)
-                    (cosTheta * (pointToRotate.X - centerPoint.X) -
-                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
-                Y =
-                    (int)
-                    (sinTheta * (pointToRotate.X - centerPoint.X) +
-                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y)
-            };
-        }
+        internal Rect LastKnownRectSize;
+
     }
 }

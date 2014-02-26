@@ -758,9 +758,18 @@ namespace GraphX
             item.ShowArrows = _svShowEdgeArrows;
             item.ShowLabel = _svShowEdgeLabels;
             item.AlignLabelsToEdges = _svAlignEdgeLabels;
+            item.UpdateLabelPosition = _svUpdateLabelPosition;
             HighlightBehaviour.SetIsHighlightEnabled(item, _svEdgeHlEnabled);
             HighlightBehaviour.SetHighlightControl(item, _svEdgeHlObjectType);
             HighlightBehaviour.SetHighlightEdges(item, EdgesType.All);
+        }
+
+        private bool _svUpdateLabelPosition;
+        public void UpdateEdgeLabelPosition(bool value)
+        {
+            _svUpdateLabelPosition = value;
+            foreach (var item in EdgesList)
+                item.Value.UpdateLabelPosition = value;
         }
 
         private EdgeDashStyle _svEdgeDashStyle = EdgeDashStyle.Solid;
@@ -862,6 +871,7 @@ namespace GraphX
             _svVertexHlEdgesType = hlEdgesOfType;
             foreach (var item in VertexList)
             {
+                HighlightBehaviour.SetHighlighted(item.Value, false);
                 HighlightBehaviour.SetIsHighlightEnabled(item.Value, isEnabled);
                 HighlightBehaviour.SetHighlightControl(item.Value, hlObjectsOfType);
                 HighlightBehaviour.SetHighlightEdges(item.Value, hlEdgesOfType);
@@ -882,6 +892,7 @@ namespace GraphX
 
             foreach (var item in VertexList)
             {
+                HighlightBehaviour.SetHighlighted(item.Value, false);
                 HighlightBehaviour.SetIsHighlightEnabled(item.Value, isEnabled);
                 HighlightBehaviour.SetHighlightControl(item.Value, hlObjectsOfType);
                 HighlightBehaviour.SetHighlightEdges(item.Value, EdgesType.All);
@@ -938,6 +949,8 @@ namespace GraphX
                 var edgectrl = new EdgeControl(_vertexlist[item.Source], _vertexlist[item.Target], item) { Visibility = defaultVisibility };
                 InternalInsertEdge(item, edgectrl);
                 //setup path
+                if (_svShowEdgeLabels)
+                    edgectrl.ShowLabel = true;
                 edgectrl.PrepareEdgePath();
                 //edgectrl.InvalidateChildren();
             }
@@ -945,6 +958,64 @@ namespace GraphX
 
             if (LogicCore.EnableParallelEdges)
                 ParallelizeEdges();
+            if (_svShowEdgeLabels && LogicCore.EnableEdgeLabelsOverlapRemoval)
+               RemoveEdgeLabelsOverlap();
+
+        }
+
+        private void RemoveEdgeLabelsOverlap()
+        {
+            var sizes = new Dictionary<LabelOverlapData, Rect>();
+            var sz = GetVertexSizeRectangles();
+
+            foreach (var item in sz)
+                sizes.Add(new LabelOverlapData() { Id = item.Key.ID, IsVertex = true }, item.Value);
+            foreach (var item in EdgesList)
+            {
+                item.Value.UpdateLabelLayout();
+                sizes.Add(new LabelOverlapData() { Id = item.Key.ID, IsVertex = false }, item.Value.GetLabelSize());
+            }
+  
+            var orAlgo = LogicCore.AlgorithmFactory.CreateFSAA(sizes, 15f, 15f);
+            orAlgo.Compute();
+            foreach (var item in orAlgo.Rectangles)
+            {
+                if (item.Key.IsVertex)
+                {
+                    var vertex = VertexList.FirstOrDefault(a => a.Key.ID == item.Key.Id).Value;
+                    if (vertex == null) throw new GX_InvalidDataException("RemoveEdgeLabelsOverlap() -> Vertex not found!");
+                    vertex.SetPosition(new Point(item.Value.X + item.Value.Width * .5,item.Value.Y + item.Value.Height * .5));
+                    //vertex.Arrange(item.Value);
+                }
+                else
+                {
+                    var edge = EdgesList.FirstOrDefault(a => a.Key.ID == item.Key.Id).Value;
+                    if (edge == null) throw new GX_InvalidDataException("RemoveEdgeLabelsOverlap() -> Edge not found!");
+                    edge.SetCustomLabelSize(item.Value);
+                }
+            }
+            //recalculate route path for new vertex positions
+            if (LogicCore.AlgorithmStorage.EdgeRouting != null)
+            {
+                LogicCore.AlgorithmStorage.EdgeRouting.VertexSizes = GetVertexSizeRectangles();
+                LogicCore.AlgorithmStorage.EdgeRouting.VertexPositions = GetVertexPositions();
+                LogicCore.AlgorithmStorage.EdgeRouting.Compute();
+                if (LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes != null)
+                    foreach (var item in LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes)
+                        item.Key.RoutingPoints = item.Value;
+            }
+            foreach (var item in EdgesList)
+            {
+                item.Value.PrepareEdgePath(false, null, false);
+            }
+            //update edges
+           // UpdateAllEdges();
+        }
+
+        private class LabelOverlapData
+        {
+            public bool IsVertex;
+            public int Id;
         }
 
         /// <summary>

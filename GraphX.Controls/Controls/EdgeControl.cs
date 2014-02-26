@@ -93,7 +93,7 @@ namespace GraphX
                     ec.StrokeDashArray = null;
                     break;
             }
-            ec.UpdateEdge();
+            ec.UpdateEdge(false);
         }
 
         private DoubleCollection StrokeDashArray { get; set; }
@@ -115,6 +115,12 @@ namespace GraphX
         /// </summary>
         public bool CanBeParallel { get { return _canbeparallel; } set { _canbeparallel = value; } }
 
+        private bool _updateLabelPosition;
+        /// <summary>
+        /// Gets or sets if label position should be updated on edge update
+        /// </summary>
+        public bool UpdateLabelPosition { get { return _updateLabelPosition; } set { _updateLabelPosition = true; } }
+
         /// <summary>
         /// Gets if this edge is self looped (have same Source and Target)
         /// </summary>
@@ -126,19 +132,39 @@ namespace GraphX
         /// <summary>
         /// Show arrows on the edge ends. Default value is true.
         /// </summary>
-        public bool ShowArrows { get { return _showarrows; } set { _showarrows = value; UpdateEdge(); } }
+        public bool ShowArrows { get { return _showarrows; } set { _showarrows = value; UpdateEdge(false); } }
         private bool _showarrows;
 
+
+        public static readonly DependencyProperty ShowLabelProperty = DependencyProperty.Register("ShowLabel",
+                                                                               typeof(bool),
+                                                                               typeof(EdgeControl),
+                                                                               new UIPropertyMetadata(showlabel_changed));
+
+        private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ec = (d as EdgeControl);
+            if(ec == null) return;
+
+            ec.UpdateEdge(false);
+        }
         /// <summary>
         /// Show edge label.Default value is False.
         /// </summary>
-        public bool ShowLabel { get { return _showlabel; } set { _showlabel = value; UpdateEdge(); } }
-        private bool _showlabel;
+        public bool ShowLabel { get { return (bool)GetValue(ShowLabelProperty); } set { SetValue(ShowLabelProperty, value); } }
 
         /// <summary>
         /// Gets or sets if lables should be aligned to edges and be displayed under the same angle
         /// </summary>
-        public bool AlignLabelsToEdges { get { return _alignLabelsToEdges; } set { _alignLabelsToEdges = value; if (_edgeLabelControl != null && value == false) _edgeLabelControl.Angle = 0; } }
+        public bool AlignLabelsToEdges { get { return _alignLabelsToEdges; } set 
+        { 
+            _alignLabelsToEdges = value;
+            if (_edgeLabelControl != null)
+            {
+                if (value == false) _edgeLabelControl.Angle = 0;
+                _edgeLabelControl.UpdatePosition();
+            }
+        } }
         private bool _alignLabelsToEdges;
 
         /// <summary>
@@ -250,6 +276,7 @@ namespace GraphX
             Edge = edge; DataContext = edge;
             ShowArrows = showArrows;
             ShowLabel = showLabels;
+            _updateLabelPosition = true;
 
             EventOptions = new EdgeEventOptions(this);
             foreach (var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
@@ -480,11 +507,11 @@ namespace GraphX
 
         #region public PrepareEdgePath()
 
-        internal void UpdateEdge()
+        internal void UpdateEdge(bool updateLabel = true)
         {
             if (Visibility == Visibility.Visible && _linePathObject != null)
             {
-                PrepareEdgePath(true);
+                PrepareEdgePath(true, null, updateLabel);
                 _linePathObject.Data = _linegeometry;
                 _linePathObject.StrokeDashArray = StrokeDashArray;
 
@@ -522,7 +549,7 @@ namespace GraphX
         /// </summary>
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
         /// <param name="externalRoutingPoints">Provided custom routing points will be used instead of stored ones.</param>
-        public void PrepareEdgePath(bool useCurrentCoords = false, Point[] externalRoutingPoints = null)
+        public void PrepareEdgePath(bool useCurrentCoords = false, Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
             if (Visibility != Visibility.Visible || Source == null || Target == null || ManualDrawing) return;
@@ -661,7 +688,9 @@ namespace GraphX
                 }
                 GeometryHelper.TryFreeze(_linegeometry);
                 GeometryHelper.TryFreeze(_arrowgeometry);
-                
+
+                if (ShowLabel && _edgeLabelControl != null && _updateLabelPosition && updateLabel )
+                    _edgeLabelControl.UpdatePosition();
             }
             else
             {
@@ -674,6 +703,27 @@ namespace GraphX
         public void Dispose()
         {
             Clean();
+        }
+
+        public Rect GetLabelSize()
+        {
+            return _edgeLabelControl.LastKnownRectSize;
+        }
+
+        public void SetCustomLabelSize(Rect rect)
+        {
+            _edgeLabelControl.LastKnownRectSize = rect;
+            _edgeLabelControl.Arrange(rect);
+        }
+
+        internal void UpdateLabelLayout()
+        {
+            _edgeLabelControl.Visibility = Visibility.Visible;
+            if (_edgeLabelControl.LastKnownRectSize == Rect.Empty || double.IsNaN(_edgeLabelControl.Width))
+            {
+                _edgeLabelControl.UpdateLayout();
+                _edgeLabelControl.UpdatePosition();
+            }
         }
     }
 }

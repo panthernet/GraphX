@@ -34,6 +34,7 @@ namespace GraphX.Logic
         public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; set; }
         #endregion
 
+        public bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
         public IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
         public IExternalOverlapRemoval<TVertex> ExternalOverlapRemovalAlgorithm { get; set; }

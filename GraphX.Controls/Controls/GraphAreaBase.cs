@@ -97,7 +97,7 @@ namespace GraphX
         internal virtual void OnVertexDoubleClick(VertexControl vc)
         {
             if (VertexDoubleClick != null)
-                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, null));
+                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
         }
 
         /// <summary>
@@ -105,10 +105,10 @@ namespace GraphX
         /// </summary>
         public virtual event VertexSelectedEventHandler VertexSelected;
 
-        internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e)
+        internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (VertexSelected != null)
-                VertexSelected(this, new VertexSelectedEventArgs(vc, e));
+                VertexSelected(this, new VertexSelectedEventArgs(vc, e, keys));
         }
         /// <summary>
         /// Fires when mouse is over the vertex control
@@ -118,7 +118,7 @@ namespace GraphX
         internal virtual void OnVertexMouseEnter(VertexControl vc)
         {
             if (VertexMouseEnter != null)
-                VertexMouseEnter(this, new VertexSelectedEventArgs(vc, null));
+                VertexMouseEnter(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
             if (MouseOverAnimation != null)
                 MouseOverAnimation.AnimateVertexForward(vc);
         }
@@ -142,7 +142,7 @@ namespace GraphX
         internal virtual void OnVertexMouseLeave(VertexControl vc)
         {
             if (VertexMouseLeave != null)
-                VertexMouseLeave(this, new VertexSelectedEventArgs(vc, null));
+                VertexMouseLeave(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
             if (MouseOverAnimation != null)
                 MouseOverAnimation.AnimateVertexBackward(vc);
         }

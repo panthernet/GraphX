@@ -28,7 +28,7 @@ namespace GraphX
         bool EnableParallelEdges { get; set; }
         int ParallelEdgeDistance { get; set; }
         bool IsEdgeRoutingEnabled { get; }
-
+        bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
         void CreateNewAlgorithmFactory();
         void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er);
@@ -40,5 +40,7 @@ namespace GraphX
         IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size> vertexSizes);
         IExternalOverlapRemoval<TVertex> GenerateOverlapRemovalAlgorithm(Dictionary<TVertex, Rect> rectangles = null);
         IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size DesiredSize);
+
+        
     }
 }

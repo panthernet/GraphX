@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.FDP;
+using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using GraphX.Logic;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.Tree;
 using GraphX.GraphSharp.Algorithms.Layout;
@@ -28,52 +29,44 @@ namespace ShowcaseExample
             tst_Area.SetVerticesDrag(true, true);
         }
 
+        private GraphExample GenerateTestGraph()
+        {
+            var graph = new GraphExample();
+            var v1 = new DataVertex() { Text = "Test1", ID = 1 };
+            graph.AddVertex(v1);
+            var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+            graph.AddVertex(v2);
+            var v3 = new DataVertex() { Text = "Test3", ID = 3 };
+            graph.AddVertex(v3);
+            var v4 = new DataVertex() { Text = "Test4", ID = 4 };
+            graph.AddVertex(v4);
+
+            graph.AddEdge(new DataEdge(v1, v2, 100));
+            graph.AddEdge(new DataEdge(v2, v3, 100));
+            graph.AddEdge(new DataEdge(v2, v4, 100));
+            return graph;
+
+        }
+
         void tst_but_gen_Click(object sender, RoutedEventArgs e)
         {
-            var _graph = new GraphExample();
-            var v1 = new DataVertex() { Text = "Test1", ID = 1 };
-            _graph.AddVertex(v1);
-            var v2 = new DataVertex() { Text = "Test2", ID = 2 };
-            _graph.AddVertex(v2);
-            var v3 = new DataVertex() { Text = "Test3", ID = 3 };
-            _graph.AddVertex(v3);
-            var v4 = new DataVertex() { Text = "Test4", ID = 4 };
-            _graph.AddVertex(v4);
-
-            _graph.AddEdge(new DataEdge(v1, v2, 1) { ID = 1000 });
-            _graph.AddEdge(new DataEdge(v1, v2, 1) { ID = 1 });
-
-
-            _graph.AddEdge(new DataEdge(v1, v4, 1) { ID = 1000 });
-            _graph.AddEdge(new DataEdge(v1, v4, 1) { ID = 1 });
-            _graph.AddEdge(new DataEdge(v1, v4, 1) { ID = 2 });
-            _graph.AddEdge(new DataEdge(v2, v4, 1) { ID = 1001 });
-            _graph.AddEdge(new DataEdge(v3, v4, 1) { ID = 1002 });
-            _graph.AddEdge(new DataEdge(v3, v4, 1) { ID = 1003 });
-            _graph.AddEdge(new DataEdge(v4, v3, 1) { ID = 1004 });
-            _graph.AddEdge(new DataEdge(v4, v3, 1) { ID = 1005 });
-            _graph.AddEdge(new DataEdge(v4, v3, 1) { ID = 1006 });
-
-            tst_Area.ShowAllEdgesArrows(true);
-
-            var ergTreeLayoutParameters = new KKLayoutParameters { };
-
-            var logic = new LogicCoreExample();
-            TSTLC = logic;
-            logic.Graph = _graph;
-            logic.EnableParallelEdges = true;
-
+            var graph = GenerateTestGraph();
+            var logic = new LogicCoreExample {Graph = graph};
+            logic.EnableParallelEdges = false;
             logic.ParallelEdgeDistance = 15;
 
-            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
-            logic.DefaultLayoutAlgorithmParams = ergTreeLayoutParameters;
+            tst_Area.ShowAllEdgesArrows(false);
 
+            var layParams = new LinLogLayoutParameters { IterationCount = 100 };
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
+            logic.DefaultLayoutAlgorithmParams = layParams;
+            var overlapParams = new OverlapRemovalParameters { HorizontalGap = 100, VerticalGap = 100 };
             logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
-            logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
+            logic.DefaultOverlapRemovalAlgorithmParams = overlapParams;
+            IExternalEdgeRouting<DataVertex, DataEdge> erParams = null;
+            //logic.ExternalEdgeRoutingAlgorithm = 
 
-            ((GraphX.GraphSharp.Algorithms.OverlapRemoval.OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 140;
-            ((GraphX.GraphSharp.Algorithms.OverlapRemoval.OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).VerticalGap = 140;
-            tst_Area.GenerateGraph(_graph, true);
+            tst_Area.GenerateGraph(graph, true);
             //tst_Area.VertexList[v1].Visibility = System.Windows.Visibility.Collapsed;
             //tst_Area.VertexList[v2].Visibility = System.Windows.Visibility.Collapsed;
             //tst_Area.VertexList[v3].Visibility = System.Windows.Visibility.Collapsed;
