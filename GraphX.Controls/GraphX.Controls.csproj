@@ -126,9 +126,11 @@
     <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />
     <Compile Include="Models\EdgeSelectedEventHandler.cs" />
+    <Compile Include="Models\GraphControlFactory.cs" />
     <Compile Include="Models\IBidirectionalControlAnimation.cs" />
     <Compile Include="Models\IGraphArea.cs" />
     <Compile Include="Models\IGraphControl.cs" />
+    <Compile Include="Models\IGraphControlFactory.cs" />
     <Compile Include="Models\IOneWayControlAnimation.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
