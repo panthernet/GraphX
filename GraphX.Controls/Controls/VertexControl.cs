@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System;
 using System.Linq;
 using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
 using GraphX.Models;
 
@@ -12,6 +13,7 @@ namespace GraphX
 	/// Visual vertex control
 	/// </summary>
     [Serializable]
+    [TemplatePart(Name = "PART_vertexLabel", Type = typeof(VertexLabelControl))]
     public class VertexControl: Control, IGraphControl
     {
         #region Properties
@@ -57,6 +59,18 @@ namespace GraphX
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(VertexControl), new UIPropertyMetadata(null));
 
+        private bool _showLabel;
+        public bool ShowLabel
+        {
+            get { return _showLabel; }
+            set
+            {
+                _showLabel = value;
+                if (_vertexLabelControl != null)
+                    _vertexLabelControl.Visibility = _showLabel ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
 		static VertexControl()
 		{
 			//override the StyleKey Property
@@ -99,6 +113,8 @@ namespace GraphX
 
         private void source_PositionChanged(object sender, EventArgs e)
         {
+            if(ShowLabel && _vertexLabelControl != null)
+                _vertexLabelControl.UpdatePosition();
             OnPositionChanged(new Point(0,0), GetPosition());
         }
         #endregion
@@ -142,6 +158,21 @@ namespace GraphX
             EventOptions = new VertexEventOptions(this) { PositionChangeNotification = tracePositionChange };
             foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
                 UpdateEventhandling(item);
+        }
+
+	    private VertexLabelControl _vertexLabelControl;
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (Template != null)
+            {
+                _vertexLabelControl = Template.FindName("PART_vertexLabel", this) as VertexLabelControl;                
+                if(_vertexLabelControl != null)
+                    _vertexLabelControl.UpdatePosition();
+            }
+
         }
 
         #region Events handling
@@ -206,7 +237,7 @@ namespace GraphX
         void VertexControl_Down(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexSelected(this, e);
+                RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
             e.Handled = true;
         }
         #endregion
@@ -226,5 +257,7 @@ namespace GraphX
                 EventOptions.Clean();
             }
         }
+
+
     }
 }

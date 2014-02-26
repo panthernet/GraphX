@@ -24,5 +24,6 @@ namespace GraphX
         IOverlapRemovalParameters CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum algorithmType);
         IExternalEdgeRouting<TVertex, TEdge> CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum newAlgorithmType, Rect graphArea, TGraph Graph, IDictionary<TVertex, Point> Positions, IDictionary<TVertex, Rect> Rectangles, IEdgeRoutingParameters parameters = null);
         IEdgeRoutingParameters CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum algorithmType);
+        IOverlapRemovalAlgorithm<T> CreateFSAA<T>(IDictionary<T, Rect> rectangles, float horgap, float vertGap) where T : class;
     }
 }

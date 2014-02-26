@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Media;
 
 namespace GraphX
 {
@@ -13,42 +10,72 @@ namespace GraphX
         private const int BOT   = 4;  /* двоичное 0100 */
         private const int TOP   = 8;  /* двоичное 1000 */
 
+        const double D30_DEGREES_IN_RADIANS = Math.PI / 6.0;
+
         public static double Tangent30Degrees { get; private set; }
 
         static MathHelper()
         {
-            Double d30DegreesInRadians = Math.PI / 6.0;
-            Tangent30Degrees = Math.Tan(d30DegreesInRadians);
+            Tangent30Degrees = Math.Tan(D30_DEGREES_IN_RADIANS);
+        }
+
+        public static double GetAngleBetweenPoints(Point point1, Point point2)
+        {
+            return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);
+        }
+
+        public static double GetDistanceBetweenPoints(Point point1, Point point2)
+        {
+            return Math.Sqrt(Math.Pow(point2.X - point1.X, 2) + Math.Pow(point2.Y - point1.Y, 2));
+        }
+
+
+        public static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInDegrees)
+        {
+            var angleInRadians = angleInDegrees * (Math.PI / 180);
+            var cosTheta = Math.Cos(angleInRadians);
+            var sinTheta = Math.Sin(angleInRadians);
+            return new Point
+            {
+                X =
+                    (int)
+                    (cosTheta * (pointToRotate.X - centerPoint.X) -
+                    sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X),
+                Y =
+                    (int)
+                    (sinTheta * (pointToRotate.X - centerPoint.X) +
+                    cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y)
+            };
         }
 
         public static bool IsIntersected(Rect r, Point a, Point b)
         {
-            sides code;
-            Point c; /* одна из точек */
-            Point start = new Point(a.X, a.Y);
+           // var start = new Point(a.X, a.Y);
             /* код конечных точек отрезка */
-            sides code_a = GetIntersectionData(r, a);
-            sides code_b = GetIntersectionData(r, b);
+            var codeA = GetIntersectionData(r, a);
+            var codeB = GetIntersectionData(r, b);
 
-            if (code_a.IsInside() && code_b.IsInside())
+            if (codeA.IsInside() && codeB.IsInside())
                 return true;
 
             /* пока одна из точек отрезка вне прямоугольника */
-            while (!code_a.IsInside() || !code_b.IsInside())
+            while (!codeA.IsInside() || !codeB.IsInside())
             {
                 /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
-                if (code_a.SameSide(code_b))
+                if (codeA.SameSide(codeB))
                     return false;
 
                 /* выбираем точку c с ненулевым кодом */
-                if (!code_a.IsInside())
+                sides code;
+                Point c; /* одна из точек */
+                if (!codeA.IsInside())
                 {
-                    code = code_a;
+                    code = codeA;
                     c = a;
                 }
                 else
                 {
-                    code = code_b;
+                    code = codeB;
                     c = b;
                 }
 
@@ -77,15 +104,15 @@ namespace GraphX
                 }
 
                 /* обновляем код */
-                if (code == code_a)
+                if (code == codeA)
                 {
                     a = c;
-                    code_a = GetIntersectionData(r, a);
+                    codeA = GetIntersectionData(r, a);
                 }
                 else
                 {
                     b = c;
-                    code_b = GetIntersectionData(r, b);
+                    codeB = GetIntersectionData(r, b);
                 }
             }
             return true;
@@ -95,10 +122,10 @@ namespace GraphX
         {
             sides code; 
             Point c; /* одна из точек */
-            Point start = new Point(a.X, a.Y);
+            var start = new Point(a.X, a.Y);
             /* код конечных точек отрезка */
-            sides code_a = GetIntersectionData(r, a);
-            sides code_b = GetIntersectionData(r, b);
+            var code_a = GetIntersectionData(r, a);
+            var code_b = GetIntersectionData(r, b);
 
             /* пока одна из точек отрезка вне прямоугольника */
             while (!code_a.IsInside() || !code_b.IsInside())

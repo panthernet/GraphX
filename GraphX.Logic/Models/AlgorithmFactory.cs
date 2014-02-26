@@ -1,4 +1,5 @@
-﻿using GraphX.GraphSharp;
+﻿using System.Reflection;
+using GraphX.GraphSharp;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.Circular;
@@ -132,6 +133,11 @@ namespace GraphX.Logic.Models
                 default:
                     return null;
             }
+        }
+
+        public IOverlapRemovalAlgorithm<T> CreateFSAA<T>(IDictionary<T, Rect> rectangles, float horGap, float vertGap) where T : class
+        {
+            return  new FSAAlgorithm<T>(rectangles, new OverlapRemovalParameters() { HorizontalGap = horGap, VerticalGap = vertGap});
         }
 
         public IOverlapRemovalParameters CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum algorithmType)

@@ -193,6 +193,7 @@ namespace GraphX.Controls
             {
                 // create VisualBrush for the view finder display panel
                 CreateVisualBrushForViewFinder(Content as Visual);
+                _viewFinderDisplay.Background = this.Background;
 
                 // hook up event handlers for dragging and resizing the viewport
                 _viewFinderDisplay.MouseMove += ViewFinderDisplayMouseMove;

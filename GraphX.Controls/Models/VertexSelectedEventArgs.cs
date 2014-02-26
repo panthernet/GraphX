@@ -7,12 +7,14 @@ namespace GraphX.Models
     {
         public VertexControl VertexControl { get; private set; }
         public MouseButtonEventArgs MouseArgs { get; private set; }
+        public ModifierKeys Modifiers { get; private set; }
 
-        public VertexSelectedEventArgs(VertexControl vc, MouseButtonEventArgs e)
+        public VertexSelectedEventArgs(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
             : base()
         {
             VertexControl = vc;
             MouseArgs = e;
+            Modifiers = keys;
         }
     }
 }
