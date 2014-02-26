@@ -7,6 +7,7 @@
 + Fixed labels rendering for parallel edges. Now they are displayed separately for each edge.
 + Fixed async calculations being broken due to LogicCore property became dependency
 + Fixed ViewFinder not deriving ZoomControl background
++ Fixed edge label update on alignment change
 + Implemented some properties as dependencies
 + Reworked EdgeLabelControl inner logic. Should now be more flexible and performance efficient.
 + Some code refactoring. Minor performance improvements.

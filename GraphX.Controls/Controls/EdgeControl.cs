@@ -156,7 +156,15 @@ namespace GraphX
         /// <summary>
         /// Gets or sets if lables should be aligned to edges and be displayed under the same angle
         /// </summary>
-        public bool AlignLabelsToEdges { get { return _alignLabelsToEdges; } set { _alignLabelsToEdges = value; if (_edgeLabelControl != null && value == false) _edgeLabelControl.Angle = 0; } }
+        public bool AlignLabelsToEdges { get { return _alignLabelsToEdges; } set 
+        { 
+            _alignLabelsToEdges = value;
+            if (_edgeLabelControl != null)
+            {
+                if (value == false) _edgeLabelControl.Angle = 0;
+                _edgeLabelControl.UpdatePosition();
+            }
+        } }
         private bool _alignLabelsToEdges;
 
         /// <summary>
