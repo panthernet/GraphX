@@ -474,10 +474,11 @@ namespace GraphX
                 if (_vertexlist.Count == 0 || LogicCore.Graph == null) return; // no vertexes == no edges
 
                 UpdateLayout(); //update layout so we can get actual control sizes
+
                 if (LogicCore.AreVertexSizesNeeded())
                     vertexSizes = GetVertexSizes();
                 alg = LogicCore.GenerateLayoutAlgorithm(vertexSizes);
-                if (alg == null)
+                if (alg == null && !LogicCore.IsCustomLayout)
                 {
                     MessageBox.Show("Layout type not supported yet!");
                     return;
@@ -490,12 +491,21 @@ namespace GraphX
                 //setup Edge Routing algorithm
                 eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize);
             }));
-            if (alg == null) return;
+            if (alg == null && !LogicCore.IsCustomLayout) return;
+            IDictionary<TVertex, Point> resultCoords;
+            if (alg != null)
+            {
+                alg.Compute();
+                if (Worker != null) Worker.ReportProgress(33, 0);
+                //result data storage
+                resultCoords = alg.VertexPositions;
+            }//get default coordinates if using Custom layout
+            else
+            {
+                //UpdateLayout();
+                resultCoords = GetVertexPositions();
+            }
 
-            alg.Compute();
-            if (Worker != null) Worker.ReportProgress(33, 0);
-            //result data storage
-            var resultCoords = alg.VertexPositions;
             //overlap removal
             if (overlap != null)
             {
@@ -675,8 +685,8 @@ namespace GraphX
             {
                 AutoresolveIds(graph);
             }
-
-            PreloadVertexes(graph, dataContextToDataItem);
+            if(!LogicCore.IsCustomLayout)
+                PreloadVertexes(graph, dataContextToDataItem);
             _relayoutGraphMain(generateAllEdges, false);
         }
 
@@ -1132,19 +1142,24 @@ namespace GraphX
                     inlist = LogicCore.Graph.InEdges(vc.Vertex as TVertex).ToArray();
                     break;
             }
+            bool gotSelfLoop = false;
             if (inlist != null)
                 foreach (var item in inlist)
                 {
+                    if(gotSelfLoop) continue;
                     var ctrl = new EdgeControl(_vertexlist[item.Source], vc, item) { Visibility = defaultVisibility };
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
+                    if(item.Source == item.Target) gotSelfLoop = true;
                 }
             if (outlist != null)
                 foreach (var item in outlist)
                 {
+                    if(gotSelfLoop) continue;
                     var ctrl = new EdgeControl(vc, _vertexlist[item.Target], item) { Visibility = defaultVisibility };
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
+                    if(item.Source == item.Target) gotSelfLoop = true;
                 }
         }
         #endregion

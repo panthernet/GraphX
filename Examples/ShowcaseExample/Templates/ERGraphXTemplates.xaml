@@ -61,7 +61,7 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
                             x:Name="PART_edgeArrowPath"/>
-                        <gxl:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <gxl:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -102,7 +102,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-       <Setter Property="LayoutTransform">
+       <Setter Property="RenderTransform">
             <Setter.Value>
                 <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=gxl:EdgeLabelControl} , Path=Angle}"/>
             </Setter.Value>

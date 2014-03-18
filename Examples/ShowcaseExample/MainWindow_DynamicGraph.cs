@@ -21,7 +21,7 @@ namespace ShowcaseExample
         /// </summary>
         private List<VertexControl> DG_SelectedVertices = new List<VertexControl>();
         
-        public void DynamicGraph_Construtor()
+        public void DynamicGraph_Constructor()
         {
             var dg_Logic = new LogicCoreExample();
             dg_Area.LogicCore = dg_Logic;

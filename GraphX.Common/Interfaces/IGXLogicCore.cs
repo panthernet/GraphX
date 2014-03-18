@@ -29,6 +29,15 @@ namespace GraphX
         int ParallelEdgeDistance { get; set; }
         bool IsEdgeRoutingEnabled { get; }
         bool EnableEdgeLabelsOverlapRemoval { get; set; }
+        bool IsCustomLayout { get; }
+
+        LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { get; set; }
+        OverlapRemovalAlgorithmTypeEnum DefaultOverlapRemovalAlgorithm { get; set; }
+        EdgeRoutingAlgorithmTypeEnum DefaultEdgeRoutingAlgorithm { get; set; }
+        ILayoutParameters DefaultLayoutAlgorithmParams { get; set; }
+        IOverlapRemovalParameters DefaultOverlapRemovalAlgorithmParams { get; set; }
+        IEdgeRoutingParameters DefaultEdgeRoutingAlgorithmParams { get; set; }
+
 
         void CreateNewAlgorithmFactory();
         void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er);

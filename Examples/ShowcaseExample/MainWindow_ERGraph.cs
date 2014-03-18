@@ -20,18 +20,18 @@ namespace ShowcaseExample
         private BundleEdgeRoutingParameters ergbundle;
         public BundleEdgeRoutingParameters erg_BundleEdgeRoutingParameters { get { return ergbundle; } set { ergbundle = value; OnPropertyChanged("erg_BundleEdgeRoutingParameters"); } }
 
-        //.GetLogicCore<LogicCoreExample>()
+        private LogicCoreExample _er_logic;
 
         private void ERGraph_Constructor()
         {
-            var erg_Logic = new LogicCoreExample();
-            erg_Area.LogicCore = erg_Logic;
+            _er_logic = new LogicCoreExample();
+            erg_Area.LogicCore = _er_logic;
             erg_Area.LogicCore.ParallelEdgeDistance = 20;
 
             erg_showEdgeArrows.IsChecked = true;
-            erg_BundleEdgeRoutingParameters = (BundleEdgeRoutingParameters)erg_Logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.Bundling);
-            erg_SimpleERParameters = (SimpleERParameters)erg_Logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.SimpleER);
-            erg_PFERParameters = (PathFinderEdgeRoutingParameters)erg_Logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.PathFinder);
+            erg_BundleEdgeRoutingParameters = (BundleEdgeRoutingParameters)_er_logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.Bundling);
+            erg_SimpleERParameters = (SimpleERParameters)_er_logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.SimpleER);
+            erg_PFERParameters = (PathFinderEdgeRoutingParameters)_er_logic.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.PathFinder);
 
             erg_pfprm_formula.ItemsSource = Enum.GetValues(typeof(PathFindAlgorithm)).Cast<PathFindAlgorithm>();
             erg_pfprm_formula.SelectedIndex = 0;
@@ -198,15 +198,15 @@ namespace ShowcaseExample
             if ((EdgeRoutingAlgorithmTypeEnum)erg_eralgo.SelectedItem == EdgeRoutingAlgorithmTypeEnum.PathFinder)
                 erg_Area.RelayoutGraph();
             else if ((EdgeRoutingAlgorithmTypeEnum)erg_eralgo.SelectedItem == EdgeRoutingAlgorithmTypeEnum.Bundling)
-                CalcBundling();
+                erg_Area.RelayoutGraph();//CalcBundling();
             else 
-                erg_Area.GenerateGraph(erg_Area.LogicCore.Graph );
+                erg_Area.GenerateGraph(erg_Area.LogicCore.Graph, true );
                 
-            erg_Area.GenerateAllEdges(Visibility.Visible);
-            erg_recalculate_Checked(null, null);
+            //erg_Area.GenerateAllEdges();
+            /*erg_recalculate_Checked(null, null);
             erg_showEdgeArrows_Checked(null, null);
             erg_showEdgeLabels_Checked(null, null);
-            erg_alignEdgeLabels_Checked(null, null);
+            erg_alignEdgeLabels_Checked(null, null);*/
         }
 
         private Dictionary<DataVertex, Point> GenerateRandomVertices(GraphExample graph, int index, int count, int minX, int maxX, int minY, int maxY)
@@ -224,7 +224,7 @@ namespace ShowcaseExample
             return VertexPositions;
         }
 
-        void erg_but_randomgraph_Click(object sender, System.Windows.RoutedEventArgs e)
+        void erg_but_randomgraph_Click(object sender, RoutedEventArgs e)
         {
 
             if ((EdgeRoutingAlgorithmTypeEnum)erg_eralgo.SelectedItem != EdgeRoutingAlgorithmTypeEnum.Bundling)
@@ -264,20 +264,14 @@ namespace ShowcaseExample
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.SimpleRandom;
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithmParams = erg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
-                var oprm = erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithmParams as OverlapRemovalParameters;
-                //oprm.HorizontalGap = 100;
-                //oprm.VerticalGap = 100;
-                //erg_Area.ExternalEdgeRoutingAlgorithm = new SimpleEdgeRouting<DataVertex, DataEdge,  GraphExample>(gr as GraphExample, erg_Area.GetVertexPositions(), erg_Area.GetVertexSizeRectangles());
 
-                erg_Area.GenerateGraph(gr);
+                erg_Area.GenerateGraph(gr, true);
+                erg_Area.SetVerticesDrag(true, true);
                 erg_zoomctrl.ZoomToFill();//.ZoomToFill();
-                erg_Area.GenerateAllEdges();
-                foreach (var item in erg_Area.GetAllVertexControls())
-                    DragBehaviour.SetIsDragEnabled(item, true);
-                erg_recalculate_Checked(null, null);
+                /*erg_recalculate_Checked(null, null);
                 erg_showEdgeArrows_Checked(null, null);
                 erg_showEdgeLabels_Checked(null, null);
-                erg_alignEdgeLabels_Checked(null, null);
+                erg_alignEdgeLabels_Checked(null, null);*/
                 return;
             }
 
@@ -295,73 +289,39 @@ namespace ShowcaseExample
                 var vertex2 = vlist[Rand.Next(0, graph.VertexCount - 1)];
                 graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ToolTipText = string.Format("{0} -> {1}", item, vertex2) });
             } 
-           /* graph.AddEdge(new DataEdge(vlist[0], vlist[3], 1));
-            graph.AddEdge(new DataEdge(vlist[1], vlist[4], 1));
-            graph.AddEdge(new DataEdge(vlist[2], vlist[5], 1));
 
-            graph.AddEdge(new DataEdge(vlist[0], vlist[6], 1));
-            graph.AddEdge(new DataEdge(vlist[1], vlist[7], 1));
-            graph.AddEdge(new DataEdge(vlist[2], vlist[8], 1));
-            //generate vertex positions
-            var VertexPositions = new Dictionary<DataVertex, Point>();
-
-            VertexPositions.Add(vlist[6], new Point(5000, 1000));
-            VertexPositions.Add(vlist[7], new Point(5000, 1100));
-            VertexPositions.Add(vlist[8], new Point(5000, 1300));
-
-            VertexPositions.Add(vlist[0], new Point(100, 100));
-            VertexPositions.Add(vlist[1], new Point(300, 100));
-            VertexPositions.Add(vlist[2], new Point(200, 300));
-
-            VertexPositions.Add(vlist[3], new Point(10000, 1000));
-            VertexPositions.Add(vlist[4], new Point(10300, 1000));
-            VertexPositions.Add(vlist[5], new Point(10200, 1300));*/
             //generate vertices
 
-            var VertexPositions = new Dictionary<DataVertex, Point>();
+            var vertexPositions = new Dictionary<DataVertex, Point>();
             foreach (var item in GenerateRandomVertices(graph, 0, 40, 0, 2000, 0, 2000))
-                VertexPositions.Add(item.Key, item.Value);
+                vertexPositions.Add(item.Key, item.Value);
             foreach (var item in GenerateRandomVertices(graph, 40, 40, 5000, 7000, 3000, 4000))
-                VertexPositions.Add(item.Key, item.Value);
+                vertexPositions.Add(item.Key, item.Value);
             foreach (var item in GenerateRandomVertices(graph, 80, 40, 500, 2500, 6000, 9000))
-                VertexPositions.Add(item.Key, item.Value);
+                vertexPositions.Add(item.Key, item.Value);
             erg_Area.LogicCore.Graph = graph;
             UpdateLayout();
 
+            erg_Area.SetVerticesDrag(true, false);
+            _er_logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Custom;
+            _er_logic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.Bundling;
+            _er_logic.DefaultEdgeRoutingAlgorithmParams = erg_BundleEdgeRoutingParameters;
+            erg_Area.GenerateGraph(true);
+           // CalcBundling();
+            //erg_Area.GenerateAllEdges(Visibility.Visible);
 
-            CalcBundling();
-
-
-
-            //generate edges
-            erg_Area.GenerateAllEdges(Visibility.Visible);
-            foreach (var item in erg_Area.GetAllVertexControls())
-                DragBehaviour.SetIsDragEnabled(item, true);
-            erg_recalculate_Checked(null, null);
+            /*erg_recalculate_Checked(null, null);
             erg_showEdgeArrows_Checked(null, null);
-            erg_showEdgeLabels_Checked(null, null);
+            erg_showEdgeLabels_Checked(null, null);*/
             erg_zoomctrl.ZoomToFill();
         }
 
-        private void CalcBundling()
+        /*private void CalcBundling()
         {
             //perform edge routing
-            IExternalEdgeRouting<DataVertex, DataEdge> era = null;
-            IEdgeRoutingParameters prms = null;
-            switch ((EdgeRoutingAlgorithmTypeEnum)erg_eralgo.SelectedItem)
-            {
-                case EdgeRoutingAlgorithmTypeEnum.Bundling:
-                    prms = erg_BundleEdgeRoutingParameters;
-                    era = new BundleEdgeRouting<DataVertex, DataEdge, GraphExample>(erg_Area.ContentSize, erg_Area.LogicCore.Graph as GraphExample, erg_Area.GetVertexPositions(), erg_Area.GetVertexSizeRectangles(), prms);
-                    break;
-                /*case EdgeRoutingAlgorithmTypeEnum.SimpleER:
-                    prms = erg_SimpleERParameters;
-                    era = new SimpleEdgeRouting<DataVertex, DataEdge, GraphExample>(graph, VertexPositions, erg_Area.GetVertexSizeRectangles(VertexPositions), prms);
-                    break;*/
-                case EdgeRoutingAlgorithmTypeEnum.None:
-                    break;
-
-            }
+            IExternalEdgeRouting<DataVertex, DataEdge> era = erg_Area.LogicCore.AlgorithmFactory.CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum.Bundling,  erg_Area.ContentSize,
+                erg_Area.LogicCore.Graph, erg_Area.GetVertexPositions(), erg_Area.GetVertexSizeRectangles(), new BundleEdgeRoutingParameters() { Iterations = 500});
+            
             if (era != null)
             {
                 era.Compute();
@@ -371,6 +331,6 @@ namespace ShowcaseExample
                         item.RoutingPoints = era.EdgeRoutes[item];
                 }
             }
-        }
+        }*/
     }
 }

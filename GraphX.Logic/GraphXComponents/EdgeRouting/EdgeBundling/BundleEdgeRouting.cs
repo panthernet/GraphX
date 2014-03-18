@@ -93,11 +93,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             //sw = new Stopwatch();
             //sw.Start();
 
-            for (int i = 0; i < iterations; i++)
+            for (var i = 0; i < iterations; i++)
                 MoveControlPoints(edgeGroupData);
 
             //prevents oscillating movements
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 cooldown *= 0.5f;
                 MoveControlPoints(edgeGroupData);
@@ -114,7 +114,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             {
                 if (!e.IsSelfLoop)
                 {
-                    KeyPair key = new KeyPair(e.Source.ID, e.Target.ID);
+                    var key = new KeyPair(e.Source.ID, e.Target.ID);
                     var list2 = edgeGroupData[key].controlPoints.ToList(); 
 
                     //Point p1 = GeometryHelper.GetEdgeEndpointOnRectangle(VertexPositions[e.Source], VertexSizes[e.Source], list2.First());
@@ -154,10 +154,10 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             FindCompatibleEdges(movedEdgeGroupData);
             ResetMovedEdges();
 
-            for (int i = 0; i < iterations; i++)
+            for (var i = 0; i < iterations; i++)
                 MoveControlPoints(movedEdgeGroupData);
 
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 cooldown *= 0.5f;
                 MoveControlPoints(movedEdgeGroupData);
@@ -171,7 +171,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             foreach (var e in edges)
             {
                 EdgeGroupData ed;
-                KeyPair key = new KeyPair(e.Source.ID, e.Target.ID);
+                var key = new KeyPair(e.Source.ID, e.Target.ID);
                 movedEdgeGroupData.TryGetValue(key, out ed);
                 if (ed != null)
                 {
@@ -180,7 +180,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                     //Point p1 = GeometryHelper.GetEdgeEndpointOnRectangle(VertexPositions[e.Source], VertexSizes[e.Source], list2.First());
                     //Point p2 = GeometryHelper.GetEdgeEndpointOnRectangle(VertexPositions[e.Target], VertexSizes[e.Target], list2.Last());
                     //list2.Insert(0, p1); list2.Add(p2);
-                    list2.Insert(0, list2.First()); list2.Add(list2.Last());
+                    if (list2.Count > 0)
+                    {
+                        list2.Insert(0, list2.First());
+                        list2.Add(list2.Last());
+                    }
 
                     if (EdgeRoutes.ContainsKey(e))
                         EdgeRoutes[e] = list2.ToArray();
@@ -202,7 +206,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             foreach (var e in edges)
                 if (!e.IsSelfLoop)
                 {
-                    KeyPair key = new KeyPair(e.Source.ID, e.Target.ID);
+                    var key = new KeyPair(e.Source.ID, e.Target.ID);
                     if (!movedEdgeGroupData.ContainsKey(key))
                         movedEdgeGroupData.Add(key, edgeGroupData[key]);
                 }
@@ -233,7 +237,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         private void AddEdgeData(TEdge e)
         {
             EdgeGroupData ed;
-            KeyPair key = new KeyPair(e.Source.ID, e.Target.ID);
+            var key = new KeyPair(e.Source.ID, e.Target.ID);
 
             edgeGroupData.TryGetValue(key, out ed);
 
@@ -284,7 +288,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         private void AddExistingData(TEdge e)
         {
             EdgeGroupData ed;
-            KeyPair key = new KeyPair(e.Source.ID, e.Target.ID);
+            var key = new KeyPair(e.Source.ID, e.Target.ID);
 
             edgeGroupData.TryGetValue(key, out ed);
 
@@ -332,7 +336,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </returns>
         private float AngleCompatibility(EdgeGroupData ed1, EdgeGroupData ed2)
         {
-            float a = VectorTools.Angle(ed1.v1, ed1.v2, ed2.v1, ed2.v2);
+            var a = VectorTools.Angle(ed1.v1, ed1.v2, ed2.v1, ed2.v2);
             return (float)Math.Abs(Math.Cos(a));
         }
 
@@ -353,8 +357,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </returns>
         private float PositionCompatibility(EdgeGroupData ed1, EdgeGroupData ed2)
         {
-            float avg = (ed1.length + ed2.length) / 2;
-            float dis = VectorTools.Distance(ed1.middle, ed2.middle);
+            var avg = (ed1.length + ed2.length) / 2;
+            var dis = VectorTools.Distance(ed1.middle, ed2.middle);
             if ((avg + dis) == 0) return 0;
             return (avg / (avg + dis));
         }
@@ -376,14 +380,14 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </returns>
         private float ScaleCompatibility(EdgeGroupData ed1, EdgeGroupData ed2)
         {
-            float l1 = ed1.length;
-            float l2 = ed2.length;
-            float l = l1 + l2;
+            var l1 = ed1.length;
+            var l2 = ed2.length;
+            var l = l1 + l2;
             if (l == 0)
                 return 0;
             else
             {
-                float ret = 4 * l1 * l2 / (l * l);
+                var ret = 4 * l1 * l2 / (l * l);
                 return ret * ret;
             }
         }
@@ -406,7 +410,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </returns>
         private float CalculateCompatibility(EdgeGroupData ed1, EdgeGroupData ed2)
         {
-            float c = PositionCompatibility(ed1, ed2);
+            var c = PositionCompatibility(ed1, ed2);
             if (c > threshold) c *= ScaleCompatibility(ed1, ed2);
             else return 0;
             if (c > threshold) c *= AngleCompatibility(ed1, ed2);
@@ -490,8 +494,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 
             var qm = ed2.middle;
 
-            float i = VectorTools.Distance(i1, i2);
-            float m = VectorTools.Distance(qm, im);
+            var i = VectorTools.Distance(i1, i2);
+            var m = VectorTools.Distance(qm, im);
 
             if (i == 0) return 0;
 
@@ -559,18 +563,18 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </returns>
         private bool Intersects(Point p1, Point p2, Point q1, Point q2, ref Point intersection, ref float rp)
         {
-            double q = (p1.Y - q1.Y) * (q2.X - q1.X) - (p1.X - q1.X) * (q2.Y - q1.Y);
-            double d = (p2.X - p1.X) * (q2.Y - q1.Y) - (p2.Y - p1.Y) * (q2.X - q1.X);
+            var q = (p1.Y - q1.Y) * (q2.X - q1.X) - (p1.X - q1.X) * (q2.Y - q1.Y);
+            var d = (p2.X - p1.X) * (q2.Y - q1.Y) - (p2.Y - p1.Y) * (q2.X - q1.X);
 
             if (d == 0) // parallel lines
             {
                 return false;
             }
 
-            double r = q / d;
+            var r = q / d;
 
             q = (p1.Y - q1.Y) * (p2.X - p1.X) - (p1.X - q1.X) * (p2.Y - p1.Y);
-            double s = q / d;
+            var s = q / d;
 
             intersection = VectorTools.Plus(p1, VectorTools.Multiply(VectorTools.Minus(p2, p1), r));
 
@@ -586,10 +590,10 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </param>
         private void FindCompatibleEdges(Dictionary<KeyPair, EdgeGroupData> edgeSet)
         {
-            foreach (KeyValuePair<KeyPair, EdgeGroupData> p1 in edgeSet)
+            foreach (var p1 in edgeSet)
             {
                 if (p1.Value.length < 50) continue;//??????
-                foreach (KeyValuePair<KeyPair, EdgeGroupData> p2 in edgeGroupData)
+                foreach (var p2 in edgeGroupData)
                 {
                     if (p2.Value.length < 50) continue;//??????
                     if (((p1.Key.k1 == p2.Key.k1) && (p1.Key.k2 == p2.Key.k2))
@@ -598,10 +602,10 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                     //if ((((p1.Value.v1 == p2.Value.v1) && (p1.Value.v1.Y == p2.Value.v1.Y)) && (p1.Value.v2.X == p2.Value.v2.X) && (p1.Value.v2.Y == p2.Value.v2.Y)) ||
                     //(((p1.Value.v1.X == p2.Value.v2.X) && (p1.Value.v1.Y == p2.Value.v2.Y)) && (p1.Value.v2.X == p2.Value.v1.X) && (p1.Value.v2.Y == p2.Value.v1.Y)))
                     //    continue;
-                    float c = CalculateCompatibility(p1.Value, p2.Value);
+                    var c = CalculateCompatibility(p1.Value, p2.Value);
                     if (c == 0) continue;
-                    bool d = CalculateDirectedness(p1.Value, p2.Value);
-                    GroupPairData epd = new GroupPairData(c, p1.Value, p2.Value, d);
+                    var d = CalculateDirectedness(p1.Value, p2.Value);
+                    var epd = new GroupPairData(c, p1.Value, p2.Value, d);
                     p1.Value.compatibleGroups.Add(p2.Key, epd);
                     p2.Value.compatibleGroups.Add(p1.Key, epd);
                 }
@@ -619,7 +623,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         {
             if (subdivisionPointsNum < 1) return;
 
-            foreach (EdgeGroupData ed in edgeGroupData.Values)
+            foreach (var ed in edgeGroupData.Values)
                 DivideEdge(ed, subdivisionPointsNum);
 
             subdivisionPoints = subdivisionPointsNum;
@@ -631,7 +635,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </summary>
         private void ResetMovedEdges()
         {
-            foreach (EdgeGroupData ed in movedEdgeGroupData.Values)
+            foreach (var ed in movedEdgeGroupData.Values)
                 DivideEdge(ed, subdivisionPoints);
         }
 
@@ -648,7 +652,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </param>
         private void DivideEdge(EdgeGroupData ed, int subdivisionPointsNum)
         {
-            float r = ed.length / (subdivisionPointsNum + 1);
+            var r = ed.length / (subdivisionPointsNum + 1);
             var sPoints = new Point[subdivisionPointsNum];
             ed.newControlPoints = new Point[subdivisionPointsNum];
             Point move;
@@ -656,7 +660,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                 move = new Point(0, 0);
             else
                 move = VectorTools.Multiply(VectorTools.Minus(ed.v2, ed.v1), 1f / ed.length);
-            for (int i = 0; i < subdivisionPointsNum; i++)
+            for (var i = 0; i < subdivisionPointsNum; i++)
                 sPoints[i] = VectorTools.Plus(ed.v1, VectorTools.Multiply(move, r * (i + 1)));
             ed.controlPoints = sPoints;
             ed.k = springConstant * (subdivisionPointsNum + 1) / ed.length;
@@ -686,11 +690,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             var sPoints = ed.controlPoints;
             var sPointsDoubled = new Point[subdivisionPoints * 2 + 1];
             ed.newControlPoints = new Point[subdivisionPoints * 2 + 1];
-            for (int i = 0; i < subdivisionPoints; i++)
+            for (var i = 0; i < subdivisionPoints; i++)
                 sPointsDoubled[i * 2 + 1] = sPoints[i];
 
 
-            for (int i = 0; i < subdivisionPoints - 1; i++)
+            for (var i = 0; i < subdivisionPoints - 1; i++)
                 sPointsDoubled[i * 2 + 2] = VectorTools.MidPoint(sPoints[i], sPoints[i + 1]);
 
 
@@ -707,7 +711,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </summary>
         private void DoubleSubdivisionPointsForAllEdges()
         {
-            foreach (EdgeGroupData ed in edgeGroupData.Values) DoubleSubdivisionPoints(ed);
+            foreach (var ed in edgeGroupData.Values) DoubleSubdivisionPoints(ed);
             subdivisionPoints = subdivisionPoints * 2 + 1;
         }
 
@@ -720,8 +724,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </param>
         private void CalculateNewControlPoints(Object o)
         {
-            EdgeGroupData ed = (EdgeGroupData)o;
-            for (int i = 0; i < subdivisionPoints; i++)
+            var ed = (EdgeGroupData)o;
+            for (var i = 0; i < subdivisionPoints; i++)
             {
                 var p = ed.controlPoints[i];
                 Point p1, p2;
@@ -730,10 +734,10 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                 //SizeF sp = new SizeF(p);
                 var f = VectorTools.Multiply(VectorTools.Plus(VectorTools.Minus(p1, p), VectorTools.Minus(p2, p)), ed.k);
                 var r = new Point(0, 0);
-                foreach (GroupPairData epd in ed.compatibleGroups.Values)
+                foreach (var epd in ed.compatibleGroups.Values)
                 {
                     Point q;
-                    float j = 1f;
+                    var j = 1f;
                     EdgeGroupData ed2;
                     if ((epd.ed1.id.k1 == ed.id.k1) && (epd.ed1.id.k2 == ed.id.k2))
                         ed2 = epd.ed2;
@@ -747,10 +751,10 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                         q = ed2.controlPoints[subdivisionPoints - i - 1];
                         if (directed && repulseOpposite) j = repulsionCoefficient;
                     }
-                    Point fs = VectorTools.Minus(q, p);
+                    var fs = VectorTools.Minus(q, p);
                     //PointF fs = new PointF(q.X - p.X, q.Y - p.Y);
 
-                    float l = VectorTools.Length(fs);
+                    var l = VectorTools.Length(fs);
                     if (l > 0)//???
                     {
                         fs = VectorTools.Multiply(fs, epd.c / (l));
@@ -763,12 +767,12 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                     }
                 }
 
-                float rl = VectorTools.Length(r);
+                var rl = VectorTools.Length(r);
                 if (rl>0)
                     r = VectorTools.Multiply(r, (float)(1.0/Math.Sqrt(rl)));
 
                 var move = new Point(f.X + r.X, f.Y + r.Y);
-                float moveL = VectorTools.Length(move);
+                var moveL = VectorTools.Length(move);
 
                 //float len = ed.Length / (subdivisionPoints + 1);
                 //if (moveL > (len)) move = VectorTools.Multiply(move, len*cooldown / moveL);
@@ -802,19 +806,19 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         {
             if (useThreading)
             {
-                foreach (EdgeGroupData ed in groupsToMove.Values)
+                foreach (var ed in groupsToMove.Values)
                     ThreadPool.QueueUserWorkItem(new WaitCallback(this.CalculateNewControlPoints), ed);
-                for (int i = 0; i < groupsToMove.Values.Count; i++)
+                for (var i = 0; i < groupsToMove.Values.Count; i++)
                     sem.WaitOne();
             }
             else
             {
-                foreach (EdgeGroupData ed in groupsToMove.Values)
+                foreach (var ed in groupsToMove.Values)
                     CalculateNewControlPoints(ed);
             }
 
 
-            foreach (EdgeGroupData ed in groupsToMove.Values)
+            foreach (var ed in groupsToMove.Values)
             {
                 ed.controlPoints = ed.newControlPoints;
                 ed.newControlPoints = new Point[subdivisionPoints];
@@ -837,9 +841,9 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// </param>
         private void StraightenEdgesInternally(Dictionary<KeyPair, EdgeGroupData> groupsToStraighten, float s)
         {
-            foreach (EdgeGroupData ed in groupsToStraighten.Values)
+            foreach (var ed in groupsToStraighten.Values)
             {
-                for (int i = 0; i < subdivisionPoints; i++)
+                for (var i = 0; i < subdivisionPoints; i++)
                 {
                     //STRONG CHANGE
                     var p = ed.controlPoints[i];
@@ -871,7 +875,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                 if (e.IsSelfLoop) continue;
                 var controlPoints = e.RoutingPoints;//(PointF[])e.GetValue(ReservedMetadataKeys.PerEdgeIntermediateCurvePoints);
                 var newControlPoints = new Point[controlPoints.Length];
-                for (int i = 0; i < controlPoints.Length; i++)
+                for (var i = 0; i < controlPoints.Length; i++)
                 {
                     //STRONG CHANGE
                     var p = controlPoints[i];

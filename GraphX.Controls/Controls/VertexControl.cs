@@ -17,11 +17,27 @@ namespace GraphX
     public class VertexControl: Control, IGraphControl
     {
         #region Properties
-
         /// <summary>
         /// Provides settings for event calls within single vertex control
         /// </summary>
         public VertexEventOptions EventOptions { get; private set; }
+
+        private double _labelAngle;
+        /// <summary>
+        /// Gets or sets vertex label angle
+        /// </summary>
+        public double LabelAngle
+        {
+            get
+            {
+                return _vertexLabelControl != null ? _vertexLabelControl.Angle : _labelAngle;
+            }
+            set
+            {
+                _labelAngle = value;
+                if (_vertexLabelControl != null) _vertexLabelControl.Angle = _labelAngle;
+            }
+        }
 
         /// <summary>
         /// Gets or sets actual shape form of vertex control (affects mostly math calculations such edges connectors)
@@ -76,6 +92,7 @@ namespace GraphX
 			//override the StyleKey Property
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VertexControl), new FrameworkPropertyMetadata(typeof(VertexControl)));
 		}
+
         #endregion
 
         #region Position trace feature

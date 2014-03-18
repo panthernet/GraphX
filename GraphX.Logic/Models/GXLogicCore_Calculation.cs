@@ -2,10 +2,7 @@
 using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using QuickGraph;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace GraphX.Logic

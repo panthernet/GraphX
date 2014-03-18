@@ -44,6 +44,8 @@ namespace ShowcaseExample
             graph.AddEdge(new DataEdge(v1, v2, 100));
             graph.AddEdge(new DataEdge(v2, v3, 100));
             graph.AddEdge(new DataEdge(v2, v4, 100));
+
+            
             return graph;
 
         }
