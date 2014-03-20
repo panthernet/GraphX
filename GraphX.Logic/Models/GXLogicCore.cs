@@ -36,6 +36,11 @@ namespace GraphX.Logic
 
         public bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
+        /// <summary>
+        /// Gets is custom layout selected and used
+        /// </summary>
+        public bool IsCustomLayout { get { return DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Custom && ExternalLayoutAlgorithm == null; } }
+
         public IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
         public IExternalOverlapRemoval<TVertex> ExternalOverlapRemovalAlgorithm { get; set; }
         public IExternalEdgeRouting<TVertex, TEdge> ExternalEdgeRoutingAlgorithm { get; set; }

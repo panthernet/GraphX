@@ -1,10 +1,5 @@
-﻿using GraphX.GraphSharp;
-using GraphX;
+﻿using GraphX;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Xml.Serialization;
 using YAXLib;
 
 namespace ShowcaseExample

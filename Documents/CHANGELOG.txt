@@ -2,12 +2,17 @@
 + Added vertex control labels with following functionality:
 	+ 2 available positioning modes: by sides or by coordinates
 	+ Always attached to vertex and moves with it
+	+ Rotation angle support
 	+ Same template logic as in EdgeLabelControl
 + Added key modifiers to vertex event args
++ Added new layout type Custom. When set layout algorithm calculation is skipped completely and manually added data is used for OR and ER algorithms (if any).
++ Added (reintroduced) GraphArea::SideExpansionSize property which gets or sets additional space for GraphArea borders. Useful for zoom adjustments when custom text or controls which are not used in size calculations must fit into the zooming.
 + Fixed labels rendering for parallel edges. Now they are displayed separately for each edge.
 + Fixed async calculations being broken due to LogicCore property became dependency
-+ Fixed ViewFinder not deriving ZoomControl background
++ Fixed ViewFinder not deriving ZoomControl content background
 + Fixed edge label update on alignment change
++ Fixed self-looped edges handling in GraphArea::GenerateEdgesForVertex() method
++ Fixed bugs with edge routing calculation in some cases
 + Implemented some properties as dependencies
 + Reworked EdgeLabelControl inner logic. Should now be more flexible and performance efficient.
 + Some code refactoring. Minor performance improvements.

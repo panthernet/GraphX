@@ -394,11 +394,10 @@ namespace GraphX
         /// </summary>
 // public Vector Translation { get; private set; }
         /// <summary>
-        /// Gets or sets additional area space for each side of GraphArea expanded by specified amount
-        /// Useful for showing scale animation near the area borders (no object clipping thanks to expanded area)
+        /// Gets or sets additional area space for each side of GraphArea. Useful for zoom adjustments.
         /// 0 by default.
         /// </summary>
-// public Size SideExpansionSize { get; set; }
+        public Size SideExpansionSize { get; set; }
         /// <summary>
         /// Gets or sets if edge route paths must be taken into consideration while determining area size
         /// </summary>
@@ -514,6 +513,10 @@ namespace GraphX
                 }
 
             }
+            _topLeft.X -= SideExpansionSize.Width * .5;
+            _topLeft.Y -= SideExpansionSize.Height * .5;
+            _bottomRight.X += SideExpansionSize.Width * .5;
+            _bottomRight.Y += SideExpansionSize.Height * .5;
             var newSize = ContentSize;
             if (oldSize != newSize)
                 OnContentSizeChanged(oldSize, newSize);

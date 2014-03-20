@@ -57,6 +57,23 @@ namespace GraphX
 
 		#region Properties
 
+        private double _labelAngle;
+        /// <summary>
+        /// Gets or sets vertex label angle
+        /// </summary>
+        public double LabelAngle
+        {
+            get
+            {
+                return _edgeLabelControl != null ? _edgeLabelControl.Angle : _labelAngle;
+            }
+            set
+            {
+                _labelAngle = value;
+                if (_edgeLabelControl != null) _edgeLabelControl.Angle = _labelAngle;
+            }
+        }
+
         #region DashStyle
 
         public static readonly DependencyProperty DashStyleProperty = DependencyProperty.Register("DashStyle",

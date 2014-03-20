@@ -57,6 +57,7 @@ namespace GraphX.Logic.Models
                 case LayoutAlgorithmTypeEnum.CompoundFDP:
                     return new CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>(Graph, Sizes, new Dictionary<TVertex, Thickness>(), new Dictionary<TVertex, CompoundVertexInnerLayoutType>(),
                         Positions, parameters as CompoundFDPLayoutParameters);
+
                 /*case LayoutAlgorithmTypeEnum.BalloonTree:
                     return new BalloonTreeLayoutAlgorithm<TVertex, TEdge, TGraph>(Graph, Positions, Sizes, parameters as BalloonTreeLayoutParameters, Graph.Vertices.FirstOrDefault());*/
                 default:
@@ -137,7 +138,7 @@ namespace GraphX.Logic.Models
 
         public IOverlapRemovalAlgorithm<T> CreateFSAA<T>(IDictionary<T, Rect> rectangles, float horGap, float vertGap) where T : class
         {
-            return  new FSAAlgorithm<T>(rectangles, new OverlapRemovalParameters() { HorizontalGap = horGap, VerticalGap = vertGap});
+            return  new FSAAlgorithm<T>(rectangles, new OverlapRemovalParameters { HorizontalGap = horGap, VerticalGap = vertGap});
         }
 
         public IOverlapRemovalParameters CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum algorithmType)

@@ -34,7 +34,7 @@ namespace ShowcaseExample
             GeneralGraph_Constructor();
             ThemedGraph_Constructor();
             ERGraph_Constructor();
-            DynamicGraph_Construtor();
+            DynamicGraph_Constructor();
             TestGround_Constructor();
             DataSource = GenerateData(datasourceSize);
             Closed += MainWindow_Closed;            
@@ -94,7 +94,8 @@ namespace ShowcaseExample
             {
                 if (Rand.Next(0, 50) > 25) continue;
                 var vertex2 = vlist[Rand.Next(0, graph.VertexCount - 1)];
-                graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ID = cnt, Text = string.Format("{0} -> {1}", item.Text, vertex2.Text) });
+                var txt = string.Format("{0} -> {1}", item.Text, vertex2.Text);
+                graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ID = cnt, Text = txt, ToolTipText = txt });
                 cnt++;
             }
             return graph;

@@ -103,7 +103,7 @@ namespace GraphX
             {
                 var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToArray();
 
-                if (routePoints == null)
+                if (routePoints == null || routePoints.Length == 0)
                 {
                     // the edge is a single segment (p1,p2)
                     edgeLength = GetLabelDistance(MathHelper.GetDistanceBetweenPoints(p1, p2));
