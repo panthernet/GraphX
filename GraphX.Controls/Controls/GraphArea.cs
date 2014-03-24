@@ -1,3 +1,4 @@
+using System.Drawing;
 using GraphX.Controls.Models;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;
@@ -15,6 +16,8 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Controls;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace GraphX
 {
@@ -27,7 +30,7 @@ namespace GraphX
         #region My properties
 
         public static readonly DependencyProperty LogicCoreProperty =
-            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphAreaBase), new UIPropertyMetadata(null));
+            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets GraphX logic core object that will drive this visual
@@ -1384,6 +1387,11 @@ namespace GraphX
             {
                 PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, true, dpi, quality);
             }
+        }
+
+        public Bitmap ExportToBitmap(double dpi = PrintHelper.DefaultDPI)
+        {
+            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
         }
 
         
