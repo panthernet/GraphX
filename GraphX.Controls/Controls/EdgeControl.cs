@@ -610,18 +610,32 @@ namespace GraphX
                 var routeInformation = externalRoutingPoints == null ? (Edge as IRoutingInfo).RoutingPoints : externalRoutingPoints;
                 #endregion
 
+                // Get the TopLeft position of the Source Vertex.
+                var sourcePos1 = new Point
+                {
+                    X = (useCurrentCoords ? GraphAreaBase.GetX(Source) : GraphAreaBase.GetFinalX(Source)),
+                    Y = (useCurrentCoords ? GraphAreaBase.GetY(Source) : GraphAreaBase.GetFinalY(Source))
+                };
+                // Get the TopLeft position of the Target Vertex.
+                var targetPos1 = new Point
+                {
+                    X = (useCurrentCoords ? GraphAreaBase.GetX(Target) : GraphAreaBase.GetFinalX(Target)),
+                    Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target))
+                };
+
                 //if self looped edge
                 if (IsSelfLooped)
                 {
                     if (!RootArea.EdgeShowSelfLooped) return;
-                    var pt = new Point(sourcePos.X + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius, sourcePos.Y + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius);
+                    var pt = new Point(sourcePos1.X + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius, sourcePos1.Y + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius);
                     var geo = new EllipseGeometry(pt, RootArea.EdgeSelfLoopCircleRadius, RootArea.EdgeSelfLoopCircleRadius);
                     const double dArrowAngle = Math.PI / 2.0;
                     _arrowgeometry = new PathGeometry();
-                    var aPoint = sourcePos;
+                    var aPoint = sourcePos1;
                     _arrowgeometry.Figures.Add( GeometryHelper.GenerateArrow(aPoint, new Point(), new Point(), dArrowAngle));
-
                     _linegeometry = geo;
+                    GeometryHelper.TryFreeze(_arrowgeometry);
+                    GeometryHelper.TryFreeze(_linegeometry);
                     return;
                 }
 
@@ -637,18 +651,6 @@ namespace GraphX
 
                 /* Rectangular shapes implementation by bleibold */
                 
-                // Get the TopLeft position of the Source Vertex.
-                var sourcePos1 = new Point
-                {
-                    X = (useCurrentCoords ? GraphAreaBase.GetX(Source) : GraphAreaBase.GetFinalX(Source)),
-                    Y = (useCurrentCoords ? GraphAreaBase.GetY(Source) : GraphAreaBase.GetFinalY(Source))
-                };
-                // Get the TopLeft position of the Target Vertex.
-                var targetPos1 = new Point
-                {
-                    X = (useCurrentCoords ? GraphAreaBase.GetX(Target) : GraphAreaBase.GetFinalX(Target)),
-                    Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target))
-                };
 
                 //Point p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.MathShape);
                 //Point p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.MathShape);

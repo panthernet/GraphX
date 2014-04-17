@@ -47,6 +47,10 @@ namespace WindowsFormsProject
             logic.AsyncAlgorithmCompute = false;
             zoomctrl.Content = gArea;
             gArea.RelayoutFinished += gArea_RelayoutFinished;
+
+            var myResourceDictionary = new ResourceDictionary {Source = new Uri("Templates\\template.xaml", UriKind.Relative)};
+            zoomctrl.Resources.MergedDictionaries.Add(myResourceDictionary);
+            
             return zoomctrl;
         }
 
@@ -69,6 +73,9 @@ namespace WindowsFormsProject
             var dataEdge = new DataEdge(vlist[0], vlist[1]) { Text = string.Format("{0} -> {1}", vlist[0], vlist[1]) };
             dataGraph.AddEdge(dataEdge);
             dataEdge = new DataEdge(vlist[2], vlist[3]) { Text = string.Format("{0} -> {1}", vlist[2], vlist[3]) };
+            dataGraph.AddEdge(dataEdge);
+
+            dataEdge = new DataEdge(vlist[2], vlist[2]) { Text = string.Format("{0} -> {1}", vlist[2], vlist[2]) };
             dataGraph.AddEdge(dataEdge);
             return dataGraph;
         }
