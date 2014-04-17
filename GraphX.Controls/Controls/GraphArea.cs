@@ -1,3 +1,5 @@
+using System.Drawing;
+using GraphX.Controls.Models;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
@@ -14,6 +16,8 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Controls;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace GraphX
 {
@@ -26,7 +30,7 @@ namespace GraphX
         #region My properties
 
         public static readonly DependencyProperty LogicCoreProperty =
-            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphAreaBase), new UIPropertyMetadata(null));
+            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets GraphX logic core object that will drive this visual
@@ -36,6 +40,9 @@ namespace GraphX
             get { return (IGXLogicCore<TVertex, TEdge, TGraph>)GetValue(LogicCoreProperty); }
             set { SetValue(LogicCoreProperty, value); }
         }
+
+
+        public IGraphControlFactory ControlFactory { get; set; }
 
         /// <summary>
         /// Gets logic core unsafely converted to specified type
@@ -154,6 +161,8 @@ namespace GraphX
 
         public GraphArea()
         {
+            ControlFactory = new GraphControlFactory();
+            ControlFactory.FactoryRootArea = this;
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
@@ -165,28 +174,29 @@ namespace GraphX
                 Width = DesignSize.Width;
                 Height = DesignSize.Height;
                 var vc = new VertexDataExample(1, "Johnson B.C");
-                var ctrl = new VertexControl(vc) { RootArea = this };
+                var ctrl = ControlFactory.CreateVertexControl(vc);
                 SetX(ctrl, 0); SetY(ctrl, 0, true);
 
                 var vc2 = new VertexDataExample(2, "Manson J.C");
-                var ctrl2 = new VertexControl(vc2) { RootArea = this };
+                var ctrl2 = ControlFactory.CreateVertexControl(vc2);
                 SetX(ctrl2, 200); SetY(ctrl2, 0, true);
 
                 var vc3 = new VertexDataExample(1, "Franklin A.J");
-                var ctrl3 = new VertexControl(vc3) { RootArea = this };
+                var ctrl3 = ControlFactory.CreateVertexControl(vc3);
                 SetX(ctrl3, 100); SetY(ctrl3, 100, true);
 
                 UpdateLayout();
                 var edge = new EdgeDataExample<VertexDataExample>(vc, vc2, 1) { Text = "One" };
-                var edgectrl = new EdgeControl(ctrl, ctrl2, edge) { RootArea = this };
+                var edgectrl = ControlFactory.CreateEdgeControl(ctrl, ctrl2, edge);
+
                 base.Children.Add(edgectrl);
 
                 edge = new EdgeDataExample<VertexDataExample>(vc2, vc3, 1) { Text = "Two" };
-                edgectrl = new EdgeControl(ctrl2, ctrl3, edge) { RootArea = this };
+                edgectrl = ControlFactory.CreateEdgeControl(ctrl2, ctrl3, edge);
                 base.Children.Add(edgectrl);
 
                 edge = new EdgeDataExample<VertexDataExample>(vc3, vc, 1) { Text = "Three" };
-                edgectrl = new EdgeControl(ctrl3, ctrl, edge) { RootArea = this };
+                edgectrl = ControlFactory.CreateEdgeControl(ctrl3, ctrl, edge);
                 base.Children.Add(edgectrl);
 
 
@@ -446,7 +456,9 @@ namespace GraphX
             //preload vertex controls
             foreach (var it in graph.Vertices)
             {
-                var vc = new VertexControl(it) { DataContext = dataContextToDataItem ? it : null, Visibility = Visibility.Hidden }; // make them invisible (there is no layout positions yet calculated)
+                var vc = ControlFactory.CreateVertexControl(it);
+                vc.DataContext = dataContextToDataItem ? it : null;
+                vc.Visibility = Visibility.Hidden; // make them invisible (there is no layout positions yet calculated)
                 InternalAddVertex(it, vc);
             }
             if (forceVisPropRecovery)
@@ -956,7 +968,8 @@ namespace GraphX
             {
                 if (item.Source == null || item.Target == null) continue;
                 if (!_vertexlist.ContainsKey(item.Source) || !_vertexlist.ContainsKey(item.Target)) continue;
-                var edgectrl = new EdgeControl(_vertexlist[item.Source], _vertexlist[item.Target], item) { Visibility = defaultVisibility };
+                var edgectrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], _vertexlist[item.Target],
+                                                                    item, false, true, defaultVisibility);
                 InternalInsertEdge(item, edgectrl);
                 //setup path
                 if (_svShowEdgeLabels)
@@ -1146,8 +1159,9 @@ namespace GraphX
             if (inlist != null)
                 foreach (var item in inlist)
                 {
-                    if(gotSelfLoop) continue;
-                    var ctrl = new EdgeControl(_vertexlist[item.Source], vc, item) { Visibility = defaultVisibility };
+					if(gotSelfLoop) continue;
+                    var ctrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], vc, item, false, true,
+                                                                     defaultVisibility);                   
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
                     if(item.Source == item.Target) gotSelfLoop = true;
@@ -1155,8 +1169,9 @@ namespace GraphX
             if (outlist != null)
                 foreach (var item in outlist)
                 {
-                    if(gotSelfLoop) continue;
-                    var ctrl = new EdgeControl(vc, _vertexlist[item.Target], item) { Visibility = defaultVisibility };
+					if(gotSelfLoop) continue;                    
+                    var ctrl = ControlFactory.CreateEdgeControl(vc, _vertexlist[item.Target], item, false, true,
+                                                 defaultVisibility);
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
                     if(item.Source == item.Target) gotSelfLoop = true;
@@ -1292,7 +1307,8 @@ namespace GraphX
             foreach (var item in vlist)
             {
                 var vertexdata = item.Data as TVertex;
-                var ctrl = new VertexControl(vertexdata); ctrl.SetPosition(item.Position);
+                var ctrl = ControlFactory.CreateVertexControl(vertexdata);
+                ctrl.SetPosition(item.Position);
                 AddVertex(vertexdata, ctrl);
                 LogicCore.Graph.AddVertex(vertexdata);
             }
@@ -1371,6 +1387,11 @@ namespace GraphX
             {
                 PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, true, dpi, quality);
             }
+        }
+
+        public Bitmap ExportToBitmap(double dpi = PrintHelper.DefaultDPI)
+        {
+            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
         }
 
         

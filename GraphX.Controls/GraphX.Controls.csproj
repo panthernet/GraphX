@@ -58,14 +58,23 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
-    <Reference Include="QuickGraph">
-      <HintPath>..\DLL\QuickGraph.dll</HintPath>
+    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
     </Reference>
-    <Reference Include="QuickGraph.Serialization">
-      <HintPath>..\DLL\QuickGraph.Serialization.dll</HintPath>
+    <Reference Include="QuickGraph.Data">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -73,6 +82,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="YAXLib, Version=2.12.0.0, Culture=neutral, PublicKeyToken=7cc39f8266ad1835, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\YAXLib.2.12\lib\YAXLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Documents\AIV.cs">
@@ -114,9 +127,11 @@
     <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />
     <Compile Include="Models\EdgeSelectedEventHandler.cs" />
+    <Compile Include="Models\GraphControlFactory.cs" />
     <Compile Include="Models\IBidirectionalControlAnimation.cs" />
     <Compile Include="Models\IGraphArea.cs" />
     <Compile Include="Models\IGraphControl.cs" />
+    <Compile Include="Models\IGraphControlFactory.cs" />
     <Compile Include="Models\IOneWayControlAnimation.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
@@ -151,8 +166,13 @@
       <Project>{eebd4ef2-4649-4f36-8fda-b1ba071a19be}</Project>
       <Name>GraphX.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GraphX.Logic\GraphX.Logic.csproj">
+      <Project>{35f09d76-fdbe-4854-9dfc-961185c53b57}</Project>
+      <Name>GraphX.Logic</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="signature.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

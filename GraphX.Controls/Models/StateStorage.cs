@@ -82,7 +82,8 @@ namespace GraphX
             //setup visible edges
             foreach (var item in _states[id].VisibleEdges)
             {
-                var edgectrl = new EdgeControl(_area.VertexList[item.Source], _area.VertexList[item.Target], item);
+               var edgectrl =  _area.ControlFactory.CreateEdgeControl(_area.VertexList[item.Source], _area.VertexList[item.Target],
+                                                       item);
                 _area.InsertEdge(item, edgectrl);
             }
 
