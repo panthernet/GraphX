@@ -32,18 +32,15 @@ namespace GraphX
                                                                                                typeof(EdgeControl),
 																							   new UIPropertyMetadata( null ) );
 
-		/*public static readonly DependencyProperty RoutePointsProperty = DependencyProperty.Register( "RoutePoints",
-																									typeof( Point[] ),
-                                                                                                    typeof(EdgeControl),
-																									new UIPropertyMetadata(
-																										null ) );*/
-
 		public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register( "Edge", typeof( object ),
                                                                                              typeof(EdgeControl),
 																							 new PropertyMetadata( null ) );
 
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(EdgeControl),
                                                                                                                     new UIPropertyMetadata(5.0) );
+        /// <summary>
+        /// Gets or sets parent GraphArea visual
+        /// </summary>
         public GraphAreaBase RootArea
         {
             get { return (GraphAreaBase)GetValue(RootCanvasProperty); }
@@ -52,6 +49,16 @@ namespace GraphX
 
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(EdgeControl), new UIPropertyMetadata(null));
+
+        private bool _isSelfLooped { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
+        /// <summary>
+        /// Gets if this edge is self looped (have same Source and Target)
+        /// </summary>
+        public bool IsSelfLooped
+        {
+            get { return _isSelfLooped; }
+            protected set { SetValue(IsSelfLoopedPropertyKey, value); }
+        }
 
 		#endregion
 
@@ -141,10 +148,20 @@ namespace GraphX
         /// <summary>
         /// Gets if this edge is self looped (have same Source and Target)
         /// </summary>
-        public bool IsSelfLooped
+        /*public bool IsSelfLooped
         {
             get { return Source != null && Target != null && Source.Vertex == Target.Vertex; }
-        }
+        }*/
+
+        private static readonly DependencyPropertyKey IsSelfLoopedPropertyKey
+            = DependencyProperty.RegisterReadOnly("IsSelfLooped", typeof(bool), typeof(EdgeControl),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.None));
+
+        public static readonly DependencyProperty IsSelfLoopedPropProperty
+            = IsSelfLoopedPropertyKey.DependencyProperty;
+
+
+
 
         /// <summary>
         /// Show arrows on the edge ends. Default value is true.
@@ -216,6 +233,7 @@ namespace GraphX
         /// Templated label control to display labels
         /// </summary>
         private EdgeLabelControl _edgeLabelControl;
+
 
         public EdgeEventOptions EventOptions { get; private set; }
 
@@ -316,6 +334,8 @@ namespace GraphX
             if (dpd != null) dpd.AddValueChanged(this, SourceChanged);
             dpd = DependencyPropertyDescriptor.FromProperty(TargetProperty, typeof(EdgeControl));
             if (dpd != null) dpd.AddValueChanged(this, TargetChanged);
+
+            IsSelfLooped = _isSelfLooped;
         }
 
         static EdgeControl()
@@ -344,6 +364,7 @@ namespace GraphX
                 Source.EventOptions.PositionChangeNotification = true;
                 Source.PositionChanged += source_PositionChanged;
             }
+            IsSelfLooped = _isSelfLooped;
         }
         private void TargetChanged(object sender, EventArgs e)
         {
@@ -359,6 +380,7 @@ namespace GraphX
                 Target.EventOptions.PositionChangeNotification = true;
                 Target.PositionChanged += source_PositionChanged;
             }
+            IsSelfLooped = _isSelfLooped;
         }
 
         private void source_PositionChanged(object sender, EventArgs e)
@@ -708,15 +730,16 @@ namespace GraphX
                 }
                 GeometryHelper.TryFreeze(_linegeometry);
                 GeometryHelper.TryFreeze(_arrowgeometry);
-
+                
                 if (ShowLabel && _edgeLabelControl != null && _updateLabelPosition && updateLabel )
                     _edgeLabelControl.UpdatePosition();
+                //PathGeometry = (PathGeometry)_linegeometry;
             }
             else
             {
                 Debug.WriteLine("PrepareEdgePath() -> Edge template not found! Can't apply path to display edge!");
             }
-
+            
         }
         #endregion
 

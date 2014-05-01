@@ -14,6 +14,7 @@
 + Fixed self-looped edges handling in GraphArea::GenerateEdgesForVertex() method
 + Fixed bugs with edge routing calculation in some cases
 + Implemented some properties as dependencies
++ Implemented EdgeControl::IsSelfLooped property as read-only dependency property.
 + Reworked EdgeLabelControl inner logic. Should now be more flexible and performance efficient.
 + Reworked main objects hierarchy to use more interfaces for loosened conditions
 + Some code refactoring. Minor performance improvements.
