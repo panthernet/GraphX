@@ -136,6 +136,7 @@
         
     </Style>
 
+    <conv:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
     
     <!--                           StrokeDashArray="{Binding Path=Edge, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource dconv}}" -->
     <!-- EDGE CONTROL -->
@@ -151,6 +152,29 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
                             x:Name="PART_edgeArrowPath"/>
+                        <!--<Ellipse Width="15" Height="15" Fill="Red" Visibility="{TemplateBinding IsSelfLooped, Converter={StaticResource BooleanToVisibility}}">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform x:Name="AnimatedTranslateTransform"/>
+                            </Ellipse.RenderTransform>
+                            <Ellipse.Triggers>
+                                <EventTrigger RoutedEvent="Loaded" >
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                                            <DoubleAnimationUsingPath
+                                                Source="X" Duration="0:0:1"
+                                                Storyboard.TargetProperty="X" 
+                                                Storyboard.TargetName="AnimatedTranslateTransform"
+                                                PathGeometry="{Binding ElementName=PART_edgePath, Path=Data}"  />
+                                            <DoubleAnimationUsingPath
+                                                Source="Y" Duration="0:0:1"
+                                                Storyboard.TargetProperty="Y" 
+                                                Storyboard.TargetName="AnimatedTranslateTransform"
+                                                PathGeometry="{Binding ElementName=PART_edgePath, Path=Data}"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Ellipse.Triggers>
+                        </Ellipse>-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
