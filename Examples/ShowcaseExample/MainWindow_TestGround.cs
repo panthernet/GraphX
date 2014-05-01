@@ -24,9 +24,7 @@ namespace ShowcaseExample
         {
             tst_but_gen.Click += tst_but_gen_Click;
             //tst_Area.UseNativeObjectArrange = false;
-            tst_Area.EnableVisualPropsRecovery = true;
-            tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
-            tst_Area.SetVerticesDrag(true, true);
+
         }
 
         private GraphExample GenerateTestGraph()
@@ -41,11 +39,11 @@ namespace ShowcaseExample
             var v4 = new DataVertex() { Text = "Test4", ID = 4 };
             graph.AddVertex(v4);
 
-            graph.AddEdge(new DataEdge(v1, v2, 100));
-            graph.AddEdge(new DataEdge(v2, v3, 100));
-            graph.AddEdge(new DataEdge(v2, v4, 100));
+            graph.AddEdge(new DataEdge(v1, v2, 100) { ToolTipText = "FFFFFF" });
+            graph.AddEdge(new DataEdge(v1, v2, 100) { ToolTipText = "FFFFFF" });
+            graph.AddEdge(new DataEdge(v1, v2, 100) { ToolTipText = "FFFFFF" }); 
+            graph.AddEdge(new DataEdge(v1, v1, 100) { ToolTipText = "AAA" });
 
-            
             return graph;
 
         }
@@ -54,10 +52,16 @@ namespace ShowcaseExample
         {
             var graph = GenerateTestGraph();
             var logic = new LogicCoreExample {Graph = graph};
-            logic.EnableParallelEdges = false;
-            logic.ParallelEdgeDistance = 15;
 
-            tst_Area.ShowAllEdgesArrows(false);
+            logic.EnableParallelEdges = true;
+            logic.ParallelEdgeDistance = 25;
+            tst_Area.AlignAllEdgesLabels(true);
+            tst_Area.ShowAllEdgesLabels(true);
+            tst_Area.ShowAllEdgesArrows(true);
+            tst_Area.EnableVisualPropsRecovery = true;
+            tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
+            tst_Area.SetVerticesDrag(true, true);
+
 
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
             logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
@@ -68,13 +72,8 @@ namespace ShowcaseExample
             IExternalEdgeRouting<DataVertex, DataEdge> erParams = null;
             //logic.ExternalEdgeRoutingAlgorithm = 
 
+            TSTLC = logic;
             tst_Area.GenerateGraph(graph, true);
-            //tst_Area.VertexList[v1].Visibility = System.Windows.Visibility.Collapsed;
-            //tst_Area.VertexList[v2].Visibility = System.Windows.Visibility.Collapsed;
-            //tst_Area.VertexList[v3].Visibility = System.Windows.Visibility.Collapsed;
-            //tst_Area.VertexList[v4].SetPosition(new Point(0, 0));
-            tst_Area.ShowAllEdgesLabels();
-            tst_Area.AlignAllEdgesLabels();
             tst_zoomctrl.ZoomToFill();
 
            /* var img = new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseExample;component/Images/birdy.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad };

@@ -79,6 +79,9 @@
     <Compile Include="..\Documents\AIV.cs">
       <Link>Properties\AIV.cs</Link>
     </Compile>
+    <Compile Include="Interfaces\IGraphXEdge.cs" />
+    <Compile Include="Interfaces\IGraphXVertex.cs" />
+    <Compile Include="Interfaces\IWeightedEdge.cs" />
     <Compile Include="Models\EdgeRoutingVisualData.cs" />
     <Compile Include="Enums\EdgeRoutingAlgorithmTypeEnum.cs" />
     <Compile Include="Enums\EdgesType.cs" />

@@ -8,9 +8,9 @@ using QuickGraph;
 namespace GraphX
 {
     public class StateStorage<TVertex, TEdge, TGraph>: IDisposable
-        where TEdge : EdgeBase<TVertex>
-        where TVertex: VertexBase
-        where TGraph: BidirectionalGraph<TVertex, TEdge>
+        where TEdge : class, IGraphXEdge<TVertex>
+        where TVertex : class, IGraphXVertex
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         private Dictionary<string, GraphState<TVertex, TEdge, TGraph>> _states;
         private GraphArea<TVertex, TEdge, TGraph> _area;

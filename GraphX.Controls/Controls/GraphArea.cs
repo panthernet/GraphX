@@ -18,9 +18,9 @@ using System.Windows.Controls;
 namespace GraphX
 {
     public class GraphArea<TVertex, TEdge, TGraph>  : GraphAreaBase, IDisposable
-        where TVertex : VertexBase
-        where TEdge : EdgeBase<TVertex>
-        where TGraph : BidirectionalGraph<TVertex, TEdge>
+        where TVertex :class, IGraphXVertex
+        where TEdge : class,IGraphXEdge<TVertex>
+        where TGraph : class,IMutableBidirectionalGraph<TVertex, TEdge>
     { 
 
         #region My properties

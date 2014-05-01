@@ -26,9 +26,9 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
     /// Adapted for GraphX by PantheR.
     /// </summary>
     public class BundleEdgeRouting<TVertex, TEdge, TGraph> : EdgeRoutingAlgorithmBase<TVertex, TEdge, TGraph>
-        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
-        where TEdge : EdgeBase<TVertex>
-        where TVertex : VertexBase
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TEdge : class, IGraphXEdge<TVertex>
+        where TVertex : class, IGraphXVertex
     {
         public BundleEdgeRouting(Rect graphArea, TGraph graph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null)
             : base(graph, vertexPositions, vertexSizes, parameters)

@@ -8,7 +8,7 @@ using System.Windows;
 namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 {
     public class SimpleEdgeRouting<TVertex, TEdge, TGraph> : EdgeRoutingAlgorithmBase<TVertex, TEdge, TGraph>
-        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
         where TEdge : IEdge<TVertex>
         where TVertex : class, IIdentifiableGraphDataObject
     {

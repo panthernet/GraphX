@@ -2,7 +2,7 @@
 
 namespace GraphX
 {
-    public abstract class VertexBase: IIdentifiableGraphDataObject
+    public abstract class VertexBase : IGraphXVertex
     {
         public VertexBase()
         {
@@ -23,6 +23,11 @@ namespace GraphX
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public bool Equals(IGraphXVertex other)
+        {
+            return this == other;
         }
     }
 }

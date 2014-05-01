@@ -19,9 +19,9 @@ using GraphX.GraphSharpComponents.EdgeRouting;
 namespace GraphX.Logic.Models
 {
     public sealed class AlgorithmFactory<TVertex, TEdge, TGraph> : IAlgorithmFactory<TVertex, TEdge, TGraph>
-        where TVertex : VertexBase
-        where TEdge : EdgeBase<TVertex>
-        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
+        where TVertex : class,IGraphXVertex
+        where TEdge : class, IGraphXEdge<TVertex>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         #region Layout factory
         public ILayoutAlgorithm<TVertex, TEdge, TGraph> CreateLayoutAlgorithm(LayoutAlgorithmTypeEnum newAlgorithmType, TGraph Graph, IDictionary<TVertex, Point> Positions = null, IDictionary<TVertex, Size> Sizes = null, ILayoutParameters parameters = null)

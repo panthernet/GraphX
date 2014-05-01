@@ -4,34 +4,34 @@ using System;
 namespace GraphX
 {
 
-	public class WeightedEdge<Vertex> : IEdge<Vertex>
+    public class WeightedEdge<TVertex> : IWeightedEdge<TVertex>
 	{
 		public double Weight { get; set; }
 
-		public WeightedEdge(Vertex source, Vertex target)
+		public WeightedEdge(TVertex source, TVertex target)
 			: this(source, target, 1) {}
 
-		public WeightedEdge(Vertex source, Vertex target, double weight)
+		public WeightedEdge(TVertex source, TVertex target, double weight)
 		{
             _source = source;
             _target = target;
 			this.Weight = weight;
 		}
 
-        private Vertex _source;
+        private TVertex _source;
         /// <summary>
         /// Source vertex data
         /// </summary>
-        public Vertex Source
+        public TVertex Source
         {
             get { return _source; }
             set { _source = value; }
         }
-        private Vertex _target;
+        private TVertex _target;
         /// <summary>
         /// Target vertex data
         /// </summary>
-        public Vertex Target
+        public TVertex Target
         {
             get { return _target; }
             set { _target = value; }
@@ -41,7 +41,7 @@ namespace GraphX
         /// </summary>
         /// <param name="source">Source vertex data</param>
         /// <param name="Target">Target vertex data</param>
-        public void UpdateVertices(Vertex source, Vertex Target)
+        public void UpdateVertices(TVertex source, TVertex Target)
         {
             _source = source; _target = Target;
         }

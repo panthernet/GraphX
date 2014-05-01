@@ -566,6 +566,7 @@ namespace GraphX
         /// </summary>
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
         /// <param name="externalRoutingPoints">Provided custom routing points will be used instead of stored ones.</param>
+        /// <param name="updateLabel">Should edge label be updated in this pass</param>
         public void PrepareEdgePath(bool useCurrentCoords = false, Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges

@@ -15,6 +15,7 @@
 + Fixed bugs with edge routing calculation in some cases
 + Implemented some properties as dependencies
 + Reworked EdgeLabelControl inner logic. Should now be more flexible and performance efficient.
++ Reworked main objects hierarchy to use more interfaces for loosened conditions
 + Some code refactoring. Minor performance improvements.
 
 RELEASE 2.0.1

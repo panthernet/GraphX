@@ -14,9 +14,9 @@ using YAXLib;
 namespace GraphX.Logic
 {
     public partial class GXLogicCore<TVertex, TEdge, TGraph>: IGXLogicCore<TVertex, TEdge, TGraph>, IDisposable
-        where TVertex : VertexBase
-        where TEdge : EdgeBase<TVertex>
-        where TGraph : BidirectionalGraph<TVertex, TEdge>
+        where TVertex : class,IGraphXVertex
+        where TEdge : class,IGraphXEdge<TVertex>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         #region Properties
         #region AlgoithmFactory
