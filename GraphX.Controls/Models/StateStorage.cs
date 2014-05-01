@@ -9,8 +9,8 @@ namespace GraphX
 {
     public class StateStorage<TVertex, TEdge, TGraph>: IDisposable
         where TEdge : class, IGraphXEdge<TVertex>
-        where TVertex : class, IGraphXVertex
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TVertex: class, IGraphXVertex
+        where TGraph: class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         private Dictionary<string, GraphState<TVertex, TEdge, TGraph>> _states;
         private GraphArea<TVertex, TEdge, TGraph> _area;
@@ -82,7 +82,8 @@ namespace GraphX
             //setup visible edges
             foreach (var item in _states[id].VisibleEdges)
             {
-                var edgectrl = new EdgeControl(_area.VertexList[item.Source], _area.VertexList[item.Target], item);
+               var edgectrl =  _area.ControlFactory.CreateEdgeControl(_area.VertexList[item.Source], _area.VertexList[item.Target],
+                                                       item);
                 _area.InsertEdge(item, edgectrl);
             }
 

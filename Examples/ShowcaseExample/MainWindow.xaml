@@ -357,11 +357,11 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Test Ground" Name="tgtab">
-                    <Grid Name="xxx">
+                    <Grid>
                         <Grid.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="Templates/ERGraphXTemplates.xaml"/>
+                                    <ResourceDictionary Source="Templates/TestTemplates.xaml"/>
                                 </ResourceDictionary.MergedDictionaries>
                             </ResourceDictionary>
                         </Grid.Resources>

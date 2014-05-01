@@ -8,9 +8,9 @@ using System.Windows;
 namespace GraphX.Logic
 {
     public partial class GXLogicCore<TVertex, TEdge, TGraph>
-        where TVertex : class,IGraphXVertex
-        where TEdge : class,IGraphXEdge<TVertex>
-        where TGraph : class,IMutableBidirectionalGraph<TVertex, TEdge>
+        where TVertex : class, IGraphXVertex
+        where TEdge : class, IGraphXEdge<TVertex>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         public bool AreVertexSizesNeeded()
         {

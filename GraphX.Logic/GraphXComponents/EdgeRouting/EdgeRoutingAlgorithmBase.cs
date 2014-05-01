@@ -9,7 +9,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
     public abstract class EdgeRoutingAlgorithmBase<TVertex, TEdge, TGraph> : IExternalEdgeRouting<TVertex, TEdge>, IDisposable
         where TVertex : class
 		where TEdge : IEdge<TVertex>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
 	{
         protected IEdgeRoutingParameters _parameters;
         protected TGraph _graph;

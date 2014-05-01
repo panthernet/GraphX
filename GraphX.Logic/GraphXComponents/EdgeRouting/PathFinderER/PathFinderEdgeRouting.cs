@@ -11,7 +11,7 @@ using QuickGraph;
 namespace GraphX.GraphSharpComponents.EdgeRouting
 {
     public class PathFinderEdgeRouting<TVertex, TEdge, TGraph> : EdgeRoutingAlgorithmBase<TVertex, TEdge, TGraph>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
         where TEdge : IEdge<TVertex>
         where TVertex : class, IIdentifiableGraphDataObject
     {

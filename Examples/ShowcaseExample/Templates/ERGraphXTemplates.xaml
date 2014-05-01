@@ -6,11 +6,8 @@
     xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.Controls"
     xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.Controls">
 
-    <ControlTemplate x:Key="RightTriangleAnnotations">
-        <Polygon Points="0 0, 20 20,0 20" x:Name="poly" Fill="Green" Stroke="Red"></Polygon>
-        </ControlTemplate>
-
-        <!-- VERTEX CONTROL -->
+    
+    <!-- VERTEX CONTROL -->
     <Style TargetType="{x:Type gxl:VertexControl}">
         <Setter Property="Background" Value="#FFE3E3E3"/>
         <Setter Property="BorderThickness" Value="5,3,5,3"/>

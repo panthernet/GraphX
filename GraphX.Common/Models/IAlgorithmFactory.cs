@@ -11,8 +11,8 @@ using System.Windows;
 namespace GraphX
 {
     public interface IAlgorithmFactory<TVertex, TEdge, TGraph>
-        where TVertex : class,IGraphXVertex
-        where TEdge : class,IGraphXEdge<TVertex>
+        where TVertex : class, IGraphXVertex
+        where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         bool NeedSizes(LayoutAlgorithmTypeEnum algorithmType);

@@ -2,7 +2,7 @@
 
 namespace GraphX
 {
-    public abstract class VertexBase : IGraphXVertex
+    public abstract class VertexBase: IGraphXVertex
     {
         public VertexBase()
         {

@@ -19,7 +19,7 @@ using GraphX.GraphSharpComponents.EdgeRouting;
 namespace GraphX.Logic.Models
 {
     public sealed class AlgorithmFactory<TVertex, TEdge, TGraph> : IAlgorithmFactory<TVertex, TEdge, TGraph>
-        where TVertex : class,IGraphXVertex
+        where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {

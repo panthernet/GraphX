@@ -7,13 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.Common", "GraphX.Com
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D9664367-2C2C-46B2-81A6-26CDCD087B29}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External DLLs", "External DLLs", "{8485AE90-3EEE-4DF3-B80C-29CD2AC8803C}"
-	ProjectSection(SolutionItems) = preProject
-		DLL\QuickGraph.dll = DLL\QuickGraph.dll
-		DLL\QuickGraph.Serialization.dll = DLL\QuickGraph.Serialization.dll
-		DLL\YAXLib.dll = DLL\YAXLib.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowcaseExample", "Examples\ShowcaseExample\ShowcaseExample.csproj", "{A010A068-AC95-4A37-8054-C0B3DB6CD33F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGraph", "Examples\SimpleGraph\SimpleGraph.csproj", "{E00C5274-AA34-4CC1-BB24-F59BCF130B85}"

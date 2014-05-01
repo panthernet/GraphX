@@ -138,7 +138,6 @@
 
     <conv:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
     
-    <!--                           StrokeDashArray="{Binding Path=Edge, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource dconv}}" -->
     <!-- EDGE CONTROL -->
 	<Style TargetType="{x:Type gxl:EdgeControl}">
         <Setter Property="Template">

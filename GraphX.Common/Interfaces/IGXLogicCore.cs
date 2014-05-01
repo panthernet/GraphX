@@ -11,8 +11,8 @@ using System.Windows;
 namespace GraphX
 {
     public interface IGXLogicCore<TVertex, TEdge, TGraph>: IDisposable
-        where TVertex : class,IGraphXVertex
-        where TEdge : class,IGraphXEdge<TVertex>
+        where TVertex : class, IGraphXVertex
+        where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         IAlgorithmFactory<TVertex, TEdge, TGraph> AlgorithmFactory { get; }

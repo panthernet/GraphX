@@ -16,28 +16,28 @@ namespace GraphX
     [Serializable]
     [TemplatePart(Name = "PART_edgePath", Type = typeof(Path))]
     [TemplatePart(Name = "PART_edgeArrowPath", Type = typeof(Path))]
-    [TemplatePart(Name = "PART_edgeLabel", Type = typeof(EdgeLabelControl) )]
+    [TemplatePart(Name = "PART_edgeLabel", Type = typeof(EdgeLabelControl))]
     public class EdgeControl : Control, IGraphControl, IDisposable
-	{
-		#region Dependency Properties
+    {
+        #region Dependency Properties
 
-		public static readonly DependencyProperty SourceProperty = DependencyProperty.Register( "Source",
-																							   typeof( VertexControl ),
-																							   typeof( EdgeControl ),
-																							   new UIPropertyMetadata( null ) );
-
-
-		public static readonly DependencyProperty TargetProperty = DependencyProperty.Register( "Target",
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source",
                                                                                                typeof(VertexControl),
                                                                                                typeof(EdgeControl),
-																							   new UIPropertyMetadata( null ) );
+                                                                                               new UIPropertyMetadata(null));
 
-		public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register( "Edge", typeof( object ),
+
+        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target",
+                                                                                               typeof(VertexControl),
+                                                                                               typeof(EdgeControl),
+                                                                                               new UIPropertyMetadata(null));
+
+        public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register("Edge", typeof(object),
                                                                                              typeof(EdgeControl),
-																							 new PropertyMetadata( null ) );
+                                                                                             new PropertyMetadata(null));
 
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(EdgeControl),
-                                                                                                                    new UIPropertyMetadata(5.0) );
+                                                                                                                    new UIPropertyMetadata(5.0));
         /// <summary>
         /// Gets or sets parent GraphArea visual
         /// </summary>
@@ -60,9 +60,9 @@ namespace GraphX
             protected set { SetValue(IsSelfLoopedPropertyKey, value); }
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
         private double _labelAngle;
         /// <summary>
@@ -91,7 +91,7 @@ namespace GraphX
         private static void dashstyle_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ec = d as EdgeControl;
-            if(ec == null) return;
+            if (ec == null) return;
             switch ((EdgeDashStyle)e.NewValue)
             {
                 case EdgeDashStyle.Solid:
@@ -99,10 +99,10 @@ namespace GraphX
                     break;
 
                 case EdgeDashStyle.Dash:
-                    ec.StrokeDashArray = new DoubleCollection(new [] { 4.0, 2.0 });
+                    ec.StrokeDashArray = new DoubleCollection(new[] { 4.0, 2.0 });
                     break;
                 case EdgeDashStyle.Dot:
-                    ec.StrokeDashArray = new DoubleCollection(new [] { 1.0, 2.0 });
+                    ec.StrokeDashArray = new DoubleCollection(new[] { 1.0, 2.0 });
                     break;
 
                 case EdgeDashStyle.DashDot:
@@ -110,7 +110,7 @@ namespace GraphX
                     break;
 
                 case EdgeDashStyle.DashDotDot:
-                    ec.StrokeDashArray = new DoubleCollection(new [] { 4.0, 2.0, 1.0, 2.0, 1.0, 2.0 });
+                    ec.StrokeDashArray = new DoubleCollection(new[] { 4.0, 2.0, 1.0, 2.0, 1.0, 2.0 });
                     break;
 
                 default:
@@ -178,7 +178,7 @@ namespace GraphX
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var ec = (d as EdgeControl);
-            if(ec == null) return;
+            if (ec == null) return;
 
             ec.UpdateEdge(false);
         }
@@ -190,15 +190,19 @@ namespace GraphX
         /// <summary>
         /// Gets or sets if lables should be aligned to edges and be displayed under the same angle
         /// </summary>
-        public bool AlignLabelsToEdges { get { return _alignLabelsToEdges; } set 
-        { 
-            _alignLabelsToEdges = value;
-            if (_edgeLabelControl != null)
+        public bool AlignLabelsToEdges
+        {
+            get { return _alignLabelsToEdges; }
+            set
             {
-                if (value == false) _edgeLabelControl.Angle = 0;
-                _edgeLabelControl.UpdatePosition();
+                _alignLabelsToEdges = value;
+                if (_edgeLabelControl != null)
+                {
+                    if (value == false) _edgeLabelControl.Angle = 0;
+                    _edgeLabelControl.UpdatePosition();
+                }
             }
-        } }
+        }
         private bool _alignLabelsToEdges;
 
         /// <summary>
@@ -240,34 +244,34 @@ namespace GraphX
         /// <summary>
         /// Source visual vertex object
         /// </summary>
-		public VertexControl Source
-		{
+        public VertexControl Source
+        {
             get { return (VertexControl)GetValue(SourceProperty); }
-			set { SetValue( SourceProperty, value ); }
-		}
+            set { SetValue(SourceProperty, value); }
+        }
         /// <summary>
         /// Target visual vertex object
         /// </summary>
         public VertexControl Target
-		{
+        {
             get { return (VertexControl)GetValue(TargetProperty); }
-			set { SetValue( TargetProperty, value ); }
-		}
+            set { SetValue(TargetProperty, value); }
+        }
 
-		/*public Point[] RoutePoints
-		{
-			get { return (Point[])GetValue( RoutePointsProperty ); }
-			set { SetValue( RoutePointsProperty, value ); }
-		}*/
+        /*public Point[] RoutePoints
+        {
+            get { return (Point[])GetValue( RoutePointsProperty ); }
+            set { SetValue( RoutePointsProperty, value ); }
+        }*/
 
         /// <summary>
         /// Data edge object
         /// </summary>
-		public object Edge
-		{
-			get { return GetValue( EdgeProperty ); }
-			set { SetValue( EdgeProperty, value ); }
-		}
+        public object Edge
+        {
+            get { return GetValue(EdgeProperty); }
+            set { SetValue(EdgeProperty, value); }
+        }
 
         /// <summary>
         /// Custom edge thickness
@@ -306,7 +310,7 @@ namespace GraphX
 
         public EdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
         {
-            DataContext = edge;            
+            DataContext = edge;
             Source = source; Target = target;
             Edge = edge; DataContext = edge;
             ShowArrows = showArrows;
@@ -452,21 +456,21 @@ namespace GraphX
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseLeave(this);
-           // e.Handled = true;
+            // e.Handled = true;
         }
 
         void EdgeControl_MouseEnter(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseEnter(this);
-           // e.Handled = true;
+            // e.Handled = true;
         }
 
         void EdgeControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseMove(this);
-            e.Handled = true; 
+            e.Handled = true;
         }
 
         void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -509,7 +513,7 @@ namespace GraphX
 
         internal void InvalidateChildren()
         {
-            if(_edgeLabelControl != null)
+            if (_edgeLabelControl != null)
                 _edgeLabelControl.UpdateLayout();
         }
 
@@ -655,7 +659,7 @@ namespace GraphX
                     const double dArrowAngle = Math.PI / 2.0;
                     _arrowgeometry = new PathGeometry();
                     var aPoint = sourcePos1;
-                    _arrowgeometry.Figures.Add( GeometryHelper.GenerateArrow(aPoint, new Point(), new Point(), dArrowAngle));
+                    _arrowgeometry.Figures.Add(GeometryHelper.GenerateArrow(aPoint, new Point(), new Point(), dArrowAngle));
                     _linegeometry = geo;
                     GeometryHelper.TryFreeze(_arrowgeometry);
                     GeometryHelper.TryFreeze(_linegeometry);
@@ -666,14 +670,14 @@ namespace GraphX
                 var hasRouteInfo = routeInformation != null && routeInformation.Length > 1;
 
                 //calculate source and target edge attach points
-                if (RootArea !=null && !hasRouteInfo && RootArea.EnableParallelEdges)
+                if (RootArea != null && !hasRouteInfo && RootArea.EnableParallelEdges)
                 {
                     if (SourceOffset != 0) sourcePos = GetParallelOffset(Source, Target, SourceOffset);
                     if (TargetOffset != 0) targetPos = GetParallelOffset(Target, Source, TargetOffset);
                 }
 
                 /* Rectangular shapes implementation by bleibold */
-                
+
 
                 //Point p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.MathShape);
                 //Point p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.MathShape);
@@ -730,8 +734,8 @@ namespace GraphX
                 }
                 GeometryHelper.TryFreeze(_linegeometry);
                 GeometryHelper.TryFreeze(_arrowgeometry);
-                
-                if (ShowLabel && _edgeLabelControl != null && _updateLabelPosition && updateLabel )
+
+                if (ShowLabel && _edgeLabelControl != null && _updateLabelPosition && updateLabel)
                     _edgeLabelControl.UpdatePosition();
                 //PathGeometry = (PathGeometry)_linegeometry;
             }
@@ -739,7 +743,7 @@ namespace GraphX
             {
                 Debug.WriteLine("PrepareEdgePath() -> Edge template not found! Can't apply path to display edge!");
             }
-            
+
         }
         #endregion
 

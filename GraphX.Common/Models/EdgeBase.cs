@@ -15,6 +15,7 @@ namespace GraphX
     {
         public EdgeBase(TVertex source, TVertex target, double weight = 1)
         {
+
             Source = source;
             Target = target;
             Weight = weight;
@@ -30,12 +31,15 @@ namespace GraphX
         /// Returns true if Source vertex equals Target vertex
         /// </summary>
         [YAXDontSerialize]
-        public bool IsSelfLoop { get { return Source.Equals(Target); } }
+        public bool IsSelfLoop
+        {
+            get { return Source.Equals(Target); }
+        }
 
         /// <summary>
         /// Routing points collection used to make Path visual object
         /// </summary>
-        [YAXCustomSerializer(typeof (YAXPointArraySerializer))]
+        [YAXCustomSerializer(typeof(YAXPointArraySerializer))]
         public Point[] RoutingPoints { get; set; }
 
         public TVertex Source { get; set; }
@@ -43,6 +47,5 @@ namespace GraphX
         public TVertex Target { get; set; }
 
         public double Weight { get; set; }
-
     }
 }
