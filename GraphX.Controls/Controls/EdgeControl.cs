@@ -38,6 +38,9 @@ namespace GraphX
 
         public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(EdgeControl),
                                                                                                                     new UIPropertyMetadata(5.0));
+
+
+
         /// <summary>
         /// Gets or sets parent GraphArea visual
         /// </summary>
@@ -49,6 +52,13 @@ namespace GraphX
 
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(EdgeControl), new UIPropertyMetadata(null));
+
+        private static readonly DependencyPropertyKey IsSelfLoopedPropertyKey
+    = DependencyProperty.RegisterReadOnly("IsSelfLooped", typeof(bool), typeof(EdgeControl),
+    new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.None));
+
+        public static readonly DependencyProperty IsSelfLoopedPropProperty
+            = IsSelfLoopedPropertyKey.DependencyProperty;
 
         private bool _isSelfLooped { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
         /// <summary>
@@ -145,22 +155,12 @@ namespace GraphX
         /// </summary>
         public bool UpdateLabelPosition { get { return _updateLabelPosition; } set { _updateLabelPosition = true; } }
 
+
+
         /// <summary>
-        /// Gets if this edge is self looped (have same Source and Target)
+        /// Gets or set if hidden edges should be updated when connected vertices positions are changed. Default value is True.
         /// </summary>
-        /*public bool IsSelfLooped
-        {
-            get { return Source != null && Target != null && Source.Vertex == Target.Vertex; }
-        }*/
-
-        private static readonly DependencyPropertyKey IsSelfLoopedPropertyKey
-            = DependencyProperty.RegisterReadOnly("IsSelfLooped", typeof(bool), typeof(EdgeControl),
-            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.None));
-
-        public static readonly DependencyProperty IsSelfLoopedPropProperty
-            = IsSelfLoopedPropertyKey.DependencyProperty;
-
-
+        public bool IsHiddenEdgesUpdated { get; set; }
 
 
         /// <summary>
@@ -316,6 +316,7 @@ namespace GraphX
             ShowArrows = showArrows;
             ShowLabel = showLabels;
             _updateLabelPosition = true;
+            IsHiddenEdgesUpdated = true;
 
             EventOptions = new EdgeEventOptions(this);
             foreach (var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
@@ -550,9 +551,10 @@ namespace GraphX
 
         #region public PrepareEdgePath()
 
+
         internal void UpdateEdge(bool updateLabel = true)
         {
-            if (Visibility == Visibility.Visible && _linePathObject != null)
+            if ((Visibility == Visibility.Visible || IsHiddenEdgesUpdated) && _linePathObject != null)
             {
                 PrepareEdgePath(true, null, updateLabel);
                 _linePathObject.Data = _linegeometry;
@@ -596,7 +598,7 @@ namespace GraphX
         public void PrepareEdgePath(bool useCurrentCoords = false, Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
-            if (Visibility != Visibility.Visible || Source == null || Target == null || ManualDrawing) return;
+            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && Source == null || Target == null || ManualDrawing) return;
 
             var template = Template;
             if (template != null)

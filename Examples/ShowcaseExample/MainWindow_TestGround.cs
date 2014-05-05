@@ -23,10 +23,16 @@ namespace ShowcaseExample
         private void TestGround_Constructor()
         {
             tst_but_gen.Click += tst_but_gen_Click;
+            tst_but_action.Click += tst_but_action_Click;
             //tst_Area.UseNativeObjectArrange = false;
             tst_Area.EnableVisualPropsRecovery = true;
             tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
             tst_Area.SetVerticesDrag(true, true);
+        }
+
+        void tst_but_action_Click(object sender, RoutedEventArgs e)
+        {
+            tst_Area.EdgesList.First().Value.Visibility = tst_Area.EdgesList.First().Value.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private GraphExample GenerateTestGraph()
@@ -58,7 +64,7 @@ namespace ShowcaseExample
             logic.ParallelEdgeDistance = 15;
 
             tst_Area.ShowAllEdgesArrows(false);
-
+            tst_Area.LogicCore = logic;
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
             logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
             logic.DefaultLayoutAlgorithmParams = layParams;

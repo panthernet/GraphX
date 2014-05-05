@@ -8,9 +8,9 @@ using System.Windows;
 namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 {
     public class SimpleEdgeRouting<TVertex, TEdge, TGraph> : EdgeRoutingAlgorithmBase<TVertex, TEdge, TGraph>
-        where TGraph : class, IBidirectionalGraph<TVertex, TEdge>
-        where TEdge : IEdge<TVertex>
-        where TVertex : class, IIdentifiableGraphDataObject
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TEdge : class, IGraphXEdge<TVertex>
+        where TVertex : class, IGraphXVertex
     {
         public SimpleEdgeRouting(TGraph graph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null)
             : base(graph, vertexPositions, vertexSizes, parameters)

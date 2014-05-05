@@ -5,11 +5,13 @@
 	+ Rotation angle support
 	+ Same template logic as in EdgeLabelControl
 + Added key modifiers to vertex event args
++ Added XAML templates usage example in WF project
 + Added new layout type Custom. When set layout algorithm calculation is skipped completely and manually added data is used for OR and ER algorithms (if any).
 + Added (reintroduced) GraphArea::SideExpansionSize property which gets or sets additional space for GraphArea borders. Useful for zoom adjustments when custom text or controls which are not used in size calculations must fit into the zooming.
 + Added IGraphControlFactory-Interface and Implementation for Edge and Vertex controls creation (thanks to Paul Mandalka)
 + Added simple Nuget-Package specification for GraphX (use createPackage.bat to create the nuget package for GraphX) (thanks to Paul Mandalka)
 + Added new ZoomControl::ZoomAnimationCompleted event (thanks to Paul Mandalka)
++ Fixed hidden edges update on vertex drag
 + Fixed PrintHelper::ExportToImage method to use DPI-Settings for Image Rendering (thanks to Paul Mandalka)
 + Fixed labels rendering for parallel edges. Now they are displayed separately for each edge.
 + Fixed async calculations being broken due to LogicCore property became dependency

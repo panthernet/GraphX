@@ -383,6 +383,7 @@
                         </graphxctrl:ZoomControl>
                         <DockPanel Grid.Column="1" Grid.RowSpan="4" LastChildFill="False">
                             <Button Margin="3" Content="Random" Height="25" DockPanel.Dock="Top" Name="tst_but_gen"/>
+                            <Button Margin="3" Content="Action" Height="25" DockPanel.Dock="Top" Name="tst_but_action"/>
                         </DockPanel>
                     </Grid>
                 </TabItem>
