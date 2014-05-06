@@ -760,12 +760,12 @@ namespace GraphX
 
         private void ReapplySingleVertexVisualProperties(VertexControl item)
         {
-            DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled);
-            DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges);
-            item.MathShape = _svVertexShape;
-            HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled);
-            HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType);
-            HighlightBehaviour.SetHighlightEdges(item, _svVertexHlEdgesType);
+            if (_svVerticesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled.Value);
+            if (_svVerticesDragUpdateEdges != null) DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges.Value);
+            if (_svVertexShape != null) item.MathShape = _svVertexShape.Value;
+            if (_svVertexHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled.Value);
+            if (_svVertexHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType.Value);
+            if (_svVertexHlEdgesType != null) HighlightBehaviour.SetHighlightEdges(item, _svVertexHlEdgesType.Value);
         }
 
         private void ReapplyEdgeVisualProperties()
@@ -776,17 +776,17 @@ namespace GraphX
 
         private void ReapplySingleEdgeVisualProperties(EdgeControl item)
         {
-            item.DashStyle = _svEdgeDashStyle;
-            item.ShowArrows = _svShowEdgeArrows;
-            item.ShowLabel = _svShowEdgeLabels;
-            item.AlignLabelsToEdges = _svAlignEdgeLabels;
-            item.UpdateLabelPosition = _svUpdateLabelPosition;
-            HighlightBehaviour.SetIsHighlightEnabled(item, _svEdgeHlEnabled);
-            HighlightBehaviour.SetHighlightControl(item, _svEdgeHlObjectType);
+            if (_svEdgeDashStyle != null) item.DashStyle = _svEdgeDashStyle.Value;
+            if (_svShowEdgeArrows != null) item.ShowArrows = _svShowEdgeArrows.Value;
+            if (_svShowEdgeLabels != null) item.ShowLabel = _svShowEdgeLabels.Value;
+            if (_svAlignEdgeLabels != null) item.AlignLabelsToEdges = _svAlignEdgeLabels.Value;
+            if (_svUpdateLabelPosition != null) item.UpdateLabelPosition = _svUpdateLabelPosition.Value;
+            if (_svEdgeHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svEdgeHlEnabled.Value);
+            if (_svEdgeHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svEdgeHlObjectType.Value);
             HighlightBehaviour.SetHighlightEdges(item, EdgesType.All);
         }
 
-        private bool _svUpdateLabelPosition;
+        private bool? _svUpdateLabelPosition;
         public void UpdateEdgeLabelPosition(bool value)
         {
             _svUpdateLabelPosition = value;
@@ -794,7 +794,7 @@ namespace GraphX
                 item.Value.UpdateLabelPosition = value;
         }
 
-        private EdgeDashStyle _svEdgeDashStyle = EdgeDashStyle.Solid;
+        private EdgeDashStyle? _svEdgeDashStyle;// EdgeDashStyle.Solid;
         /// <summary>
         /// Sets all edges dash style
         /// </summary>
@@ -806,7 +806,7 @@ namespace GraphX
                 item.Value.DashStyle = style;
         }
 
-        private bool _svShowEdgeArrows = true;
+        private bool? _svShowEdgeArrows;
         /// <summary>
         /// Show or hide all edges arrows. Default value is True.
         /// </summary>
@@ -818,7 +818,7 @@ namespace GraphX
                 item.ShowArrows = isEnabled;
         }
 
-        private bool _svShowEdgeLabels;
+        private bool? _svShowEdgeLabels;
         /// <summary>
         /// Show or hide all edges labels
         /// </summary>
@@ -831,7 +831,7 @@ namespace GraphX
             InvalidateVisual();
         }
 
-        private bool _svAlignEdgeLabels;
+        private bool? _svAlignEdgeLabels;
         /// <summary>
         /// Aligns all labels with edges or displays them horizontaly
         /// </summary>
@@ -846,8 +846,8 @@ namespace GraphX
             InvalidateVisual();
         }
 
-        private bool _svVerticesDragEnabled;
-        private bool _svVerticesDragUpdateEdges;
+        private bool? _svVerticesDragEnabled;
+        private bool? _svVerticesDragUpdateEdges;
         /// <summary>
         /// Sets drag mode for all vertices
         /// </summary>
@@ -865,7 +865,7 @@ namespace GraphX
             }
         }
 
-        private VertexShape _svVertexShape = VertexShape.Rectangle;
+        private VertexShape? _svVertexShape;// = VertexShape.Rectangle;
         /// <summary>
         /// Sets math shape for all vertices
         /// </summary>
@@ -877,9 +877,9 @@ namespace GraphX
                 item.Value.MathShape = shape;
         }
 
-        private bool _svVertexHlEnabled;
-        private GraphControlType _svVertexHlObjectType = GraphControlType.VertexAndEdge;
-        private EdgesType _svVertexHlEdgesType = EdgesType.All;
+        private bool? _svVertexHlEnabled;
+        private GraphControlType? _svVertexHlObjectType;// = GraphControlType.VertexAndEdge;
+        private EdgesType? _svVertexHlEdgesType;// = EdgesType.All;
         /// <summary>
         /// Sets vertices highlight logic
         /// </summary>
@@ -900,8 +900,8 @@ namespace GraphX
             }
         }
 
-        private bool _svEdgeHlEnabled;
-        private GraphControlType _svEdgeHlObjectType = GraphControlType.VertexAndEdge;
+        private bool? _svEdgeHlEnabled;
+        private GraphControlType? _svEdgeHlObjectType;// = GraphControlType.VertexAndEdge;
         /// <summary>
         /// Sets edges highlight logic
         /// </summary>
@@ -972,7 +972,7 @@ namespace GraphX
                                                                     item, false, true, defaultVisibility);
                 InternalInsertEdge(item, edgectrl);
                 //setup path
-                if (_svShowEdgeLabels)
+                if (_svShowEdgeLabels == true)
                     edgectrl.ShowLabel = true;
                 edgectrl.PrepareEdgePath();
                 //edgectrl.InvalidateChildren();
@@ -981,7 +981,7 @@ namespace GraphX
 
             if (LogicCore.EnableParallelEdges)
                 ParallelizeEdges();
-            if (_svShowEdgeLabels && LogicCore.EnableEdgeLabelsOverlapRemoval)
+            if (_svShowEdgeLabels == true && LogicCore.EnableEdgeLabelsOverlapRemoval)
                RemoveEdgeLabelsOverlap();
 
         }
