@@ -40,7 +40,7 @@ namespace ShowcaseExample
             var graph = new GraphExample();
             var v1 = new DataVertex() { Text = "Test1", ID = 1 };
             graph.AddVertex(v1);
-            var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+           /* var v2 = new DataVertex() { Text = "Test2", ID = 2 };
             graph.AddVertex(v2);
             var v3 = new DataVertex() { Text = "Test3", ID = 3 };
             graph.AddVertex(v3);
@@ -49,7 +49,7 @@ namespace ShowcaseExample
 
             graph.AddEdge(new DataEdge(v1, v2, 100));
             graph.AddEdge(new DataEdge(v2, v3, 100));
-            graph.AddEdge(new DataEdge(v2, v4, 100));
+            graph.AddEdge(new DataEdge(v2, v4, 100));*/
 
             
             return graph;
@@ -66,7 +66,7 @@ namespace ShowcaseExample
             tst_Area.ShowAllEdgesArrows(false);
             tst_Area.LogicCore = logic;
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
-            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Tree;
             logic.DefaultLayoutAlgorithmParams = layParams;
             var overlapParams = new OverlapRemovalParameters { HorizontalGap = 100, VerticalGap = 100 };
             logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;

@@ -21,6 +21,7 @@
 + Fixed bugs with edge routing calculation in some cases
 + Fixed: Graph-Area LogicCoreProperty was registered using GraphAreaBase which could cause a problem (thanks to Paul Mandalka)
 + Fixed visual properties recovery terminating template values 
++ Fixed Sugiyama and EfficientSugiyama algorithms calculation with only one vertex
 + Implemented some properties as dependencies
 + Implemented EdgeControl::IsSelfLooped property as read-only dependency property.
 + Reworked EdgeLabelControl inner logic. Should now be more flexible and performance efficient.

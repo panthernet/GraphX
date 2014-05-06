@@ -857,6 +857,13 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
         protected override void InternalCompute()
         {
+            if(_graph.VertexCount == 0) return;
+            if (_graph.VertexCount == 1)
+            {
+                VertexPositions.Clear();
+                VertexPositions[_graph.Vertices.First().Original] = new Point(0,0);
+                return;
+            }
             //
             //Phase 1 - Filters & Removals
             //

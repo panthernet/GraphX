@@ -84,6 +84,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             int crossings = 0;
             changed = false;
             AlternatingLayer alternatingLayer = null;
+            if (_alternatingLayers.Length == 0) return 0;
             if (_alternatingLayers[startLayerIndex] == null)
             {
                 alternatingLayer = new AlternatingLayer();

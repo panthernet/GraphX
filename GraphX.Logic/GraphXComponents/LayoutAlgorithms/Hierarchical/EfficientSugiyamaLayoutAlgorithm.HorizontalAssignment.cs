@@ -138,8 +138,9 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
         private void PutbackIsolatedVertices()
         {
-            _sparseCompactionGraph.AddVertexRange(_isolatedVertices.OfType<Data>());
             _graph.AddVertexRange(_isolatedVertices);
+            if (_isolatedVertices.Count < 2) return;
+            _sparseCompactionGraph.AddVertexRange(_isolatedVertices.OfType<Data>());
             int layer = 0;
             SugiVertex prevIsolatedVertex = null;
             foreach (var isolatedVertex in _isolatedVertices)
@@ -165,6 +166,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
         private void CalculateLayerHeightsAndPositions()
         {
+            if (_layers.Count == 0) return;
             _layerHeights = new double[_layers.Count];
             for (int i = 0; i < _layers.Count; i++)
                 _layerHeights[i] = _layers[i].Max(v => v.Size.Height);
@@ -179,29 +181,39 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
         private void CalculateRealPositions()
         {
-            foreach (var vertex in _graph.Vertices)
+            if (_graph.Vertices.Count() == 1)
             {
-                Debug.WriteLine(string.Format("{0}:\t{1}\t{2}\t{3}\t{4}",
-                    vertex.OriginalVertex,
-                    vertex.HorizontalPositions[0],
-                    vertex.HorizontalPositions[1],
-                    vertex.HorizontalPositions[2],
-                    vertex.HorizontalPositions[3]));
-                if (Parameters.PositionMode < 0)
+                _graph.Vertices.First().VerticalPosition = 0;
+                _graph.Vertices.First().HorizontalPosition = 0;
+            }
+            else
+            {
+                foreach (var vertex in _graph.Vertices)
                 {
-                    vertex.HorizontalPosition =
-                        (vertex.HorizontalPositions[0] + vertex.HorizontalPositions[1]
-                         + vertex.HorizontalPositions[2] + vertex.HorizontalPositions[3]) / 4.0;
-                }
-                else
-                {
-                    vertex.HorizontalPosition = vertex.HorizontalPositions[Parameters.PositionMode];
+                    Debug.WriteLine(string.Format("{0}:\t{1}\t{2}\t{3}\t{4}",
+                        vertex.OriginalVertex,
+                        vertex.HorizontalPositions[0],
+                        vertex.HorizontalPositions[1],
+                        vertex.HorizontalPositions[2],
+                        vertex.HorizontalPositions[3]));
+                    if (Parameters.PositionMode < 0)
+                    {
+                        vertex.HorizontalPosition =
+                            (vertex.HorizontalPositions[0] + vertex.HorizontalPositions[1]
+                             + vertex.HorizontalPositions[2] + vertex.HorizontalPositions[3]) / 4.0;
+                    } else
+                    {
+                        vertex.HorizontalPosition = vertex.HorizontalPositions[Parameters.PositionMode];
+                    }
                 }
             }
         }
 
         private void CalculateVerticalPositions()
         {
+            if (_graph.Vertices.Count() == 1)
+                _graph.Vertices.First().VerticalPosition = 0;
+            else 
             foreach (var vertex in _graph.Vertices)
                 vertex.VerticalPosition = _layerPositions[vertex.LayerIndex] + (vertex.Size.Height <= 0 ? _layerHeights[vertex.LayerIndex] : vertex.Size.Height) / 2.0;
         }
@@ -213,12 +225,17 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// <param name="upperLowerEdges">Alignment based on which edges (upper or lower ones).</param>
         private void CalculateHorizontalPositions(LeftRightMode leftRightMode, UpperLowerEdges upperLowerEdges)
         {
-            int modeIndex = (byte)upperLowerEdges * 2 + (byte)leftRightMode;
-            InitializeRootsAndAligns(modeIndex);
-            DoAlignment(modeIndex, leftRightMode, upperLowerEdges);
-            WriteOutAlignment(modeIndex);
-            InitializeSinksAndShifts(modeIndex);
-            DoHorizontalCompaction(modeIndex, leftRightMode, upperLowerEdges);
+            if (_graph.Vertices.Count() == 1)
+                _graph.Vertices.First().HorizontalPosition = 0;
+            else
+            {
+                int modeIndex = (byte) upperLowerEdges * 2 + (byte) leftRightMode;
+                InitializeRootsAndAligns(modeIndex);
+                DoAlignment(modeIndex, leftRightMode, upperLowerEdges);
+                WriteOutAlignment(modeIndex);
+                InitializeSinksAndShifts(modeIndex);
+                DoHorizontalCompaction(modeIndex, leftRightMode, upperLowerEdges);
+            }
         }
 
         private void WriteOutAlignment(int modeIndex)
