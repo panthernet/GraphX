@@ -1,4 +1,8 @@
-﻿RELEASE 2.0.2
+﻿RELEASE 2.0.3
++ Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
++ Removed redundant dependencies
+
+RELEASE 2.0.2
 + Added vertex control labels with following functionality:
 	+ 2 available positioning modes: by sides or by coordinates
 	+ Always attached to vertex and moves with it
