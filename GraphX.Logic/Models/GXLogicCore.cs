@@ -111,17 +111,21 @@ namespace GraphX.Logic
         #endregion
         #endregion
 
-        public GXLogicCore()
+        public GXLogicCore(TGraph graph)
         {
             CreateNewAlgorithmFactory();
             CreateNewAlgorithmStorage(null, null, null);
-
-            Graph = (TGraph)Activator.CreateInstance(typeof(TGraph));
+            Graph = graph;
             EdgeSelfLoopCircleOffset = new Point(10, 10);
             EdgeCurvingTolerance = 8;
             EdgeSelfLoopCircleRadius = 10;
             EdgeShowSelfLooped = true;
             ParallelEdgeDistance = 5;
+        }
+
+        public GXLogicCore()
+            : this((TGraph)Activator.CreateInstance(typeof(TGraph)))
+        {
         }
 
         public void Dispose()
