@@ -1,4 +1,11 @@
-﻿RELEASE 2.0.3
+﻿PCL-IMPROVEMENTS
+- Added YAXLib v2.13 project sources splitted into 2 different projects: main and PCL compliant (for attributes to be availbale in PCL libraries)
+- Implemented PCL version of GraphX.Common
+- Setted up PCL version of GraphX.Logic (not yet fully implemented)
+
+Discussion:
+
+RELEASE 2.0.3
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies
 
