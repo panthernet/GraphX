@@ -86,7 +86,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout
 			: base( visitedGraph, vertexPositions )
 		{
 			InitParameters( oldParameters );
-			TraceSource = new TraceSource( "LayoutAlgorithm", SourceLevels.All );
+			//TraceSource = new TraceSource( "LayoutAlgorithm", SourceLevels.All );
 		}
 		#endregion
 

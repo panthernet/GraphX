@@ -147,7 +147,7 @@ namespace GraphX.Logic
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);
         }
 
-        public void SaveDataToFile(string filename, List<DataSaveModel> modelsList)
+        /*//!PCL-TODO! public void SaveDataToFile(string filename, List<DataSaveModel> modelsList)
         {
             var serializer = new YAXSerializer(typeof(List<DataSaveModel>));
             using (var textWriter = new StreamWriter(filename))
@@ -164,6 +164,19 @@ namespace GraphX.Logic
             {
                 return (List<DataSaveModel>)deserializer.Deserialize(textReader);
             }
+        }*/
+
+
+        public void SaveDataToFile(string filename, List<DataSaveModel> modelsList)
+        {
+            //!TODO-PCL!
+            throw new NotImplementedException();
+        }
+
+        public List<DataSaveModel> LoadDataFromFile(string filename)
+        {
+            //!TODO-PCL!
+            throw new NotImplementedException();
         }
     }
 }

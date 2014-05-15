@@ -195,7 +195,7 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
                            OrderBy(mi => getFakeDistance(pt, mi.Point)).
                            Take(1);
             if (lst.Count() == 0) throw new Exception("GetClosestPoint() -> Can't find one!");
-            return  new System.Drawing.Point(lst.First().PlaceX, lst.First().PlaceY);
+            return  new Point(lst.First().PlaceX, lst.First().PlaceY);
         }
 
         private double getFakeDistance(Point source, Point target)

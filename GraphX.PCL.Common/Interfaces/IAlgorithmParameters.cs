@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-
-namespace GraphX.GraphSharp.Algorithms
+﻿namespace GraphX.GraphSharp.Algorithms
 {
-	public interface IAlgorithmParameters : INotifyPropertyChanged
+	public interface IAlgorithmParameters : ICloneable//!PCL-NON-COMPL! INotifyPropertyChanged
 	{
 	}
 }

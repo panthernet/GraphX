@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GraphX.Measure;
 using QuickGraph;
-using System.Diagnostics;
 
 namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 {
@@ -187,12 +187,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             {
                 foreach (var vertex in _graph.Vertices)
                 {
-                    Debug.WriteLine(string.Format("{0}:\t{1}\t{2}\t{3}\t{4}",
+                    /*Debug.WriteLine(string.Format("{0}:\t{1}\t{2}\t{3}\t{4}",
                         vertex.OriginalVertex,
                         vertex.HorizontalPositions[0],
                         vertex.HorizontalPositions[1],
                         vertex.HorizontalPositions[2],
-                        vertex.HorizontalPositions[3]));
+                        vertex.HorizontalPositions[3]));*/
                     if (Parameters.PositionMode < 0)
                     {
                         vertex.HorizontalPosition =
@@ -237,7 +237,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
         private void WriteOutAlignment(int modeIndex)
         {
-            Debug.WriteLine(string.Format("Alignment for {0}", modeIndex));
+            /*Debug.WriteLine(string.Format("Alignment for {0}", modeIndex));
             foreach (var vertex in _graph.Vertices)
                 Debug.WriteLine(string.Format("{0},{1},{2}: Root {3},{4},{5}\tAlign {6},{7},{8}",
                     vertex.OriginalVertex,
@@ -248,7 +248,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     vertex.Roots[modeIndex].Type,
                     vertex.Aligns[modeIndex].OriginalVertex,
                     vertex.Aligns[modeIndex].LayerIndex,
-                    vertex.Aligns[modeIndex].Type));
+                    vertex.Aligns[modeIndex].Type));*/
         }
 
         private void InitializeSinksAndShifts(int modeIndex)
@@ -408,8 +408,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                             if (vertex.Aligns[modeIndex] != vertex)
                                 continue;
                             var edge = neighbourEdges[medians[m]];
-                            if (edge.Marked)
-                                Debug.WriteLine("Edge marked: " + edge.Source.OriginalVertex + ", " + edge.Target.OriginalVertex);
+                            //if (edge.Marked)
+                            //    Debug.WriteLine("Edge marked: " + edge.Source.OriginalVertex + ", " + edge.Target.OriginalVertex);
                             var neighbour = edge.OtherVertex(vertex);
                             if (!edge.Marked &&
                                 ((leftRightMode == LeftRightMode.Left && r < neighbour.Position)

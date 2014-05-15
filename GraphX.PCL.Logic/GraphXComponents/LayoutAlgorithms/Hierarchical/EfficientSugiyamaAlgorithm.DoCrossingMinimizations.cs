@@ -129,7 +129,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 }
                 else
                 {
-                    Debug.WriteLine("Layer " + (i + step) + " has not changed.");
+                    //!PCL-NON-COMPL! Debug.WriteLine("Layer " + (i + step) + " has not changed.");
                     alternatingLayer = _alternatingLayers[i + step];
                     crossings += prevCrossCount;
                 }
@@ -140,24 +140,24 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         [Conditional("DEBUG")]
         private void OutputAlternatingLayer(AlternatingLayer alternatingLayer, int layerIndex, int crossCount)
         {
-            Debug.Write(layerIndex + " | " + crossCount + ": ");
-            for (int i = 0; i < alternatingLayer.Count; i++)
-            {
-                if (alternatingLayer[i] is SugiVertex)
-                {
-                    var vertex = alternatingLayer[i] as SugiVertex;
-                    Debug.Write(string.Format("{0},{1}\t", vertex.OriginalVertex, vertex.Type.ToString()[0]));
-                }
-                else
-                {
-                    var segmentContainer = alternatingLayer[i] as SegmentContainer;
-                    for (int j = 0; j < segmentContainer.Count; j++)
-                    {
-                        Debug.Write("| \t");
-                    }
-                }
-            }
-            Debug.WriteLine("");
+            /*!PCL-NON-COMPL!  //Debug.Write(layerIndex + " | " + crossCount + ": ");
+              for (int i = 0; i < alternatingLayer.Count; i++)
+              {
+                  if (alternatingLayer[i] is SugiVertex)
+                  {
+                      var vertex = alternatingLayer[i] as SugiVertex;
+                      Debug.Write(string.Format("{0},{1}\t", vertex.OriginalVertex, vertex.Type.ToString()[0]));
+                  }
+                  else
+                  {
+                      var segmentContainer = alternatingLayer[i] as SegmentContainer;
+                      for (int j = 0; j < segmentContainer.Count; j++)
+                      {
+                          Debug.Write("| \t");
+                      }
+                  }
+              }
+              Debug.WriteLine("");*/
         }
 
         private void ReplaceLayer(AlternatingLayer alternatingLayer, int i)

@@ -47,7 +47,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         private IDictionary<TVertex, KeyValuePair<TVertex, Rect>> getSizesCollection(TEdge ctrl, Point end_point)
         {
             var list = VertexSizes.Where(a => a.Key.ID != ctrl.Source.ID && a.Key.ID != ctrl.Target.ID).OrderByDescending(a => MathHelper.GetDistance(VertexPositions[a.Key], end_point)).ToDictionary(a => a.Key); // new Dictionary<TVertex, Rect>();
-            list.Values.ToList().ForEach(a=> a.Value.Inflate(vertex_margin_distance*2, vertex_margin_distance*2)); //add margins
+            foreach ( var item in list.Values)
+                item.Value.Inflate(vertex_margin_distance * 2, vertex_margin_distance * 2);
             return list;
         }
 

@@ -63,8 +63,8 @@ namespace GustavoAlgorithms
 
     public class PathFinder : IPathFinder
     {
-        [System.Runtime.InteropServices.DllImport("KERNEL32.DLL", EntryPoint="RtlZeroMemory")]
-        public unsafe static extern bool ZeroMemory(byte* destination, int length);
+       // [System.Runtime.InteropServices.DllImport("KERNEL32.DLL", EntryPoint="RtlZeroMemory")]
+       // public unsafe static extern bool ZeroMemory(byte* destination, int length);
 
         #region Events
         public event PathFinderDebugHandler PathFinderDebug;
@@ -147,11 +147,11 @@ namespace GustavoAlgorithms
             set { mSearchLimit = value; }
         }
 
-        public double CompletedTime
+        /*public double CompletedTime
         {
             get { return mCompletedTime; }
             set { mCompletedTime = value; }
-        }
+        }*/
 
         public bool DebugProgress
         {
@@ -174,7 +174,7 @@ namespace GustavoAlgorithms
 
         public List<PathFinderNode> FindPath(Point start, Point end)
         {
-            HighResolutionTime.Start();
+            //!PCL-NON-COMPL! HighResolutionTime.Start();
 
             PathFinderNode parentNode;
             bool found  = false;
@@ -188,9 +188,9 @@ namespace GustavoAlgorithms
 
             #if DEBUGON
             if (mDebugProgress && PathFinderDebug != null)
-                PathFinderDebug(0, 0, start.X, start.Y, PathFinderNodeType.Start, -1, -1);
+                PathFinderDebug(0, 0, (int)start.X, (int)start.Y, PathFinderNodeType.Start, -1, -1);
             if (mDebugProgress && PathFinderDebug != null)
-                PathFinderDebug(0, 0, end.X, end.Y, PathFinderNodeType.End, -1, -1);
+                PathFinderDebug(0, 0, (int)end.X, (int)end.Y, PathFinderNodeType.End, -1, -1);
             #endif
 
             sbyte[,] direction;
@@ -202,8 +202,8 @@ namespace GustavoAlgorithms
             parentNode.G         = 0;
             parentNode.H         = mHEstimate;
             parentNode.F         = parentNode.G + parentNode.H;
-            parentNode.X         = start.X;
-            parentNode.Y         = start.Y;
+            parentNode.X         = (int)start.X;
+            parentNode.Y         = (int)start.Y;
             parentNode.PX        = parentNode.X;
             parentNode.PY        = parentNode.Y;
             mOpen.Push(parentNode);
@@ -302,14 +302,14 @@ namespace GustavoAlgorithms
                     {
                         default:
                         case HeuristicFormula.Manhattan:
-                            newNode.H       = mHEstimate * (Math.Abs(newNode.X - end.X) + Math.Abs(newNode.Y - end.Y));
+                            newNode.H       = mHEstimate * (Math.Abs(newNode.X - (int)end.X) + Math.Abs(newNode.Y - (int)end.Y));
                             break;
                         case HeuristicFormula.MaxDXDY:
-                            newNode.H       = mHEstimate * (Math.Max(Math.Abs(newNode.X - end.X), Math.Abs(newNode.Y - end.Y)));
+                            newNode.H = mHEstimate * (Math.Max(Math.Abs(newNode.X - (int)end.X), Math.Abs(newNode.Y - (int)end.Y)));
                             break;
                         case HeuristicFormula.DiagonalShortCut:
-                            int h_diagonal  = Math.Min(Math.Abs(newNode.X - end.X), Math.Abs(newNode.Y - end.Y));
-                            int h_straight  = (Math.Abs(newNode.X - end.X) + Math.Abs(newNode.Y - end.Y));
+                            int h_diagonal = Math.Min(Math.Abs(newNode.X - (int)end.X), Math.Abs(newNode.Y - (int)end.Y));
+                            int h_straight = (Math.Abs(newNode.X - (int)end.X) + Math.Abs(newNode.Y - (int)end.Y));
                             newNode.H       = (mHEstimate * 2) * h_diagonal + mHEstimate * (h_straight - 2 * h_diagonal);
                             break;
                         case HeuristicFormula.Euclidean:
@@ -320,18 +320,18 @@ namespace GustavoAlgorithms
                             break;
                         case HeuristicFormula.Custom1:
                             Point dxy       = new Point(Math.Abs(end.X - newNode.X), Math.Abs(end.Y - newNode.Y));
-                            int Orthogonal  = Math.Abs(dxy.X - dxy.Y);
-                            int Diagonal    = Math.Abs(((dxy.X + dxy.Y) - Orthogonal) / 2);
-                            newNode.H       = mHEstimate * (Diagonal + Orthogonal + dxy.X + dxy.Y);
+                            int Orthogonal  = (int)Math.Abs(dxy.X - dxy.Y);
+                            int Diagonal    = (int)Math.Abs(((dxy.X + dxy.Y) - Orthogonal) / 2);
+                            newNode.H       = mHEstimate * (int)(Diagonal + Orthogonal + dxy.X + dxy.Y);
                             break;
                     }
                     if (mTieBreaker)
                     {
-                        int dx1 = parentNode.X - end.X;
-                        int dy1 = parentNode.Y - end.Y;
-                        int dx2 = start.X - end.X;
-                        int dy2 = start.Y - end.Y;
-                        int cross = Math.Abs(dx1 * dy2 - dx2 * dy1);
+                        double dx1 = parentNode.X - end.X;
+                        double dy1 = parentNode.Y - end.Y;
+                        double dx2 = start.X - end.X;
+                        double dy2 = start.Y - end.Y;
+                        var cross = (int)Math.Abs(dx1 * dy2 - dx2 * dy1);
                         newNode.H = (int) (newNode.H + cross * 0.001);
                     }
                     newNode.F       = newNode.G + newNode.H;
@@ -359,7 +359,7 @@ namespace GustavoAlgorithms
                 #endif
             }
 
-            mCompletedTime = HighResolutionTime.GetTime();
+            //mCompletedTime = HighResolutionTime.GetTime();
             if (found)
             {
                 PathFinderNode fNode = mClose[mClose.Count - 1];
@@ -399,5 +399,8 @@ namespace GustavoAlgorithms
             #endregion
         }
         #endregion
+
+
+        public double CompletedTime { get; set; }
     }
 }

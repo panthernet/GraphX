@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Threading;
 using GraphX.GraphSharp;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;

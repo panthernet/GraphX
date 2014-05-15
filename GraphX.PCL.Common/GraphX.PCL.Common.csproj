@@ -58,6 +58,7 @@
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Interfaces\IAlgorithmParameters.cs" />
     <Compile Include="Interfaces\IAlgorithmStorage.cs" />
+    <Compile Include="Interfaces\ICloneable.cs" />
     <Compile Include="Interfaces\ICore.cs" />
     <Compile Include="Interfaces\IEdgeRoutingAlgorithm.cs" />
     <Compile Include="Interfaces\IEdgeRoutingParameters.cs" />
@@ -79,6 +80,10 @@
     <Compile Include="Models\IAlgorithmFactory.cs" />
     <Compile Include="Models\IIdentifiableGraphDataObject.cs" />
     <Compile Include="Models\IRoutingInfo.cs" />
+    <Compile Include="Models\Semaphore\BAutoResetEvent.cs" />
+    <Compile Include="Models\Semaphore\BManualResetEvent.cs" />
+    <Compile Include="Models\Semaphore\Semaphore.cs" />
+    <Compile Include="Models\Semaphore\BWaitHandle.cs" />
     <Compile Include="Models\VertexBase.cs" />
     <Compile Include="Models\WeightedEdge.cs" />
     <Compile Include="Point.cs" />

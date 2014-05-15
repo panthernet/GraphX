@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace GustavoAlgorithms
 {
-    public static class HighResolutionTime
+    /*public static class HighResolutionTime
     {
         #region Win32APIs
         [System.Runtime.InteropServices.DllImport("Kernel32.dll")]
@@ -40,6 +41,6 @@ namespace GustavoAlgorithms
             return (double) elapsed / mFrequency;
         }
         #endregion
-    }
+    }*/
 }
 
