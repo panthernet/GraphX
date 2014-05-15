@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A30D218B-AAA4-483A-99F7-EAEB1B8B4610}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GraphX.PCL.Logic</RootNamespace>
+    <AssemblyName>GraphX.PCL.Logic</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile143</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Documents\AIV.cs">
+      <Link>Properties\AIV.cs</Link>
+    </Compile>
+    <Compile Include="GraphXComponents\AlgorithmBase.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\EdgeBundling\BundleEdgeRouting.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\EdgeBundling\BundleEdgeRoutingParameters.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\EdgeBundling\VectorTools.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\EdgeRoutingAlgorithmBase.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\EdgeRoutingParameters.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\HighResolutionTime.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\IPathFinder.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\MatrixItem.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\PathFinder.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\PathFinderEdgeRouting.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\PathFinderEdgeRoutingParameters.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\PathFinderER\PriorityQueueB.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\SimpleER\SimpleEdgeRouting.cs" />
+    <Compile Include="GraphXComponents\EdgeRouting\SimpleER\SimpleERParameters.cs" />
+    <Compile Include="GraphXComponents\GraphHideHelper.cs" />
+    <Compile Include="GraphXComponents\GraphSharpExtensions.cs" />
+    <Compile Include="GraphXComponents\HierarchicalGraph.cs" />
+    <Compile Include="GraphXComponents\IAlgorithm.cs" />
+    <Compile Include="GraphXComponents\IHierarchicalBidirectionalGraph.cs" />
+    <Compile Include="GraphXComponents\ISoftMutableGraph.cs" />
+    <Compile Include="GraphXComponents\LayeredTopologicalSortAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Circular\CircularLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Circular\CircularLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\BoundedFRLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundFDPLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundFDPLayoutAlgorithm.Data.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundFDPLayoutAlgorithm.Init.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundFDPLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundGraph.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundLayoutContext.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundLayoutIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\CompoundVertexInnerLayoutType.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\ICompoundGraph.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\ICompoundLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\ICompoundLayoutContext.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\ICompoundLayoutIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\ILayoutContext.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\IMutableCompoundGraph.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\LayoutContext.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\LayoutMode.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\TestingCompoundLayoutIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\Compound\TestingCompoundVertexInfo.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\FRCoolingFunction.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\FreeFRLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\FRLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\FRLayoutParametersBase.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\ISOMLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\ISOMLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\KKLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\KKLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\LinLogLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\LinLogLayoutAlgorithm.QuadTree.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\FDP\LinLogLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.BuildSparseNormalizedGraph.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.DoCrossingMinimizations.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.DoPreparing.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutAlgorithm.AlternatingLayer.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutAlgorithm.Data.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutAlgorithm.HorizontalAssignment.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutAlgorithm.SegmentContainer.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\EfficientSugiyamaLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaEdgeRoutings.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.Enums.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.SugiEdge.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.SugiVertex.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.VertexLayer.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutAlgorithm.VertexLayerCollection.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Hierarchical\SugiyamaLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\ILayoutInfoIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\ILayoutIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\IParameterizedLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\LayoutAlgorithmBase.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\LayoutDirection.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\LayoutIterationEventArgs.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\LayoutParametersBase.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\LayoutUtil.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\ParameterizedLayoutAlgorithmBase.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Random\RandomLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\BalloonTreeLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\BalloonTreeLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.Data.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.WidthAndHeightOpt.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\SimpleTreeLayoutParameters.cs" />
+    <Compile Include="GraphXComponents\LayoutAlgorithms\Tree\SpanningTreeGeneration.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\FSAAlgorithm.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\IOverlapRemovalAlgorithmFactory.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\IOverlapRemovalContext.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OneWayFSAAlgorithm.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OneWayFSAParameters.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OverlapRemovalAlgorithmBase.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OverlapRemovalContext.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OverlapRemovalHelper.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\OverlapRemovalParameters.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\RectangleWrapper.cs" />
+    <Compile Include="GraphXComponents\OverlapRemoval\StandardOverlapRemovalAlgorithmFactory.cs" />
+    <Compile Include="GraphXComponents\SoftMutableBidirectionalGraph.cs" />
+    <Compile Include="GraphXComponents\SoftMutableHierarchicalGraph.cs" />
+    <Compile Include="GraphXComponents\TypedEdge.cs" />
+    <Compile Include="GraphXComponents\WrappedVertex.cs" />
+    <Compile Include="Helpers\ThreadingHelper.cs" />
+    <Compile Include="Models\AlgorithmFactory.cs" />
+    <Compile Include="Models\AlgorithmStorage.cs" />
+    <Compile Include="Models\GXLogicCore.cs" />
+    <Compile Include="Models\GXLogicCore_Calculation.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="signature.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="QuickGraph">
+      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
