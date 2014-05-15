@@ -1,4 +1,4 @@
-GraphX for .NET v2
+GraphX for .NET v2 PCL-COMPLIANT VERSION
 http://www.panthernet.ru
 
 Project Description
