@@ -85,7 +85,7 @@ namespace GraphX
         {
             try
             {
-                PrintDialog printDialog = new PrintDialog();
+                var printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {
                     printDialog.PrintVisual(surface, description);

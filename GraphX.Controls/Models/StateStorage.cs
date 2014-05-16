@@ -86,7 +86,6 @@ namespace GraphX
                                                        item);
                 _area.InsertEdge(item, edgectrl);
             }
-
         }
 
         /// <summary>

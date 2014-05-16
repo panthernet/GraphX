@@ -169,8 +169,7 @@ namespace GraphX
 
         public GraphArea()
         {
-            ControlFactory = new GraphControlFactory();
-            ControlFactory.FactoryRootArea = this;
+            ControlFactory = new GraphControlFactory { FactoryRootArea = this };
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
