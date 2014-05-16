@@ -108,4 +108,3 @@ Backup*/
 UpgradeLog*.XML
 /Nuget/*.nupkg
 *.suo
-GraphX v2.v11.suo
