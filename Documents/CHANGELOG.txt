@@ -1,8 +1,13 @@
-﻿RELEASE 2.1.0 WIP
+﻿RELEASE 2.1.1 WIP
 + Redesigned libraries for PCL implementation
 	This shouldn't lead to major problems but some breaks will definetly occur:
 	- All routines in Logic library now operates with custom System.Windows types (platform-specific libraries operates (externaly) with System.Windows types). This includes any custom algorithms. 
 	- GraphX.Controls assembly was renamed to GraphX.WPF.Controls assembly
+	- DataSaveModel class renamed to GraphSerializationData 
+	- Althought file operations such as Save/load layout remains the same for the end user the background logic of this features has been changed:
+		- Implemented IFileServiceProvider interface and corresponding property in GXLogicCore class
+		- When you assign GraphArea::LogicCore property the new default (platform-specific) FileServiceProvider is created and assigned to LogicCore automaticaly (if corresponding property is null)
+		- You can create custom FileServiceProviders to work with 3rd party serialization libraries or code your own file operations logic
 
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies (reworked some dependencies)

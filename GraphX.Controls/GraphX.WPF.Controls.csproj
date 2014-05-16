@@ -78,10 +78,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
-    <Reference Include="YAXLib, Version=2.12.0.0, Culture=neutral, PublicKeyToken=7cc39f8266ad1835, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\YAXLib.2.12\lib\YAXLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Documents\AIV.cs">
@@ -124,6 +120,7 @@
     <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />
     <Compile Include="Models\EdgeSelectedEventHandler.cs" />
+    <Compile Include="Models\FileServiceProviderWPF.cs" />
     <Compile Include="Models\GraphControlFactory.cs" />
     <Compile Include="Models\IBidirectionalControlAnimation.cs" />
     <Compile Include="Models\IGraphArea.cs" />
@@ -175,6 +172,10 @@
     <ProjectReference Include="..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
       <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
       <Name>YAXLib.PCL.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAXLib\YAXLib\YAXLib.csproj">
+      <Project>{f1c4d174-c948-4d18-a125-f6855ef55683}</Project>
+      <Name>YAXLib %28YAXLib\YAXLib%29</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

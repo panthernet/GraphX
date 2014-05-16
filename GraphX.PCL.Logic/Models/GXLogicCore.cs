@@ -32,6 +32,14 @@ namespace GraphX.Logic
         public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; set; }
         #endregion
 
+        /// <summary>
+        /// Gets or sets file operations provider for GXCore
+        /// </summary>
+        public IFileServiceProvider FileServiceProvider { get; set; }
+
+        /// <summary>
+        /// Gets or sets if if edge label overlap removal enabled
+        /// </summary>
         public bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
         /// <summary>
@@ -145,38 +153,6 @@ namespace GraphX.Logic
         public void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er)
         {
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);
-        }
-
-        /*//!PCL-TODO! public void SaveDataToFile(string filename, List<DataSaveModel> modelsList)
-        {
-            var serializer = new YAXSerializer(typeof(List<DataSaveModel>));
-            using (var textWriter = new StreamWriter(filename))
-            {
-                serializer.Serialize(modelsList, textWriter);
-                textWriter.Close();
-            }
-        }
-
-        public List<DataSaveModel> LoadDataFromFile(string filename)
-        {
-            var deserializer = new YAXSerializer(typeof(List<DataSaveModel>));
-            using (var textReader = new StreamReader(filename))
-            {
-                return (List<DataSaveModel>)deserializer.Deserialize(textReader);
-            }
-        }*/
-
-
-        public void SaveDataToFile(string filename, List<DataSaveModel> modelsList)
-        {
-            //!TODO-PCL!
-            throw new NotImplementedException();
-        }
-
-        public List<DataSaveModel> LoadDataFromFile(string filename)
-        {
-            //!TODO-PCL!
-            throw new NotImplementedException();
         }
     }
 }

@@ -36,11 +36,11 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>YAXLib.DevKey.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="YAXLib.DevKey.snk" />
+    <None Include="signature.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />

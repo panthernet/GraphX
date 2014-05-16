@@ -30,6 +30,8 @@ namespace GraphX
         bool EnableEdgeLabelsOverlapRemoval { get; set; }
         bool IsCustomLayout { get; }
 
+        IFileServiceProvider FileServiceProvider { get; set; }
+
         LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { get; set; }
         OverlapRemovalAlgorithmTypeEnum DefaultOverlapRemovalAlgorithm { get; set; }
         EdgeRoutingAlgorithmTypeEnum DefaultEdgeRoutingAlgorithm { get; set; }
@@ -40,8 +42,6 @@ namespace GraphX
 
         void CreateNewAlgorithmFactory();
         void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er);
-        void SaveDataToFile(string filename, List<DataSaveModel> modelsList);
-        List<DataSaveModel> LoadDataFromFile(string filename);
 
         bool AreVertexSizesNeeded();
         bool AreOverlapNeeded();
@@ -49,6 +49,5 @@ namespace GraphX
         IExternalOverlapRemoval<TVertex> GenerateOverlapRemovalAlgorithm(Dictionary<TVertex, Rect> rectangles = null);
         IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size DesiredSize);
 
-        
     }
 }

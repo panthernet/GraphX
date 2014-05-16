@@ -1,4 +1,5 @@
 using System.Drawing;
+using GraphX.Controls;
 using GraphX.Controls.Models;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;
@@ -30,7 +31,14 @@ namespace GraphX
         #region My properties
 
         public static readonly DependencyProperty LogicCoreProperty =
-            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null));
+            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null, logic_core_changed));
+
+        private static void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            //automaticaly assign default file service provider 
+            if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
+                ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider = new FileServiceProviderWpf();
+        }
 
         /// <summary>
         /// Gets or sets GraphX logic core object that will drive this visual
@@ -163,7 +171,7 @@ namespace GraphX
         {
             ControlFactory = new GraphControlFactory();
             ControlFactory.FactoryRootArea = this;
-            StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
+            StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
             //CacheMode = new BitmapCache(2) { EnableClearType = false, SnapsToDevicePixels = true };
@@ -1267,36 +1275,43 @@ namespace GraphX
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (LogicCore.FileServiceProvider == null)
+                throw new GX_ObjectNotFoundException("LogicCore::FileServiceProvider must be set before using file operation methods!");
 
             if (autoAssignMissingDataId)
             {
                 AutoresolveIds();
             }
 
-            var dlist = new List<DataSaveModel>();
+            var dlist = new List<GraphSerializationData>();
             foreach (var item in VertexList) //ALWAYS serialize vertices first
             {
-                dlist.Add(new DataSaveModel { Position = item.Value.GetPositionGraphX(), Data = item.Key });
+                dlist.Add(new GraphSerializationData { Position = item.Value.GetPositionGraphX(), Data = item.Key });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All vertex datas must have positive unique ID!");
             }
             foreach (var item in EdgesList)
             {
                // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
-                dlist.Add(new DataSaveModel { Position = new Measure.Point(), Data = item.Key });
+                dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All edge datas must have positive unique ID!");
             }
 
-            LogicCore.SaveDataToFile(filename, dlist);
+            LogicCore.FileServiceProvider.SerializeDataToFile(filename, dlist);
+
+
         }
 
         public void LoadFromFile(string filename)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (LogicCore.FileServiceProvider == null)
+                throw new GX_ObjectNotFoundException("LogicCore::FileServiceProvider must be set before using file operation methods!");
+
             RemoveAllEdges();
             RemoveAllVertices();
 
-            var data = LogicCore.LoadDataFromFile(filename);
+            var data = LogicCore.FileServiceProvider.DeserializeDataFromFile(filename);
 
             if (LogicCore.Graph == null) LogicCore.Graph = Activator.CreateInstance<TGraph>();                
             else LogicCore.Graph.Clear();

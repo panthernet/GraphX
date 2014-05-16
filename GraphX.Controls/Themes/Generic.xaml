@@ -3,14 +3,14 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:local="clr-namespace:GraphX"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:Controls="clr-namespace:GraphX.Controls"
+    xmlns:controls="clr-namespace:GraphX.Controls"
     xmlns:conv="clr-namespace:GraphX.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     
     >
 
-    <conv:DoubleToLog10Converter x:Key="log10Converter" />
-    <conv:EqualityToBooleanConverter x:Key="equalityConverter" />
+    <conv:DoubleToLog10Converter x:Key="Log10Converter" />
+    <conv:EqualityToBooleanConverter x:Key="EqualityConverter" />
 
     <conv:RoundedValueConverter x:Key="RoundedValueConverter" Precision="2" />
     <conv:VisibilityToBoolConverter x:Key="TrueIfVisibleConverter"
@@ -59,7 +59,7 @@
     <Style x:Key="ViewFinderToggleButtonStyle" BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type ToggleButton}">
         <Setter Property="Visibility" Value="Visible" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:ZoomControl}}, Path=ViewFinderVisibility}" Value="Hidden">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:ZoomControl}}, Path=ViewFinderVisibility}" Value="Hidden">
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </Style.Triggers>
@@ -256,10 +256,10 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <Style TargetType="{x:Type Controls:ZoomControl}">
+    <Style TargetType="{x:Type controls:ZoomControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Controls:ZoomControl}">
+                <ControlTemplate TargetType="{x:Type controls:ZoomControl}">
                     <ControlTemplate.Resources>
                         <SolidColorBrush x:Key="SelectionBrush" Color="LightBlue" Opacity="0.5" po:Freeze="True"/>
                         <SolidColorBrush x:Key="AreaSelectionBrush" Color="LightGreen" Opacity="0.5" po:Freeze="True"/>
@@ -282,7 +282,7 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}"
                                 ClipToBounds="{TemplateBinding ClipToBounds}">
-                            <Controls:ZoomContentPresenter x:Name="PART_Presenter"
+                            <controls:ZoomContentPresenter x:Name="PART_Presenter"
                                                            ClipToBounds="False" />
                         </Border>
 
@@ -301,9 +301,9 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel Orientation="Horizontal" Margin="0,0,0,3">
                                     <Slider Height="10" Width="100"
-                                            Minimum="{TemplateBinding MinZoom,Converter={StaticResource log10Converter}}"
-                                            Maximum="{TemplateBinding MaxZoom,Converter={StaticResource log10Converter}}"
-                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Zoom,Mode=TwoWay,Converter={StaticResource log10Converter}}"
+                                            Minimum="{TemplateBinding MinZoom,Converter={StaticResource Log10Converter}}"
+                                            Maximum="{TemplateBinding MaxZoom,Converter={StaticResource Log10Converter}}"
+                                            Value="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Zoom,Mode=TwoWay,Converter={StaticResource Log10Converter}}"
                                             HorizontalAlignment="Center"
                                             Ticks="0.1, 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 2"
                                             AutoToolTipPlacement="BottomRight"
@@ -315,22 +315,22 @@
                                             Orientation="Horizontal"
                                             IsEnabled="True"
                                             />
-                                    <Button IsEnabled="False" x:Name="FitButton" Command="Controls:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button IsEnabled="False" x:Name="FitButton" Command="controls:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FitContentGlyph}" Margin="2"  po:Freeze ="true"/>
                                     </Button>
-                                    <Button x:Name="FillButton" Command="Controls:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button x:Name="FillButton" Command="controls:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FillToBoundsGlyph}" Margin="2" po:Freeze ="true"/>
                                     </Button>
-                                    <Button x:Name="CenterButton" Command="Controls:ZoomControl.Center" ToolTip="Center Content" Width="20px" Height="20px" Margin="2,0" Style="{StaticResource TransparentButton}">
+                                    <Button x:Name="CenterButton" Command="controls:ZoomControl.Center" ToolTip="Center Content" Width="20px" Height="20px" Margin="2,0" Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource CenterGlyph}" Margin="2" po:Freeze ="true"/>
                                     </Button>
                                 </StackPanel>
-                                <ToggleButton x:Name="ToggleViewFinderButton" ToolTip="Hide View Finder" Height="13" Width="13" Margin="0,2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
+                                <ToggleButton Grid.Row="0" x:Name="ToggleViewFinderButton" ToolTip="Hide View Finder" Height="13" Width="13" Margin="0,2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                                     Style="{StaticResource TransparentButton}" Foreground="White" IsChecked="{Binding ElementName=ShowViewFinder, Path=IsChecked}" >
                                     <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"  po:Freeze ="true"/>
                                 </ToggleButton>
                                 <Border Grid.Row="1" BorderBrush="{StaticResource GlyphBrush}" BorderThickness="2" Background="#80FFFFFF" />
-                                <Controls:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
+                                <controls:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
                             </Grid>
                         </Border>
                         <ToggleButton Name="ShowViewFinder" IsTabStop="False" ToolTip="Show View Finder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Height="22" Width="22"

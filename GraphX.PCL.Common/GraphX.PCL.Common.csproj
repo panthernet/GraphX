@@ -70,6 +70,7 @@
     <Compile Include="Interfaces\IExternalEdgeRouting.cs" />
     <Compile Include="Interfaces\IExternalLayout.cs" />
     <Compile Include="Interfaces\IExternalOverlapRemoval.cs" />
+    <Compile Include="Interfaces\IFileServiceProvider.cs" />
     <Compile Include="Interfaces\IGraphXEdge.cs" />
     <Compile Include="Interfaces\IGraphXVertex.cs" />
     <Compile Include="Interfaces\IGXLogicCore.cs" />
@@ -78,7 +79,7 @@
     <Compile Include="Interfaces\IOverlapRemovalAlgorithm.cs" />
     <Compile Include="Interfaces\IOverlapRemovalParameters.cs" />
     <Compile Include="Interfaces\IWeightedEdge.cs" />
-    <Compile Include="Models\DataSaveModel.cs" />
+    <Compile Include="Models\GraphSerializationData.cs" />
     <Compile Include="Models\EdgeBase.cs" />
     <Compile Include="Models\EdgeRoutingVisualData.cs" />
     <Compile Include="Models\GraphState.cs" />
