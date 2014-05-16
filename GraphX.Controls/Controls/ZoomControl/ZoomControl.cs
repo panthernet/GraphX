@@ -552,7 +552,7 @@ namespace GraphX.Controls
             if (ContentVisual == null || _viewFinderDisplay == null)
                 return;
 
-            var size = IsContentGraphArea ? GraphAreaContent.ContentSize : new Rect(0,0, ContentVisual.DesiredSize.Width, ContentVisual.DesiredSize.Height);
+            var size = IsContentTrackable ? TrackableContent.ContentSize : new Rect(0,0, ContentVisual.DesiredSize.Width, ContentVisual.DesiredSize.Height);
             if (double.IsInfinity(size.X) || double.IsInfinity(size.Y)) return;
 
             // calculate the current viewport
@@ -595,7 +595,7 @@ namespace GraphX.Controls
             UpdateViewboxFactor();
             
             // ensure the display panel has a size
-            var contentSize = IsContentGraphArea ? GraphAreaContent.ContentSize.Size : ContentVisual.DesiredSize;
+            var contentSize = IsContentTrackable ? TrackableContent.ContentSize.Size : ContentVisual.DesiredSize;
 
             var viewFinderSize = _viewFinderDisplay.AvailableSize;
             if (viewFinderSize.Width > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Height, 0d))
@@ -628,7 +628,7 @@ namespace GraphX.Controls
         {
             if (ContentVisual == null) return;
             var contentWidth = ActualWidth;
-            var trueContentWidth = IsContentGraphArea ? GraphAreaContent.ContentSize.Width : ContentVisual.DesiredSize.Width;
+            var trueContentWidth = IsContentTrackable ? TrackableContent.ContentSize.Width : ContentVisual.DesiredSize.Width;
             if (contentWidth <=1  || trueContentWidth <= 1) _viewboxFactor = 1d;
             else _viewboxFactor = contentWidth / trueContentWidth;
         }
@@ -959,21 +959,21 @@ namespace GraphX.Controls
             }
         }
         /// <summary>
-        /// Gets content as GraphAreaBase
+        /// Gets content as ITrackableContent like GraphArea
         /// </summary>
-        public GraphAreaBase GraphAreaContent
+        public ITrackableContent TrackableContent
         {
             get
             {
-                return Content as GraphAreaBase;
+                return Content as ITrackableContent;
             }
         }
 
         bool _isga;
         /// <summary>
-        /// Is loaded content represents GraphArea object
+        /// Is loaded content represents ITrackableContent object
         /// </summary>
-        public bool IsContentGraphArea
+        public bool IsContentTrackable
         {
             get { return _isga; }
         }
@@ -1064,14 +1064,14 @@ namespace GraphX.Controls
         {
             if (oldContent != null)
             {
-                var old = oldContent as GraphAreaBase;
+                var old = oldContent as ITrackableContent;
                 if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
             }
             if (newContent != null)
             {
                 UpdateViewFinderDisplayContentBounds();
                 UpdateViewport();
-                var newc = newContent as GraphAreaBase;
+                var newc = newContent as ITrackableContent;
                 if (newc != null)
                 {
                     _isga = true;
@@ -1354,7 +1354,7 @@ namespace GraphX.Controls
             if (_presenter == null)
                 return;
 
-            var initialTranslate = GetGraphTranslate();
+            var initialTranslate = GetTrackableTranslate();
             DoZoomAnimation(Zoom, initialTranslate.X*Zoom, initialTranslate.Y*Zoom);
         }
 
@@ -1379,9 +1379,10 @@ namespace GraphX.Controls
         /// <summary>
         /// Returns initial translate depending on container graph settings (to deal with optinal new coord system)
         /// </summary>
-        private Vector GetGraphTranslate()
+        private Vector GetTrackableTranslate()
         {
-            return DesignerProperties.GetIsInDesignMode(this) ? GetInitialTranslate(200,100) : GetInitialTranslate(GraphAreaContent.ContentSize.Width, GraphAreaContent.ContentSize.Height, GraphAreaContent.ContentSize.X, GraphAreaContent.ContentSize.Y);
+            if (!IsContentTrackable) return new Vector();
+            return DesignerProperties.GetIsInDesignMode(this) ? GetInitialTranslate(200,100) : GetInitialTranslate(TrackableContent.ContentSize.Width, TrackableContent.ContentSize.Height, TrackableContent.ContentSize.X, TrackableContent.ContentSize.Y);
         }
 
         private void DoZoomToOriginal()
@@ -1389,7 +1390,7 @@ namespace GraphX.Controls
             if (_presenter == null)
                 return;
 
-            var initialTranslate = GetGraphTranslate();
+            var initialTranslate = GetTrackableTranslate();
             DoZoomAnimation(1.0, initialTranslate.X, initialTranslate.Y);
         }
 
@@ -1409,9 +1410,9 @@ namespace GraphX.Controls
         {
             if (_presenter == null)
                 return;
-            var c = IsContentGraphArea ? GraphAreaContent.ContentSize.Size : ContentVisual.DesiredSize;
+            var c = IsContentTrackable ? TrackableContent.ContentSize.Size : ContentVisual.DesiredSize;
             var deltaZoom = Math.Min(MaxZoom,Math.Min( ActualWidth / (c.Width), ActualHeight / (c.Height)));
-            var initialTranslate = IsContentGraphArea ? GetGraphTranslate() : GetInitialTranslate(c.Width, c.Height);
+            var initialTranslate = IsContentTrackable ? GetTrackableTranslate() : GetInitialTranslate(c.Width, c.Height);
             DoZoomAnimation(deltaZoom, initialTranslate.X * deltaZoom, initialTranslate.Y * deltaZoom);
         }
 

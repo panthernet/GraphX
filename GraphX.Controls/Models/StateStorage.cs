@@ -85,6 +85,12 @@ namespace GraphX
                var edgectrl =  _area.ControlFactory.CreateEdgeControl(_area.VertexList[item.Source], _area.VertexList[item.Target],
                                                        item);
                 _area.InsertEdge(item, edgectrl);
+                //edgectrl.UpdateEdge();
+            }
+            _area.UpdateLayout();
+            foreach (var item in _area.EdgesList.Values)
+            {
+                item.UpdateEdge();
             }
         }
 

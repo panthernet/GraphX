@@ -154,5 +154,31 @@ namespace GraphX.Logic
         {
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);
         }
+
+        public void ComputeEdgeRoutesByVertex(TVertex dataVertex, Point? vertexPosition = null, Size? vertexSize = null)
+        {
+            if (AlgorithmStorage == null || AlgorithmStorage.EdgeRouting == null)
+                throw new GX_InvalidDataException("GXC: Algorithm storage is not initialized!");
+            if (dataVertex == null) return;
+            var list = new List<TEdge>();
+            IEnumerable<TEdge> edges;
+            Graph.TryGetInEdges(dataVertex, out edges);
+            list.AddRange(edges);
+            Graph.TryGetOutEdges(dataVertex, out edges);
+            list.AddRange(edges);
+
+            if (vertexPosition.HasValue && vertexSize.HasValue)
+            {
+                UpdateVertexDataForER(dataVertex, vertexPosition.Value, vertexSize.Value);
+            }
+
+            foreach (var item in list)
+                item.RoutingPoints = AlgorithmStorage.EdgeRouting.ComputeSingle(item);
+        }
+
+        private void UpdateVertexDataForER(TVertex vertexData, Point position, Size size)
+        {
+            AlgorithmStorage.EdgeRouting.UpdateVertexData(vertexData, position, new Rect(position, size));
+        }
     }
 }

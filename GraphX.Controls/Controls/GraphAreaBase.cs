@@ -11,7 +11,7 @@ using System.ComponentModel;
 
 namespace GraphX
 {
-    public abstract class GraphAreaBase: Canvas
+    public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
         #region Attached Dependency Property registrations
         public static readonly DependencyProperty XProperty =
@@ -253,7 +253,7 @@ namespace GraphX
         /// </summary>
         /// <param name="vc">Vertex visual control</param>
         /// <param name="vertexDataNeedUpdate">If vertex data inside edge routing algorthm needs to be updated</param>
-        public virtual void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true) { }
+        internal virtual void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true) { }
         #endregion
 
         #region Virtual members

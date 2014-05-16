@@ -105,7 +105,7 @@ namespace ShowcaseExample
             var dlg = new SaveFileDialog() { Filter = "All files|*.*", Title = "Select layout file name", FileName = "laytest.xml" };
             if (dlg.ShowDialog() == true)
             {
-                gg_Area.SaveIntoFile(dlg.FileName);
+                gg_Area.SerializeToFile(dlg.FileName);
             }
         }
         #endregion
@@ -148,7 +148,7 @@ namespace ShowcaseExample
                 exampleVertexStorage.Clear();
                 try
                 {
-                    gg_Area.LoadFromFile(dlg.FileName);
+                    gg_Area.DeserializeFromFile(dlg.FileName);
                     gg_Area.SetVerticesDrag(true);
                     gg_Area.UpdateAllEdges();
                 }

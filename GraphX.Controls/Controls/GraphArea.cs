@@ -217,7 +217,7 @@ namespace GraphX
         #region Edge & vertex controls operations
 
         /// <summary>
-        /// Returns all existing VertexControls addded into the layout as new Array
+        /// Returns all existing VertexControls added into the layout as new Array
         /// </summary>
         public override VertexControl[] GetAllVertexControls() { return _vertexlist.Values.ToArray(); }
 
@@ -938,29 +938,11 @@ namespace GraphX
         /// </summary>
         /// <param name="vc">Vertex visual control</param>
         /// <param name="vertexDataNeedUpdate">If vertex data inside edge routing algorthm needs to be updated</param>
-        public override void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true)
+        internal override void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true)
         {
-            if (LogicCore == null || LogicCore.AlgorithmStorage == null || LogicCore.AlgorithmStorage.EdgeRouting == null)
-                throw new GX_InvalidDataException("LogicCore or algorithm storage is not initialized!");
-            if (vc == null) return;
-            var vdata = vc.Vertex as TVertex;
-            if (vdata == null) return;
-            var list = new List<TEdge>();
-            IEnumerable<TEdge> edges;
-            LogicCore.Graph.TryGetInEdges(vdata, out edges);
-            list.AddRange(edges);
-            LogicCore.Graph.TryGetOutEdges(vdata, out edges);
-            list.AddRange(edges);
-
-            if(vertexDataNeedUpdate)
-            {
-                var position = vc.GetPositionGraphX();
-                var size = new Measure.Rect(position.X, position.Y, vc.ActualWidth, vc.ActualHeight);
-                LogicCore.AlgorithmStorage.EdgeRouting.UpdateVertexData(vdata, position, size);
-            }
-
-            foreach (var item in list)
-                item.RoutingPoints = LogicCore.AlgorithmStorage.EdgeRouting.ComputeSingle(item);
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore is not initialized!");
+            LogicCore.ComputeEdgeRoutesByVertex((TVertex)vc.Vertex, vertexDataNeedUpdate ? (Measure.Point?)vc.GetPositionGraphX() : null, vertexDataNeedUpdate ? (Measure.Size?)new Measure.Size(vc.ActualWidth, vc.ActualHeight) : null);
         }
         #endregion
 
@@ -1270,7 +1252,7 @@ namespace GraphX
 
         #region Save
 
-        public void SaveIntoFile(string filename, bool autoAssignMissingDataId = true)
+        public void SerializeToFile(string filename, bool autoAssignMissingDataId = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1286,21 +1268,20 @@ namespace GraphX
             foreach (var item in VertexList) //ALWAYS serialize vertices first
             {
                 dlist.Add(new GraphSerializationData { Position = item.Value.GetPositionGraphX(), Data = item.Key });
-                if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All vertex datas must have positive unique ID!");
+                if (item.Key.ID == -1) throw new GX_InvalidDataException("SerializeToFile() -> All vertex datas must have positive unique ID!");
             }
             foreach (var item in EdgesList)
             {
                // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
                 dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key });
-                if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All edge datas must have positive unique ID!");
+                if (item.Key.ID == -1) throw new GX_InvalidDataException("SerializeToFile() -> All edge datas must have positive unique ID!");
             }
 
             LogicCore.FileServiceProvider.SerializeDataToFile(filename, dlist);
 
-
         }
 
-        public void LoadFromFile(string filename)
+        public void DeserializeFromFile(string filename)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1325,6 +1306,7 @@ namespace GraphX
                 LogicCore.Graph.AddVertex(vertexdata);
             }
             var elist = data.Where(a => a.Data is TEdge);
+
             foreach (var item in elist)
             {
                 var edgedata = item.Data as TEdge;
@@ -1336,15 +1318,16 @@ namespace GraphX
                 edgedata.Target = datatarget;
 
                 if (datasource == null || datatarget == null)
-                    throw new GX_SerializationException("LoadFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
+                    throw new GX_SerializationException("DeserializeFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
                 var ecc = new EdgeControl { Edge = edgedata, Source = _vertexlist[datasource], Target = _vertexlist[datatarget] };
                 InsertEdge(edgedata, ecc);
                 LogicCore.Graph.AddEdge(edgedata);
-                //update edge layout and shapes manually
-                //to correctly draw arrows in any case except they are manually disabled
-                UpdateLayout();
-                ecc.OnApplyTemplate();
-            }      
+            }
+            //update edge layout and shapes manually
+            //to correctly draw arrows in any case except they are manually disabled
+            UpdateLayout();
+            foreach (var item in EdgesList.Values)
+               item.OnApplyTemplate();
         }
 
         #endregion

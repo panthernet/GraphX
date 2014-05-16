@@ -12,6 +12,11 @@
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies (reworked some dependencies)
 + Implemented many small tweaks and optimizations during the port process
++ Implemented ITrackableContent interface that helps to abstract from direct GraphArea links in ZoomControl
++ GraphArea::ComputeEdgeRoutesByVertex() method made internal. If you still need it please use LogicCore::ComputeEdgeRoutesByVertex().
++ Renamed method SaveIntoFile to SerializeToFile
++ Renamed method LoadFromFile to DeserializeFromFile
++ Fixed edges after storage state loading
 
 PCL-IMPROVEMENTS
 - Added YAXLib v2.13 project sources splitted into 2 different projects: main and PCL compliant (for attributes to be availbale in PCL libraries)
