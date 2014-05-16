@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
 
 namespace GraphX.Animations
 {
@@ -17,7 +15,7 @@ namespace GraphX.Animations
         /// <summary>
         /// Stores initial vertex data
         /// </summary>
-        public Dictionary<IGraphControl, Point> VertexStorage { get; private set; }
+        public Dictionary<IGraphControl, Measure.Point> VertexStorage { get; private set; }
         /// <summary>
         /// Stores initial edges data
         /// </summary>
@@ -25,7 +23,7 @@ namespace GraphX.Animations
 
         public MoveAnimationBase()
         {
-            VertexStorage = new Dictionary<IGraphControl, Point>();
+            VertexStorage = new Dictionary<IGraphControl, Measure.Point>();
             EdgeStorage = new List<IGraphControl>();
             Duration = TimeSpan.FromSeconds(2);
         }
@@ -63,7 +61,7 @@ namespace GraphX.Animations
         /// </summary>
         /// <param name="control">Vertex control which should be animated to its new position</param>
         /// <param name="coord">New vertex position coordinates</param>
-        public void AddVertexData(IGraphControl control, Point coord)
+        public void AddVertexData(IGraphControl control, Measure.Point coord)
         {
             if (double.IsNaN(coord.X) || double.IsNaN(coord.Y))
                 throw new GX_InvalidDataException("AddVertexData() -> NaN coordinated has been supplied! Correct coordinates was expected.");

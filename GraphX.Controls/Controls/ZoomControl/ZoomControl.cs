@@ -552,7 +552,7 @@ namespace GraphX.Controls
             if (ContentVisual == null || _viewFinderDisplay == null)
                 return;
 
-            var size = IsContentGraphArea ? GraphAreaContent.ContentSize : new Rect(new Point(0,0), ContentVisual.DesiredSize);
+            var size = IsContentGraphArea ? GraphAreaContent.ContentSize : new Rect(0,0, ContentVisual.DesiredSize.Width, ContentVisual.DesiredSize.Height);
             if (double.IsInfinity(size.X) || double.IsInfinity(size.Y)) return;
 
             // calculate the current viewport

@@ -1,12 +1,19 @@
-﻿PCL-IMPROVEMENTS
+﻿RELEASE 2.1.0 WIP
++ Redesigned libraries for PCL implementation
+	This shouldn't lead to major problems but some breaks will definetly occur:
+	- All routines in Logic library now operates with custom System.Windows types (platform-specific libraries operates (externaly) with System.Windows types). This includes any custom algorithms. 
+	- GraphX.Controls assembly was renamed to GraphX.WPF.Controls assembly
+
++ Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
++ Removed redundant dependencies (reworked some dependencies)
++ Implemented many small tweaks and optimizations during the port process
+
+PCL-IMPROVEMENTS
 - Added YAXLib v2.13 project sources splitted into 2 different projects: main and PCL compliant (for attributes to be availbale in PCL libraries)
 - Implemented PCL version of GraphX.Common
 - Implemented PCL version of GraphX.Logic
+- Implemented GraphX.WPF.Controls platform-specific library
 
-
-RELEASE 2.0.3
-+ Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
-+ Removed redundant dependencies
 
 RELEASE 2.0.2
 + Added vertex control labels with following functionality:

@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SimpleGraph</RootNamespace>
     <AssemblyName>SimpleGraph</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -72,9 +73,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="YAXLib">
-      <HintPath>..\..\packages\YAXLib.2.12\lib\YAXLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -128,20 +126,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphX.Common\GraphX.Common.csproj">
-      <Project>{eebd4ef2-4649-4f36-8fda-b1ba071a19be}</Project>
-      <Name>GraphX.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GraphX.Controls\GraphX.Controls.csproj">
-      <Project>{d2e33fee-6689-4bb4-a95c-1b5c327a1e8f}</Project>
-      <Name>GraphX.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GraphX.Logic\GraphX.Logic.csproj">
-      <Project>{35f09d76-fdbe-4854-9dfc-961185c53b57}</Project>
-      <Name>GraphX.Logic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\dice.png" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +133,28 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GraphX.Controls\GraphX.WPF.Controls.csproj">
+      <Project>{d2e33fee-6689-4bb4-a95c-1b5c327a1e8f}</Project>
+      <Name>GraphX.WPF.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
+      <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
+      <Name>GraphX.PCL.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
+      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
+      <Name>YAXLib.PCL.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\YAXLib\YAXLib\YAXLib.csproj">
+      <Project>{f1c4d174-c948-4d18-a125-f6855ef55683}</Project>
+      <Name>YAXLib %28YAXLib\YAXLib%29</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

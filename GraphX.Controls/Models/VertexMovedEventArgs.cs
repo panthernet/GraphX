@@ -8,7 +8,7 @@ namespace GraphX.Models
         public VertexControl VertexControl { get; private set; }
         public Point Offset { get; private set; }
 
-        public VertexMovedEventArgs(VertexControl vc, Point offset )
+        public VertexMovedEventArgs(VertexControl vc, Point offset)
             : base()
         {
             Offset = offset;

@@ -40,9 +40,9 @@ namespace GraphX
         {
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            var vposlist = new Dictionary<TVertex, Point>();
+            var vposlist = new Dictionary<TVertex, Measure.Point>();
             foreach (var item in _area.VertexList)
-                vposlist.Add(item.Key, item.Value.GetPosition());
+                vposlist.Add(item.Key, item.Value.GetPositionGraphX());
             var vedgelist = new List<TEdge>();
             foreach (var item in _area.EdgesList)
                 if (item.Value.Visibility == Visibility.Visible)
@@ -76,7 +76,7 @@ namespace GraphX
             //setup vertex positions
             foreach (var item in _states[id].VertexPositions)
             {
-                _area.VertexList[item.Key].SetPosition(item.Value, true);
+                _area.VertexList[item.Key].SetPosition(item.Value.X, item.Value.Y, true);
                 _area.VertexList[item.Key].Visibility = Visibility.Visible;
             }
             //setup visible edges

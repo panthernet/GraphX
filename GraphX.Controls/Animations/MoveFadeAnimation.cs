@@ -41,7 +41,7 @@ namespace GraphX.Animations
             {
                 return; //just in case of... who knows what?
             }
-            control.SetPosition(VertexStorage[control], false);
+            control.SetPosition(VertexStorage[control].X, VertexStorage[control].Y, false);
 
             VertexStorage.Remove(control);
             var story = CreateStory(control, 0, 1, null);

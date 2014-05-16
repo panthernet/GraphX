@@ -1,8 +1,8 @@
 ﻿<Window x:Class="SimpleGraph.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:graphxctrl="clr-namespace:GraphX.Controls;assembly=GraphX.Controls"
-        xmlns:gx="clr-namespace:GraphX;assembly=GraphX.Controls"
+        xmlns:graphxctrl="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+        xmlns:gx="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
         xmlns:local="clr-namespace:SimpleGraph"  
         Title="Simple graph example. Read code comments for more info." Height="600" Width="825">
     <Grid>

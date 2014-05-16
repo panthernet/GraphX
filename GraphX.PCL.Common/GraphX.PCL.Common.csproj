@@ -34,6 +34,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <None Include="signature.snk" />
@@ -55,7 +61,6 @@
     <Compile Include="Exceptions\GX_InvalidDataException.cs" />
     <Compile Include="Exceptions\GX_ObjectNotFoundException.cs" />
     <Compile Include="Exceptions\GX_SerializationException.cs" />
-    <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Interfaces\IAlgorithmParameters.cs" />
     <Compile Include="Interfaces\IAlgorithmStorage.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />
@@ -105,6 +110,9 @@
       <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
       <Name>YAXLib.PCL.Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

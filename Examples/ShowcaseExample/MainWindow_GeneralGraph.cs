@@ -234,7 +234,7 @@ namespace ShowcaseExample
         {
             if (gg_useExternalORAlgo.IsChecked == true)
             {
-                gg_Area.GetLogicCore<LogicCoreExample>().ExternalOverlapRemovalAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum.FSA, new Dictionary<DataVertex, Rect>(), null);
+                gg_Area.GetLogicCore<LogicCoreExample>().ExternalOverlapRemovalAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum.FSA, null, null);
             }
             else gg_Area.GetLogicCore<LogicCoreExample>().ExternalOverlapRemovalAlgorithm = null;
         }
@@ -251,9 +251,9 @@ namespace ShowcaseExample
         {
             if (gg_useExternalERAlgo.IsChecked == true)
             {
-                var graph = gg_Area.LogicCore.Graph == null ? GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text)) : gg_Area.LogicCore.Graph;
+                var graph = gg_Area.LogicCore.Graph ?? GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
                 gg_Area.LogicCore.Graph = graph;
-                gg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum.SimpleER, new Rect(gg_Area.DesiredSize), graph, null, null, null);
+                gg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum.SimpleER, new GraphX.Measure.Rect(gg_Area.DesiredSize.ToGraphX()), graph, null, null, null);
             }
             else gg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = null;
         }

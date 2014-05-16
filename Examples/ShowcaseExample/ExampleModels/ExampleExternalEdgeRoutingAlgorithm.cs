@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using GraphX.Measure;
 
 namespace ShowcaseExample.ExampleModels
 {
@@ -12,19 +13,19 @@ namespace ShowcaseExample.ExampleModels
         {
         }
 
-        public IDictionary<TVertex, System.Windows.Rect> VertexSizes { get; set; }
+        public IDictionary<TVertex, Rect> VertexSizes { get; set; }
 
-        public IDictionary<TVertex, System.Windows.Point> VertexPositions { get; set; }
+        public IDictionary<TVertex, Point> VertexPositions { get; set; }
 
-        Dictionary<TEdge, System.Windows.Point[]> _edgeRoutes = new Dictionary<TEdge,System.Windows.Point[]>();
-        public IDictionary<TEdge, System.Windows.Point[]> EdgeRoutes { get { return _edgeRoutes; }}
+        Dictionary<TEdge, Point[]> _edgeRoutes = new Dictionary<TEdge,Point[]>();
+        public IDictionary<TEdge, Point[]> EdgeRoutes { get { return _edgeRoutes; }}
 
-        public System.Windows.Point[] ComputeSingle(TEdge edge) { return null; }
+        public Point[] ComputeSingle(TEdge edge) { return null; }
 
-        public void UpdateVertexData(TVertex vertex, System.Windows.Point position, System.Windows.Rect size) { }
+        public void UpdateVertexData(TVertex vertex, Point position, Rect size) { }
 
 
-        public System.Windows.Rect AreaRectangle { get; set; }
+        public Rect AreaRectangle { get; set; }
 
     }
 }

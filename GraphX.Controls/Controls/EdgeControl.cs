@@ -258,11 +258,6 @@ namespace GraphX
             set { SetValue(TargetProperty, value); }
         }
 
-        /*public Point[] RoutePoints
-        {
-            get { return (Point[])GetValue( RoutePointsProperty ); }
-            set { SetValue( RoutePointsProperty, value ); }
-        }*/
 
         /// <summary>
         /// Data edge object
@@ -412,6 +407,12 @@ namespace GraphX
             GraphAreaBase.SetY(this, pt.Y, alsoFinal);
         }
 
+        public void SetPosition(double x, double y, bool alsoFinal = true)
+        {
+            GraphAreaBase.SetX(this, x, alsoFinal);
+            GraphAreaBase.SetY(this, y, alsoFinal);
+        }
+
         /// <summary>
         /// Get control position on the GraphArea panel in attached coords X and Y
         /// </summary>
@@ -420,6 +421,16 @@ namespace GraphX
         public Point GetPosition(bool final = false, bool round = false)
         {
             return new Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
+        }
+
+        /// <summary>
+        /// Get control position on the GraphArea panel in attached coords X and Y
+        /// </summary>
+        /// <param name="final"></param>
+        /// <param name="round"></param>
+        internal Measure.Point GetPositionGraphX(bool final = false, bool round = false)
+        {
+            return new Measure.Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
         }
         #endregion
 
@@ -595,7 +606,7 @@ namespace GraphX
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
         /// <param name="externalRoutingPoints">Provided custom routing points will be used instead of stored ones.</param>
         /// <param name="updateLabel">Should edge label be updated in this pass</param>
-        public void PrepareEdgePath(bool useCurrentCoords = false, Point[] externalRoutingPoints = null, bool updateLabel = true)
+        public void PrepareEdgePath(bool useCurrentCoords = false, Measure.Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
             if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && Source == null || Target == null || ManualDrawing) return;
@@ -625,7 +636,8 @@ namespace GraphX
                     Width = Target.ActualWidth,
                     Height = Target.ActualHeight
                 };
-                if (DesignerProperties.GetIsInDesignMode(this)) targetSize = new Size(80, 20);
+                if (DesignerProperties.GetIsInDesignMode(this)) 
+                    targetSize = new Size(80, 20);
 
                 //get the position center of the target
                 var targetPos = new Point
@@ -634,9 +646,12 @@ namespace GraphX
                     Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target)) + targetSize.Height * .5
                 };
 
+                var routedEdge = Edge as IRoutingInfo;
+                if(routedEdge == null)
+                    throw new GX_InvalidDataException("Edge must implement IRoutingInfo interface");
 
                 //get the route informations
-                var routeInformation = externalRoutingPoints == null ? (Edge as IRoutingInfo).RoutingPoints : externalRoutingPoints;
+                var routeInformation = externalRoutingPoints ?? routedEdge.RoutingPoints;
                 #endregion
 
                 // Get the TopLeft position of the Source Vertex.
@@ -684,8 +699,8 @@ namespace GraphX
                 //Point p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.MathShape);
                 //Point p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.MathShape);
 
-                var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.MathShape);
-                var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.MathShape);
+                var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.MathShape);
+                var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.MathShape);
 
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
                 _arrowgeometry = new PathGeometry(); PathFigure arrowFigure;
@@ -694,7 +709,7 @@ namespace GraphX
                 if (RootArea != null && hasRouteInfo)
                 {
                     //replace start and end points with accurate ones
-                    var routePoints = routeInformation.ToList();
+                    var routePoints = routeInformation.ToWindows().ToList();
                     routePoints.Remove(routePoints.First());
                     routePoints.Remove(routePoints.Last());
                     routePoints.Insert(0, p1);
@@ -713,7 +728,7 @@ namespace GraphX
                     }
                     else
                     {
-                        lineFigure = new PathFigure(p1, new PathSegment[] { new PolyLineSegment(routePoints, true) }, false);
+                        lineFigure = new PathFigure(p1, new PathSegment[] { new PolyLineSegment(routePoints.ToArray(), true) }, false);
                         arrowFigure = GeometryHelper.GenerateOldArrow(routePoints[routePoints.Count - 2], p2);
                     }
 
@@ -754,9 +769,9 @@ namespace GraphX
             Clean();
         }
 
-        public Rect GetLabelSize()
+        public Measure.Rect GetLabelSize()
         {
-            return _edgeLabelControl.LastKnownRectSize;
+            return _edgeLabelControl.LastKnownRectSize.ToGraphX();
         }
 
         public void SetCustomLabelSize(Rect rect)

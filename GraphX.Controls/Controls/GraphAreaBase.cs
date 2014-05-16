@@ -454,7 +454,7 @@ namespace GraphX
                     maxPoint = new Point(Math.Max(maxPoint.X, x), Math.Max(maxPoint.Y, y));
                 }
 
-                child.Arrange(new Rect(new Point(x, y), child.DesiredSize));
+                child.Arrange(new Rect(x, y, child.DesiredSize.Width, child.DesiredSize.Height));
             }
 
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : new Size(10, 10);

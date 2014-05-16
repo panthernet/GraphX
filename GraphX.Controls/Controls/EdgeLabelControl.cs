@@ -101,7 +101,7 @@ namespace GraphX
             var routingInfo = edgeControl.Edge as IRoutingInfo;
             if (routingInfo != null) 
             {
-                var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToArray();
+                var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToWindows();
 
                 if (routePoints == null || routePoints.Length == 0)
                 {
@@ -169,7 +169,7 @@ namespace GraphX
             double cos = Math.Cos(angleBetweenPoints);
             double sign = sin * cos / Math.Abs(sin * cos);
             p.Offset(x * sin * sign + edgeLength * cos, y * cos * sign - edgeLength * sin);*/
-            LastKnownRectSize = new Rect(p, desiredSize);
+            LastKnownRectSize = new Rect(p.X,p.Y, desiredSize.Width, desiredSize.Height);
             Arrange(LastKnownRectSize);
         }
 

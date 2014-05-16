@@ -2,8 +2,8 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.Controls"
-    xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.Controls">
+    xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
+    xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.WPF.Controls">
 
 
     <!-- VERTEX CONTROL -->

@@ -405,8 +405,8 @@ namespace GraphX
 
         public static PathFigure GenerateOldArrow(Point p1, Point p2)
         {
-            Vector v = p1 - p2; v = v / v.Length * 5;
-            Vector n = new Vector(-v.Y, v.X) * 0.7;
+            var v = p1 - p2; v = v / v.Length * 5;
+            var n = new Vector(-v.Y, v.X) * 0.7;
             var fig = new PathFigure(p2, new PathSegment[] {	new LineSegment(p2 + v - n, true),
 			                                           	    new LineSegment(p2 + v + n, true)}, true);
             TryFreeze(fig);

@@ -8,8 +8,8 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GraphX.Controls</RootNamespace>
-    <AssemblyName>GraphX.Controls</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>GraphX.WPF.Controls</AssemblyName>
+    <TargetFrameworkVersion>v4.0.3</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -23,6 +23,7 @@
     <DefineConstants>TRACE;DEBUG;USECANVAS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +42,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -49,6 +52,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -113,6 +117,7 @@
     <Compile Include="Controls\GraphAreaBase.cs" />
     <Compile Include="Controls\IZoomControl.cs" />
     <Compile Include="GeometryHelper.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="Models\AnimationFactory.cs" />
     <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
     <Compile Include="Models\ControlEventArgs.cs" />
@@ -143,6 +148,7 @@
     <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\ZoomViewModifierMode.cs" />
+    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\help_black.png" />
@@ -154,18 +160,22 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphX.Common\GraphX.Common.csproj">
-      <Project>{eebd4ef2-4649-4f36-8fda-b1ba071a19be}</Project>
-      <Name>GraphX.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GraphX.Logic\GraphX.Logic.csproj">
-      <Project>{35f09d76-fdbe-4854-9dfc-961185c53b57}</Project>
-      <Name>GraphX.Logic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="signature.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
+      <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
+      <Name>GraphX.PCL.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
+      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
+      <Name>YAXLib.PCL.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

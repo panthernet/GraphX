@@ -132,7 +132,7 @@ namespace GraphX
         {
             if(ShowLabel && _vertexLabelControl != null)
                 _vertexLabelControl.UpdatePosition();
-            OnPositionChanged(new Point(0,0), GetPosition());
+            OnPositionChanged(new Point(), GetPosition());
         }
         #endregion
 
@@ -143,10 +143,16 @@ namespace GraphX
 	    /// </summary>
 	    /// <param name="pt"></param>
 	    /// <param name="alsoFinal"></param>
-	    public void SetPosition(Point pt, bool alsoFinal = true)
+        public void SetPosition(Point pt, bool alsoFinal = true)
         {
             GraphAreaBase.SetX(this, pt.X, alsoFinal);
             GraphAreaBase.SetY(this, pt.Y, alsoFinal);
+        }
+
+        public void SetPosition(double x, double y, bool alsoFinal = true)
+        {
+            GraphAreaBase.SetX(this, x, alsoFinal);
+            GraphAreaBase.SetY(this, y, alsoFinal);
         }
 
 	    /// <summary>
@@ -154,10 +160,19 @@ namespace GraphX
 	    /// </summary>
 	    /// <param name="final"></param>
 	    /// <param name="round"></param>
-	    public Point GetPosition(bool final = false, bool round = false)
-	    {
-	        return round ? new Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
-	    }
+        public Point GetPosition(bool final = false, bool round = false)
+        {
+            return round ? new Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
+        }
+        /// <summary>
+        /// Get control position on the GraphArea panel in attached coords X and Y (GraphX type version)
+        /// </summary>
+        /// <param name="final"></param>
+        /// <param name="round"></param>
+        internal Measure.Point GetPositionGraphX(bool final = false, bool round = false)
+        {
+            return round ? new Measure.Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Measure.Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
+        }
 
 	    #endregion
 

@@ -8,7 +8,7 @@ namespace GraphX.Measure
     /// <summary>
     /// Custom PCL implementation of Rect class
     /// </summary>
-    public class Rect
+    public struct Rect
     {
         internal double _x;
         internal double _y;
@@ -98,7 +98,6 @@ namespace GraphX.Measure
             }
         }
 
-        public Rect() { }
 
         public Rect(Point location, Size size)
         {
@@ -134,8 +133,8 @@ namespace GraphX.Measure
         {
             this._x = Math.Min(point1._x, point2._x);
             this._y = Math.Min(point1._y, point2._y);
-            this._width = Math.Max((double)(Math.Max(point1._x, point2._x) - this._x), (double)0.0);
-            this._height = Math.Max((double)(Math.Max(point1._y, point2._y) - this._y), (double)0.0);
+            this._width = Math.Max(Math.Max(point1._x, point2._x) - this._x, 0);
+            this._height = Math.Max(Math.Max(point1._y, point2._y) - this._y, 0);
         }
 
         public Rect(Point point, Vector vector)

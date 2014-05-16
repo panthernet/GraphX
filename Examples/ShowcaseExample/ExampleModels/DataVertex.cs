@@ -39,7 +39,7 @@ namespace ShowcaseExample
 
         private string[] imgArray = new string[4]
         {
-            @"pack://application:,,,/GraphX.Controls;component/Images/help_black.png",
+            @"pack://application:,,,/GraphX.WPF.Controls;component/Images/help_black.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/skull_bw.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/wrld.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/birdy.png",

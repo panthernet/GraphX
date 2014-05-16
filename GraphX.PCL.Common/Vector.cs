@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GraphX.Measure
 {
-    public class Vector
+    public struct Vector
     {
         internal double _x;
         internal double _y;
@@ -32,7 +32,6 @@ namespace GraphX.Measure
             }
         }
 
-        public Vector() { }
         public Vector(double x, double y) { _x = x; _y = y; }
 
         private static readonly Vector zeroVector = new Vector();
@@ -45,7 +44,7 @@ namespace GraphX.Measure
 
         public static bool operator ==(Vector vector1, Vector vector2)
         {
-            return ((vector1.X == vector2.X) && (vector1.Y == vector2.Y));
+            return vector1.X == vector2.X && vector1.Y == vector2.Y;
         }
 
         public static bool operator !=(Vector vector1, Vector vector2)

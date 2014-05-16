@@ -1,9 +1,7 @@
 ﻿using GraphX.GraphSharp.Algorithms.Layout;
+using GraphX.Measure;
 using QuickGraph;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical;
 
 /*
@@ -34,13 +32,13 @@ namespace ShowcaseExample
             vertexPositions = algo.VertexPositions;
         }
 
-        IDictionary<DataVertex, System.Windows.Point> vertexPositions = new Dictionary<DataVertex, System.Windows.Point>();
-        public IDictionary<DataVertex, System.Windows.Point> VertexPositions
+        IDictionary<DataVertex, Point> vertexPositions = new Dictionary<DataVertex, Point>();
+        public IDictionary<DataVertex, Point> VertexPositions
         {
             get { return vertexPositions;  }
         }
 
-        public IDictionary<DataVertex, System.Windows.Size> VertexSizes { get; set; }
+        public IDictionary<DataVertex, Size> VertexSizes { get; set; }
 
         public bool NeedVertexSizes
         {

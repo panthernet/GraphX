@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace GraphX.Measure
 {
-    public class Size
+    public struct Size
     {
         internal double _width;
         public double Width { get { return this._width; } 
@@ -33,7 +31,6 @@ namespace GraphX.Measure
         public static Size Empty { get { return s_empty; } }
         public bool IsEmpty { get { return (this._width < 0.0); } }
 
-        public Size() { }
         public Size(double width, double height) 
         {
             if ((width < 0.0) || (height < 0.0))
@@ -47,7 +44,7 @@ namespace GraphX.Measure
 
         public static bool operator ==(Size size1, Size size2)
         {
-            return ((size1.Width == size2.Width) && (size1.Height == size2.Height));
+            return size1.Width == size2.Width && size1.Height == size2.Height;
         }
 
         public static bool operator !=(Size size1, Size size2)

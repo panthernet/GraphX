@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace ShowcaseExample
 {
@@ -10,7 +7,7 @@ namespace ShowcaseExample
 
         public static List<string> Photos = new List<string>()
         {
-            @"pack://application:,,,/GraphX.Controls;component/Images/help_black.png",
+            @"pack://application:,,,/GraphX.WPF.Controls;component/Images/help_black.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/skull_bw.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/wrld.png",
             @"pack://application:,,,/ShowcaseExample;component/Images/birdy.png",

@@ -88,7 +88,7 @@ namespace GraphX
         /// <summary>
         /// Link to LogicCore. Gets looped edge offset.
         /// </summary>
-        internal override Point EdgeSelfLoopCircleOffset { get { return LogicCore == null ? new Point() : LogicCore.EdgeSelfLoopCircleOffset; } }
+        internal override Point EdgeSelfLoopCircleOffset { get { return LogicCore == null ? new Point() : LogicCore.EdgeSelfLoopCircleOffset.ToWindows(); } }
         /// <summary>
         /// Link to LogicCore. Gets if edge curving is used.
         /// </summary>
@@ -391,13 +391,13 @@ namespace GraphX
         /// <summary>
         /// Get vertex control sizes
         /// </summary>
-        public Dictionary<TVertex, Size> GetVertexSizes()
+        public Dictionary<TVertex, Measure.Size> GetVertexSizes()
         {          
             //measure if needed and get all vertex sizes
             if (!IsMeasureValid) Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            var vertexSizes = new Dictionary<TVertex, Size>(_vertexlist.Count);
+            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count);
             //go through the vertex presenters and get the actual layoutpositions
-            foreach (var vc in VertexList) vertexSizes[vc.Key] = new Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+            foreach (var vc in VertexList) vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
             return vertexSizes;
         }
 
@@ -407,20 +407,20 @@ namespace GraphX
         /// <param name="positions">Vertex positions collection (auto filled if null)</param>
         /// <param name="vertexSizes">Vertex sizes collection (auto filled if null)</param>
         /// <param name="getCenterPoints">True if you want center points returned instead of top-left (needed by overlap removal algo)</param>
-        public Dictionary<TVertex, Rect> GetVertexSizeRectangles(IDictionary<TVertex, Point> positions = null, Dictionary<TVertex, Size> vertexSizes = null, bool getCenterPoints = false)
+        public Dictionary<TVertex, Measure.Rect> GetVertexSizeRectangles(IDictionary<TVertex, Measure.Point> positions = null, Dictionary<TVertex, Measure.Size> vertexSizes = null, bool getCenterPoints = false)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
 
             if (vertexSizes == null) vertexSizes = GetVertexSizes();
             if (positions == null) positions = GetVertexPositions();
-            var rectangles = new Dictionary<TVertex, Rect>();
+            var rectangles = new Dictionary<TVertex, Measure.Rect>();
             foreach (var vertex in LogicCore.Graph.Vertices)
             {
-                Point position; Size size;
+                Measure.Point position; Measure.Size size;
                 if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;
-                if(!getCenterPoints) rectangles[vertex] = new Rect(position.X , position.Y, size.Width, size.Height);
-                else rectangles[vertex] = new Rect(position.X - size.Width * (float)0.5, position.Y - size.Height * (float)0.5, size.Width, size.Height);
+                if (!getCenterPoints) rectangles[vertex] = new Measure.Rect(position.X, position.Y, size.Width, size.Height);
+                else rectangles[vertex] = new Measure.Rect(position.X - size.Width * (float)0.5, position.Y - size.Height * (float)0.5, size.Width, size.Height);
             
             }
             return rectangles;
@@ -429,9 +429,9 @@ namespace GraphX
         /// <summary>
         /// Returns all vertices positions list
         /// </summary>
-        public Dictionary<TVertex, Point> GetVertexPositions()
+        public Dictionary<TVertex, Measure.Point> GetVertexPositions()
         {
-            return VertexList.ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPosition());
+            return VertexList.ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPositionGraphX());
         }
 
         #endregion
@@ -471,9 +471,9 @@ namespace GraphX
         #region RelayoutGraph()
         private void _relayoutGraph()
         {
-            Dictionary<TVertex, Size> vertexSizes = null;
+            Dictionary<TVertex, Measure.Size> vertexSizes = null;
             IExternalLayout<TVertex> alg = null; //layout algorithm
-            Dictionary<TVertex, Rect> rectangles = null; //rectangled size data
+            Dictionary<TVertex, Measure.Rect> rectangles = null; //rectangled size data
             IExternalOverlapRemoval<TVertex> overlap = null;//overlap removal algorithm
             IExternalEdgeRouting<TVertex, TEdge> eralg = null;
 
@@ -501,10 +501,10 @@ namespace GraphX
                     overlap = LogicCore.GenerateOverlapRemovalAlgorithm(rectangles);
 
                 //setup Edge Routing algorithm
-                eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize);
+                eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
             }));
             if (alg == null && !LogicCore.IsCustomLayout) return;
-            IDictionary<TVertex, Point> resultCoords;
+            IDictionary<TVertex, Measure.Point> resultCoords;
             if (alg != null)
             {
                 alg.Compute();
@@ -529,9 +529,9 @@ namespace GraphX
                 }));
                 overlap.Rectangles = rectangles;
                 overlap.Compute();
-                resultCoords = new Dictionary<TVertex, Point>();
+                resultCoords = new Dictionary<TVertex, Measure.Point>();
                 foreach (var res in overlap.Rectangles)
-                    resultCoords.Add(res.Key, new Point((res.Value.Left), (res.Value.Top)));
+                    resultCoords.Add(res.Key, new Measure.Point(res.Value.Left, res.Value.Top));
                 if (Worker != null) Worker.ReportProgress(66, 1);
             }
 
@@ -555,7 +555,7 @@ namespace GraphX
                     SetFinalY(vc, item.Value.Y);
 
                     if (MoveAnimation == null || double.IsNaN(GetX(vc)))
-                        vc.SetPosition(item.Value, false);
+                        vc.SetPosition(item.Value.X,item.Value.Y, false);
                     else MoveAnimation.AddVertexData(vc, item.Value);
                     vc.Visibility = Visibility.Visible; //show vertexes with layout positions assigned
                 }
@@ -578,7 +578,7 @@ namespace GraphX
                 dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
                     //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
-                    eralg.AreaRectangle = ContentSize;// new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
+                    eralg.AreaRectangle = ContentSize.ToGraphX();// new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
                     rectangles = GetVertexSizeRectangles(resultCoords, vertexSizes);
                 }));
                 eralg.VertexPositions = resultCoords;
@@ -947,8 +947,8 @@ namespace GraphX
 
             if(vertexDataNeedUpdate)
             {
-                var position = vc.GetPosition();
-                var size = new Rect(position.X, position.Y, vc.ActualWidth, vc.ActualHeight);
+                var position = vc.GetPositionGraphX();
+                var size = new Measure.Rect(position.X, position.Y, vc.ActualWidth, vc.ActualHeight);
                 LogicCore.AlgorithmStorage.EdgeRouting.UpdateVertexData(vdata, position, size);
             }
 
@@ -988,11 +988,9 @@ namespace GraphX
 
         private void RemoveEdgeLabelsOverlap()
         {
-            var sizes = new Dictionary<LabelOverlapData, Rect>();
             var sz = GetVertexSizeRectangles();
 
-            foreach (var item in sz)
-                sizes.Add(new LabelOverlapData() { Id = item.Key.ID, IsVertex = true }, item.Value);
+            var sizes = sz.ToDictionary(item => new LabelOverlapData() {Id = item.Key.ID, IsVertex = true}, item => item.Value);
             foreach (var item in EdgesList)
             {
                 item.Value.UpdateLabelLayout();
@@ -1007,14 +1005,14 @@ namespace GraphX
                 {
                     var vertex = VertexList.FirstOrDefault(a => a.Key.ID == item.Key.Id).Value;
                     if (vertex == null) throw new GX_InvalidDataException("RemoveEdgeLabelsOverlap() -> Vertex not found!");
-                    vertex.SetPosition(new Point(item.Value.X + item.Value.Width * .5,item.Value.Y + item.Value.Height * .5));
+                    vertex.SetPosition(item.Value.X + item.Value.Width * .5, item.Value.Y + item.Value.Height * .5);
                     //vertex.Arrange(item.Value);
                 }
                 else
                 {
                     var edge = EdgesList.FirstOrDefault(a => a.Key.ID == item.Key.Id).Value;
                     if (edge == null) throw new GX_InvalidDataException("RemoveEdgeLabelsOverlap() -> Edge not found!");
-                    edge.SetCustomLabelSize(item.Value);
+                    edge.SetCustomLabelSize(item.Value.ToWindows());
                 }
             }
             //recalculate route path for new vertex positions
@@ -1278,13 +1276,13 @@ namespace GraphX
             var dlist = new List<DataSaveModel>();
             foreach (var item in VertexList) //ALWAYS serialize vertices first
             {
-                dlist.Add(new DataSaveModel { Position = item.Value.GetPosition(), Data = item.Key });
+                dlist.Add(new DataSaveModel { Position = item.Value.GetPositionGraphX(), Data = item.Key });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All vertex datas must have positive unique ID!");
             }
             foreach (var item in EdgesList)
             {
                // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
-                dlist.Add(new DataSaveModel { Position = new Point(), Data = item.Key });
+                dlist.Add(new DataSaveModel { Position = new Measure.Point(), Data = item.Key });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("SaveIntoFile() -> All edge datas must have positive unique ID!");
             }
 
@@ -1308,7 +1306,7 @@ namespace GraphX
             {
                 var vertexdata = item.Data as TVertex;
                 var ctrl = ControlFactory.CreateVertexControl(vertexdata);
-                ctrl.SetPosition(item.Position);
+                ctrl.SetPosition(item.Position.X, item.Position.Y);
                 AddVertex(vertexdata, ctrl);
                 LogicCore.Graph.AddVertex(vertexdata);
             }

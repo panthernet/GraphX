@@ -253,7 +253,7 @@ namespace GraphX
 
         private static void UpdateVertexEdges(VertexControl vc)
         {
-            if (vc != null)
+            if (vc != null && vc.Vertex != null)
             {
                 var ra = vc.RootArea;
                 if (ra == null) throw new GX_InvalidDataException("OnDragFinished() - IGraphControl object must always have RootArea property set!");

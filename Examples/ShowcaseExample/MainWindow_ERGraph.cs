@@ -188,7 +188,7 @@ namespace ShowcaseExample
             if (erg_useExternalERAlgo.IsChecked == true)
             {
                 if (erg_Area.LogicCore.Graph == null) erg_but_randomgraph_Click(null, null);
-                erg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = erg_Area.LogicCore.AlgorithmFactory.CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum.SimpleER, new Rect(erg_Area.DesiredSize), erg_Area.LogicCore.Graph, null, null, null);
+                erg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = erg_Area.LogicCore.AlgorithmFactory.CreateEdgeRoutingAlgorithm(EdgeRoutingAlgorithmTypeEnum.SimpleER, new GraphX.Measure.Rect(0,0, erg_Area.DesiredSize.Width, erg_Area.DesiredSize.Height), erg_Area.LogicCore.Graph, null, null, null);
             }
             else erg_Area.GetLogicCore<LogicCoreExample>().ExternalEdgeRoutingAlgorithm = null;
         }
