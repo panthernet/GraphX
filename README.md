@@ -1,4 +1,4 @@
-GraphX for .NET v2 PCL-COMPLIANT VERSION
+GraphX for .NET v2 PCL-COMPLIANT VERSIONs
 http://www.panthernet.ru
 
 Project Description
@@ -19,10 +19,11 @@ Project Description
   Features:
 
     Performance oriented, isolated library design optimized for:
-		Large amount of graph vertices rendering
-		Separated visual and logic libraries usage		
-		Constantly improving MVVM support		
-    Internal support for Graph# algorithms ( FR, KK, ISOM, LinLog, Simple Tree, Simple Circle, Sugiyama, CompoundFDP, FSA/FSAOneWay overlap removal)
+        Large amount of graph vertices rendering
+        Isolated visual and logic libraries design and modular coding approach
+        Constantly improving MVVM support
+        .NET multiplatform support	
+    Default support for layout algorithms ( FR, KK, ISOM, LinLog, Simple Tree, Simple Circle, Sugiyama, CompoundFDP, FSA/FSAOneWay overlap removal)
     Advanced graph edges features:
         Support for parametrized edge routing algorithms (SimpleER, EdgeBundling, PathFinder)
         Support for dynamic and/or single edge routing calculation (for ex. for dragged vertex)
@@ -33,13 +34,14 @@ Project Description
         Optional self-looped edges visualization support
         Optional parallel edges visualization support between vertices
 	Advanced graph vertex features:
-		Easy vertex drag and highlight support
-		Customizable vertex labels support 
+		Easy vertex drag and highlight support including on-the-fly edge routing updates
+		Customizable vertex labels support that allows to set text, positionand angle
 		Support for different vertex math shapes for proper edge connections rendering
+		Support for different vertex and edge animations including the ability to easily create custom animations
     Easy support for user-defined external layout, overlap removal and edge routing algorithms
     Configurable vertex and edge controls highlighting system based on behaviour mechanics
     Vertex and edge move, delete, add, mouse over animation support with the ability to create custom animations!
-    Universal graph Save/Load methods using YAXLib interfaces
+    Universal graph serialization methods using YAXLib interfaces
     Graph state saving and loading allows the capture and store in-memory visual and data graphs
     Async algorithm computation support
     Rich usability documentation
