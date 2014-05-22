@@ -2,6 +2,7 @@ GraphX for .NET v2
 http://www.panthernet.ru
 
 Project Description
+
   GraphX for .NET is an advanced graph visualization library based on Graph# algorithmic blueprints that uses WPF for rendering (WinForms interop is also working). I've coded it when i felt that Graph# is outdated and can't be easily enhanced in the means of performance and feature implementation.
   
   Library depends on:
