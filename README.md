@@ -17,6 +17,7 @@ GraphX for .NET is an advanced open-source graph visualization library that supp
     * Extended WPF Toolkit
 	
   Library supports following platforms:
+  
     * Windows Desktop (WPF & WinForms on Windows XP SP3 and later)
     * Microsoft Silverlight 4-5 (WIP, only logic core is available)
     * Windows Metro 8 and later (WIP, only logic core is available)
