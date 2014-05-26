@@ -2,8 +2,8 @@ GraphX for .NET v2 PCL-COMPLIANT VERSIONs
 http://www.panthernet.ru
 
 Project Description
-  GraphX for .NET is an advanced graph visualization library based on Graph# algorithmic blueprints that uses WPF for rendering (WinForms interop is also working). I've coded it when i felt that Graph# is outdated and can't be easily enhanced in the means of performance and feature implementation.
-  
+GraphX for .NET is an advanced open-source graph visualization library that supports different layout algorithms and highly customizable features. It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
+
   Library depends on:
   
     * QuickGraph
@@ -15,6 +15,12 @@ Project Description
     * WPFExtensions
     * NodeXL
     * Extended WPF Toolkit
+	
+  Library supports following platforms:
+    * Windows Desktop (WPF & WinForms on Windows XP SP3 and later)
+    * Microsoft Silverlight 4-5 (WIP, only logic core is available)
+    * Windows Metro 8 and later (WIP, only logic core is available)
+    * Windows Phone 8 (WIP, only logic core is available)
     
   Features:
 
