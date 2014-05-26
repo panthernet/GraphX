@@ -9,6 +9,7 @@
 		- When you assign GraphArea::LogicCore property the new default (platform-specific) FileServiceProvider is created and assigned to LogicCore automaticaly (if corresponding property is null)
 		- You can create custom FileServiceProviders to work with 3rd party serialization libraries or code your own file operations logic
 
++ Added example project for VB.NET
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies (reworked some dependencies)
 + Implemented many small tweaks and optimizations during the port process
