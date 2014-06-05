@@ -770,6 +770,7 @@ namespace GraphX
             if (_svVerticesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled.Value);
             if (_svVerticesDragUpdateEdges != null) DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges.Value);
             if (_svVertexShape != null) item.MathShape = _svVertexShape.Value;
+            if (_svVertexLabelShow != null) item.ShowLabel = _svVertexLabelShow.Value;
             if (_svVertexHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled.Value);
             if (_svVertexHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType.Value);
             if (_svVertexHlEdgesType != null) HighlightBehaviour.SetHighlightEdges(item, _svVertexHlEdgesType.Value);
@@ -834,6 +835,19 @@ namespace GraphX
         {
             _svShowEdgeLabels = isEnabled;
             foreach (var item in _edgeslist.Values)
+                item.ShowLabel = isEnabled;
+            InvalidateVisual();
+        }
+
+        private bool? _svVertexLabelShow;
+        /// <summary>
+        /// Show or hide all vertex labels
+        /// </summary>
+        /// <param name="isEnabled">Boolean value</param>
+        public void ShowAllVerticesLabels(bool isEnabled = true)
+        {
+            _svVertexLabelShow = isEnabled;
+            foreach (var item in _vertexlist.Values)
                 item.ShowLabel = isEnabled;
             InvalidateVisual();
         }

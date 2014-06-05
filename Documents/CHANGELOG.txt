@@ -10,6 +10,7 @@
 		- You can create custom FileServiceProviders to work with 3rd party serialization libraries or code your own file operations logic
 
 + Added example project for VB.NET
++ Added method to GraphArea to show/hide vertex labels
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies (reworked some dependencies)
 + Implemented many small tweaks and optimizations during the port process

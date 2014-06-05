@@ -1240,9 +1240,6 @@ namespace GraphX.Controls
                 ZoomAnimationCompleted(this, EventArgs.Empty);
         }
 
-
-
-
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
         {
             _isZooming = isZooming;
