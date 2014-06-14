@@ -45,19 +45,6 @@
                                     Opacity="0.3" Direction="315"/>
                         </Border.Effect>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Vertex.exists}" Value="false">
-                            <Setter Property="Visibility" TargetName="btn" Value="Hidden"/>
-                            <Setter Property="Background" TargetName="border" Value="LightGreen"/>
-                            <Setter Property="Width" TargetName="btn" Value="0"/>
-                            <Setter Property="Height" TargetName="btn" Value="0"/>
-                            <Setter TargetName="exp" Property="IsExpanded" Value="False" />
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Vertex.isarchive}" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="Green"/>
-                            <Setter TargetName="exp" Property="IsExpanded" Value="False" />
-                        </DataTrigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

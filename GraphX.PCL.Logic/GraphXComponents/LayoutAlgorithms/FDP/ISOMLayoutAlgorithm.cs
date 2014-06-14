@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -47,6 +48,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 
 		protected override void InternalCompute()
 		{
+            if (VisitedGraph.VertexCount == 1)
+            {
+                VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
+                return;
+            }
+
 			//initialize vertex positions
 			InitializeWithRandomPositions( Parameters.Width, Parameters.Height );
 

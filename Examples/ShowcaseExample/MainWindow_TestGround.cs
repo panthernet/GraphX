@@ -66,10 +66,10 @@ namespace ShowcaseExample
             tst_Area.ShowAllEdgesArrows(false);
             tst_Area.LogicCore = logic;
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
-            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Tree;
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
             logic.DefaultLayoutAlgorithmParams = layParams;
             var overlapParams = new OverlapRemovalParameters { HorizontalGap = 100, VerticalGap = 100 };
-            logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
+            logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.OneWayFSA;
             logic.DefaultOverlapRemovalAlgorithmParams = overlapParams;
             IExternalEdgeRouting<DataVertex, DataEdge> erParams = null;
             //logic.ExternalEdgeRoutingAlgorithm = 
@@ -79,8 +79,8 @@ namespace ShowcaseExample
             //tst_Area.VertexList[v2].Visibility = System.Windows.Visibility.Collapsed;
             //tst_Area.VertexList[v3].Visibility = System.Windows.Visibility.Collapsed;
             //tst_Area.VertexList[v4].SetPosition(new Point(0, 0));
-            tst_Area.ShowAllEdgesLabels();
-            tst_Area.AlignAllEdgesLabels();
+            //tst_Area.ShowAllEdgesLabels();
+            //tst_Area.AlignAllEdgesLabels();
             tst_zoomctrl.ZoomToFill();
 
            /* var img = new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseExample;component/Images/birdy.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad };

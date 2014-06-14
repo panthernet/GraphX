@@ -125,9 +125,10 @@ namespace GraphX.Logic.Models
             switch (newAlgorithmType)
             {
                 case OverlapRemovalAlgorithmTypeEnum.FSA:
-                    return new FSAAlgorithm<TVertex>(Rectangles, parameters);
+                    return new FSAAlgorithm<TVertex>(Rectangles, parameters is OverlapRemovalParameters ? parameters : new OverlapRemovalParameters());
                 case OverlapRemovalAlgorithmTypeEnum.OneWayFSA:
-                    return new OneWayFSAAlgorithm<TVertex>(Rectangles, parameters as OneWayFSAParameters);
+                    
+                    return new OneWayFSAAlgorithm<TVertex>(Rectangles, parameters is OneWayFSAParameters ? parameters as OneWayFSAParameters : new OneWayFSAParameters());
                 default:
                     return null;
             }

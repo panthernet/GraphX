@@ -47,7 +47,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 
 		protected override void InternalCompute()
 		{
-			if ( VisitedGraph.VertexCount <= 1 ) return;
+			if ( VisitedGraph.VertexCount == 0 ) return;
+            if (VisitedGraph.VertexCount == 1)
+            {
+                VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
+                return;
+            }
 
 			InitializeWithRandomPositions( 1, 1, -0.5, -0.5 );
 
