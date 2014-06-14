@@ -18,6 +18,7 @@
 + GraphArea::ComputeEdgeRoutesByVertex() method made internal. If you still need it please use LogicCore::ComputeEdgeRoutesByVertex().
 + Renamed method SaveIntoFile to SerializeToFile
 + Renamed method LoadFromFile to DeserializeFromFile
++ Set (0,0) coordinate by default for all custom objects newly added to GraphArea
 + Fixed edges after storage state loading
 
 PCL-IMPROVEMENTS
