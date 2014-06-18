@@ -27,7 +27,29 @@ namespace ShowcaseExample
             //tst_Area.UseNativeObjectArrange = false;
             tst_Area.EnableVisualPropsRecovery = true;
             tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
-            tst_Area.SetVerticesDrag(true, true);
+            tst_Area.SetVerticesDrag(false);
+            tst_Area.VertexSelected += tst_Area_VertexSelected;
+            tst_Area.VertexMouseUp += tst_Area_VertexMouseUp;
+        }
+
+        void tst_Area_VertexMouseUp(object sender, GraphX.Models.VertexSelectedEventArgs args)
+        {
+            if (args.VertexControl != _firstVertex && _secondVertex == null)
+            {
+                _secondVertex = args.VertexControl;
+                var logic = tst_Area.GetLogicCore<LogicCoreExample>();
+                var dataEdge = new DataEdge(_firstVertex.Vertex as DataVertex, _secondVertex.Vertex as DataVertex);
+                logic.Graph.AddEdge(dataEdge);
+                tst_Area.AddEdge(dataEdge, new EdgeControl(_firstVertex, _secondVertex, dataEdge));
+            }
+        }
+
+        private VertexControl _firstVertex;
+        private VertexControl _secondVertex;
+
+        void tst_Area_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
+        {
+            _firstVertex = args.VertexControl;
         }
 
         void tst_but_action_Click(object sender, RoutedEventArgs e)
@@ -40,16 +62,18 @@ namespace ShowcaseExample
             var graph = new GraphExample();
             var v1 = new DataVertex() { Text = "Test1", ID = 1 };
             graph.AddVertex(v1);
-           /* var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+            var v2 = new DataVertex() { Text = "Test2", ID = 1 };
             graph.AddVertex(v2);
-            var v3 = new DataVertex() { Text = "Test3", ID = 3 };
-            graph.AddVertex(v3);
-            var v4 = new DataVertex() { Text = "Test4", ID = 4 };
-            graph.AddVertex(v4);
+            /* var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+             graph.AddVertex(v2);
+             var v3 = new DataVertex() { Text = "Test3", ID = 3 };
+             graph.AddVertex(v3);
+             var v4 = new DataVertex() { Text = "Test4", ID = 4 };
+             graph.AddVertex(v4);
 
-            graph.AddEdge(new DataEdge(v1, v2, 100));
-            graph.AddEdge(new DataEdge(v2, v3, 100));
-            graph.AddEdge(new DataEdge(v2, v4, 100));*/
+             graph.AddEdge(new DataEdge(v1, v2, 100));
+             graph.AddEdge(new DataEdge(v2, v3, 100));
+             graph.AddEdge(new DataEdge(v2, v4, 100));*/
 
             
             return graph;

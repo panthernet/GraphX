@@ -11,6 +11,7 @@
 
 + Added example project for VB.NET
 + Added method to GraphArea to show/hide vertex labels
++ Added MouseUp event global handling for VertexControl
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies (reworked some dependencies)
 + Implemented many small tweaks and optimizations during the port process
