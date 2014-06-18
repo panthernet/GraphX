@@ -84,7 +84,7 @@ namespace GraphX
                 Debug.WriteLine("EdgeLabelControl_LayoutUpdated() -> Got empty edgecontrol!");
                 return;
             }
-            var source = edgeControl.Source;
+            /*var source = edgeControl.Source;
             var p1 = source.GetPosition();
             p1.Offset(source.DesiredSize.Width * .5, source.DesiredSize.Height * .5);
             var target = edgeControl.Target;
@@ -95,7 +95,10 @@ namespace GraphX
             {
                 p1 = edgeControl.GetParallelOffset(source, target, edgeControl.SourceOffset);
                 p2 = edgeControl.GetParallelOffset(target, source, edgeControl.TargetOffset);
-            }
+            }*/
+
+            var p1 = edgeControl.SourceConnectionPoint.GetValueOrDefault();
+            var p2 = edgeControl.TargetConnectionPoint.GetValueOrDefault();
 
             double edgeLength = 0;
             var routingInfo = edgeControl.Edge as IRoutingInfo;

@@ -590,6 +590,15 @@ namespace GraphX
         }
 
         /// <summary>
+        /// Internal value to store last calculated Source vertex connection point
+        /// </summary>
+        internal Point? SourceConnectionPoint;
+        /// <summary>
+        /// Internal value to store last calculated Target vertex connection point
+        /// </summary>
+        internal Point? TargetConnectionPoint;
+
+        /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
         /// </summary>
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
@@ -686,6 +695,9 @@ namespace GraphX
 
                 var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.MathShape);
                 var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.MathShape);
+
+                SourceConnectionPoint = p1;
+                TargetConnectionPoint = p2;
 
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
                 _arrowgeometry = new PathGeometry(); PathFigure arrowFigure;
