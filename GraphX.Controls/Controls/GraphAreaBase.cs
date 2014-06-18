@@ -110,6 +110,18 @@ namespace GraphX
             if (VertexSelected != null)
                 VertexSelected(this, new VertexSelectedEventArgs(vc, e, keys));
         }
+
+        /// <summary>
+        /// Fires when mouse up on vertex
+        /// </summary>
+        public virtual event VertexSelectedEventHandler VertexMouseUp;
+
+        internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (VertexMouseUp != null)
+                VertexMouseUp(this, new VertexSelectedEventArgs(vc, e, keys));
+        }
+
         /// <summary>
         /// Fires when mouse is over the vertex control
         /// </summary>

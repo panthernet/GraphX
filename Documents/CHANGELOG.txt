@@ -1,4 +1,5 @@
 ﻿RELEASE 2.0.3
++ Added MouseUp event global handling for VertexControl
 + Improvement: GXLogicCore expected concrete class as TGraph (thanks to stefanpe)
 + Removed redundant dependencies
 + Fixed edge labels positioning

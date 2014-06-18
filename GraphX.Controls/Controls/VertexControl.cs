@@ -222,6 +222,15 @@ namespace GraphX
                     UpdatePositionTraceState();
                     break;
             }
+
+            MouseUp += VertexControl_MouseUp;
+        }
+
+        void VertexControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+                RootArea.OnVertexMouseUp(this, e, Keyboard.Modifiers);
+            e.Handled = true;
         }
 
         void VertexControl_MouseLeave(object sender, MouseEventArgs e)
