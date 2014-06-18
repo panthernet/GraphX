@@ -599,6 +599,14 @@ namespace GraphX
                  sourcepos.Y + source.DesiredSize.Height * .5 - sideDistance * (mainVector.X / mainVector.Length));
             return joint;
         }
+        /// <summary>
+        /// Internal value to store last calculated Source vertex connection point
+        /// </summary>
+        internal Point? SourceConnectionPoint;
+        /// <summary>
+        /// Internal value to store last calculated Target vertex connection point
+        /// </summary>
+        internal Point? TargetConnectionPoint;
 
         /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
@@ -701,6 +709,9 @@ namespace GraphX
 
                 var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.MathShape);
                 var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.MathShape);
+
+                SourceConnectionPoint = p1;
+                TargetConnectionPoint = p2;
 
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
                 _arrowgeometry = new PathGeometry(); PathFigure arrowFigure;

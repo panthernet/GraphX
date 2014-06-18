@@ -22,6 +22,7 @@
 + Fixed edges after storage state loading
 + Fixed LinLog, KK, ISOM, FR algorithms display when there is only one vertex
 + Fixed overlap removal algorithm loading with incorrect parameters
++ Fixed edge labels positioning
 
 PCL-IMPROVEMENTS
 - Added YAXLib v2.13 project sources splitted into 2 different projects: main and PCL compliant (for attributes to be availbale in PCL libraries)
