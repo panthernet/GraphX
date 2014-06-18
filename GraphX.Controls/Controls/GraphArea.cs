@@ -111,6 +111,8 @@ namespace GraphX
         public void AddCustomChildControl(UIElement control)
         {
             base.Children.Add(control);
+            SetX(control, 0);
+            SetY(control, 0);
         }
 
         /// <summary>
@@ -121,6 +123,8 @@ namespace GraphX
         public void InsertCustomChildControl(int index, UIElement control)
         {
             base.Children.Insert(index, control);
+            SetX(control, 0);
+            SetY(control, 0);
         }
 
         /// <summary>
