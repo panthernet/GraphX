@@ -28,6 +28,7 @@ namespace ShowcaseExample
             tst_Area.EnableVisualPropsRecovery = true;
             tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
             tst_Area.SetVerticesDrag(false);
+            tst_Area.ShowAllVerticesLabels();
             tst_Area.VertexSelected += tst_Area_VertexSelected;
             tst_Area.VertexMouseUp += tst_Area_VertexMouseUp;
         }
@@ -87,7 +88,8 @@ namespace ShowcaseExample
             logic.EnableParallelEdges = false;
             logic.ParallelEdgeDistance = 15;
 
-            tst_Area.ShowAllEdgesArrows(false);
+            tst_Area.ShowAllEdgesArrows(true);
+            tst_Area.ShowAllEdgesLabels();
             tst_Area.LogicCore = logic;
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
             logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;

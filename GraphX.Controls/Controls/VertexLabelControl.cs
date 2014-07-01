@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace GraphX
 {
@@ -15,7 +13,15 @@ namespace GraphX
        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(VertexLabelControl),
-                                                                                       new UIPropertyMetadata(0.0));
+                                                                                       new UIPropertyMetadata(0.0) );
+
+
+
+
+
+
+
+
         /// <summary>
         /// Gets or sets label drawing angle in degrees
         /// </summary>

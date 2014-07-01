@@ -471,11 +471,8 @@
 							CornerRadius="10,10,10,10"
 						Padding="{TemplateBinding Padding}">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
                             <ContentPresenter Content="{TemplateBinding Vertex}" />
+                            <local:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -496,6 +493,7 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
                             x:Name="PART_edgeArrowPath" po:Freeze ="true"/>
+                        <local:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -514,5 +512,49 @@
                 Value="1" />
     </Style>
 
- 
-    </ResourceDictionary>
+    <!--EDGE LABLE CONTROL -->
+    <Style TargetType="{x:Type local:EdgeLabelControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:EdgeLabelControl}">
+                    <Grid>
+                        <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
+                            <ContentPresenter Margin="3"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=local:EdgeLabelControl} , Path=Angle}"/>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <!--VERTEX LABEL CONTROL -->
+    <Style TargetType="local:VertexLabelControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="LabelPositionMode" Value="Sides"/>
+        <Setter Property="LabelPositionSide" Value="BottomRight"/>
+
+        <!-- Custom label template body -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:VertexLabelControl">
+                    <Grid>
+                        <ContentPresenter Margin="3"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=local:EdgeLabelControl} , Path=Angle}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
