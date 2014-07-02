@@ -1,11 +1,12 @@
-﻿using GraphX;
+﻿using System.ComponentModel;
+using GraphX;
 using System;
 using YAXLib;
 
 namespace ShowcaseExample
 {
     [Serializable]
-    public class DataEdge : EdgeBase<DataVertex>
+    public class DataEdge : EdgeBase<DataVertex>, INotifyPropertyChanged
     {
         public DataEdge(DataVertex source, DataVertex target, double weight = 1)
 			: base(source, target, weight)
@@ -24,7 +25,8 @@ namespace ShowcaseExample
         /// <summary>
         /// Node main description (header)
         /// </summary>
-        public string Text { get; set; }
+        private string text;
+        public string Text { get { return text; } set { text = value; OnPropertyChanged("Text"); } }
         public string ToolTipText {get; set; }
 
         public override string ToString()
@@ -38,5 +40,12 @@ namespace ShowcaseExample
             get { return this; }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

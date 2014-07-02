@@ -361,7 +361,7 @@
                         <Grid.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.MergedDictionaries>
-                                    <!--"<ResourceDictionary Source="Templates/TestTemplates.xaml"/>-->
+                                    <ResourceDictionary Source="Templates/TestTemplates.xaml"/>
                                 </ResourceDictionary.MergedDictionaries>
                             </ResourceDictionary>
                         </Grid.Resources>
@@ -373,10 +373,6 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Image Source="Images/birdy.png"  Grid.Row="1"
-                               RenderTransform="{Binding Presenter.RenderTransform, ElementName=tst_zoomctrl, UpdateSourceTrigger=PropertyChanged}"
-                               RenderTransformOrigin="{Binding Presenter.RenderTransformOrigin, ElementName=tst_zoomctrl, UpdateSourceTrigger=PropertyChanged}"
-                               />
                         
                         <graphxctrl:ZoomControl x:Name="tst_zoomctrl" Grid.Row="1" Background="Transparent" BorderBrush="Black" BorderThickness="2"  VerticalContentAlignment="Stretch" VerticalAlignment="Stretch">
                             <local:GraphAreaExample x:Name="tst_Area" Background="Transparent" LogicCore="{Binding TSTLC, UpdateSourceTrigger=PropertyChanged}"/>

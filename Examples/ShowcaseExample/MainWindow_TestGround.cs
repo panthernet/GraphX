@@ -55,26 +55,21 @@ namespace ShowcaseExample
 
         void tst_but_action_Click(object sender, RoutedEventArgs e)
         {
-            tst_Area.EdgesList.First().Value.Visibility = tst_Area.EdgesList.First().Value.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            //tst_Area.GetLogicCore<LogicCoreExample>().Graph.Edges.First().Text = "LoadLayoutCommand";
+            tst_Area.DeserializeFromFile("1.txt");
         }
 
         private GraphExample GenerateTestGraph()
         {
             var graph = new GraphExample();
-            var v1 = new DataVertex() { Text = "Test1", ID = 1 };
+            var v1 = new DataVertex() { Text = "Test2", ID = 2 };
             graph.AddVertex(v1);
-            var v2 = new DataVertex() { Text = "Test2", ID = 1 };
-            graph.AddVertex(v2);
-            /* var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+             var v2 = new DataVertex() { Text = "Test2", ID = 2 };
              graph.AddVertex(v2);
-             var v3 = new DataVertex() { Text = "Test3", ID = 3 };
-             graph.AddVertex(v3);
-             var v4 = new DataVertex() { Text = "Test4", ID = 4 };
-             graph.AddVertex(v4);
 
-             graph.AddEdge(new DataEdge(v1, v2, 100));
-             graph.AddEdge(new DataEdge(v2, v3, 100));
-             graph.AddEdge(new DataEdge(v2, v4, 100));*/
+
+             graph.AddEdge(new DataEdge(v1, v2, 100) { Text = Rand.Next().ToString() });
+
 
             
             return graph;
@@ -91,6 +86,7 @@ namespace ShowcaseExample
             tst_Area.ShowAllEdgesArrows(true);
             tst_Area.ShowAllEdgesLabels();
             tst_Area.LogicCore = logic;
+            tst_Area.SetVerticesDrag(true, true);
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
             logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
             logic.DefaultLayoutAlgorithmParams = layParams;
