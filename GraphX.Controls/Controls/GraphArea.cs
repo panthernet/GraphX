@@ -1329,7 +1329,7 @@ namespace GraphX
 
                 if (datasource == null || datatarget == null)
                     throw new GX_SerializationException("LoadFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
-                var ecc = new EdgeControl { Edge = edgedata, Source = _vertexlist[datasource], Target = _vertexlist[datatarget] };
+                var ecc = new EdgeControl { Edge = edgedata, Source = _vertexlist[datasource], Target = _vertexlist[datatarget], DataContext = edgedata};
                 InsertEdge(edgedata, ecc);
                 LogicCore.Graph.AddEdge(edgedata);
                 //update edge layout and shapes manually

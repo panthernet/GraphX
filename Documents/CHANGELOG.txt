@@ -4,6 +4,7 @@
 + Removed redundant dependencies
 + Fixed edge labels positioning
 + Fixed custom control loading into GraphArea
++ Fixed EdgeControl data context bug after graph deserialization
 
 RELEASE 2.0.2
 + Added vertex control labels with following functionality:
