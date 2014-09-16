@@ -1,0 +1,17 @@
+﻿1. async/threadsafe
+2. XAML:
+	- xmlns changes
+	- style TargetType changed
+	- Template.FindName cut off (this.FindName or GetTemplatedName)
+	- readonly dependecy props are removed
+	- DP definition logic changed
+	- invalidatevisual removed, now can use invalidatearrange
+	- generic.xaml as Content and must use DefaultStyleKey for Control objects to hook default styles 
+	- Freezable removed
+	- PolyLine, LineSegment, PathSegment and etc. have no ctors w params
+	- Only PropertyMetadata remains
+	- No Triggers (use visual states)
+3. math and logic:
+	- Matrix class have no advanced methods (Transform(Points[]), RotateAt)
+4. No DependencyPropertyDescriptor so no attached props change notifications
+

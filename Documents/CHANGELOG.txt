@@ -1,4 +1,7 @@
-﻿RELEASE 2.1.2 WIP
+﻿RELEASE 2.1.3 WIP
+
++ Added experimental METRO support
+
 + Redesigned libraries for PCL implementation
 	This shouldn't lead to major problems but some breaks will definetly occur:
 	- All routines in Logic library now operates with custom System.Windows types (platform-specific libraries operates (externaly) with System.Windows types). This includes any custom algorithms. 

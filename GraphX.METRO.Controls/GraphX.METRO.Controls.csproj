@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{66F33708-C1C7-4385-8235-7201784D184C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GraphX.METRO.Controls</RootNamespace>
+    <AssemblyName>GraphX.METRO.Controls</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE, USECANVAS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
+      <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
+      <Name>GraphX.PCL.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
+      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
+      <Name>YAXLib.PCL.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animations\DeleteFadeAnimation.cs" />
+    <Compile Include="Animations\DeleteShrinkAnimation.cs" />
+    <Compile Include="Animations\MouseOverScaleAnimation.cs" />
+    <Compile Include="Animations\MoveAnimationBase.cs" />
+    <Compile Include="Animations\MoveFadeAnimation.cs" />
+    <Compile Include="Animations\MoveSimpleAnimation.cs" />
+    <Compile Include="Behaviours\DragBehaviour.cs" />
+    <Compile Include="Behaviours\HighlightBehaviour.cs" />
+    <Compile Include="Controls\EdgeControl.cs" />
+    <Compile Include="Controls\EdgeLabelControl.cs" />
+    <Compile Include="Controls\GraphArea.cs" />
+    <Compile Include="Controls\GraphAreaBase.cs" />
+    <Compile Include="Controls\IPositionChangeNotify.cs" />
+    <Compile Include="Controls\ITrackableContent.cs" />
+    <Compile Include="Controls\IZoomControl.cs" />
+    <Compile Include="Controls\VertexControl.cs" />
+    <Compile Include="Controls\VertexLabelControl.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\VisibilityToBoolConverter.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\DoubleHelper.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\PointHelper.cs" />
+    <Compile Include="Controls\ZoomControl\Helpers\VisualTreeHelperEx.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventArgs.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventHandler.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ContentSizeChangedHandler.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ZoomControlModes.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\ZoomViewModifierMode.cs" />
+    <Compile Include="Controls\ZoomControl\ZoomContentPresenter.cs" />
+    <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
+    <Compile Include="CustomHelper.cs" />
+    <Compile Include="DesignerExampleData\EdgeDataExample.cs" />
+    <Compile Include="DesignerExampleData\VertexDataExample.cs" />
+    <Compile Include="DpExtensions.cs" />
+    <Compile Include="Enums\DeleteAnimation.cs" />
+    <Compile Include="Enums\EdgeDashStyle.cs" />
+    <Compile Include="Enums\MouseOverAnimation.cs" />
+    <Compile Include="Enums\MoveAnimation.cs" />
+    <Compile Include="GeometryHelper.cs" />
+    <Compile Include="MathHelper.cs" />
+    <Compile Include="Models\AnimationFactory.cs" />
+    <Compile Include="Models\AnimationHelper.cs" />
+    <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
+    <Compile Include="Models\ControlEventArgs.cs" />
+    <Compile Include="Models\DelegateCommand.cs" />
+    <Compile Include="Models\DispatcherHelper.cs" />
+    <Compile Include="Models\EdgeEventOptions.cs" />
+    <Compile Include="Models\EdgeSelectedEventArgs.cs" />
+    <Compile Include="Models\EdgeSelectedEventHandler.cs" />
+    <Compile Include="Models\FileServiceProviderMETRO.cs" />
+    <Compile Include="Models\GraphControlFactory.cs" />
+    <Compile Include="Models\IBidirectionalControlAnimation.cs" />
+    <Compile Include="Models\IGraphArea.cs" />
+    <Compile Include="Models\IGraphControl.cs" />
+    <Compile Include="Models\IGraphControlFactory.cs" />
+    <Compile Include="Models\IOneWayControlAnimation.cs" />
+    <Compile Include="Models\ModifierKeys.cs" />
+    <Compile Include="Models\MouseButtonEventArgs.cs" />
+    <Compile Include="Models\RemoveControlEventHandler.cs" />
+    <Compile Include="Models\StateStorage.cs" />
+    <Compile Include="Models\VertexEventOptions.cs" />
+    <Compile Include="Models\VertexMovedEventArgs.cs" />
+    <Compile Include="Models\VertexPositionChangedEH.cs" />
+    <Compile Include="Models\VertexPositionEventArgs.cs" />
+    <Compile Include="Models\VertexSelectedEventArgs.cs" />
+    <Compile Include="Models\VertexSelectedEventHandler.cs" />
+    <Compile Include="PrintHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeExtensions.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="QuickGraph">
+      <HintPath>..\..\..\GraphX\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\cross-icon.png" />
+    <Content Include="Images\round1.png" />
+    <Content Include="Images\round2.png" />
+    <Content Include="port.txt" />
+    <Content Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\help_black.png" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
+    <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
