@@ -1,4 +1,8 @@
-﻿RELEASE 2.1.3 WIP
+﻿RELEASE 2.1.4 WIP
++ Fixed dynamic Showcase example when only one vertex was added
++ Misc project fixes including build type and information
+
+RELEASE 2.1.3 WIP
 
 + Added experimental METRO support
 

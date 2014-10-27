@@ -36,6 +36,7 @@ namespace ShowcaseExample
             dg_Logic.EdgeCurvingEnabled = true;
             dg_Logic.Graph = new GraphExample();
             dg_Area.MoveAnimation = AnimationFactory.CreateMoveAnimation(MoveAnimation.Move, TimeSpan.FromSeconds(0.5));
+            dg_Area.MoveAnimation.Completed += MoveAnimation_Completed;
             //dg_Area.DeleteAnimation = AnimationFactory.CreateDeleteAnimation(DeleteAnimation.Fade, TimeSpan.FromSeconds(0.3));
            // dg_Area.MouseOverAnimation = AnimationFactory.CreateMouseOverAnimation(MouseOverAnimation.Scale, TimeSpan.FromSeconds(0.3));
             dg_Area.VertexSelected += dg_Area_VertexSelected;
@@ -59,6 +60,11 @@ namespace ShowcaseExample
             dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;
 
             //dg_zoomctrl.KeepContentInBounds = true;
+        }
+
+        void MoveAnimation_Completed(object sender, EventArgs e)
+        {
+            dg_zoomctrl.ZoomToFill();
         }
 
         #region Manual edge drawing
@@ -377,8 +383,12 @@ namespace ShowcaseExample
             var data = new DataVertex("Vertex " + dg_Area.VertexList.Count() + 1);
             dg_Area.LogicCore.Graph.AddVertex(data);
             dg_Area.AddVertex(data, new VertexControl(data));
-            
-            dg_Area.RelayoutGraph(true);
+
+            //we have to check if there is only one vertex and set coordinates manulay 
+            //because layout algorithms skip all logic if there are less than two vertices
+            if (dg_Area.VertexList.Count() == 1)
+                dg_Area.VertexList.First().Value.SetPosition(0,0);
+            else dg_Area.RelayoutGraph(true);
             dg_zoomctrl.ZoomToFill();
         }
     }
