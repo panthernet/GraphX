@@ -175,7 +175,7 @@ namespace GraphX
 
         public GraphArea()
         {
-            ControlFactory = new GraphControlFactory { FactoryRootArea = this };
+            ControlFactory = new GraphControlFactory(this);
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
@@ -398,7 +398,7 @@ namespace GraphX
 
         #endregion
 
-        #region GenerateGraph
+        #region xph
 
         #region Sizes operations
         /// <summary>
@@ -408,9 +408,11 @@ namespace GraphX
         {          
             //measure if needed and get all vertex sizes
             if (!IsMeasureValid) Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count);
+            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count(a => !((IGraphXVertex)a.Value.Vertex).SkipProcessing));
             //go through the vertex presenters and get the actual layoutpositions
-            foreach (var vc in VertexList) vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+            foreach (var vc in VertexList.Where(vc => !((IGraphXVertex)vc.Value.Vertex).SkipProcessing)) {
+                vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+            }
             return vertexSizes;
         }
 
@@ -428,7 +430,7 @@ namespace GraphX
             if (vertexSizes == null) vertexSizes = GetVertexSizes();
             if (positions == null) positions = GetVertexPositions();
             var rectangles = new Dictionary<TVertex, Measure.Rect>();
-            foreach (var vertex in LogicCore.Graph.Vertices)
+            foreach (var vertex in LogicCore.Graph.Vertices.Where(a=> !a.SkipProcessing))
             {
                 Measure.Point position; Measure.Size size;
                 if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;
@@ -444,7 +446,7 @@ namespace GraphX
         /// </summary>
         public Dictionary<TVertex, Measure.Point> GetVertexPositions()
         {
-            return VertexList.ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPositionGraphX());
+            return VertexList.Where(a => !((IGraphXVertex)a.Value.Vertex).SkipProcessing).ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPositionGraphX());
         }
 
         #endregion
@@ -467,7 +469,7 @@ namespace GraphX
             RemoveAllEdges();
 
             //preload vertex controls
-            foreach (var it in graph.Vertices)
+            foreach (var it in graph.Vertices.Where(a=> !a.SkipProcessing))
             {
                 var vc = ControlFactory.CreateVertexControl(it);
                 vc.DataContext = dataContextToDataItem ? it : null;

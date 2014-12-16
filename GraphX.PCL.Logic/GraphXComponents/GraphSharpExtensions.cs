@@ -256,13 +256,19 @@ namespace GraphX.GraphSharp
 
 
         public static BidirectionalGraph<TVertex, TEdge> CopyToBidirectionalGraph<TVertex, TEdge>(
-            this IVertexAndEdgeListGraph<TVertex, TEdge> graph)
+            this IVertexAndEdgeListGraph<TVertex, TEdge> graph, bool includeEmpty = true)
             where TEdge : IEdge<TVertex>
         {
             var newGraph = new BidirectionalGraph<TVertex, TEdge>();
 
             //copy the vertices
-            newGraph.AddVerticesAndEdgeRange(graph.Edges);
+            if(!includeEmpty)
+                newGraph.AddVerticesAndEdgeRange(graph.Edges);
+            else
+            {
+                newGraph.AddVertexRange(graph.Vertices);
+                newGraph.AddEdgeRange(graph.Edges);
+            }
 
             return newGraph;
         }

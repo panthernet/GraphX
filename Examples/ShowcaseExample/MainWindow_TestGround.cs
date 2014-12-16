@@ -48,6 +48,7 @@ namespace ShowcaseExample
         private VertexControl _firstVertex;
         private VertexControl _secondVertex;
 
+        private bool _action;
         void tst_Area_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
         {
             _firstVertex = args.VertexControl;
@@ -56,19 +57,22 @@ namespace ShowcaseExample
         void tst_but_action_Click(object sender, RoutedEventArgs e)
         {
             //tst_Area.GetLogicCore<LogicCoreExample>().Graph.Edges.First().Text = "LoadLayoutCommand";
-            tst_Area.DeserializeFromFile("1.txt");
+            //tst_Area.DeserializeFromFile("1.txt");
+            _action = !_action;
         }
 
         private GraphExample GenerateTestGraph()
         {
             var graph = new GraphExample();
-            var v1 = new DataVertex() { Text = "Test2", ID = 2 };
+            var v1 = new DataVertex() { Text = "Test1", ID = 1};
             graph.AddVertex(v1);
-             var v2 = new DataVertex() { Text = "Test2", ID = 2 };
-             graph.AddVertex(v2);
+            var v2 = new DataVertex() { Text = "Test2", ID = 2 };
+            graph.AddVertex(v2);
+            var v3 = new DataVertex() { Text = "Test3", ID = 3, SkipProcessing = _action };
+            graph.AddVertex(v3);
 
 
-             graph.AddEdge(new DataEdge(v1, v2, 100) { Text = Rand.Next().ToString() });
+            graph.AddEdge(new DataEdge(v1, v2, 100) { Text = Rand.Next().ToString() });
 
 
             
@@ -82,19 +86,20 @@ namespace ShowcaseExample
             var logic = new LogicCoreExample {Graph = graph};
             logic.EnableParallelEdges = false;
             logic.ParallelEdgeDistance = 15;
+            tst_Area.LogicCore = logic;
 
             tst_Area.ShowAllEdgesArrows(true);
             tst_Area.ShowAllEdgesLabels();
-            tst_Area.LogicCore = logic;
             tst_Area.SetVerticesDrag(true, true);
             var layParams = new LinLogLayoutParameters { IterationCount = 100 };
-            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.SimpleRandom;
             logic.DefaultLayoutAlgorithmParams = layParams;
             var overlapParams = new OverlapRemovalParameters { HorizontalGap = 100, VerticalGap = 100 };
-            logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.OneWayFSA;
+            logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
             logic.DefaultOverlapRemovalAlgorithmParams = overlapParams;
             IExternalEdgeRouting<DataVertex, DataEdge> erParams = null;
             //logic.ExternalEdgeRoutingAlgorithm = 
+            TSTLC = logic;
 
             tst_Area.GenerateGraph(graph, true);
             //tst_Area.VertexList[v1].Visibility = System.Windows.Visibility.Collapsed;

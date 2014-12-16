@@ -20,7 +20,8 @@ namespace ShowcaseExample
         /// tmp collection to speedup selected vertices search
         /// </summary>
         private List<VertexControl> DG_SelectedVertices = new List<VertexControl>();
-        
+
+
         public void DynamicGraph_Constructor()
         {
             var dg_Logic = new LogicCoreExample();
@@ -58,7 +59,6 @@ namespace ShowcaseExample
             dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;
             dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;
-
             //dg_zoomctrl.KeepContentInBounds = true;
         }
 

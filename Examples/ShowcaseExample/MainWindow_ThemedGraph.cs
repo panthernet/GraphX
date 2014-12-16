@@ -1,6 +1,5 @@
 ﻿using GraphX;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using GraphX.Models;
@@ -8,10 +7,6 @@ using System.Windows.Input;
 using ShowcaseExample.Models;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using System.Windows.Media.Imaging;
-using System.Text;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Markup;
 using GraphX.Controls;
 
 namespace ShowcaseExample
@@ -32,7 +27,7 @@ namespace ShowcaseExample
             tg_Logic.EdgeCurvingEnabled = true;
             tg_Logic.AsyncAlgorithmCompute = true;
 
-            tg_edgeMode.ItemsSource = new string[] { "Draw all edges", "Draw edges by vertex selection" };
+            tg_edgeMode.ItemsSource = new[] { "Draw all edges", "Draw edges by vertex selection" };
             tg_edgeMode.SelectedIndex = 0;
             tg_edgeType.ItemsSource = Enum.GetValues(typeof(EdgesType)).Cast<EdgesType>();
             tg_edgeType.SelectedItem = EdgesType.All;
@@ -108,11 +103,12 @@ namespace ShowcaseExample
                 var menuitem = new System.Windows.Controls.MenuItem() { Header = "Delete item", Tag = args.VertexControl };
                 menuitem.Click += tg_deleteitem_Click;
                 args.VertexControl.ContextMenu.Items.Add(menuitem);
+                args.VertexControl.ContextMenu.IsOpen = true;
                 
-                var str = new StringBuilder();
+                /*var str = new StringBuilder();
                 using (var writer = new StringWriter(str))
                     XamlWriter.Save(args.VertexControl.ContextMenu.Template, writer);
-                Debug.Write(str);
+                Debug.Write(str);*/
             }
         }
 

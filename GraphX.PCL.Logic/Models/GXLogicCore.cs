@@ -90,7 +90,7 @@ namespace GraphX.Logic
         /// <summary>
         /// Main graph object
         /// </summary>
-        public TGraph Graph { get; set; }
+        public virtual TGraph Graph { get; set; }
 
         /// <summary>
         /// Enables parallel edges. All edges between the same nodes will be separated by ParallelEdgeDistance value.

@@ -4,6 +4,11 @@ namespace GraphX
 {
     public abstract class VertexBase: IGraphXVertex
     {
+        /// <summary>
+        /// Skip vertex in algo calc and visualization
+        /// </summary>
+        public bool SkipProcessing { get; set; }
+
         public VertexBase()
         {
             ID = -1;

@@ -1099,8 +1099,10 @@ namespace GraphX.Controls
         public Rect ToContentRectangle(Rect screenRectangle)
         {
             var tl = TranslatePoint(new Point(screenRectangle.X, screenRectangle.Y), ContentVisual);
-            var br = TranslatePoint(new Point(screenRectangle.Right, screenRectangle.Bottom), ContentVisual);
-            return new Rect(tl.X, tl.Y, Math.Abs(Math.Abs(br.X) - Math.Abs(tl.X)), Math.Abs(Math.Abs(br.Y) - Math.Abs(tl.Y)));
+            //var br = TranslatePoint(new Point(screenRectangle.Right, screenRectangle.Bottom), ContentVisual);
+            //return new Rect(tl.X, tl.Y, Math.Abs(Math.Abs(br.X) - Math.Abs(tl.X)), Math.Abs(Math.Abs(br.Y) - Math.Abs(tl.Y)));
+
+            return new Rect(tl.X, tl.Y, screenRectangle.Width / Zoom, screenRectangle.Height / Zoom);
         }
 
         private void ZoomControl_MouseWheel(object sender, MouseWheelEventArgs e)

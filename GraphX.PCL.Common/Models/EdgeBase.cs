@@ -10,6 +10,11 @@ namespace GraphX
     /// <typeparam name="TVertex">Vertex class</typeparam>
     public abstract class EdgeBase<TVertex> : IGraphXEdge<TVertex>
     {
+        /// <summary>
+        /// Skip edge in algo calc and visualization
+        /// </summary>
+        public bool SkipProcessing { get; set; }
+
         public EdgeBase(TVertex source, TVertex target, double weight = 1)
         {
 
@@ -44,5 +49,6 @@ namespace GraphX
         public TVertex Target { get; set; }
 
         public double Weight { get; set; }
+
     }
 }

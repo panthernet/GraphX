@@ -56,7 +56,7 @@ namespace GraphX
         /// </summary>
 		public object Vertex
 		{
-			get { return GetValue( VertexProperty ); }
+            get { return GetValue(VertexProperty); }
 			set { SetValue( VertexProperty, value ); }
 		}
 

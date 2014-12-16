@@ -5,7 +5,9 @@ using System.Linq;
 
 namespace ShowcaseExample
 {
-    public class GraphExample : BidirectionalGraph<DataVertex, DataEdge> { }
+    public class GraphExample : BidirectionalGraph<DataVertex, DataEdge> 
+    { 
+    }
 
 
 }
