@@ -1,5 +1,6 @@
 ﻿using GraphX.Measure;
 using GraphX.Models.XmlSerializer;
+using GraphX.PCL.Common.Enums;
 using YAXLib;
 
 namespace GraphX
@@ -13,7 +14,7 @@ namespace GraphX
         /// <summary>
         /// Skip edge in algo calc and visualization
         /// </summary>
-        public bool SkipProcessing { get; set; }
+        public ProcessingOptionEnum SkipProcessing { get; set; }
 
         public EdgeBase(TVertex source, TVertex target, double weight = 1)
         {

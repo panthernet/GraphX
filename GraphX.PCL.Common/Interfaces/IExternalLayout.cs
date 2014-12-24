@@ -24,5 +24,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout
         /// If algorithm needs to know visual vertex control sizes they will be set into VertexSizes property before calculation
         /// </summary>
         bool NeedVertexSizes { get; }
+
+        /// <summary>
+        /// Gets if algorithm supports vertex/edge freeze feature
+        /// </summary>
+        bool SupportsObjectFreeze { get; }
     }
 }

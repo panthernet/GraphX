@@ -1,4 +1,6 @@
-﻿using QuickGraph;
+﻿using System.Collections.Generic;
+using GraphX.Measure;
+using QuickGraph;
 
 namespace GraphX.GraphSharp.Algorithms.Layout
 {
@@ -8,5 +10,6 @@ namespace GraphX.GraphSharp.Algorithms.Layout
 		where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
 	{
         TGraph VisitedGraph { get; }
+       ////// Dictionary<TVertex, Point> FreezedVertices { get; } 
 	}
 }

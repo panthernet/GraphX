@@ -14,28 +14,33 @@ namespace ShowcaseExample
 {
     public class ExampleExternalLayoutAlgorithm: IExternalLayout<DataVertex>
     {
-        private IVertexAndEdgeListGraph<DataVertex, DataEdge> Graph;
+        public bool SupportsObjectFreeze
+        {
+            get { return true; }
+        }
+
+        private readonly IVertexAndEdgeListGraph<DataVertex, DataEdge> _graph;
         public ExampleExternalLayoutAlgorithm(IVertexAndEdgeListGraph<DataVertex, DataEdge> graph)
         {
-            Graph = graph;
+            _graph = graph;
         }
 
         public void Compute()
         {
             var pars = new EfficientSugiyamaLayoutParameters { LayerDistance = 200 };
-            var algo = new EfficientSugiyamaLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(Graph, pars, vertexPositions, VertexSizes);
+            var algo = new EfficientSugiyamaLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(_graph, pars, _vertexPositions, VertexSizes);
             algo.Compute();
 
             // now you can use = algo.VertexPositions for custom manipulations
 
             //set this algo calculation results 
-            vertexPositions = algo.VertexPositions;
+            _vertexPositions = algo.VertexPositions;
         }
 
-        IDictionary<DataVertex, Point> vertexPositions = new Dictionary<DataVertex, Point>();
+        IDictionary<DataVertex, Point> _vertexPositions = new Dictionary<DataVertex, Point>();
         public IDictionary<DataVertex, Point> VertexPositions
         {
-            get { return vertexPositions;  }
+            get { return _vertexPositions;  }
         }
 
         public IDictionary<DataVertex, Size> VertexSizes { get; set; }

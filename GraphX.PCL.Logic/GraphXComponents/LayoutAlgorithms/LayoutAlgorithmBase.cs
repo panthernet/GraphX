@@ -10,34 +10,32 @@ namespace GraphX.GraphSharp.Algorithms.Layout
 		where TEdge : IEdge<TVertex>
 		where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
 	{
-		private readonly Dictionary<TVertex, Point> vertexPositions;
-		private readonly TGraph visitedGraph;
+		private readonly Dictionary<TVertex, Point> _vertexPositions;
+		private readonly TGraph _visitedGraph;
+
+       // public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
+
+        public virtual bool SupportsObjectFreeze { get { return false; } }
+
 
 		public IDictionary<TVertex, Point> VertexPositions
 		{
-			get { return vertexPositions; }
+			get { return _vertexPositions; }
 		}
 
 		public TGraph VisitedGraph
 		{
-			get { return visitedGraph; }
+			get { return _visitedGraph; }
 		}
 
-		protected LayoutAlgorithmBase( TGraph visitedGraph ) :
-			this( visitedGraph, null )
-		{
-		}
+	    protected LayoutAlgorithmBase( TGraph visitedGraph, IDictionary<TVertex, Point> vertexPositions = null)
+	    {
+	        _visitedGraph = visitedGraph;
+	        _vertexPositions = vertexPositions != null ? new Dictionary<TVertex, Point>( vertexPositions ) : new Dictionary<TVertex, Point>( visitedGraph.VertexCount );
+            /////FreezedVertices = new Dictionary<TVertex, Point>();
+	    }
 
-		protected LayoutAlgorithmBase( TGraph visitedGraph, IDictionary<TVertex, Point> vertexPositions )
-		{
-            this.visitedGraph = visitedGraph;
-			if ( vertexPositions != null )
-				this.vertexPositions = new Dictionary<TVertex, Point>( vertexPositions );
-			else
-				this.vertexPositions = new Dictionary<TVertex, Point>( visitedGraph.VertexCount );
-		}
-
-        public IDictionary<TVertex, Size> VertexSizes { get; set; }
+	    public IDictionary<TVertex, Size> VertexSizes { get; set; }
 
         public virtual bool NeedVertexSizes
         {

@@ -1,4 +1,5 @@
-﻿using GraphX.GraphSharp;
+﻿using System.Linq;
+using GraphX.GraphSharp;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.Circular;
@@ -7,6 +8,7 @@ using GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical;
 using GraphX.GraphSharp.Algorithms.Layout.Simple.Tree;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
 using QuickGraph;
 using System.Collections.Generic;
 using GraphX.GraphSharp.Algorithms.Layout.Compound.FDP;
@@ -26,15 +28,20 @@ namespace GraphX.Logic.Models
             if (Graph == null) return null;
             if (parameters == null) parameters = CreateLayoutParameters(newAlgorithmType);
             IMutableBidirectionalGraph<TVertex, TEdge> graph = Graph.CopyToBidirectionalGraph();
-            graph.RemoveEdgeIf(a => a.SkipProcessing);
-            graph.RemoveVertexIf(a => a.SkipProcessing);
+            /*var dic = new Dictionary<TVertex, Point>();
+            if (Positions != null)
+            {
+                dic = Positions.Where(a => a.Key.SkipProcessing == ProcessingOptionEnum.Freeze).ToDictionary(a=> a.Key, a=> a.Value);
+            }*/
+            graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
+            graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {
                 case LayoutAlgorithmTypeEnum.Tree:
                     return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, Positions, Sizes, parameters as SimpleTreeLayoutParameters);
                 case LayoutAlgorithmTypeEnum.SimpleRandom:
-                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph);
+                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, Positions);
                 case LayoutAlgorithmTypeEnum.Circular:
                     return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, Positions, Sizes, parameters as CircularLayoutParameters);
                 case LayoutAlgorithmTypeEnum.FR:
@@ -164,8 +171,8 @@ namespace GraphX.Logic.Models
             //if (Rectangles == null) return null;
             if (parameters == null) parameters = CreateEdgeRoutingParameters(newAlgorithmType);
             IMutableBidirectionalGraph<TVertex, TEdge> graph = Graph.CopyToBidirectionalGraph();
-            graph.RemoveEdgeIf(a => a.SkipProcessing);
-            graph.RemoveVertexIf(a => a.SkipProcessing);
+            graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
+            graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {

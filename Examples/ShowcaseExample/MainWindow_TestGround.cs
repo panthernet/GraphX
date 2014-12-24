@@ -12,6 +12,7 @@ using GraphX.GraphSharp.Algorithms.Layout;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using GraphX.PCL.Common.Enums;
 
 namespace ShowcaseExample
 {
@@ -24,6 +25,7 @@ namespace ShowcaseExample
         {
             tst_but_gen.Click += tst_but_gen_Click;
             tst_but_action.Click += tst_but_action_Click;
+            tst_but_relayout.Click += tst_but_relayout_Click;
             //tst_Area.UseNativeObjectArrange = false;
             tst_Area.EnableVisualPropsRecovery = true;
             tst_Area.SetVerticesMathShape(VertexShape.Rectangle);
@@ -48,7 +50,7 @@ namespace ShowcaseExample
         private VertexControl _firstVertex;
         private VertexControl _secondVertex;
 
-        private bool _action;
+        private ProcessingOptionEnum _action;
         void tst_Area_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
         {
             _firstVertex = args.VertexControl;
@@ -58,7 +60,13 @@ namespace ShowcaseExample
         {
             //tst_Area.GetLogicCore<LogicCoreExample>().Graph.Edges.First().Text = "LoadLayoutCommand";
             //tst_Area.DeserializeFromFile("1.txt");
-            _action = !_action;
+            _action = _action == ProcessingOptionEnum.Default ? ProcessingOptionEnum.Freeze : ProcessingOptionEnum.Default;
+        }
+
+        void tst_but_relayout_Click(object sender, RoutedEventArgs e)
+        {
+            tst_Area.LogicCore.Graph.Vertices.Last().SkipProcessing = _action;
+            tst_Area.RelayoutGraph(true);
         }
 
         private GraphExample GenerateTestGraph()

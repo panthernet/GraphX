@@ -18,9 +18,5 @@
         /// If edge is self-looped
         /// </summary>
         bool IsSelfLoop { get; }
-        /// <summary>
-        /// Skip edge in algorithm calc and visual control generation
-        /// </summary>
-        bool SkipProcessing { get; }
     }
 }

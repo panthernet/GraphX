@@ -1,4 +1,4 @@
-﻿using System;
+﻿using GraphX.PCL.Common.Enums;
 
 namespace GraphX
 {
@@ -7,7 +7,7 @@ namespace GraphX
         /// <summary>
         /// Skip vertex in algo calc and visualization
         /// </summary>
-        public bool SkipProcessing { get; set; }
+        public ProcessingOptionEnum SkipProcessing { get; set; }
 
         public VertexBase()
         {
@@ -27,12 +27,12 @@ namespace GraphX
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (int)SkipProcessing ^ ID;
         }
 
         public bool Equals(IGraphXVertex other)
         {
-            return this == other;
+            return Equals(this, other);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using GraphX.Measure;
+﻿using System.Linq;
+using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
@@ -6,36 +8,42 @@ using System.Collections.Generic;
 namespace GraphX.GraphSharp.Algorithms.Layout
 {
     public class RandomLayoutAlgorithm<TVertex, TEdge, TGraph> : ILayoutAlgorithm<TVertex, TEdge, TGraph>
-        where TVertex : class
-        where TEdge : IEdge<TVertex>
+        where TVertex : class, IGraphXVertex
+        where TEdge : IGraphXEdge<TVertex>
         where TGraph : IBidirectionalGraph<TVertex, TEdge>
     {
-        private TGraph Graph;
-        private Random Rnd = new Random((int)DateTime.Now.Ticks);
+        //public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
 
-        public RandomLayoutAlgorithm(TGraph graph)
+        private readonly TGraph _graph;
+        private readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
+        private readonly IDictionary<TVertex, Point> _positions;
+
+        public RandomLayoutAlgorithm(TGraph graph, IDictionary<TVertex, Point> positions)
         {
-            Graph = graph;
+            _graph = graph;
+            _positions = positions;
         }        
     
         public void Compute()
         {
-            foreach (var item in Graph.Vertices)
-                vertexPositions.Add(item, new Point(Rnd.Next(0, 2000), Rnd.Next(0, 2000)));
-            //var vlist = Graph.Vertices.ToList();
-            /*VertexPositions.Add(vlist[0], new Point(100, 100));
-            VertexPositions.Add(vlist[1], new Point(300, 100));
-            VertexPositions.Add(vlist[2], new Point(200, 300));
-
-            VertexPositions.Add(vlist[3], new Point(10000, 1000));
-            VertexPositions.Add(vlist[4], new Point(10300, 1000));
-            VertexPositions.Add(vlist[5], new Point(10200, 1300));*/
-
+            _vertexPositions.Clear();
+            foreach (var item in _graph.Vertices)
+            {
+                if (item.SkipProcessing != ProcessingOptionEnum.Freeze || _positions == null)
+                    _vertexPositions.Add(item, new Point(_rnd.Next(0, 2000), _rnd.Next(0, 2000)));
+                else if (_positions != null)
+                {
+                    var res = _positions.FirstOrDefault(a => a.Key == item);
+                    if(res.Key != null)
+                        _vertexPositions.Add(res.Key, res.Value);
+                }            
+            }
+           
         }
 
-        IDictionary<TVertex, Point> vertexPositions = new Dictionary<TVertex, Point>();
+        readonly IDictionary<TVertex, Point> _vertexPositions = new Dictionary<TVertex, Point>();
 
-        public IDictionary<TVertex, Point> VertexPositions { get { return vertexPositions; } }
+        public IDictionary<TVertex, Point> VertexPositions { get { return _vertexPositions; } }
 
         public IDictionary<TVertex, Size> VertexSizes { get; set; }
 
@@ -46,7 +54,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout
 
         public TGraph VisitedGraph
         {
-            get { return Graph; }
+            get { return _graph; }
+        }
+
+        public bool SupportsObjectFreeze
+        {
+            get { return true; }
         }
     }
 }
