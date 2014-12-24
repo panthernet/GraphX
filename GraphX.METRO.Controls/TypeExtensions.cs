@@ -70,10 +70,11 @@ namespace GraphX
             return new Size(rect.Width, rect.Height);
         }
 
-        public static void Offset(this Point pt, double offsetX, double offsetY)
+        public static Point Offset(this Point pt, double offsetX, double offsetY)
         {
             pt.X += offsetX;
             pt.Y += offsetY;
+            return pt;
         }
 
         public static PointCollection ToPointCollection(this IEnumerable<Point> points)

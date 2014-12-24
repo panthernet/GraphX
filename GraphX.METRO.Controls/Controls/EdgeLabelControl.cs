@@ -170,7 +170,7 @@ namespace GraphX.Controls
             // align the point so that it  passes through the center of the label content
             var p = p1;
             var desiredSize = DesiredSize;
-            p.Offset(-desiredSize.Width / 2, -desiredSize.Height / 2);
+            p = p.Offset(-desiredSize.Width / 2, -desiredSize.Height / 2);
 
             // move it "edgLength" on the segment
             double tmpAngle;
@@ -183,7 +183,7 @@ namespace GraphX.Controls
                 Angle = -tmpAngle * 180 / Math.PI;
             }
   
-            p.Offset(edgeLength * Math.Cos(angleBetweenPoints), -edgeLength * Math.Sin(angleBetweenPoints));
+            p = p.Offset(edgeLength * Math.Cos(angleBetweenPoints), -edgeLength * Math.Sin(angleBetweenPoints));
             if(edgeControl.AlignLabelsToEdges)
                 p = MathHelper.RotatePoint(new Point(p.X, p.Y - edgeControl.LabelVerticalOffset), p, Angle);
             //optimized offset here

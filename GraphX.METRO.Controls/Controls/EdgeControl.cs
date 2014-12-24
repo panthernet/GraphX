@@ -707,7 +707,7 @@ namespace GraphX.Controls
                         lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
                         //get two last points of curved path to generate correct arrow
                         var cLast = oPolyLineSegment.Points.Last();
-                        var cPrev = oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2];
+                        var cPrev = oPolyLineSegment.Points.Count == 1 ? oPolyLineSegment.Points.Last() : oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2];
                         arrowFigure = GeometryHelper.GenerateOldArrow(cPrev, cLast);
                         //freeze and create resulting geometry
                     }

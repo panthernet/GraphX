@@ -42,6 +42,7 @@ namespace METRO.SimpleGraph
             butGenerate.Click += butGenerate_Click;
             graph.GenerateGraphFinished += OnFinishedLayout;
             graph.RelayoutFinished += OnFinishedLayout;
+            graph.AlignAllEdgesLabels();
             Loaded += MainPage_Loaded;
         }
 
