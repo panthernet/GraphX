@@ -1,6 +1,7 @@
 ﻿RELEASE 2.1.5 WIP
 + Added selective vertex and edge support for calculations. Use SkipProcessing property on vertex or edge data object to include/exclude in calculations and visualization.
 	Works only in WPF version.
++ Fixed major memory leak in WPF version when regenerating visual edges
 + Changed CopyToBidirectionalGraph() extension method
 + Fixed rectangular selection logic
 + Some code refactoring

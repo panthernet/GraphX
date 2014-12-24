@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 using System.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
+using GraphX.Controls.Models;
 
 namespace GraphX
 {
@@ -155,7 +156,8 @@ namespace GraphX
         /// </summary>
         public bool UpdateLabelPosition { get { return _updateLabelPosition; } set { _updateLabelPosition = true; } }
 
-
+        private PropertyChangeNotifier _sourceListener;
+        private PropertyChangeNotifier _targetListener;
 
         /// <summary>
         /// Gets or set if hidden edges should be updated when connected vertices positions are changed. Default value is True.
@@ -283,6 +285,10 @@ namespace GraphX
         {
             //cleanVertexTracer(true);
             //cleanVertexTracer(false);
+            if(_sourceListener != null)
+                _sourceListener.Dispose();
+            if(_targetListener != null)
+                _targetListener.Dispose();
             if (Source != null)
                 Source.PositionChanged -= source_PositionChanged;
             if (Target != null)
@@ -322,18 +328,22 @@ namespace GraphX
                 _sourceTrace = source.EventOptions.PositionChangeNotification;
                 source.EventOptions.PositionChangeNotification = true;
                 source.PositionChanged += source_PositionChanged;
+                _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
+                _sourceListener.ValueChanged += SourceChanged;
             }
             if (target != null)
             {
                 _targetTrace = target.EventOptions.PositionChangeNotification;
                 target.EventOptions.PositionChangeNotification = true;
                 target.PositionChanged += source_PositionChanged;
+                _targetListener = new PropertyChangeNotifier(this, TargetProperty);
+                _targetListener.ValueChanged += TargetChanged;
             }
 
-            var dpd = DependencyPropertyDescriptor.FromProperty(SourceProperty, typeof(EdgeControl));
+            /*var dpd = DependencyPropertyDescriptor.FromProperty(SourceProperty, typeof(EdgeControl));
             if (dpd != null) dpd.AddValueChanged(this, SourceChanged);
             dpd = DependencyPropertyDescriptor.FromProperty(TargetProperty, typeof(EdgeControl));
-            if (dpd != null) dpd.AddValueChanged(this, TargetChanged);
+            if (dpd != null) dpd.AddValueChanged(this, TargetChanged);*/
 
             IsSelfLooped = _isSelfLooped;
         }

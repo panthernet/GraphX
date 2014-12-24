@@ -128,6 +128,7 @@
     <Compile Include="Models\IGraphControl.cs" />
     <Compile Include="Models\IGraphControlFactory.cs" />
     <Compile Include="Models\IOneWayControlAnimation.cs" />
+    <Compile Include="Models\PropertyChangeNotifier.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
     <Compile Include="Models\VertexEventOptions.cs" />
