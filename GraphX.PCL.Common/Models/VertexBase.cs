@@ -9,7 +9,7 @@ namespace GraphX
         /// </summary>
         public ProcessingOptionEnum SkipProcessing { get; set; }
 
-        public VertexBase()
+        protected VertexBase()
         {
             ID = -1;
         }
@@ -17,18 +17,6 @@ namespace GraphX
         /// Unique vertex ID
         /// </summary>
         public int ID { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            var o = obj as VertexBase;
-            if (o == null) return false;
-            else return ID == o.ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return (int)SkipProcessing ^ ID;
-        }
 
         public bool Equals(IGraphXVertex other)
         {

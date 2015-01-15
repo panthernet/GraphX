@@ -1,7 +1,6 @@
 ﻿using GraphX.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GraphX.Animations;
@@ -13,6 +12,21 @@ namespace GraphX
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
+        /// <summary>
+        /// Gets or sets special mode for WinForms interoperability
+        /// </summary>
+        public bool EnableWinFormsHostingMode { get; set; }
+
+        /// <summary>
+        /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
+        /// </summary>
+        public bool AutoAssignMissingDataId { get; set; }
+
+        public GraphAreaBase()
+        {
+            AutoAssignMissingDataId = true;
+        }
+    
         #region Attached Dependency Property registrations
         public static readonly DependencyProperty XProperty =
             DependencyProperty.RegisterAttached("X", typeof(double), typeof(GraphAreaBase),
@@ -65,7 +79,7 @@ namespace GraphX
 
         #region Child EVENTS
 
-        internal static readonly Size DesignSize = new Size(200, 100);
+        internal static readonly Size DesignSize = new Size(70, 25);
 
         /// <summary>
         /// Fires when ContentSize property is changed
@@ -587,11 +601,6 @@ namespace GraphX
 
         #endregion
 
-
-        /// <summary>
-        /// Gets or sets special mode for WinForms interoperability
-        /// </summary>
-        public bool EnableWinFormsHostingMode { get; set; }
 
     }
 }

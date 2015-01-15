@@ -177,25 +177,29 @@ namespace GraphX
         public GraphArea()
         {
             ControlFactory = new GraphControlFactory(this);
-            StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
             //CacheMode = new BitmapCache(2) { EnableClearType = false, SnapsToDevicePixels = true };
 
             #region Designer Data
-            if (DesignerProperties.GetIsInDesignMode(this))
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
+            } 
+            else
+            {                
                 Width = DesignSize.Width;
                 Height = DesignSize.Height;
-                var vc = new VertexDataExample(1, "Johnson B.C");
+                var vc = new VertexDataExample(1, "Vertex 1");
                 var ctrl = ControlFactory.CreateVertexControl(vc);
                 SetX(ctrl, 0); SetY(ctrl, 0, true);
 
-                var vc2 = new VertexDataExample(2, "Manson J.C");
+                var vc2 = new VertexDataExample(2, "Vertex 2");
                 var ctrl2 = ControlFactory.CreateVertexControl(vc2);
                 SetX(ctrl2, 200); SetY(ctrl2, 0, true);
 
-                var vc3 = new VertexDataExample(1, "Franklin A.J");
+                var vc3 = new VertexDataExample(1, "Vertex 3");
                 var ctrl3 = ControlFactory.CreateVertexControl(vc3);
                 SetX(ctrl3, 100); SetY(ctrl3, 100, true);
 
@@ -315,6 +319,8 @@ namespace GraphX
         /// <param name="vertexControl">Vertex visual control object</param>
         public void AddVertex(TVertex vertexData, VertexControl vertexControl)
         {
+            if (AutoAssignMissingDataId && vertexData.ID == -1)
+                vertexData.ID = GetNextUniqueId();
             InternalAddVertex(vertexData, vertexControl);
             if (EnableVisualPropsApply && vertexControl != null)
                 ReapplySingleVertexVisualProperties(vertexControl);
@@ -336,6 +342,8 @@ namespace GraphX
         /// <param name="edgeControl">Edge visual control</param>
         public void AddEdge(TEdge edgeData, EdgeControl edgeControl)
         {
+            if (AutoAssignMissingDataId && edgeData.ID == -1)
+                edgeData.ID = GetNextUniqueId();
             InternalAddEdge(edgeData, edgeControl);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
@@ -358,6 +366,8 @@ namespace GraphX
         /// <param name="num">Insert position</param>
         public void InsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
         {
+            if (AutoAssignMissingDataId && edgeData.ID == -1)
+                edgeData.ID = GetNextUniqueId();
             InternalInsertEdge(edgeData, edgeControl, num);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
@@ -384,7 +394,7 @@ namespace GraphX
         #endregion
 
         #region Automatic data ID storage and resolving
-        private int _dataIdCounter;
+        private int _dataIdCounter = 1;
         private int GetNextUniqueId()
         {
             while (_dataIdsCollection.Contains(_dataIdCounter))
@@ -706,14 +716,11 @@ namespace GraphX
         /// </summary>
         /// <param name="graph">Data graph</param>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
-        /// <param name="autoAssignMissingDataId">Generate missing IDs for edge and vertex data supplied in "graph" param</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(TGraph graph, bool generateAllEdges = false, bool autoAssignMissingDataId = true, bool dataContextToDataItem = true)
+        public void GenerateGraph(TGraph graph, bool generateAllEdges = false, bool dataContextToDataItem = true)
         {
-            if (autoAssignMissingDataId)
-            {
+            if (AutoAssignMissingDataId)
                 AutoresolveIds(graph);
-            }
             if(!LogicCore.IsCustomLayout)
                 PreloadVertexes(graph, dataContextToDataItem);
             _relayoutGraphMain(generateAllEdges, false);
@@ -723,15 +730,14 @@ namespace GraphX
         /// Generate visual graph using Graph property (it must be set before this method is called)
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
-        /// <param name="autoAssignMissingDataId">Generate missing IDs for edge and vertex data supplied in "graph" param</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(bool generateAllEdges = false, bool autoAssignMissingDataId = true, bool dataContextToDataItem = true)
+        public void GenerateGraph(bool generateAllEdges = false, bool dataContextToDataItem = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
             if (LogicCore.Graph == null)
                 throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
-            GenerateGraph(LogicCore.Graph, generateAllEdges, autoAssignMissingDataId, dataContextToDataItem);
+            GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 
         private void AutoresolveIds(TGraph graph = null)
@@ -1276,17 +1282,15 @@ namespace GraphX
 
         #region Save
 
-        public void SerializeToFile(string filename, bool autoAssignMissingDataId = true)
+        public void SerializeToFile(string filename)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (LogicCore.FileServiceProvider == null)
                 throw new GX_ObjectNotFoundException("LogicCore::FileServiceProvider must be set before using file operation methods!");
 
-            if (autoAssignMissingDataId)
-            {
+            if (AutoAssignMissingDataId)
                 AutoresolveIds();
-            }
 
             var dlist = new List<GraphSerializationData>();
             foreach (var item in VertexList) //ALWAYS serialize vertices first

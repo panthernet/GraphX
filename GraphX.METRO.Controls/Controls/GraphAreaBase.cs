@@ -1,6 +1,4 @@
 ﻿using Windows.Foundation;
-using Windows.System;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -15,7 +13,16 @@ namespace GraphX
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
-        
+        /// <summary>
+        /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
+        /// </summary>
+        public bool AutoAssignMissingDataId { get; set; }
+
+        public GraphAreaBase()
+        {
+            AutoAssignMissingDataId = true;
+        }
+
         #region Attached Dependency Property registrations
         public static readonly DependencyProperty XProperty =
             DependencyProperty.RegisterAttached("X", typeof(double), typeof(GraphAreaBase),

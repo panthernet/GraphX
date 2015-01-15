@@ -1,4 +1,15 @@
-﻿RELEASE 2.1.5 WIP
+﻿RELEASE 2.1.6
++ New shiny ShowcaseApp for WPF that includes new interface and code refactoring [WPF]
++ Fixed unique id problems when building graph manualy using AddVertex() and AddEdge() method [WPF, METRO]
++ Fixed critical bug with auto id generation that prevented some custom graph logic to work as intended [ALL]
++ Fixed some derelict dependencies
++ Some code refactoring
++ Updated licenses list [WPF]
+
+!Breaking changes
++ Introduced GraphArea.AutoAssignMissingDataId property that is now responsible for auto unique id generation for vertex and edge data objects if they miss it [WPF,METRO]
+
+RELEASE 2.1.5 WIP
 + Added selective vertex and edge support for calculations. Use ProcessingMode property on vertex or edge data object to include/exclude it in calculations and visualization.
 	Supported options:
 		> Default

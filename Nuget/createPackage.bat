@@ -1,2 +1,3 @@
 
-NuGet.exe pack ..\GraphX.Controls\GraphX.Controls.csproj -IncludeReferencedProjects -Prop Configuration=Release
+NuGet.exe pack ..\GraphX.Controls\GraphX.WPF.Controls.csproj -IncludeReferencedProjects -Prop Configuration=Release
+pause

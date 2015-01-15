@@ -1034,7 +1034,7 @@ namespace GraphX.Controls
             if (DesignerProperties.GetIsInDesignMode(this))
             {
                 //Mode = ZoomControlModes.Fill;
-                //Zoom = 0.5;
+                //Zoom = 0.5;             
             }
             else
             {
@@ -1062,6 +1062,8 @@ namespace GraphX.Controls
         #region ContentChanged
         protected override void OnContentChanged(object oldContent, object newContent)
         {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+
             if (oldContent != null)
             {
                 var old = oldContent as ITrackableContent;
@@ -1450,6 +1452,13 @@ namespace GraphX.Controls
         {
             base.OnApplyTemplate();
             AttachToVisualTree();
+
+            if (DesignerProperties.GetIsInDesignMode(this))
+            {
+                if (ViewFinder != null)
+                    ViewFinder.Visibility = Visibility.Collapsed;
+                return;
+            }
 
             //get the presenter, and initialize
             Presenter = GetTemplateChild(PART_PRESENTER) as ZoomContentPresenter;

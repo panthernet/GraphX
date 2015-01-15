@@ -229,24 +229,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Documents\Licenses\Apache2.0.txt">
-      <Link>Licenses\Apache2.0.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Documents\Licenses\MicrosoftPublicLicense.txt">
-      <Link>Licenses\MicrosoftPublicLicense.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Documents\Licenses\readme.txt">
-      <Link>Licenses\readme.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Documents\Licenses\TheMITLicense.txt">
-      <Link>Licenses\TheMITLicense.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\GraphX.Controls\GraphX.WPF.Controls.csproj">
       <Project>{d2e33fee-6689-4bb4-a95c-1b5c327a1e8f}</Project>
       <Name>GraphX.WPF.Controls</Name>
@@ -267,6 +249,44 @@
       <Project>{f1c4d174-c948-4d18-a125-f6855ef55683}</Project>
       <Name>YAXLib %28YAXLib\YAXLib%29</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Documents\Licenses\License.Extended WPF Toolkit.txt">
+      <Link>Licenses\License.Extended WPF Toolkit.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.Graph# - GraphX.txt">
+      <Link>Licenses\License.Graph# - GraphX.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.icons.txt">
+      <Link>Licenses\License.icons.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.ModernUI.txt">
+      <Link>Licenses\License.ModernUI.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.NodeXL.txt">
+      <Link>Licenses\License.NodeXL.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.Quickgraph.txt">
+      <Link>Licenses\License.Quickgraph.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.RelativeAnimatingContentControl.txt">
+      <Link>Licenses\License.RelativeAnimatingContentControl.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.WPFExtensions.txt">
+      <Link>Licenses\License.WPFExtensions.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\Documents\Licenses\License.YAXLib.txt">
+      <Link>Licenses\License.YAXLib.txt</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

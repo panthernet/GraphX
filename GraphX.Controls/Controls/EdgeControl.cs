@@ -319,27 +319,29 @@ namespace GraphX
             _updateLabelPosition = true;
             IsHiddenEdgesUpdated = true;
 
-            EventOptions = new EdgeEventOptions(this);
-            foreach (var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
-                UpdateEventhandling(item);
-
-            if (source != null)
+            if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                _sourceTrace = source.EventOptions.PositionChangeNotification;
-                source.EventOptions.PositionChangeNotification = true;
-                source.PositionChanged += source_PositionChanged;
-                _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
-                _sourceListener.ValueChanged += SourceChanged;
-            }
-            if (target != null)
-            {
-                _targetTrace = target.EventOptions.PositionChangeNotification;
-                target.EventOptions.PositionChangeNotification = true;
-                target.PositionChanged += source_PositionChanged;
-                _targetListener = new PropertyChangeNotifier(this, TargetProperty);
-                _targetListener.ValueChanged += TargetChanged;
-            }
+                EventOptions = new EdgeEventOptions(this);
+                foreach (var item in Enum.GetValues(typeof (EventType)).Cast<EventType>())
+                    UpdateEventhandling(item);
 
+                if (source != null)
+                {
+                    _sourceTrace = source.EventOptions.PositionChangeNotification;
+                    source.EventOptions.PositionChangeNotification = true;
+                    source.PositionChanged += source_PositionChanged;
+                    _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
+                    _sourceListener.ValueChanged += SourceChanged;
+                }
+                if (target != null)
+                {
+                    _targetTrace = target.EventOptions.PositionChangeNotification;
+                    target.EventOptions.PositionChangeNotification = true;
+                    target.PositionChanged += source_PositionChanged;
+                    _targetListener = new PropertyChangeNotifier(this, TargetProperty);
+                    _targetListener.ValueChanged += TargetChanged;
+                }
+            }
             /*var dpd = DependencyPropertyDescriptor.FromProperty(SourceProperty, typeof(EdgeControl));
             if (dpd != null) dpd.AddValueChanged(this, SourceChanged);
             dpd = DependencyPropertyDescriptor.FromProperty(TargetProperty, typeof(EdgeControl));
@@ -543,22 +545,18 @@ namespace GraphX
         {
             base.OnApplyTemplate();
 
-            if (Template != null)
-            {
-                _linePathObject = Template.FindName("PART_edgePath", this) as Path;
-                if (_linePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
-                _linePathObject.Data = _linegeometry;
-                _arrowPathObject = Template.FindName("PART_edgeArrowPath", this) as Path;
-                if (_arrowPathObject == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeArrowPath' Path object to draw!");
-                else
-                {
-                    _arrowPathObject.Data = _arrowgeometry;
-                }
-                _edgeLabelControl = Template.FindName("PART_edgeLabel", this) as EdgeLabelControl;
-                //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
-                UpdateEdge();
-            }
+            if (Template == null) return;
 
+            _linePathObject = Template.FindName("PART_edgePath", this) as Path;
+            if (_linePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
+            _linePathObject.Data = _linegeometry;
+            _arrowPathObject = Template.FindName("PART_edgeArrowPath", this) as Path;
+            if (_arrowPathObject == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeArrowPath' Path object to draw!");
+            else _arrowPathObject.Data = _arrowgeometry;
+            
+            _edgeLabelControl = Template.FindName("PART_edgeLabel", this) as EdgeLabelControl;
+            //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
+            UpdateEdge();
         }
 
         /*protected override void OnRender(DrawingContext drawingContext)
