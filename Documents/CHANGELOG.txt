@@ -1,5 +1,9 @@
-﻿RELEASE 2.1.6
-+ New shiny ShowcaseApp for WPF that includes new interface and code refactoring [WPF]
+﻿RELEASE 2.1.7
++ Added some new exceptions for GraphArea on invalid or insufficient data [WPF,METRO]
++ Fixed async calc not being aborted on invalid data (can cause crash) [WPF,METRO]
+
+RELEASE 2.1.6
++ [DELAYED] New shiny ShowcaseApp for WPF that includes new interface and code refactoring [WPF]
 + Fixed unique id problems when building graph manualy using AddVertex() and AddEdge() method [WPF, METRO]
 + Fixed critical bug with auto id generation that prevented some custom graph logic to work as intended [ALL]
 + Fixed some derelict dependencies

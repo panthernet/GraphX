@@ -22,6 +22,8 @@
     <conv:VisibilityToBoolConverter x:Key="VisibleIfNotTrueConverter"
       Inverted="True" Not="True" />
 
+    <!-- REGION ZOOM CONTROL -->
+    
     <SolidColorBrush x:Key="GlyphBrush" Color="white" po:Freeze="True"/>
 
     <Style x:Key="TransparentButton" TargetType="{x:Type ButtonBase}"
@@ -449,14 +451,10 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
     
-    <!--<Style x:Key="{x:Type ToolTip}" TargetType="{x:Type ToolTip}">
-        <Setter Property="Background" Value="Transparent" po:Freeze="True"/>
-        <Setter Property="BorderBrush" Value="Transparent" po:Freeze="True"/>
-    </Style>-->
-
-    <!-- VERTEX CONTROL -->
+    <!-- ENDREGION -->
+    
+    <!-- REGION VERTEX CONTROL -->
     <Style TargetType="{x:Type local:VertexControl}">
         <Setter Property="Background" Value="#FFE3E3E3"/>
         <Setter Property="BorderThickness" Value="5,3,5,3"/>
@@ -479,8 +477,9 @@
 			</Setter.Value>
 		</Setter>	
 	</Style>
+    <!-- ENDREGION -->
 
-    <!-- EDGE CONTROL -->
+    <!-- REGION EDGE CONTROL -->
 	<Style TargetType="{x:Type local:EdgeControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -511,8 +510,9 @@
         <Setter Property="Opacity"
                 Value="1" />
     </Style>
-
-    <!--EDGE LABLE CONTROL -->
+    <!-- ENDREGION -->
+    
+    <!-- REGION EDGE LABLE CONTROL -->
     <Style TargetType="{x:Type local:EdgeLabelControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -532,8 +532,9 @@
         </Setter>
 
     </Style>
-
-    <!--VERTEX LABEL CONTROL -->
+    <!-- ENDREGION -->
+    
+    <!-- REGION VERTEX LABEL CONTROL -->
     <Style TargetType="local:VertexLabelControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -556,5 +557,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+    <!-- ENDREGION -->
 </ResourceDictionary>

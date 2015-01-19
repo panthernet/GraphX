@@ -77,16 +77,6 @@
                             <zc:ZCP x:Name="PART_Presenter" />
                         </Border>
 
-                       <!--<Canvas>
-                            <Border BorderBrush="{TemplateBinding ZoomBoxBorderBrush}"
-                                    BorderThickness="{TemplateBinding ZoomBoxBorderThickness}"
-                                    Canvas.Left="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomBox.X}"
-                                    Canvas.Top="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomBox.Y}"
-                                    Opacity="{TemplateBinding ZoomBoxOpacity}"
-                                    Background="{TemplateBinding ZoomBoxBackground}"
-                                    Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomBox.Width}"
-                                    Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomBox.Height}" />
-                        </Canvas>-->
                         <Border Background="Gray" BorderBrush="White" BorderThickness="4" CornerRadius="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" Opacity=".8">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="FillButton" IsTabStop="False" Margin="5" Height="64" Width="64" Style="{StaticResource TransparentButton}" Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomToFillCommand}" >

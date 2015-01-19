@@ -505,11 +505,15 @@ namespace GraphX
                 IExternalOverlapRemoval<TVertex> overlap = null; //overlap removal algorithm
                 IExternalEdgeRouting<TVertex, TEdge> eralg = null;
 
-                await DispatcherHelper.CheckBeginInvokeOnUi(() =>
+                var result = false;
+                await DispatcherHelper.CheckBeginInvokeOnUi(new Action(() =>
                 {
                     if (LogicCore == null)
                         throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-                    if (_vertexlist.Count == 0 || LogicCore.Graph == null) return; // no vertexes == no edges
+                    if (LogicCore.Graph == null)
+                        throw new GX_InvalidDataException("LogicCore -> Graph property is not set!"); 
+                    if (_vertexlist.Count == 0)
+                        return; // no vertexes == no edges
 
                     UpdateLayout(); //update layout so we can get actual control sizes
 
@@ -529,9 +533,10 @@ namespace GraphX
 
                     //setup Edge Routing algorithm
                     eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
-                });                
+                    result = true;
+                }));
+                if (!result) return;
 
-                if (alg == null && !LogicCore.IsCustomLayout) return;
                 IDictionary<TVertex, Measure.Point> resultCoords;
                 if (alg != null)
                 {

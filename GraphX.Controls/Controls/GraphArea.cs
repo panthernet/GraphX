@@ -506,11 +506,13 @@ namespace GraphX
 
             var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
 
-            dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            if(!(bool)dispatcher.Invoke(DispatcherPriority.Normal, new Func<bool>(() =>
             {
                 if (LogicCore == null)
                     throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-                if (_vertexlist.Count == 0 || LogicCore.Graph == null) return; // no vertexes == no edges
+                if(LogicCore.Graph == null)
+                    throw new GX_InvalidDataException("LogicCore -> Graph property not set!");
+                if (_vertexlist.Count == 0) return false; // no vertexes == no edges
 
                 UpdateLayout(); //update layout so we can get actual control sizes
 
@@ -520,7 +522,7 @@ namespace GraphX
                 if (alg == null && !LogicCore.IsCustomLayout)
                 {
                     MessageBox.Show("Layout type not supported yet!");
-                    return;
+                    return false;
                 }
 
                 //setup overlap removal algorythm
@@ -529,8 +531,10 @@ namespace GraphX
 
                 //setup Edge Routing algorithm
                 eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
-            }));
-            if (alg == null && !LogicCore.IsCustomLayout) return;
+                return alg != null || LogicCore.IsCustomLayout;
+            }))) return;
+            
+
             IDictionary<TVertex, Measure.Point> resultCoords;
             if (alg != null)
             {
@@ -550,10 +554,7 @@ namespace GraphX
             {
                 //generate rectangle data from sizes
                 var coords = resultCoords;
-                dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
-                {
-                    rectangles = GetVertexSizeRectangles(coords, vertexSizes, true);
-                }));
+                dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { rectangles = GetVertexSizeRectangles(coords, vertexSizes, true); }));
                 overlap.Rectangles = rectangles;
                 overlap.Compute();
                 resultCoords = new Dictionary<TVertex, Measure.Point>();
