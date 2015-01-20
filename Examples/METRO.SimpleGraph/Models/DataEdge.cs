@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using GraphX;
-using YAXLib;
 
 namespace METRO.SimpleGraph
 {
@@ -65,11 +64,6 @@ namespace METRO.SimpleGraph
             return Text;
         }
 
-        [YAXDontSerialize]
-        public DataEdge Self
-        {
-            get { return this; }
-        }
         #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using GraphX;
-using YAXLib;
 
 namespace METRO.SimpleGraph
 {
@@ -43,11 +42,6 @@ namespace METRO.SimpleGraph
 
 
         #region Calculated or static props
-        [YAXDontSerialize]
-        public DataVertex Self
-        {
-            get { return this; }
-        }
 
         public override string ToString()
         {

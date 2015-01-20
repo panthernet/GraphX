@@ -171,7 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="QuickGraph">
-      <HintPath>..\..\WindowsFormsProject\DLLS\QuickGraph.dll</HintPath>
+      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
