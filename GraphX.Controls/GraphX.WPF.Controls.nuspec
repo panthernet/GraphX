@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GraphX.WPF</id>
+    <version>$version$</version>
+    <title>GraphX for .NET (WPF)</title>
+    <authors>panthernet</authors>
+    <owners>panthernet</owners>
+    <licenseUrl>https://github.com/panthernet/GraphX/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/panthernet/GraphX</projectUrl>
+    <iconUrl>http://www.panthernet.ru/myimages/StoreLogo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>GraphX for .NET is an advanced graph visualization library</description>
+	<summary>GraphX for .NET is an advanced graph visualization library that uses different layout and edge routing algorithms, implements many graph-related features and supports highly customizable visual templates. It is able to render large amount of vertices and steadily moves to support the most popular .NET platforms.</summary>
+    <releaseNotes>https://github.com/panthernet/GraphX/blob/PCL/Documents/CHANGELOG.txt</releaseNotes>
+    <copyright>Copyright www.panthernet.ru 2015</copyright>
+    <tags>GraphX WPF Graph# QuickGraph graph visualization</tags>
+  </metadata>
+</package>

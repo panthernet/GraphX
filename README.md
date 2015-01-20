@@ -9,7 +9,6 @@ Main GraphX dev libraries can be operated in both C# and VB for .NET using WPF, 
   Library depends on:
   
     * QuickGraph
-    * YAXLib
   
   Library uses partial code from:
   
@@ -17,6 +16,11 @@ Main GraphX dev libraries can be operated in both C# and VB for .NET using WPF, 
     * WPFExtensions
     * NodeXL
     * Extended WPF Toolkit
+  
+  Library showcase uses:
+
+    * YAXLib
+	* ModernUI
 	
   Library supports following platforms:
   

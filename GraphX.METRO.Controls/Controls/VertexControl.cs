@@ -46,7 +46,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets or sets actual shape form of vertex control (affects mostly math calculations such edges connectors)
         /// </summary>
-        public VertexShape MathShape
+        public VertexShape VertexShape
         {
             get { return (VertexShape)GetValue(VertexShapeProperty); }
             set { SetValue(VertexShapeProperty, value); }

@@ -1,8 +1,4 @@
 ﻿using GraphX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using YAXLib;
 
 namespace WindowsFormsProject
 {
@@ -48,12 +44,6 @@ namespace WindowsFormsProject
         public override string ToString()
         {
             return Text;
-        }
-
-        [YAXDontSerialize]
-        public DataEdge Self
-        {
-            get { return this; }
         }
         #endregion
     }

@@ -1,0 +1,1058 @@
+<ListOfGraphSerializationData xmlns:yaxlib="http://www.sinairv.com/yaxlib/">
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 0</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>0</ID>
+    </Data>
+    <Position>
+      <X>549.762451002909</X>
+      <Y>505.912966985449</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 1</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>1</ID>
+    </Data>
+    <Position>
+      <X>348.896081788963</X>
+      <Y>863.606926028659</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 2</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>2</ID>
+    </Data>
+    <Position>
+      <X>834.080072572688</X>
+      <Y>494.567317277898</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 3</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>3</ID>
+    </Data>
+    <Position>
+      <X>548.879053865518</X>
+      <Y>0.0620066052936465</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 4</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>4</ID>
+    </Data>
+    <Position>
+      <X>-3.7707464869701</X>
+      <Y>132.682995365595</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 5</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>5</ID>
+    </Data>
+    <Position>
+      <X>213.754422798275</X>
+      <Y>4.65460242169391</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 6</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>6</ID>
+    </Data>
+    <Position>
+      <X>716.692721184763</X>
+      <Y>242.599780588984</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 7</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>7</ID>
+    </Data>
+    <Position>
+      <X>669.393552194623</X>
+      <Y>608.401439601766</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 8</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>8</ID>
+    </Data>
+    <Position>
+      <X>333.984090101088</X>
+      <Y>498.339500006062</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 9</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>9</ID>
+    </Data>
+    <Position>
+      <X>195.50676229302</X>
+      <Y>853.525299871414</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 10</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>10</ID>
+    </Data>
+    <Position>
+      <X>496.211533880214</X>
+      <Y>755.700428744498</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 11</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>11</ID>
+    </Data>
+    <Position>
+      <X>463.654855322632</X>
+      <Y>377.490139959932</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 12</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>12</ID>
+    </Data>
+    <Position>
+      <X>86.2521152425894</X>
+      <Y>736.327629509773</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 13</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>13</ID>
+    </Data>
+    <Position>
+      <X>264.231139434352</X>
+      <Y>372.977175954983</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 14</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>14</ID>
+    </Data>
+    <Position>
+      <X>460.896081788963</X>
+      <Y>880.882323473134</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 15</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>15</ID>
+    </Data>
+    <Position>
+      <X>436.879053865518</X>
+      <Y>112.414429512783</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 16</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>16</ID>
+    </Data>
+    <Position>
+      <X>684.323069695559</X>
+      <Y>383.396334406536</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 17</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>17</ID>
+    </Data>
+    <Position>
+      <X>214.198547499501</X>
+      <Y>620.17772698184</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 18</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>18</ID>
+    </Data>
+    <Position>
+      <X>828.692721184763</X>
+      <Y>354.952203496473</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 19</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>19</ID>
+    </Data>
+    <Position>
+      <X>-114.290013013926</X>
+      <Y>398.558771799502</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 20</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>20</ID>
+    </Data>
+    <Position>
+      <X>660.879053865518</X>
+      <Y>118.345579469154</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 21</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>21</ID>
+    </Data>
+    <Position>
+      <X>781.393552194623</X>
+      <Y>720.753862509255</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 22</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>22</ID>
+    </Data>
+    <Position>
+      <X>80.2939167566254</X>
+      <Y>604.030508391303</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 23</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>23</ID>
+    </Data>
+    <Position>
+      <X>611.014950755928</X>
+      <Y>734.720176778226</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 24</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>24</ID>
+    </Data>
+    <Position>
+      <X>608.211533880214</X>
+      <Y>872.264166059723</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 25</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>25</ID>
+    </Data>
+    <Position>
+      <X>916.482645690217</X>
+      <Y>610.604902442741</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 26</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>0</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>26</ID>
+    </Data>
+    <Position>
+      <X>307.50676229302</X>
+      <Y>741.172876963925</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 27</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>27</ID>
+    </Data>
+    <Position>
+      <X>-186.742215549375</X>
+      <Y>779.339050812095</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 28</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>1</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>28</ID>
+    </Data>
+    <Position>
+      <X>-184.162740834356</X>
+      <Y>669.050092764222</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataVertex">
+      <Text>Vertex 29</Text>
+      <Name />
+      <Profession />
+      <Gender />
+      <Age>0</Age>
+      <ImageId>2</ImageId>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>29</ID>
+    </Data>
+    <Position>
+      <X>724.368741879266</X>
+      <Y>833.106285416744</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 0 -&gt; Vertex 7</Text>
+      <ToolTipText>Vertex 0 -&gt; Vertex 7</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>1</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 0</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>0</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 7</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>7</ID>
+      </Target>
+      <Weight>16</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 2 -&gt; Vertex 21</Text>
+      <ToolTipText>Vertex 2 -&gt; Vertex 21</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>2</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 2</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>2</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>2</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 21</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>21</ID>
+      </Target>
+      <Weight>33</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 4 -&gt; Vertex 5</Text>
+      <ToolTipText>Vertex 4 -&gt; Vertex 5</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>3</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 4</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>4</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 5</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>5</ID>
+      </Target>
+      <Weight>29</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 6 -&gt; Vertex 16</Text>
+      <ToolTipText>Vertex 6 -&gt; Vertex 16</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>4</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 6</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>6</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 16</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>16</ID>
+      </Target>
+      <Weight>49</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 7 -&gt; Vertex 23</Text>
+      <ToolTipText>Vertex 7 -&gt; Vertex 23</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>5</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 7</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>7</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 23</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>23</ID>
+      </Target>
+      <Weight>1</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 8 -&gt; Vertex 11</Text>
+      <ToolTipText>Vertex 8 -&gt; Vertex 11</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>6</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 8</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>8</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 11</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>2</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>11</ID>
+      </Target>
+      <Weight>3</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 9 -&gt; Vertex 1</Text>
+      <ToolTipText>Vertex 9 -&gt; Vertex 1</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>7</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 9</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>9</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 1</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>2</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>1</ID>
+      </Target>
+      <Weight>35</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 10 -&gt; Vertex 1</Text>
+      <ToolTipText>Vertex 10 -&gt; Vertex 1</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>8</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 10</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>10</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 1</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>2</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>1</ID>
+      </Target>
+      <Weight>1</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 13 -&gt; Vertex 8</Text>
+      <ToolTipText>Vertex 13 -&gt; Vertex 8</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>9</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 13</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>13</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 8</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>8</ID>
+      </Target>
+      <Weight>36</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 16 -&gt; Vertex 7</Text>
+      <ToolTipText>Vertex 16 -&gt; Vertex 7</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>10</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 16</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>16</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 7</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>7</ID>
+      </Target>
+      <Weight>22</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 17 -&gt; Vertex 8</Text>
+      <ToolTipText>Vertex 17 -&gt; Vertex 8</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>11</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 17</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>17</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 8</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>8</ID>
+      </Target>
+      <Weight>41</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 19 -&gt; Vertex 4</Text>
+      <ToolTipText>Vertex 19 -&gt; Vertex 4</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>12</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 19</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>19</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 4</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>4</ID>
+      </Target>
+      <Weight>48</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 21 -&gt; Vertex 25</Text>
+      <ToolTipText>Vertex 21 -&gt; Vertex 25</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>13</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 21</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>21</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 25</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>25</ID>
+      </Target>
+      <Weight>11</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 22 -&gt; Vertex 19</Text>
+      <ToolTipText>Vertex 22 -&gt; Vertex 19</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>14</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 22</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>2</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>22</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 19</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>19</ID>
+      </Target>
+      <Weight>22</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 23 -&gt; Vertex 10</Text>
+      <ToolTipText>Vertex 23 -&gt; Vertex 10</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>15</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 23</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>23</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 10</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>10</ID>
+      </Target>
+      <Weight>1</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+  <GraphSerializationData>
+    <Data yaxlib:realtype="ShowcaseApp.WPF.DataEdge">
+      <RoutingPoints></RoutingPoints>
+      <Angle>90</Angle>
+      <Text>Vertex 26 -&gt; Vertex 17</Text>
+      <ToolTipText>Vertex 26 -&gt; Vertex 17</ToolTipText>
+      <SkipProcessing>Default</SkipProcessing>
+      <ID>16</ID>
+      <IsSelfLoop>False</IsSelfLoop>
+      <Source>
+        <Text>Vertex 26</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>0</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>26</ID>
+      </Source>
+      <Target>
+        <Text>Vertex 17</Text>
+        <Name />
+        <Profession />
+        <Gender />
+        <Age>0</Age>
+        <ImageId>1</ImageId>
+        <SkipProcessing>Default</SkipProcessing>
+        <ID>17</ID>
+      </Target>
+      <Weight>24</Weight>
+    </Data>
+    <Position>
+      <X>0</X>
+      <Y>0</Y>
+    </Position>
+  </GraphSerializationData>
+</ListOfGraphSerializationData>

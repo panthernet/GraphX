@@ -1,0 +1,42 @@
+﻿<mui:ModernWindow x:Class="ShowcaseApp.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+        Title="GraphX for WPF showcase application" IsTitleVisible="True"
+        TextOptions.TextFormattingMode ="Ideal"
+        UseLayoutRounding="False"
+        ContentSource="/Pages/Introduction.xaml"
+        Height="600" Width="999">
+    <mui:ModernWindow.TitleLinks>
+        <mui:Link DisplayName="Settings" Source="/Pages/Settings.xaml" />
+        <mui:Link DisplayName="Web" Source="http://panthernet.ru/forum/index.php?/forum/5-discussions/" />
+    </mui:ModernWindow.TitleLinks>
+    <mui:ModernWindow.MenuLinkGroups>
+        <mui:LinkGroup DisplayName="Start">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Introduction" Source="/Pages/Introduction.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Layouts">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Playground" Source="/Pages/GeneralGraph.xaml" />
+                <mui:Link DisplayName="Dynamics" Source="/Pages/DynamicGraph.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Templates">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="General" Source="/Pages/ThemedGraph.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Edge routing">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="General" Source="/Pages/EdgeRoutingGraph.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Settings" GroupKey="settings">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Software" Source="/Pages/Settings.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+    </mui:ModernWindow.MenuLinkGroups>
+</mui:ModernWindow>

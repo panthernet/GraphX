@@ -30,6 +30,9 @@ namespace GraphX
         bool EnableEdgeLabelsOverlapRemoval { get; set; }
         bool IsCustomLayout { get; }
 
+        /// <summary>
+        /// File service provider for graph serialization
+        /// </summary>
         IFileServiceProvider FileServiceProvider { get; set; }
 
         LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { get; set; }

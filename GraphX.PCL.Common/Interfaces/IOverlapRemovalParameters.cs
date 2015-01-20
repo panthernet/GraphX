@@ -2,7 +2,7 @@
 {
 	public interface IOverlapRemovalParameters : IAlgorithmParameters
 	{
-		float VerticalGap { get; }
-		float HorizontalGap { get; }
+		float VerticalGap { get; set; }
+		float HorizontalGap { get; set; }
 	}
 }

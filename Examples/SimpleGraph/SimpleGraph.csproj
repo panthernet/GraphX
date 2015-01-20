@@ -147,14 +147,6 @@
       <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
       <Name>GraphX.PCL.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
-      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
-      <Name>YAXLib.PCL.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\YAXLib\YAXLib\YAXLib.csproj">
-      <Project>{f1c4d174-c948-4d18-a125-f6855ef55683}</Project>
-      <Name>YAXLib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

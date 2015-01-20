@@ -758,7 +758,7 @@ namespace GraphX
         {
             if (_svVerticesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled.Value);
             if (_svVerticesDragUpdateEdges != null) DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges.Value);
-            if (_svVertexShape != null) item.MathShape = _svVertexShape.Value;
+            if (_svVertexShape != null) item.VertexShape = _svVertexShape.Value;
             if (_svVertexLabelShow != null) item.ShowLabel = _svVertexLabelShow.Value;
             if (_svVertexHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled.Value);
             if (_svVertexHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType.Value);
@@ -882,7 +882,7 @@ namespace GraphX
         {
             _svVertexShape = shape;
             foreach (var item in VertexList)
-                item.Value.MathShape = shape;
+                item.Value.VertexShape = shape;
         }
 
         private bool? _svVertexHlEnabled;

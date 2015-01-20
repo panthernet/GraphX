@@ -1,7 +1,5 @@
 ﻿using GraphX.Measure;
-using GraphX.Models.XmlSerializer;
 using GraphX.PCL.Common.Enums;
-using YAXLib;
 
 namespace GraphX
 {
@@ -33,7 +31,7 @@ namespace GraphX
         /// <summary>
         /// Returns true if Source vertex equals Target vertex
         /// </summary>
-        [YAXDontSerialize]
+        //[YAXDontSerialize]
         public bool IsSelfLoop
         {
             get { return Source.Equals(Target); }
@@ -42,8 +40,8 @@ namespace GraphX
         /// <summary>
         /// Routing points collection used to make Path visual object
         /// </summary>
-        [YAXCustomSerializer(typeof(YAXPointArraySerializer))]
-        public Point[] RoutingPoints { get; set; }
+        //[YAXCustomSerializer(typeof(YAXPointArraySerializer))]
+        public virtual Point[] RoutingPoints { get; set; }
 
         public TVertex Source { get; set; }
 

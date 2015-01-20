@@ -113,10 +113,6 @@
       <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
       <Name>GraphX.PCL.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
-      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
-      <Name>YAXLib.PCL.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Documents\AIV.cs">

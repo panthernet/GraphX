@@ -19,12 +19,6 @@ Namespace Models
         Private _mText As String
 
 #Region "Calculated or static props"
-        <YAXDontSerialize> _
-        Public ReadOnly Property Self() As DataVertex
-            Get
-                Return Me
-            End Get
-        End Property
 
         Public Overrides Function ToString() As String
             Return Text

@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="ShowcaseApp.WPF.Pages.ThemedGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
+             xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="180"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Templates/ThemedGraphXTemplates.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+
+        <Border CornerRadius="2" BorderBrush="{DynamicResource ButtonBorder}" Background="{DynamicResource ButtonBackground}" Margin="2" BorderThickness="1">
+            <TextBlock Margin="1" TextWrapping="Wrap" TextAlignment="Center" Text="This graph is designed for templating, animation and visual behaviours preview. See vertex and edge tooltips, templated highlights and animations."/>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0">
+            <Border.Background>
+                <VisualBrush TileMode="Tile"  Viewport="0,0,0.4,0.4">
+                    <VisualBrush.Visual>
+                        <Image Source="/Assets/brick_16.png" Stretch="Uniform"></Image>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.Background>
+        </Border>
+        <Border Grid.Row="1" Margin="30"  Grid.Column="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="0" CornerRadius="60" >
+            <Border.Background>
+                <VisualBrush TileMode="Tile" Viewport="0,0,0.2,0.2" >
+                    <VisualBrush.Visual>
+                        <Image Source="/Assets/carpet.png"></Image>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.Background>
+            <Border Margin="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="0" CornerRadius="0" >
+                <Border.Background>
+                    <VisualBrush TileMode="None" >
+                        <VisualBrush.Visual>
+                            <Image Source="/Assets/board_hd.png"></Image>
+                        </VisualBrush.Visual>
+                    </VisualBrush>
+                </Border.Background>
+                <controls:ZoomControl Margin="20" x:Name="tg_zoomctrl" Background="Transparent">
+                    <wpf:GraphAreaExample x:Name="tg_Area">
+                        <wpf:GraphAreaExample.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="/Templates/TransparentTooltips.xaml"/>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </wpf:GraphAreaExample.Resources>
+                    </wpf:GraphAreaExample>
+                </controls:ZoomControl>
+            </Border>
+        </Border>
+        <Border Name="tg_loader" Visibility="Collapsed" CornerRadius="4" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Background="{DynamicResource ButtonBackground}" Grid.Row="1" Grid.Column="0">
+            <Label VerticalAlignment="Center" Content="Async loading graph..." Margin="10"/>
+        </Border>
+
+        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+                <Button Height="50" Margin="3" Name="tg_but_randomgraph" Click="tg_but_randomgraph_Click"  DockPanel.Dock="Top" UseLayoutRounding="True" BorderBrush="{DynamicResource ModernButtonBorder}">
+                    <Path Width="38" Height="35.768" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 38,34.8333C 39.7489,34.8333 41.1667,36.2511 41.1667,38C 41.1667,39.7489 39.7489,41.1667 38,41.1667C 36.2511,41.1667 34.8333,39.7489 34.8333,38C 34.8333,36.2511 36.2511,34.8333 38,34.8333 Z M 57,38L 44.3333,38C 44.3333,35.5799 42.9759,33.4769 40.981,32.4107L 46.9429,21.232C 52.9278,24.4306 57,30.7398 57,38 Z M 31.6667,38L 19,38C 19,30.7398 23.0722,24.4306 29.0571,21.232L 35.019,32.4107C 33.024,33.4769 31.6667,35.5799 31.6667,38 Z M 38,57C 34.7668,57 31.7223,56.1924 29.0571,54.768L 35.019,43.5894C 35.9074,44.0642 36.9223,44.3333 38,44.3333C 39.0777,44.3333 40.0926,44.0642 40.981,43.5893L 46.9429,54.768C 44.2777,56.1924 41.2332,57 38,57 Z "/>
+                </Button>
+                <Button Height="50" Margin="3" Name="tg_but_relayout" DockPanel.Dock="Top" UseLayoutRounding="True" BorderBrush="{DynamicResource ModernButtonBorder}">
+                    <Path Width="34.8333" Height="41.1667" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z "/>
+                </Button>
+            </StackPanel>
+            <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="SETTINGS" FontWeight="Bold"/>
+            
+            <ScrollViewer DockPanel.Dock="Top">
+                <acc:Accordion HorizontalAlignment="Stretch">
+                    <acc:Accordion.Items>
+                        <acc:AccordionItem Header="Edge options">
+                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Top" Text="Edge display mode" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_edgeMode"  Margin="3" SelectionChanged="tg_edgeMode_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                                <TextBlock DockPanel.Dock="Top" Text="Edge display type" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_edgeType"  Margin="3" SelectionChanged="tg_edgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            </DockPanel>
+                        </acc:AccordionItem>
+                        <acc:AccordionItem Header="Behaviours">
+                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                                <CheckBox Name="tg_dragEnabled" Content="Vertex drag enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_dragEnabled_Checked" Unchecked="tg_dragEnabled_Checked"/>
+                                <CheckBox Name="tg_dragMoveEdges" Content="Update edges on move" Margin="3" DockPanel.Dock="Top"/>
+
+                                <CheckBox Name="tg_highlightEnabled" Content="Is feature enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
+                                <TextBlock DockPanel.Dock="Top" Text="Affected control type" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_highlightType"  Margin="3" SelectionChanged="tg_highlightType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                                <TextBlock DockPanel.Dock="Top" Text="Strategy" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_highlightStrategy"  Margin="3" SelectionChanged="tg_highlightStrategy_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                                <TextBlock DockPanel.Dock="Top" Text="Edge directions" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_highlightEdgeType"  Margin="3" SelectionChanged="tg_highlightEdgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            </DockPanel>
+                        </acc:AccordionItem>
+                        <acc:AccordionItem Header="Animation">
+                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                                <TextBlock DockPanel.Dock="Top" Text="Move animation" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_moveAnimation"  Margin="3" SelectionChanged="tg_moveAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                                <TextBlock DockPanel.Dock="Top" Text="Delete animation" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_deleteAnimation"  Margin="3" SelectionChanged="tg_deleteAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                                <TextBlock DockPanel.Dock="Top" Text="MouseOver animation" HorizontalAlignment="Center"/>
+                                <ComboBox x:Name="tg_mouseoverAnimation"  Margin="3" SelectionChanged="tg_mouseoverAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            </DockPanel>
+                        </acc:AccordionItem>
+                    </acc:Accordion.Items>
+                </acc:Accordion>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</UserControl>

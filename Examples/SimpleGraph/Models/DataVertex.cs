@@ -1,6 +1,4 @@
 ﻿using GraphX;
-using System;
-using YAXLib;
 
 namespace SimpleGraph
 {
@@ -20,11 +18,6 @@ namespace SimpleGraph
         public string Text { get; set; }
  
         #region Calculated or static props
-        [YAXDontSerialize]
-        public DataVertex Self
-        {
-            get { return this; }
-        }
 
         public override string ToString()
         {

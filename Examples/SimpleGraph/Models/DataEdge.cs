@@ -1,8 +1,4 @@
 ﻿using GraphX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using YAXLib;
 
 namespace SimpleGraph
 {
@@ -50,11 +46,6 @@ namespace SimpleGraph
             return Text;
         }
 
-        [YAXDontSerialize]
-        public DataEdge Self
-        {
-            get { return this; }
-        }
         #endregion
     }
 }

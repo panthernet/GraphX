@@ -1,7 +1,20 @@
 ﻿RELEASE 2.1.7
-+ Added some new exceptions for GraphArea on invalid or insufficient data [WPF,METRO]
-+ Fixed async calc not being aborted on invalid data (can cause crash) [WPF,METRO]
++ Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.
 
++ Added some new exceptions for GraphArea on invalid or insufficient data [WPF,METRO]
++ Addded automatic default params generation for GXLogicCore if default algorithm was changed and default params property is null
++ Fixed async calc not being aborted on invalid data (can cause crash) [WPF,METRO]
++ Implemented VertexControl::ShowLabel property as dependecy for templating purpose [WPF]
++ Fixed vertex label display [WPF]
++ Implemented IOverlapRemovalParameters properties setters to be able to change params easily[ALL]
++ Made EdgeBase::RoutingPoints property virtual in case you want to override it and add custom serialization attributes (as was the issue with YAXLib)[ALL]
+
+!Breaking changes
++ Renamed VertexControl::MathShape property to VertexShape for template bindings to work [WPF, METRO]
++ Removed YAXLib project from solution and its dependencies from GraphX projects except showcase project. This will make GraphX independent from this 3rd party lib. [WPF]
+  The cost is that there is no built in FileServiceProvider anymore but you can easily create your own using provided interface or use YAXLib example from showcase app.
+  One less additional dll file :)
+  
 RELEASE 2.1.6
 + [DELAYED] New shiny ShowcaseApp for WPF that includes new interface and code refactoring [WPF]
 + Fixed unique id problems when building graph manualy using AddVertex() and AddEdge() method [WPF, METRO]

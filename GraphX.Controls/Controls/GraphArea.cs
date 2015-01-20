@@ -37,8 +37,8 @@ namespace GraphX
         private static void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             //automaticaly assign default file service provider 
-            if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
-                ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider = new FileServiceProviderWpf();
+            //if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
+            //    ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider = new FileServiceProviderWpf();
         }
 
         /// <summary>
@@ -786,7 +786,7 @@ namespace GraphX
         {
             if (_svVerticesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled.Value);
             if (_svVerticesDragUpdateEdges != null) DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges.Value);
-            if (_svVertexShape != null) item.MathShape = _svVertexShape.Value;
+            if (_svVertexShape != null) item.VertexShape = _svVertexShape.Value;
             if (_svVertexLabelShow != null) item.ShowLabel = _svVertexLabelShow.Value;
             if (_svVertexHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled.Value);
             if (_svVertexHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType.Value);
@@ -912,7 +912,7 @@ namespace GraphX
         {
             _svVertexShape = shape;
             foreach (var item in VertexList)
-                item.Value.MathShape = shape;
+                item.Value.VertexShape = shape;
         }
 
         private bool? _svVertexHlEnabled;
@@ -1283,6 +1283,12 @@ namespace GraphX
 
         #region Save
 
+        /// <summary>
+        /// Serialize graph layout to file using custom FileServiceProvider
+        /// </summary>
+        /// <param name="filename">Output filename</param>
+        /// <exception cref="GX_InvalidDataException">Occures when LogicCore or object Id isn't set</exception>
+        /// <exception cref="GX_ObjectNotFoundException">Occures when FileServiceProvider not set</exception>
         public void SerializeToFile(string filename)
         {
             if (LogicCore == null)
@@ -1310,6 +1316,13 @@ namespace GraphX
 
         }
 
+        /// <summary>
+        /// Deserializes previously serialized graph layout from file
+        /// </summary>
+        /// <param name="filename">Input filename</param>
+        /// <exception cref="GX_InvalidDataException"></exception>
+        /// <exception cref="GX_ObjectNotFoundException"></exception>
+        /// <exception cref="GX_SerializationException"></exception>
         public void DeserializeFromFile(string filename)
         {
             if (LogicCore == null)

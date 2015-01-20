@@ -3,15 +3,13 @@ using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using GraphX.Logic.Models;
 using GraphX.Measure;
-using GraphX.Models;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace GraphX.Logic
 {
-    public partial class GXLogicCore<TVertex, TEdge, TGraph>: IGXLogicCore<TVertex, TEdge, TGraph>, IDisposable
+    public partial class GXLogicCore<TVertex, TEdge, TGraph>: IGXLogicCore<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
@@ -29,7 +27,7 @@ namespace GraphX.Logic
         /// <summary>
         /// Get algorithm storage that contain all currently defined algorithms by type (default or external)
         /// </summary>
-        public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; set; }
+        public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; private set; }
         #endregion
 
         /// <summary>
@@ -51,14 +49,51 @@ namespace GraphX.Logic
         public IExternalOverlapRemoval<TVertex> ExternalOverlapRemovalAlgorithm { get; set; }
         public IExternalEdgeRouting<TVertex, TEdge> ExternalEdgeRoutingAlgorithm { get; set; }
 
-        public LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { get; set; }
-        public OverlapRemovalAlgorithmTypeEnum DefaultOverlapRemovalAlgorithm { get; set; }
-        public EdgeRoutingAlgorithmTypeEnum DefaultEdgeRoutingAlgorithm { get; set; }
-        public ILayoutParameters DefaultLayoutAlgorithmParams { get; set; }
+        private LayoutAlgorithmTypeEnum _defaultLayoutAlgorithm;
+        public LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { 
+            get { return _defaultLayoutAlgorithm; } set { _defaultLayoutAlgorithm = value; SetDefaultParams(0); } 
+        }
 
+        private OverlapRemovalAlgorithmTypeEnum _defaultOverlapRemovalAlgorithm;
+        public OverlapRemovalAlgorithmTypeEnum DefaultOverlapRemovalAlgorithm {
+            get { return _defaultOverlapRemovalAlgorithm; }
+            set { _defaultOverlapRemovalAlgorithm = value; SetDefaultParams(1);}
+        }
+
+        private EdgeRoutingAlgorithmTypeEnum _defaultEdgeRoutingAlgorithm;
+        public EdgeRoutingAlgorithmTypeEnum DefaultEdgeRoutingAlgorithm { 
+            get { return _defaultEdgeRoutingAlgorithm; } set { _defaultEdgeRoutingAlgorithm = value; SetDefaultParams(2); } }
+
+        public ILayoutParameters DefaultLayoutAlgorithmParams { get; set; }
         public IOverlapRemovalParameters DefaultOverlapRemovalAlgorithmParams { get; set; }
         public IEdgeRoutingParameters DefaultEdgeRoutingAlgorithmParams { get; set; }
         public bool AsyncAlgorithmCompute { get; set; }
+
+        /// <summary>
+        /// Create default params if algorithm was changed and default params property is null
+        /// </summary>
+        /// <param name="type">Algorithm type (inner)</param>
+        private void SetDefaultParams(int type)
+        {
+            switch (type)
+            {
+                    //layout
+                case 0:
+                    if(DefaultLayoutAlgorithmParams!=null) return;
+                    DefaultLayoutAlgorithmParams = AlgorithmFactory.CreateLayoutParameters(DefaultLayoutAlgorithm);
+                    return;
+                    //overlap
+                case 1:
+                    if(DefaultOverlapRemovalAlgorithmParams!=null) return;
+                    DefaultOverlapRemovalAlgorithmParams = AlgorithmFactory.CreateOverlapRemovalParameters(DefaultOverlapRemovalAlgorithm);
+                    return;
+                    //edge
+                case 2:
+                    if(DefaultEdgeRoutingAlgorithmParams!=null) return;
+                    DefaultEdgeRoutingAlgorithmParams = AlgorithmFactory.CreateEdgeRoutingParameters(DefaultEdgeRoutingAlgorithm);
+                    return;
+            }
+        }
 
         /// <summary>
         /// Use edge curving technique for smoother edges. Default value is false.
@@ -169,14 +204,14 @@ namespace GraphX.Logic
 
             if (vertexPosition.HasValue && vertexSize.HasValue)
             {
-                UpdateVertexDataForER(dataVertex, vertexPosition.Value, vertexSize.Value);
+                UpdateVertexDataForEr(dataVertex, vertexPosition.Value, vertexSize.Value);
             }
 
             foreach (var item in list)
                 item.RoutingPoints = AlgorithmStorage.EdgeRouting.ComputeSingle(item);
         }
 
-        private void UpdateVertexDataForER(TVertex vertexData, Point position, Size size)
+        private void UpdateVertexDataForEr(TVertex vertexData, Point position, Size size)
         {
             AlgorithmStorage.EdgeRouting.UpdateVertexData(vertexData, position, new Rect(position, size));
         }

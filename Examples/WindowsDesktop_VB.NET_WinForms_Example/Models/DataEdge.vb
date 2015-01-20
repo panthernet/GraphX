@@ -39,12 +39,7 @@ Namespace Models
             Return Text
         End Function
 
-        <YAXDontSerialize> _
-        Public ReadOnly Property Self() As DataEdge
-            Get
-                Return Me
-            End Get
-        End Property
+
 #End Region
     End Class
 End Namespace

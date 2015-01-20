@@ -39,17 +39,18 @@ namespace GraphX
             }
         }
 
+
+        public static readonly DependencyProperty VertexShapeProperty =
+            DependencyProperty.Register("VertexShape", typeof(VertexShape), typeof(VertexControl), new UIPropertyMetadata(null));
+
         /// <summary>
         /// Gets or sets actual shape form of vertex control (affects mostly math calculations such edges connectors)
         /// </summary>
-        public VertexShape MathShape
+        public VertexShape VertexShape
         {
             get { return (VertexShape)GetValue(VertexShapeProperty); }
             set { SetValue(VertexShapeProperty, value); }
         }
-
-        public static readonly DependencyProperty VertexShapeProperty =
-            DependencyProperty.Register("VertexShape", typeof(VertexShape), typeof(VertexControl), new UIPropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets vertex data object
@@ -75,16 +76,23 @@ namespace GraphX
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(VertexControl), new UIPropertyMetadata(null));
 
-        private bool _showLabel;
+
+
+        public static readonly DependencyProperty ShowLabelProperty =
+            DependencyProperty.Register("ShowLabel", typeof(bool), typeof(VertexControl), new UIPropertyMetadata(false, ShowLabelChanged));
+
+        private static void ShowLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var obj = d as VertexControl;
+            if (obj._vertexLabelControl != null)
+                obj._vertexLabelControl.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+
         public bool ShowLabel
         {
-            get { return _showLabel; }
-            set
-            {
-                _showLabel = value;
-                if (_vertexLabelControl != null)
-                    _vertexLabelControl.Visibility = _showLabel ? Visibility.Visible : Visibility.Collapsed;
-            }
+            get { return (bool)GetValue(ShowLabelProperty); }
+            set { SetValue(ShowLabelProperty, value);}
         }
 
 		static VertexControl()
@@ -200,9 +208,14 @@ namespace GraphX
 
             if (Template != null)
             {
-                _vertexLabelControl = Template.FindName("PART_vertexLabel", this) as VertexLabelControl;                
-                if(_vertexLabelControl != null)
+                _vertexLabelControl = Template.FindName("PART_vertexLabel", this) as VertexLabelControl;
+
+                if (_vertexLabelControl != null)
+                {
+                    _vertexLabelControl.Visibility = ShowLabel ? Visibility.Visible : Visibility.Collapsed;
+                    UpdateLayout(); 
                     _vertexLabelControl.UpdatePosition();
+                }
             }
 
         }

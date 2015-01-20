@@ -100,19 +100,11 @@
     <Compile Include="Size.cs" />
     <Compile Include="Thickness.cs" />
     <Compile Include="Vector.cs" />
-    <Compile Include="XmlSerializer\YAXPointArraySerializer.cs" />
-    <Compile Include="XmlSerializer\YAXPointSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="QuickGraph">
       <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
-      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
-      <Name>YAXLib.PCL.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Helpers\" />

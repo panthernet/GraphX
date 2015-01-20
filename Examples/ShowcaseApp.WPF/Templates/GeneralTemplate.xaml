@@ -1,0 +1,93 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ShowcaseApp.WPF"
+    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+    xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
+    xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.WPF.Controls"
+    >
+
+    <local:ValueToImageConverter x:Key="ValueToImage"/>
+    
+    <!-- VERTEX CONTROL -->
+    <Style TargetType="{x:Type gxl:VertexControl}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="VertexShape" Value="Circle"/>
+        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="Template">
+			<Setter.Value>
+                <ControlTemplate TargetType="{x:Type gxl:VertexControl}">
+	
+                    <Grid>
+                        <Image Source="{Binding ImageId, Converter={StaticResource ValueToImage}}" Margin="1" Width="80" Stretch="UniformToFill"/>
+                        <!--<TextBlock Text="{Binding Text}" Grid.Row="1" HorizontalAlignment="Center" Margin="2" />-->
+                        <gxl:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />
+                    </Grid>
+
+                </ControlTemplate>
+			</Setter.Value>
+		</Setter>
+
+        <!-- VERTEX DRAGGING CONTROL -->
+        <Setter Property="gxl:DragBehaviour.IsDragEnabled"
+                Value="True" />
+        <Setter Property="gxl:DragBehaviour.UpdateEdgesOnMove"
+                Value="True" />
+
+        <Setter Property="gxl:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
+
+        <Style.Triggers>
+            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
+                <Setter Property="Background" Value="Gold"/>
+                <Setter Property="BorderThickness" Value="7"/>
+            </Trigger>
+            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="False ">
+                <Setter Property="Background" Value="#FFE3E3E3"/>
+                <Setter Property="BorderThickness" Value="5"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- EDGE CONTROL -->
+    <Style TargetType="{x:Type gxl:EdgeControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type gxl:EdgeControl}">
+                    <Grid>
+                        <Path Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="5" MinWidth="1" MinHeight="1"
+                          ToolTip="{TemplateBinding ToolTip}" 
+                            x:Name="PART_edgePath"/>
+                        <Path Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="2" MinWidth="1" MinHeight="1" 
+                            x:Name="PART_edgeArrowPath"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Setter Property="MinWidth"
+                Value="1" />
+        <Setter Property="MinHeight"
+                Value="1" />
+        <Setter Property="Foreground"
+                Value="LightSkyBlue" />
+        <Setter Property="Opacity"
+                Value="1" />
+
+        <Setter Property="gxl:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
+
+        
+        <Style.Triggers>
+            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
+                <Setter Property="Foreground" Value="Gold"/>
+                <Setter Property="StrokeThickness" Value="5"/>
+            </Trigger>
+            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="False ">
+                <Setter Property="Foreground" Value="Silver"/>
+                <Setter Property="StrokeThickness" Value="2"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+	
+</ResourceDictionary>

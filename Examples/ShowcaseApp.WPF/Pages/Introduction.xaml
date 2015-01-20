@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="ShowcaseApp.WPF.Pages.Introduction"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             mc:Ignorable="d"              
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid Style="{StaticResource ContentRoot}">
+        <ScrollViewer>
+            <StackPanel >
+                <Image Source="/Assets/SplashScreen.png" Width="250" Margin="0,0,0,10"></Image>
+                <mui:BBCodeBlock BBCode="[b]GraphX for .NET[/b] is an advanced open-source graph visualization library that uses different layout and edge routing algorithms, implements many graph-related features and supports highly customizable visual templates. It is able to render large amount of vertices and steadily moves to support the most popular .NET platforms.&#13;&#10;&#13;&#10;If you have any questions please feel free to visit [url=http://panthernet.ru/forum]GraphX forums[/url].&#13;&#10;&#13;&#10;You can also visit [url=http://panthernet.ru/en/projects-en/graphx-en/14-graphx-en/33-graphx-doc-main]Documentation[/url] section on the web site. It can be a bit outdated but you always can ask your questions on the forum." Margin="0,0,0,32" />
+                <TextBlock Text="GUIDE" Style="{StaticResource Heading2}" />
+                <mui:BBCodeBlock BBCode="Use menu items at the top of the window to select different graph examples with corresponding settings. Click on [url=/Pages/GeneralGraph.xaml]General graph[/url] to select first example." Margin="0,0,0,32"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

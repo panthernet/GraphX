@@ -1,0 +1,126 @@
+﻿<UserControl x:Class="ShowcaseApp.WPF.Pages.EdgeRoutingGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
+             xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Templates/ERGraphXTemplates.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border CornerRadius="2" BorderBrush="{DynamicResource ButtonBorder}" Background="{DynamicResource ButtonBackground}" Margin="2" BorderThickness="1">
+            <TextBlock Margin="1" TextWrapping="Wrap" TextAlignment="Center" Text="Here is an example of the edges routing and handling. You can preview different edge routing and compiling algorithms along with applied visual styles and drag vertices to see routed path changes."/>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1"  Margin="2" >
+            <controls:ZoomControl x:Name="erg_zoomctrl" Margin="-5,0,5,0">
+                <wpf:GraphAreaExample x:Name="erg_Area"/>
+            </controls:ZoomControl>
+        </Border>
+
+        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
+                <Button Height="50" Margin="3" Name="erg_but_randomgraph"  DockPanel.Dock="Top" UseLayoutRounding="True"  BorderBrush="{DynamicResource ModernButtonBorder}">
+                    <Path Width="38" Height="35.768" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 38,34.8333C 39.7489,34.8333 41.1667,36.2511 41.1667,38C 41.1667,39.7489 39.7489,41.1667 38,41.1667C 36.2511,41.1667 34.8333,39.7489 34.8333,38C 34.8333,36.2511 36.2511,34.8333 38,34.8333 Z M 57,38L 44.3333,38C 44.3333,35.5799 42.9759,33.4769 40.981,32.4107L 46.9429,21.232C 52.9278,24.4306 57,30.7398 57,38 Z M 31.6667,38L 19,38C 19,30.7398 23.0722,24.4306 29.0571,21.232L 35.019,32.4107C 33.024,33.4769 31.6667,35.5799 31.6667,38 Z M 38,57C 34.7668,57 31.7223,56.1924 29.0571,54.768L 35.019,43.5894C 35.9074,44.0642 36.9223,44.3333 38,44.3333C 39.0777,44.3333 40.0926,44.0642 40.981,43.5893L 46.9429,54.768C 44.2777,56.1924 41.2332,57 38,57 Z "/>
+                </Button>
+                <Button Height="50" Margin="3" Name="erg_but_relayout" DockPanel.Dock="Top" UseLayoutRounding="True"  BorderBrush="{DynamicResource ModernButtonBorder}">
+                    <Path Width="34.8333" Height="41.1667" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 38,20.5833C 42.9908,20.5833 47.4912,22.6825 50.6667,26.046L 50.6667,17.4167L 55.4166,22.1667L 55.4167,34.8333L 42.75,34.8333L 38,30.0833L 46.8512,30.0833C 44.6768,27.6539 41.517,26.125 38,26.125C 31.9785,26.125 27.0037,30.6068 26.2296,36.4167L 20.6543,36.4167C 21.4543,27.5397 28.9148,20.5833 38,20.5833 Z M 38,49.875C 44.0215,49.875 48.9963,45.3932 49.7703,39.5833L 55.3457,39.5833C 54.5457,48.4603 47.0852,55.4167 38,55.4167C 33.0092,55.4167 28.5088,53.3175 25.3333,49.954L 25.3333,58.5833L 20.5833,53.8333L 20.5833,41.1667L 33.25,41.1667L 38,45.9167L 29.1487,45.9167C 31.3231,48.3461 34.483,49.875 38,49.875 Z "/>
+                </Button>
+            </StackPanel>
+            <ScrollViewer>
+                <acc:Accordion  DockPanel.Dock="Top" HorizontalAlignment="Stretch" Name="Accordion">
+                    <acc:Accordion.Items>
+                        <acc:AccordionItem Header="Edge routing algorithm">
+                            <ScrollViewer>
+                                <DockPanel LastChildFill="False">
+                                    <ComboBox IsReadOnly="True" Name="erg_eralgo" Margin="3" DockPanel.Dock="Top"/>
+                                    <CheckBox Name="erg_useExternalERAlgo" DockPanel.Dock="Top"  Margin="3" Content="Use external algorithm"/>
+                                    <CheckBox Name="erg_useCurves"  Margin="3" Content="Use curving technique" DockPanel.Dock="Top"/>
+                                    <CheckBox Name="erg_recalculate"  Margin="3" Content="Update paths on drag" DockPanel.Dock="Top"/>
+
+                                    <DockPanel LastChildFill="False" Name="erg_prmsbox">
+                                        <TextBlock Text="Parameters" TextAlignment="Center" DockPanel.Dock="Top"/>
+                                        <DockPanel LastChildFill="False" DockPanel.Dock="Top" Name="pfer_prms_dp" Visibility="Collapsed">
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Horizontal grid step:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding PfErParameters.HorizontalGridSize}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Smaller the value more points will be available."/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Vertical grid step:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding PfErParameters.VerticalGridSize}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Smaller the value more points will be available."/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Side grid offset:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding PfErParameters.SideGridOffset}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Additional space around graph from each side that is available for edge routes."/>
+                                            <CheckBox Margin="3" IsChecked="{Binding PfErParameters.UseDiagonals}" DockPanel.Dock="Top"  Content="Use diagonals"  ToolTip="Use diagonals in route paths"/>
+                                            <CheckBox Margin="3" IsChecked="{Binding PfErParameters.UseHeavyDiagonals}" DockPanel.Dock="Top"  Content="Use heavy diagonals" ToolTip="Prefer using diagonals in route path" />
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Pathfinder formula:" DockPanel.Dock="Top"/>
+                                            <ComboBox IsReadOnly="True" Name="erg_pfprm_formula" Margin="3" DockPanel.Dock="Top" SelectedItem="{Binding PfErParameters.PathFinderAlgorithm}"/>
+                                            <CheckBox Margin="3" IsChecked="{Binding PfErParameters.PunishChangeDirection}" DockPanel.Dock="Top"  Content="Punish change direction"  ToolTip="Don't prefer direction change results in more directed paths"/>
+                                            <CheckBox Margin="3" IsChecked="{Binding PfErParameters.UseTieBreaker}" DockPanel.Dock="Top"  Content="Use tie breaker"  ToolTip="Use tie breaking formula"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Heuristics level:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding PfErParameters.Heuristic}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Search tries limit:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding PfErParameters.SearchTriesLimit}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Maximum number of tries available to find correct path"/>
+                                        </DockPanel>
+                                        <DockPanel LastChildFill="False" DockPanel.Dock="Top" Name="simpleer_prms_dp" Visibility="Collapsed">
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Side step:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding SimpleErParameters.SideStep}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Back step:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding SimpleErParameters.BackStep}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top"/>
+                                        </DockPanel>
+                                        <DockPanel LastChildFill="False" DockPanel.Dock="Top" Name="bundleer_prms_dp" Visibility="Collapsed">
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Subdivision points:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.SubdivisionPoints}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="More points - smoother the edge path"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Iterations:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.Iterations}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="More iterations - tighter the edge routing channels"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Spring constant:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.SpringConstant}" PreviewTextInput="erg_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Lower the value - more bended the edges"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Threshold [0.0 - 1.0]:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.Threshold}" PreviewTextInput="erg_to1_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Edges that have coefficient lower than the threshold between them are not considered for interaction"/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Repulsion coeff [-1.0 - 0.0]:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.RepulsionCoefficient}" PreviewTextInput="erg_tominus1_PreviewTextInput" DockPanel.Dock="Top" ToolTip="If repulseOpposite is true, this determines how much will opposite edges repulse eachother."/>
+                                            <Label Margin="3" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Straightening [0.0 - 1.0]:" DockPanel.Dock="Top"/>
+                                            <TextBox Margin="3" Text="{Binding BundleEdgeRoutingParameters.Straightening}" PreviewTextInput="erg_to1_PreviewTextInput" DockPanel.Dock="Top" ToolTip="Amount of straightening that will be applied after every bundling"/>
+                                            <CheckBox Margin="3" IsChecked="{Binding BundleEdgeRoutingParameters.RepulseOpposite}" DockPanel.Dock="Top"  Content="Repulse opposite" />
+                                            <CheckBox Margin="3" IsChecked="{Binding BundleEdgeRoutingParameters.UseThreading, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top"  Content="Use threading" ToolTip="Value indicating whether opposite edges should attracts or repulse each other"/>
+                                        </DockPanel>
+                                    </DockPanel>
+
+                                </DockPanel>
+                            </ScrollViewer>
+                        </acc:AccordionItem>
+                        <acc:AccordionItem Header="Edges styling">
+                            <DockPanel LastChildFill="False">
+                                <TextBlock Text="Edge dash style:" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
+                                <ComboBox IsReadOnly="True" Name="erg_dashstyle" Margin="3" DockPanel.Dock="Top"/>
+                                <Button Margin="3" Content="Randomize edge styles!" Name="erg_randomizeAll" DockPanel.Dock="Top"/>
+                                <Button Margin="3" Content="Randomize edge arrows!" Name="erg_randomizeArrows" DockPanel.Dock="Top"/>
+                            </DockPanel>
+                        </acc:AccordionItem>
+                        <acc:AccordionItem Header="Common settings">
+                            <DockPanel LastChildFill="False">
+                                <CheckBox Margin="3" Content="Show edge arrows" Name="erg_showEdgeArrows" DockPanel.Dock="Top"/>
+                                <CheckBox Margin="3" Content="Show edge labels" Name="erg_showEdgeLabels" DockPanel.Dock="Top"/>
+                                <CheckBox Margin="3" Content="Align edge labels" x:Name="erg_alignEdgeLabels" DockPanel.Dock="Top"/>
+                                <CheckBox Margin="3" Content="Enable parallel edges" x:Name="erg_enableParallelEdges" DockPanel.Dock="Top" ToolTip="Enables special edges rendering between same vertices (edges drawn separated by custom interval)"/>
+                            </DockPanel>
+                        </acc:AccordionItem>
+                    </acc:Accordion.Items>
+                </acc:Accordion>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</UserControl>

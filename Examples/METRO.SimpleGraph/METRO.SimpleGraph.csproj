@@ -113,10 +113,6 @@
       <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
       <Name>GraphX.PCL.Logic</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\YAXLib\YAXLib.PCL.Common\YAXLib.PCL.Common.csproj">
-      <Project>{2c800806-b034-4282-b735-dbe6da633cbb}</Project>
-      <Name>YAXLib.PCL.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\GraphX.METRO.Controls\GraphX.METRO.Controls.csproj">
       <Project>{66f33708-c1c7-4385-8235-7201784d184c}</Project>
       <Name>GraphX.METRO.Controls</Name>
