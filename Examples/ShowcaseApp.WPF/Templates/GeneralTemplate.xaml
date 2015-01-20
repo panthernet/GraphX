@@ -55,7 +55,7 @@
                 <ControlTemplate TargetType="{x:Type gxl:EdgeControl}">
                     <Grid>
                         <Path Stroke="{TemplateBinding Foreground}"
-                          StrokeThickness="5" MinWidth="1" MinHeight="1"
+                          StrokeThickness="3" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
                         <Path Stroke="{TemplateBinding Foreground}"

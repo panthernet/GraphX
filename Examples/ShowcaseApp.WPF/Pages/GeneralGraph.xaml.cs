@@ -30,14 +30,14 @@ namespace ShowcaseApp.WPF.Pages
             gg_oralgo.ItemsSource = Enum.GetValues(typeof(OverlapRemovalAlgorithmTypeEnum)).Cast<OverlapRemovalAlgorithmTypeEnum>();
             gg_oralgo.SelectedIndex = 0;
             gg_eralgo.ItemsSource = Enum.GetValues(typeof(EdgeRoutingAlgorithmTypeEnum)).Cast<EdgeRoutingAlgorithmTypeEnum>();
-            gg_eralgo.SelectedIndex = 2;
+            gg_eralgo.SelectedItem = EdgeRoutingAlgorithmTypeEnum.SimpleER;            
             gg_but_randomgraph.Click += gg_but_randomgraph_Click;
             gg_vertexCount.Text = "30";
             gg_async.Checked += gg_async_Checked;
             gg_async.Unchecked += gg_async_Checked;
             gg_Area.RelayoutFinished += gg_Area_RelayoutFinished;
             gg_Area.GenerateGraphFinished += gg_Area_GenerateGraphFinished;
-            ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
+            ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             ggLogic.EdgeCurvingEnabled = true;
 
 
