@@ -76,6 +76,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\YAXLib.2.13\lib\YAXLib.dll</HintPath>
     </Reference>
+    <Reference Include="YAXLib.PCL.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcbed8d9a3a2cf04, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\YAXLib.PCL.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
