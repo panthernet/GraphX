@@ -2,9 +2,10 @@ GraphX for .NET v2 PCL-COMPLIANT VERSIONs
 http://www.panthernet.ru
 
 Project Description
+
 GraphX for .NET is an advanced open-source graph visualization library that supports different layout algorithms and highly customizable features. It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
 
-Main GraphX dev libraries can be operated in both C# and VB for .NET using WPF, WinForms or METRO technologies.
+Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms or METRO technologies.
 
   Library depends on:
   
