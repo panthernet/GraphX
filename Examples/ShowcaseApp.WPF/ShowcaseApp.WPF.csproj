@@ -76,10 +76,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\YAXLib.2.13\lib\YAXLib.dll</HintPath>
     </Reference>
-    <Reference Include="YAXLib.PCL.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=dcbed8d9a3a2cf04, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\YAXLib.PCL.Common.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -129,6 +125,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\EditorGraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\DynamicGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -156,6 +156,10 @@
     <Page Include="Templates\Accordion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\EditorGraphXTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Templates\DynamicGraphXTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -192,6 +196,7 @@
     </Compile>
     <Compile Include="Models\ColorModel.cs" />
     <Compile Include="Models\DataItem.cs" />
+    <Compile Include="Models\EditorObjectManager.cs" />
     <Compile Include="Models\ImageLoader.cs" />
     <Compile Include="Models\ShadowChrome.cs" />
     <Compile Include="Models\ShowcaseHelper.cs" />
@@ -201,6 +206,9 @@
     <Compile Include="Models\VCTemplateBehaviour.cs" />
     <Compile Include="Pages\DebugGraph.xaml.cs">
       <DependentUpon>DebugGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\EditorGraph.xaml.cs">
+      <DependentUpon>EditorGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DynamicGraph.xaml.cs">
       <DependentUpon>DynamicGraph.xaml</DependentUpon>

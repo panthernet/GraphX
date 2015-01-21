@@ -18,7 +18,7 @@ namespace ShowcaseApp.WPF.Pages
 
         void butTest_Click(object sender, RoutedEventArgs e)
         {
-            var win = new Window {Content = new GeneralGraph()};
+            var win = new Window {Content = new EditorGraph()};
             win.ShowDialog();
         }
 
