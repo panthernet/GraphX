@@ -37,27 +37,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accordion">
-      <HintPath>..\packages\Accordion.1.0.0\lib\Accordion.dll</HintPath>
+      <HintPath>..\..\packages\Accordion.1.0.0\lib\Accordion.dll</HintPath>
     </Reference>
-    <Reference Include="FirstFloor.ModernUI, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ExternalDlls\FirstFloor.ModernUI.dll</HintPath>
+    <Reference Include="FirstFloor.ModernUI">
+      <HintPath>..\..\ExternalDlls\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Windows.Shell">
-      <HintPath>..\ExternalDlls\Microsoft.Windows.Shell.dll</HintPath>
+      <HintPath>..\..\ExternalDlls\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
-    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Data">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Graphviz.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph.Serialization">
-      <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.Serialization.dll</HintPath>
+    <Reference Include="QuickGraph">
+      <HintPath>..\..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -74,7 +63,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="YAXLib, Version=2.13.0.0, Culture=neutral, PublicKeyToken=7cc39f8266ad1835, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\YAXLib.2.13\lib\YAXLib.dll</HintPath>
+      <HintPath>..\..\packages\YAXLib.2.13\lib\YAXLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

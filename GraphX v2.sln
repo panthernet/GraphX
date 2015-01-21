@@ -3,13 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.WPF.Controls", "GraphX.Controls\GraphX.WPF.Controls.csproj", "{D2E33FEE-6689-4BB4-A95C-1B5C327A1E8F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D9664367-2C2C-46B2-81A6-26CDCD087B29}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGraph", "Examples\SimpleGraph\SimpleGraph.csproj", "{E00C5274-AA34-4CC1-BB24-F59BCF130B85}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsProject", "Examples\WindowsFormsProject\WindowsFormsProject.csproj", "{E8B92A96-39FD-441D-9925-34A6F6DC8BEE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{C6ACB65E-A76D-44E4-9B20-022C0E3498B7}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,6 +26,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licenses", "Licenses", "{E3
 		Documents\Licenses\License.YAXLib.txt = Documents\Licenses\License.YAXLib.txt
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{C7DE85B0-A017-4DF7-AE7A-A1197B5D0D47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.WPF.Controls", "GraphX.Controls\GraphX.WPF.Controls.csproj", "{D2E33FEE-6689-4BB4-A95C-1B5C327A1E8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleGraph", "Examples\SimpleGraph\SimpleGraph.csproj", "{E00C5274-AA34-4CC1-BB24-F59BCF130B85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsProject", "Examples\WindowsFormsProject\WindowsFormsProject.csproj", "{E8B92A96-39FD-441D-9925-34A6F6DC8BEE}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.PCL.Common", "GraphX.PCL.Common\GraphX.PCL.Common.csproj", "{3644D44B-DEC0-4B65-BBA0-C68E34821AAE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.PCL.Logic", "GraphX.PCL.Logic\GraphX.PCL.Logic.csproj", "{A30D218B-AAA4-483A-99F7-EAEB1B8B4610}"
@@ -41,8 +43,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphX.METRO.Controls", "GraphX.METRO.Controls\GraphX.METRO.Controls.csproj", "{66F33708-C1C7-4385-8235-7201784D184C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "METRO.SimpleGraph", "Examples\METRO.SimpleGraph\METRO.SimpleGraph.csproj", "{44841666-C547-4874-9BC9-B34D2A1FA6D8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Externals", "Externals", "{C7DE85B0-A017-4DF7-AE7A-A1197B5D0D47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowcaseApp.WPF", "Examples\ShowcaseApp.WPF\ShowcaseApp.WPF.csproj", "{C054C423-7284-46A6-9738-B82E2237E9C7}"
 EndProject
@@ -178,9 +178,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{E33DE020-10E3-44CC-BD32-0516CABD459C} = {C6ACB65E-A76D-44E4-9B20-022C0E3498B7}
 		{E00C5274-AA34-4CC1-BB24-F59BCF130B85} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
 		{E8B92A96-39FD-441D-9925-34A6F6DC8BEE} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
-		{E33DE020-10E3-44CC-BD32-0516CABD459C} = {C6ACB65E-A76D-44E4-9B20-022C0E3498B7}
 		{C2718C9A-6455-43F6-835A-26B788824F53} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
 		{44841666-C547-4874-9BC9-B34D2A1FA6D8} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
 		{C054C423-7284-46A6-9738-B82E2237E9C7} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
