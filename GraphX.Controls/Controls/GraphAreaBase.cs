@@ -97,10 +97,10 @@ namespace GraphX
         /// </summary>
         public virtual event EdgeSelectedEventHandler EdgeSelected;
 
-        internal virtual void OnEdgeSelected(EdgeControl ec)
+        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (EdgeSelected != null)
-                EdgeSelected(this, new EdgeSelectedEventArgs(ec));
+                EdgeSelected(this, new EdgeSelectedEventArgs(ec, e, keys));
         }
 
         /// <summary>
@@ -239,33 +239,33 @@ namespace GraphX
         }
 
         public virtual event EdgeSelectedEventHandler EdgeDoubleClick;
-        internal void OnEdgeDoubleClick(EdgeControl edgeControl)
+        internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (EdgeDoubleClick != null)
-                EdgeDoubleClick(this, new EdgeSelectedEventArgs(edgeControl));
+                EdgeDoubleClick(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
         public virtual event EdgeSelectedEventHandler EdgeMouseMove;
-        internal void OnEdgeMouseMove(EdgeControl edgeControl)
+        internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (EdgeMouseMove != null)
-                EdgeMouseMove(this, new EdgeSelectedEventArgs(edgeControl));
+                EdgeMouseMove(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
         public virtual event EdgeSelectedEventHandler EdgeMouseEnter;
-        internal void OnEdgeMouseEnter(EdgeControl edgeControl)
+        internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (EdgeMouseEnter != null)
-                EdgeMouseEnter(this, new EdgeSelectedEventArgs(edgeControl));
+                EdgeMouseEnter(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             if (MouseOverAnimation != null)
                 MouseOverAnimation.AnimateEdgeForward(edgeControl);
         }
 
         public virtual event EdgeSelectedEventHandler EdgeMouseLeave;
-        internal void OnEdgeMouseLeave(EdgeControl edgeControl)
+        internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
             if (EdgeMouseLeave != null)
-                EdgeMouseLeave(this, new EdgeSelectedEventArgs(edgeControl));
+                EdgeMouseLeave(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             if (MouseOverAnimation != null)
                 MouseOverAnimation.AnimateEdgeBackward(edgeControl);
         }

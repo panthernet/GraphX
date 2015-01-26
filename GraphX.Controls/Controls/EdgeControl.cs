@@ -479,35 +479,35 @@ namespace GraphX
         void EdgeControl_MouseLeave(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseLeave(this);
+                RootArea.OnEdgeMouseLeave(this, null, Keyboard.Modifiers);
             // e.Handled = true;
         }
 
         void EdgeControl_MouseEnter(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseEnter(this);
+                RootArea.OnEdgeMouseEnter(this, null, Keyboard.Modifiers);
             // e.Handled = true;
         }
 
         void EdgeControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseMove(this);
+                RootArea.OnEdgeMouseMove(this, null, Keyboard.Modifiers);
             e.Handled = true;
         }
 
         void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeDoubleClick(this);
+                RootArea.OnEdgeDoubleClick(this, e, Keyboard.Modifiers);
             e.Handled = true;
         }
 
         void GraphEdge_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeSelected(this);
+                RootArea.OnEdgeSelected(this, e, Keyboard.Modifiers);
             e.Handled = true;
         }
 

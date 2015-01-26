@@ -26,6 +26,7 @@
         <mui:LinkGroup DisplayName="Templates">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="General" Source="/Pages/ThemedGraph.xaml" />
+                <mui:Link DisplayName="Editor" Source="/Pages/EditorGraph.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="Edge routing">

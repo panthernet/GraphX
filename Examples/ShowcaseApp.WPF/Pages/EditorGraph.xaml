@@ -29,7 +29,15 @@
             <TextBlock Margin="1" TextWrapping="Wrap" TextAlignment="Center" Text="Create vertices and connect them with edges! Read tooltips for buttons info."/>
         </Border>
 
+        
         <Border  Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1"  Margin="2" >
+            <Border.Background>
+                <VisualBrush TileMode="Tile"  Viewport="0,0,0.09,0.095">
+                    <VisualBrush.Visual>
+                        <Image Source="/Assets/grid_paper.png" Stretch="Uniform" UseLayoutRounding="True" SnapsToDevicePixels="True"></Image>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.Background>
             <controls:ZoomControl x:Name="zoomCtrl" Background="Transparent" VerticalContentAlignment="Center" VerticalAlignment="Center">
                 <wpf:GraphAreaExample x:Name="graphArea"/>
             </controls:ZoomControl>
@@ -46,7 +54,7 @@
                         <Setter Property="Height" Value="45"/>
                     </Style>                     
                 </StackPanel.Resources>
-                <ToggleButton Name="butSelect" ToolTip="Selection mode: drag vertices" x:FieldModifier="private">
+                <ToggleButton Name="butSelect" ToolTip="Selection mode: drag vertices, Ctrl+Click to group them" x:FieldModifier="private">
                     <Path  Stretch="Uniform" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}, Path=Foreground}" Data="F1 M 29,18L 52.25,41.1667L 43.0865,42.6585L 50.817,56.6949L 43.827,60.4115L 36,46.25L 29,53.25L 29,18 Z "/>
                 </ToggleButton>
                 <ToggleButton Name="butEdit"  ToolTip="Edit mode: click to place vertices, click vertices to add edges" x:FieldModifier="private">

@@ -136,17 +136,26 @@ namespace ShowcaseApp.WPF.Models
             "Oren Kesten",
         };
 
-        private static List<BitmapImage> Images = new List<BitmapImage>(); 
+        public static readonly List<BitmapImage> Images = new List<BitmapImage>();
+        public static readonly List<BitmapImage> EditorImages = new List<BitmapImage>(); 
 
         static ThemedDataStorage()
         {
             Images.Add(new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseApp.WPF;component/Assets/female.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad });
             Images.Add(new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseApp.WPF;component/Assets/male.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad });
+            EditorImages.Add(new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseApp.WPF;component/Assets/hand_comp.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad });
+            EditorImages.Add(new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseApp.WPF;component/Assets/hand_comp2.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad });
+            EditorImages.Add(new BitmapImage(new Uri(@"pack://application:,,,/ShowcaseApp.WPF;component/Assets/hand_comp3.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad });
         }
 
         public static BitmapImage GetImageById(int imageId)
         {
-            return Images[imageId > 1 ? 1 : 0];
+            return Images[imageId >= 1 ? 1 : 0];
+        }
+
+        public static BitmapImage GetEditorImageById(int imageId)
+        {
+            return EditorImages[imageId >= 1 ? 1 : 0];
         }
 
         public static void FillDataVertex(DataVertex item)

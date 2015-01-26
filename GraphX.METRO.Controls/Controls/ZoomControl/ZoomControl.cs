@@ -660,6 +660,7 @@ namespace GraphX.Controls
 
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
         {
+            if (targetZoom == 0d && double.IsNaN(transformX) && double.IsNaN(transformY)) return;
             _isZooming = isZooming;
             var duration = !IsAnimationDisabled ? new Duration(AnimationLength) : new Duration(new TimeSpan(0,0,0,0,100));
             var value = (double)GetValue(TranslateXProperty);

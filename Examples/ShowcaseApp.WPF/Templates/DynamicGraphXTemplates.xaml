@@ -62,8 +62,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{Binding PersonImage}" Margin="3"  Width="60" Stretch="UniformToFill" Grid.RowSpan="2"/>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold" Foreground="Black" Grid.Column="1" Grid.Row="0" Margin="3" MinWidth="120"/>
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Black" Grid.Column="1" Grid.Row="0" Margin="3" MinWidth="120"/>
                             <TextBlock Text="{Binding Profession}" TextAlignment="Center" FontStyle="Italic" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3"/>
                         </Grid>
                     </Grid>

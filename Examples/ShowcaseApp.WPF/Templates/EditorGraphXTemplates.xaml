@@ -3,6 +3,8 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
+    xmlns:local="clr-namespace:ShowcaseApp.WPF"
+    
     xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.WPF.Controls">
 
     <LinearGradientBrush x:Key="NormalBrush" EndPoint="0.5,1" StartPoint="0.5,0" po:Freeze="true">
@@ -20,53 +22,29 @@
 
     <LinearGradientBrush x:Key="EdgeBrush" EndPoint="0.5,0" StartPoint="0.5,1" po:Freeze="true">
         <GradientStop Color="#FF000000"/>
-        <GradientStop Color="#FFBF931E" Offset="1"/>
+        <GradientStop Color="#FF95EAE2" Offset="1"/>
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="EdgeArrowBrush" Color="Black" po:Freeze="true" />
 
+    <local:ValueToEditorImageConverter x:Key="ImageConverter"/>
+    
     <!-- VERTEX CONTROL -->
     <Style TargetType="{x:Type gxl:VertexControl}">
         <!-- Set background color through attached property -->
-        <Setter Property="Background" Value="{StaticResource NormalBrush}"/>
-        <Setter Property="Padding" Value="10,5,10,5"/>
-        <Setter Property="BorderBrush" Value="{StaticResource NormalBorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ShowLabel" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type gxl:VertexControl}">
-                    <ControlTemplate.Resources>
-                        <Storyboard x:Key="HoverOn">
-                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="BackgroundOver" Storyboard.TargetProperty="Opacity" To="1" />
-                            <DoubleAnimation Duration="00:00:00.1000000" Storyboard.TargetName="BackgroundOver_Highlight" Storyboard.TargetProperty="Opacity" To="0.65" />
-                        </Storyboard>
-                        <Storyboard x:Key="HoverOff">
-                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="BackgroundOver" Storyboard.TargetProperty="Opacity" To="0" />
-                            <DoubleAnimation Duration="00:00:00.4000000" Storyboard.TargetName="BackgroundOver_Highlight" Storyboard.TargetProperty="Opacity" To="0" />
-                        </Storyboard>
-                    </ControlTemplate.Resources>
-
                     <Grid>
-                        <Border x:Name="BackgroundNorm" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"/>
-                        <Border x:Name="BackgroundNorm_highlight" Margin="1" BorderBrush="{DynamicResource NormalHighlightBrush}" BorderThickness="1,0,1,1" CornerRadius="5" Opacity="0.65" />
-                        <Border x:Name="BackgroundOver" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" Opacity="0" Background="{DynamicResource MouseOverBrush}" BorderBrush="{DynamicResource MouseOverBorderBrush}"/>
-                        <Border x:Name="BackgroundOver_Highlight" Margin="1" BorderThickness="1,0,1,1" CornerRadius="5" Opacity="0" BorderBrush="{DynamicResource MouseOverHighlightBrush}"/>
+                        <Border CornerRadius="50" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Name="hlBorder">
+                            <Image Source="{Binding ImageId, Converter={StaticResource ImageConverter}}" Width="45" Stretch="Uniform" Margin="2" />
+                        </Border>
 
-                        <Grid UseLayoutRounding="True" SnapsToDevicePixels="True">
-                            <TextBlock Text="{Binding Text}" TextAlignment="Center" FontStyle="Italic" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3"/>
-                        </Grid>
+                        <gxl:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" FontFamily="Comic Sans MS" />
+
                     </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Trigger.ExitActions>
-                                <BeginStoryboard Storyboard="{StaticResource HoverOff}" x:Name="HoverOff_BeginStoryboard" />
-                            </Trigger.ExitActions>
-                            <Trigger.EnterActions>
-                                <BeginStoryboard Storyboard="{StaticResource HoverOn}" />
-                            </Trigger.EnterActions>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
 
@@ -82,7 +60,7 @@
         <Style.Triggers>
             <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
                 <Setter Property="BorderBrush" Value="Gold"/>
-                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="BorderThickness" Value="3"/>
             </Trigger>
         </Style.Triggers>
 

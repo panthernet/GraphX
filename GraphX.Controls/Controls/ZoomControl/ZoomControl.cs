@@ -1090,10 +1090,7 @@ namespace GraphX.Controls
 
         void ZoomControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var zoom = Zoom;
-            BeginAnimation(ZoomProperty, null);
-            SetValue(ZoomProperty,zoom);
-            SetValue(ZoomDeltaMultiplierProperty, ZoomDeltaMultiplier);
+            FakeZoom();
         }
 
         #region ContentChanged
@@ -1288,6 +1285,7 @@ namespace GraphX.Controls
 
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
         {
+            if (targetZoom == 0d && double.IsNaN(transformX) && double.IsNaN(transformY)) return;
             _isZooming = isZooming;
             var duration = !IsAnimationDisabled ? new Duration(AnimationLength) : new Duration(new TimeSpan(0,0,0,0,100));
             var value = (double)GetValue(TranslateXProperty);
@@ -1493,6 +1491,26 @@ namespace GraphX.Controls
                 DoZoomAnimation(currentZoom, transformX, transformY);
             }
             Mode = ZoomControlModes.Custom;
+        }
+
+        private void FakeZoom()
+        {
+            var startZoom = Zoom;
+            var currentZoom = startZoom;
+            currentZoom = Math.Max(MinZoom, Math.Min(MaxZoom, currentZoom));
+
+            var startTranslate = new Vector(TranslateX, TranslateY);
+
+            var v = (OrigoPosition - OrigoPosition);
+            var vTarget = (OrigoPosition - OrigoPosition);
+
+            var targetPoint = (v - startTranslate) / startZoom;
+            var zoomedTargetPointPos = targetPoint * currentZoom + startTranslate;
+            var endTranslate = vTarget - zoomedTargetPointPos;
+
+            var transformX = GetCoercedTranslateX(TranslateX + endTranslate.X, currentZoom);
+            var transformY = GetCoercedTranslateY(TranslateY + endTranslate.Y, currentZoom);
+            DoZoomAnimation(currentZoom, transformX, transformY);
         }
 
         public override void OnApplyTemplate()
