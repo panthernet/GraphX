@@ -1,7 +1,9 @@
 ﻿RELEASE 2.1.8
 + Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
++ Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left
 + Fixed annoying data binding error in ZoomControl slider binding [METRO, WPF]
 + Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
++ Fixed dynamic graph showcase example first vertex auto zooming onto
 
 !Breaking changes
 + Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]

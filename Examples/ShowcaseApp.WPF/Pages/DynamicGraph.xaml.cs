@@ -344,8 +344,10 @@ namespace ShowcaseApp.WPF.Pages
             //we have to check if there is only one vertex and set coordinates manulay 
             //because layout algorithms skip all logic if there are less than two vertices
             if (dg_Area.VertexList.Count() == 1)
+            {
                 dg_Area.VertexList.First().Value.SetPosition(0, 0);
-            else dg_Area.RelayoutGraph(true);
+                dg_Area.UpdateLayout(); //update layout to update vertex size
+            } else dg_Area.RelayoutGraph(true);
             dg_zoomctrl.ZoomToFill();
         }
     }

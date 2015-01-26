@@ -942,12 +942,18 @@ namespace GraphX.Controls
             set { SetValue(MaxZoomProperty, value); }
         }
 
+        /// <summary>
+        /// Maximum value for zoom sensivity (how fast the zoom can do)
+        /// </summary>
         public double MaxZoomDelta
         {
             get { return (double)GetValue(MaxZoomDeltaProperty); }
             set { SetValue(MaxZoomDeltaProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets zooming sensivity. Lower the value - smoother the zoom.
+        /// </summary>
         public double ZoomDeltaMultiplier
         {
             get { return (double)GetValue(ZoomDeltaMultiplierProperty); }
@@ -1087,6 +1093,7 @@ namespace GraphX.Controls
             var zoom = Zoom;
             BeginAnimation(ZoomProperty, null);
             SetValue(ZoomProperty,zoom);
+            SetValue(ZoomDeltaMultiplierProperty, ZoomDeltaMultiplier);
         }
 
         #region ContentChanged

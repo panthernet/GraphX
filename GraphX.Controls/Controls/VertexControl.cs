@@ -311,6 +311,13 @@ namespace GraphX
             }
         }
 
-
+        /// <summary>
+        /// Get vertex center position
+        /// </summary>
+        public Point GetCenterPosition(bool final = false)
+        {
+            var pos = GetPosition();
+            return new Point(pos.X + ActualWidth * .5, pos.Y + ActualHeight * .5);
+        }
     }
 }

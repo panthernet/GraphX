@@ -38,34 +38,25 @@
 
         <DockPanel LastChildFill="False" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="3">
             <TextBlock Text="Select mode:" HorizontalAlignment="Center" DockPanel.Dock="Top"/>
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel DockPanel.Dock="Top" Orientation="Vertical" HorizontalAlignment="Center">
                 <StackPanel.Resources>
                     <Style TargetType="ToggleButton" BasedOn="{StaticResource toggleButtonModernStyle}">
-                        <Setter Property="Margin" Value="1"/>
-                        <Setter Property="Width" Value="35"/>
-                        <Setter Property="Height" Value="35"/>
+                        <Setter Property="Margin" Value="2"/>
+                        <Setter Property="Width" Value="45"/>
+                        <Setter Property="Height" Value="45"/>
                     </Style>                     
                 </StackPanel.Resources>
-                <ToggleButton Name="butSelect" ToolTip="Selection mode" x:FieldModifier="private">
+                <ToggleButton Name="butSelect" ToolTip="Selection mode: drag vertices" x:FieldModifier="private">
                     <Path  Stretch="Uniform" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}, Path=Foreground}" Data="F1 M 29,18L 52.25,41.1667L 43.0865,42.6585L 50.817,56.6949L 43.827,60.4115L 36,46.25L 29,53.25L 29,18 Z "/>
                 </ToggleButton>
-                <ToggleButton Name="butEdit"  ToolTip="Edit mode" x:FieldModifier="private">
+                <ToggleButton Name="butEdit"  ToolTip="Edit mode: click to place vertices, click vertices to add edges" x:FieldModifier="private">
                     <Path Stretch="Uniform" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}, Path=Foreground}" Data="F1 M 20.5833,55.4167L 49.0833,55.4167L 45.9167,52.25L 25.3333,52.25L 31.6667,49.0833L 25.3333,42.75L 22.1667,49.875C 22.1667,49.875 15.8333,55.4167 20.5833,55.4167 Z M 36.4166,47.5L 26.9166,38L 26.9166,41.1667L 33.25,47.5L 36.4166,47.5 Z M 28.8958,37.6042L 36.8125,45.5209C 38.3958,47.1042 42.75,42.75 42.75,42.75L 31.6666,31.6667C 26.9166,36.4167 28.8958,37.6042 28.8958,37.6042 Z M 44.3333,41.1667L 65.6868,16.8593C 63.2289,13.6452 60.224,10.8717 56.8112,8.67772L 33.25,30.0834L 44.3333,41.1667 Z "/>
                 </ToggleButton>
-                <ToggleButton Name="butDelete" ToolTip="Delete mode" x:FieldModifier="private">
+                <ToggleButton Name="butDelete" ToolTip="Delete mode: click vertices and edges to delete them" x:FieldModifier="private">
                     <Path  Stretch="Uniform" Fill="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}, Path=Foreground}" Data="F1 M 56.0143,57L 45.683,57L 39.0246,44.6245C 38.7758,44.1665 38.5156,43.3183 38.2442,42.0799L 38.1339,42.0799C 38.0095,42.6623 37.7127,43.5473 37.2433,44.7348L 30.5594,57L 20.1857,57L 32.5018,38L 21.2714,19L 31.8487,19L 37.3621,30.3915C 37.7918,31.2963 38.1763,32.365 38.5156,33.5977L 38.6259,33.5977C 38.8408,32.857 39.2394,31.7543 39.8219,30.2897L 45.8951,19L 55.4714,19L 44.0969,37.8388L 56.0143,57 Z "/>
                 </ToggleButton>
             </StackPanel>
-            <GroupBox Header="Vertices" Margin="3" DockPanel.Dock="Top">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Margin="3" ToolTip="Add random vertex" Name="addVertexButton" Height="50" BorderBrush="{DynamicResource ButtonBorder}">
-                        <Path Width="36.6666" Height="36.6667" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 26.9167,38L 31.6667,38L 31.6667,45.9167L 39.5833,45.9167L 39.5833,50.6667L 31.6667,50.6667L 31.6667,58.5833L 26.9167,58.5833L 26.9167,50.6667L 19,50.6667L 19,45.9167L 26.9167,45.9167L 26.9167,38 Z M 38,19C 43.5417,19 45.9167,22.1667 45.1174,28.8134C 45.8315,29.2229 46.3125,29.9928 46.3125,30.875C 46.3125,31.9545 45.5923,32.8658 44.6061,33.1546C 44.1941,34.623 43.5543,35.9229 42.75,36.9628L 42.75,41.9583C 45.3889,42.4861 47.5,42.75 50.6667,44.3333C 53.8333,45.9167 54.8889,47.3681 57,49.4792L 57,57L 33.25,57L 33.25,52.25L 41.1667,52.25L 41.1666,44.3333L 33.25,44.3333L 33.25,36.9628L 33.25,36.4167L 32.8586,36.4167C 32.237,35.4811 31.7366,34.3762 31.3939,33.1546C 30.4077,32.8658 29.6875,31.9545 29.6875,30.875C 29.6875,29.9928 30.1685,29.2229 30.8826,28.8134C 30.0833,22.1667 32.4583,19 38,19 Z M 19,57L 19,52.25L 25.3333,52.25L 25.3333,57L 19,57 Z "/>
-                    </Button>
-                    <Button Margin="3" ToolTip="Remove selected vertices" Name="addEdgeButton" Height="50" BorderBrush="{DynamicResource ButtonBorder}">
-                        <Path Width="36.6666" Height="36.6667" Stretch="Fill" Fill="{DynamicResource ButtonText}" Data="F1 M 23,55L 18,55L 18,50L 21,50L 53,24L 53,21L 58,21L 58,26L 55,26L 23,52L 23,55 Z M 54,22L 54,25L 57,25L 57,22L 54,22 Z M 19,51L 19,54L 22,54L 22,51L 19,51 Z "/>
-                    </Button>
-                </StackPanel>
-            </GroupBox>
+
         </DockPanel>
     </Grid>
 </UserControl>

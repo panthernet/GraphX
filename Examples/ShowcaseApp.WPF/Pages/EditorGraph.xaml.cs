@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
 using GraphX.Controls;
 using ShowcaseApp.WPF.Models;
-using Rect = GraphX.Measure.Rect;
 
 namespace ShowcaseApp.WPF.Pages
 {
     /// <summary>
     /// Interaction logic for DynamicGraph.xaml
     /// </summary>
-    public partial class EditorGraph
+    public partial class EditorGraph: IDisposable
     {
         /// <summary>
         /// tmp collection to speedup selected vertices search
@@ -22,7 +21,7 @@ namespace ShowcaseApp.WPF.Pages
 
         private EditorOperationMode _opMode = EditorOperationMode.Select;
         private VertexControl _ecFrom;
-
+        private EditorObjectManager _editorManager;
 
         public EditorGraph()
         {
@@ -50,6 +49,7 @@ namespace ShowcaseApp.WPF.Pages
             zoomCtrl.Zoom = 3;
             zoomCtrl.MinZoom = .5;
             zoomCtrl.MaxZoom = 50;
+            zoomCtrl.ZoomDeltaMultiplier = 25;
             zoomCtrl.MouseDown += zoomCtrl_MouseDown;
             var tb = new TextBlock() {Text = "AAAA"};
             graphArea.AddCustomChildControl(tb);
@@ -67,6 +67,7 @@ namespace ShowcaseApp.WPF.Pages
 
             butSelect.IsChecked = true;
 
+            _editorManager = new EditorObjectManager(graphArea, zoomCtrl);
         }
 
         void graphArea_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
@@ -82,8 +83,12 @@ namespace ShowcaseApp.WPF.Pages
         {
             //create vertices and edges only in Edit mode
             if(_opMode != EditorOperationMode.Edit) return;
-            if(e.LeftButton == MouseButtonState.Pressed)
-                CreateVertexControl(zoomCtrl.TranslatePoint(e.GetPosition(zoomCtrl), graphArea));
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                var vc = CreateVertexControl(zoomCtrl.TranslatePoint(e.GetPosition(zoomCtrl), graphArea));
+                if(_ecFrom != null)
+                    CreateEdgeControl(vc);
+            }
         }
 
 
@@ -118,7 +123,7 @@ namespace ShowcaseApp.WPF.Pages
             }
         }
 
-        private void CreateVertexControl(Point position)
+        private VertexControl CreateVertexControl(Point position)
         {
             var data = new DataVertex("Vertex " + (graphArea.VertexList.Count + 1));
             graphArea.LogicCore.Graph.AddVertex(data);
@@ -126,12 +131,14 @@ namespace ShowcaseApp.WPF.Pages
             graphArea.AddVertex(data, vc);
             GraphAreaBase.SetX(vc, position.X, true);
             GraphAreaBase.SetY(vc, position.Y, true);
+            return vc;
         }
 
         private void CreateEdgeControl(VertexControl vc)
         {
             if(_ecFrom == null)
             {
+                _editorManager.CreateVirtualEdge(vc, vc.GetPosition());
                 _ecFrom = vc;
                 HighlightBehaviour.SetHighlighted(_ecFrom, true);
                 return;
@@ -145,6 +152,7 @@ namespace ShowcaseApp.WPF.Pages
 
             HighlightBehaviour.SetHighlighted(_ecFrom, false);
             _ecFrom = null;
+            _editorManager.DestroyVirtualEdge();
         }
 
    /*     #region Manual edge drawing
@@ -389,6 +397,15 @@ namespace ShowcaseApp.WPF.Pages
         }
         */
 
+
+        public void Dispose()
+        {
+            if(_editorManager != null)
+                _editorManager.Dispose();
+            if(graphArea != null)
+                graphArea.Dispose();
+                        
+        }
     }
 
     public enum EditorMode
