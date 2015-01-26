@@ -1,4 +1,5 @@
-﻿using GraphX.Models;
+﻿using GraphX.Controls.Controls.ZoomControl.SupportClasses;
+using GraphX.Models;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -649,9 +650,9 @@ namespace GraphX.Controls
         public bool UseCtrlForMouseWheel { get; set; }
 
         /// <summary>
-        /// Gets or sets absolute zooming on mouse wheel which doesn't depend on mouse position
+        /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area.
         /// </summary>
-        public bool UseAbsoluteZoomOnMouseWheel { get; set; }
+        public MouseWheelZoomingMode MouseWheelZoomingMode { get; set; }
 
         /// <summary>
         /// Fires when area has been selected using SelectionModifiers 
@@ -841,7 +842,6 @@ namespace GraphX.Controls
         /// </summary>
         private TranslateTransform _translateTransform;
 
-        private int _zoomAnimCount;
         private bool _isZooming;
 
         public Brush ZoomBoxBackground
@@ -874,11 +874,17 @@ namespace GraphX.Controls
             set { SetValue(ZoomBoxProperty, value); }
         }
 
+        /// <summary>
+        /// Gets origo (area center) position
+        /// </summary>
         public Point OrigoPosition
         {
             get { return new Point(ActualWidth / 2, ActualHeight / 2); }
         }
 
+        /// <summary>
+        /// Gets or sets translation value for X property
+        /// </summary>
         public double TranslateX
         {
             get 
@@ -893,6 +899,9 @@ namespace GraphX.Controls
             }
         }
 
+        /// <summary>
+        /// Gets or sets translation value for Y property
+        /// </summary>
         public double TranslateY
         {
             get {
@@ -906,18 +915,27 @@ namespace GraphX.Controls
             }
         }
 
+        /// <summary>
+        /// Gets or sets animation length
+        /// </summary>
         public TimeSpan AnimationLength
         {
             get { return (TimeSpan)GetValue(AnimationLengthProperty); }
             set { SetValue(AnimationLengthProperty, value); }
         }
 
+        /// <summary>
+        /// Minimum zoom distance (Zoom out)
+        /// </summary>
         public double MinZoom
         {
             get { return (double)GetValue(MinZoomProperty); }
             set { SetValue(MinZoomProperty, value); }
         }
 
+        /// <summary>
+        /// Maximum zoom distance (Zoom in)
+        /// </summary>
         public double MaxZoom
         {
             get { return (double)GetValue(MaxZoomProperty); }
@@ -936,6 +954,9 @@ namespace GraphX.Controls
             set { SetValue(ZoomDeltaMultiplierProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets current zoom value
+        /// </summary>
         public double Zoom
         {
             get { return (double)GetValue(ZoomProperty); }
@@ -1056,7 +1077,16 @@ namespace GraphX.Controls
                 CommandBindings.Add(binding);
 
                 AddHandler(SizeChangedEvent, new SizeChangedEventHandler(OnSizeChanged), true);
+
+                Loaded += ZoomControl_Loaded;
             }
+        }
+
+        void ZoomControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var zoom = Zoom;
+            BeginAnimation(ZoomProperty, null);
+            SetValue(ZoomProperty,zoom);
         }
 
         #region ContentChanged
@@ -1113,14 +1143,19 @@ namespace GraphX.Controls
             if (!handle) return;
 
             e.Handled = true;
-            var origoPosition = new Point(ActualWidth / 2, ActualHeight / 2);
+            MouseWheelAction(e);
+        }
+
+        private void MouseWheelAction(MouseWheelEventArgs e)
+        {
+            var origoPosition = OrigoPosition;
             var mousePosition = e.GetPosition(this);
 
             DoZoom(
                 Math.Max(1 / MaxZoomDelta, Math.Min(MaxZoomDelta, e.Delta / 10000.0 * ZoomDeltaMultiplier + 1)),
                 origoPosition,
-                UseAbsoluteZoomOnMouseWheel ? origoPosition : mousePosition,
-                UseAbsoluteZoomOnMouseWheel ? origoPosition : mousePosition);
+                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
+                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition);
         }
 
         private void ZoomControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -1273,21 +1308,26 @@ namespace GraphX.Controls
             if (dp == ZoomProperty)
             {
                 _zoomAnimCount++;
-                animation.Completed += (s, args) =>
-                                           {
-                                               _zoomAnimCount--;
-                                               if (_zoomAnimCount > 0)
-                                                   return;
-                                               var zoom = Zoom;
-                                               BeginAnimation(ZoomProperty, null);
-                                               SetValue(ZoomProperty, zoom);
-                                               _isZooming = false;
-                                               UpdateViewport();
-                                               OnZoomAnimationCompleted();
-                                           };
+                animation.Completed += ZoomCompleted;
             }
             BeginAnimation(dp, animation, HandoffBehavior.Compose);
         }
+
+        private int _zoomAnimCount;
+
+        void ZoomCompleted(object sender, EventArgs e)
+        {
+            _zoomAnimCount--;
+            if (_zoomAnimCount > 0)
+                return;
+            var zoom = Zoom;          
+            BeginAnimation(ZoomProperty, null);
+            SetValue(ZoomProperty, zoom);
+            _isZooming = false;
+            UpdateViewport();
+            OnZoomAnimationCompleted();
+        }
+
         #endregion
 
         /// <summary>

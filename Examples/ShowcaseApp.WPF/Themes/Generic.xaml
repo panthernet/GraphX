@@ -2,6 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:WindowGlows">
 
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/Converters.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style TargetType="{x:Type local:GlowWindow}">
         <Setter Property="Template">
             <Setter.Value>
@@ -22,5 +27,47 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     
+    <Style TargetType="ToggleButton" x:Key="toggleButtonModernStyle">
+        <Setter Property="Background" Value="{DynamicResource ButtonBackground}"></Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorder}"></Setter>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"></Setter>
+
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
+                        <ContentPresenter Margin="1" TextBlock.Foreground="{TemplateBinding Foreground}">
+                            <ContentPresenter.Resources>
+                                <Style TargetType="Path">
+                                    <Setter Property="Fill" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Foreground, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></Setter>
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Button.Background" Value="{DynamicResource ButtonBackgroundHover}"></Setter>
+                <Setter Property="Button.BorderBrush" Value="{DynamicResource ButtonBorderHover}"></Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Button.Background" Value="{DynamicResource ButtonBackgroundPressed}"></Setter>
+                <Setter Property="Button.BorderBrush" Value="{DynamicResource ButtonBorderPressed}"></Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="true">
+                <Setter Property="Button.Background" Value="{DynamicResource ButtonBackgroundPressed}"></Setter>
+                <Setter Property="Button.BorderBrush" Value="{DynamicResource ButtonBorderPressed}"></Setter>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Button.Foreground" Value="{DynamicResource ButtonTextDisabled}"></Setter>
+                <Setter Property="Button.BorderBrush" Value="{DynamicResource ModernButtonBorderDisabled}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

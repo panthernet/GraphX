@@ -94,12 +94,14 @@
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\ITrackableContent.cs" />
     <Compile Include="Controls\VertexLabelControl.cs" />
+    <Compile Include="Controls\ZoomControl\Converters\GeometryToPathGeometryConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\VisibilityToBoolConverter.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventArgs.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventHandler.cs" />
     <Compile Include="Controls\ZoomControl\Helpers\DoubleHelper.cs" />
     <Compile Include="Controls\ZoomControl\Helpers\PointHelper.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\MouseWheelZoomingMode.cs" />
     <Compile Include="Controls\ZoomControl\ViewFinderDisplay.cs" />
     <Compile Include="Controls\ZoomControl\Helpers\VisualTreeHelperEx.cs" />
     <Compile Include="CustomHelper.cs" />

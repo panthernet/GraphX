@@ -31,7 +31,7 @@
         <Setter Property="Background" Value="{StaticResource NormalBrush}"/>
         <Setter Property="Padding" Value="10,5,10,5"/>
         <Setter Property="BorderBrush" Value="{StaticResource NormalBorderBrush}"/>
-        <Setter Property="BorderThickness" Value="3"/>
+        <Setter Property="BorderThickness" Value="1"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -54,17 +54,7 @@
                         <Border x:Name="BackgroundOver_Highlight" Margin="1" BorderThickness="1,0,1,1" CornerRadius="5" Opacity="0" BorderBrush="{DynamicResource MouseOverHighlightBrush}"/>
 
                         <Grid UseLayoutRounding="True" SnapsToDevicePixels="True">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Image Source="{Binding PersonImage}" Margin="3"  Width="60" Stretch="UniformToFill" Grid.RowSpan="2"/>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontWeight="Bold" Foreground="Black" Grid.Column="1" Grid.Row="0" Margin="3" MinWidth="120"/>
-                            <TextBlock Text="{Binding Profession}" TextAlignment="Center" FontStyle="Italic" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3"/>
+                            <TextBlock Text="{Binding Text}" TextAlignment="Center" FontStyle="Italic" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Grid.Column="1" Grid.Row="1" Margin="3"/>
                         </Grid>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -92,7 +82,7 @@
         <Style.Triggers>
             <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
                 <Setter Property="BorderBrush" Value="Gold"/>
-                <Setter Property="BorderThickness" Value="7"/>
+                <Setter Property="BorderThickness" Value="2"/>
             </Trigger>
         </Style.Triggers>
 

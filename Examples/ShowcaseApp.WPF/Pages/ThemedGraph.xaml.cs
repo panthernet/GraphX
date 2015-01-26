@@ -16,6 +16,8 @@ namespace ShowcaseApp.WPF.Pages
     /// </summary>
     public partial class ThemedGraph : INotifyPropertyChanged
     {
+       // private ZoomControl tg_zoomctrl = new ZoomControl();
+
         public ThemedGraph()
         {
             InitializeComponent();

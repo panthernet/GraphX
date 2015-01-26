@@ -1,4 +1,12 @@
-﻿RELEASE 2.1.7
+﻿RELEASE 2.1.8
++ Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
++ Fixed annoying data binding error in ZoomControl slider binding [METRO, WPF]
++ Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
+
+!Breaking changes
++ Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]
+
+RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.
 
 + Added some new exceptions for GraphArea on invalid or insufficient data [WPF,METRO]

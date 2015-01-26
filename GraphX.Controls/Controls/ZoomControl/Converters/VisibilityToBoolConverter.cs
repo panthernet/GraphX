@@ -21,6 +21,8 @@ using System.Windows.Data;
 
 namespace GraphX.Converters
 {
+
+
   public class VisibilityToBoolConverter : IValueConverter
   {
     #region Inverted Property

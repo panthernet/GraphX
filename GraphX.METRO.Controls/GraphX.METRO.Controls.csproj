@@ -145,6 +145,7 @@
     <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventArgs.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\AreaSelectedEventHandler.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\ContentSizeChangedHandler.cs" />
+    <Compile Include="Controls\ZoomControl\SupportClasses\MouseWheelZoomingMode.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomControl\SupportClasses\ZoomViewModifierMode.cs" />
     <Compile Include="Controls\ZoomControl\ZoomContentPresenter.cs" />

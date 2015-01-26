@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using GraphX;
 using GraphX.Controls;
-using GraphX.Models;
 using ShowcaseApp.WPF.Models;
+using Rect = GraphX.Measure.Rect;
 
 namespace ShowcaseApp.WPF.Pages
 {
@@ -22,13 +20,16 @@ namespace ShowcaseApp.WPF.Pages
         /// </summary>
         private readonly List<VertexControl> _selectedVertices = new List<VertexControl>();
 
+        private EditorOperationMode _opMode = EditorOperationMode.Select;
+        private VertexControl _ecFrom;
+
+
         public EditorGraph()
         {
             InitializeComponent();
             var dgLogic = new LogicCoreExample();
             graphArea.LogicCore = dgLogic;
-            graphArea.SetVerticesDrag(true);
-
+            graphArea.VertexSelected += graphArea_VertexSelected;
            // addVertexButton.Click += addVertexButton_Click;
            // addEdgeButton.Click += addEdgeButton_Click;
 
@@ -36,15 +37,114 @@ namespace ShowcaseApp.WPF.Pages
             dgLogic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
             dgLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             dgLogic.EdgeCurvingEnabled = true;
+            
 
             //graphArea.MoveAnimation = AnimationFactory.CreateMoveAnimation(MoveAnimation.Move, TimeSpan.FromSeconds(0.5));
             //graphArea.MoveAnimation.Completed += MoveAnimation_Completed;
             //graphArea.VertexSelected += dg_Area_VertexSelected;
             
+            
 
             zoomCtrl.IsAnimationDisabled = true;
             ZoomControl.SetViewFinderVisibility(zoomCtrl, Visibility.Visible);
-        
+            zoomCtrl.Zoom = 3;
+            zoomCtrl.MinZoom = .5;
+            zoomCtrl.MaxZoom = 50;
+            zoomCtrl.MouseDown += zoomCtrl_MouseDown;
+            var tb = new TextBlock() {Text = "AAAA"};
+            graphArea.AddCustomChildControl(tb);
+            GraphAreaBase.SetX(tb, 0);
+            GraphAreaBase.SetY(tb, 0, true);
+            graphArea.UpdateLayout();
+            zoomCtrl.ZoomToFill();
+            graphArea.RemoveCustomChildControl(tb);
+
+            //zoomCtrl.ZoomToContent(new System.Windows.Rect(0,0, 500, 500));
+
+            butDelete.Checked += ToolbarButton_Checked;
+            butSelect.Checked += ToolbarButton_Checked;
+            butEdit.Checked += ToolbarButton_Checked;
+
+            butSelect.IsChecked = true;
+
+        }
+
+        void graphArea_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
+        {
+             if(args.MouseArgs.LeftButton == MouseButtonState.Pressed && _opMode == EditorOperationMode.Edit)
+             {
+                 CreateEdgeControl(args.VertexControl);
+                 return;
+             }
+        }
+
+        void zoomCtrl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //create vertices and edges only in Edit mode
+            if(_opMode != EditorOperationMode.Edit) return;
+            if(e.LeftButton == MouseButtonState.Pressed)
+                CreateVertexControl(zoomCtrl.TranslatePoint(e.GetPosition(zoomCtrl), graphArea));
+        }
+
+
+        void ToolbarButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if(butDelete.IsChecked == true && sender == butDelete)
+            {
+                butEdit.IsChecked = false;
+                butSelect.IsChecked = false;
+                zoomCtrl.Cursor = Cursors.Help;
+                _opMode = EditorOperationMode.Delete;
+                graphArea.SetVerticesDrag(false);
+                return;
+            }
+            if (butEdit.IsChecked == true && sender == butEdit)
+            {
+                butDelete.IsChecked = false;
+                butSelect.IsChecked = false;
+                zoomCtrl.Cursor = Cursors.Pen;
+                _opMode = EditorOperationMode.Edit;
+                graphArea.SetVerticesDrag(false);
+                return;
+            }
+            if (butSelect.IsChecked == true && sender == butSelect)
+            {
+                butEdit.IsChecked = false;
+                butDelete.IsChecked = false;
+                zoomCtrl.Cursor = Cursors.Hand;
+                _opMode = EditorOperationMode.Select;
+                graphArea.SetVerticesDrag(true, true);
+                return;
+            }
+        }
+
+        private void CreateVertexControl(Point position)
+        {
+            var data = new DataVertex("Vertex " + (graphArea.VertexList.Count + 1));
+            graphArea.LogicCore.Graph.AddVertex(data);
+            var vc = new VertexControl(data);
+            graphArea.AddVertex(data, vc);
+            GraphAreaBase.SetX(vc, position.X, true);
+            GraphAreaBase.SetY(vc, position.Y, true);
+        }
+
+        private void CreateEdgeControl(VertexControl vc)
+        {
+            if(_ecFrom == null)
+            {
+                _ecFrom = vc;
+                HighlightBehaviour.SetHighlighted(_ecFrom, true);
+                return;
+            }
+            if(_ecFrom == vc) return;
+
+            var data = new DataEdge((DataVertex)_ecFrom.Vertex, (DataVertex)vc.Vertex);
+            graphArea.LogicCore.Graph.AddEdge(data);
+            var ec = new EdgeControl(_ecFrom, vc, data);
+            graphArea.InsertEdge(data, ec);
+
+            HighlightBehaviour.SetHighlighted(_ecFrom, false);
+            _ecFrom = null;
         }
 
    /*     #region Manual edge drawing

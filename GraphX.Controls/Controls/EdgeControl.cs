@@ -768,6 +768,7 @@ namespace GraphX
                     GeometryHelper.TryFreeze(arrowFigure);
                     _arrowgeometry.Figures.Add(arrowFigure);
                 }
+                
                 GeometryHelper.TryFreeze(_linegeometry);
                 GeometryHelper.TryFreeze(_arrowgeometry);
 

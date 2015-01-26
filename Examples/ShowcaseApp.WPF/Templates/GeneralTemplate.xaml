@@ -48,6 +48,8 @@
         </Style.Triggers>
     </Style>
 
+    <conv:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
+
     <!-- EDGE CONTROL -->
     <Style TargetType="{x:Type gxl:EdgeControl}">
         <Setter Property="Template">
@@ -60,7 +62,7 @@
                             x:Name="PART_edgePath"/>
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
-                            x:Name="PART_edgeArrowPath"/>
+                            x:Name="PART_edgeArrowPath"/>                      
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

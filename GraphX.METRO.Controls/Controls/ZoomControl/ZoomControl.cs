@@ -7,6 +7,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using GraphX.Controls.Zoom;
+using GraphX.METRO.Controls.Controls.ZoomControl.SupportClasses;
 using GraphX.Models;
 using System;
 using System.ComponentModel;
@@ -54,7 +55,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets or sets absolute zooming on mouse wheel which doesn't depend on mouse position
         /// </summary>
-        public bool UseAbsoluteZoomOnMouseWheel { get; set; }
+        public MouseWheelZoomingMode MouseWheelZoomingMode { get; set; }
 
         /// <summary>
         /// Fires when area has been selected using SelectionModifiers 
@@ -223,7 +224,8 @@ namespace GraphX.Controls
         /// </summary>
         private TranslateTransform _translateTransform;
 
-        private int _zoomAnimCount;
+        private Storyboard _currentZoomAnimation;
+
         private bool _isZooming;
 
         public Brush ZoomBoxBackground
@@ -455,8 +457,14 @@ namespace GraphX.Controls
 
 //                AddHandler( new SizeChangedEventHandler(OnSizeChanged), true);
                 //VF SizeChanged += OnSizeChanged;
+                Loaded += ZoomControl_Loaded;
             }
 
+        }
+
+        void ZoomControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SetValue(ZoomProperty, Zoom);
         }
 
         void ZoomControl_DesignerLoaded(object sender, RoutedEventArgs e)
@@ -522,8 +530,8 @@ namespace GraphX.Controls
             DoZoom(
                 Math.Max(1 / MaxZoomDelta, Math.Min(MaxZoomDelta, e.GetCurrentPoint(this).Properties.MouseWheelDelta / 10000.0 * ZoomDeltaMultiplier + 1)),
                 origoPosition,
-                UseAbsoluteZoomOnMouseWheel ? origoPosition : mousePosition,
-                UseAbsoluteZoomOnMouseWheel ? origoPosition : mousePosition);
+                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
+                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition);
         }
 
         private void ZoomControl_MouseUp(object sender, PointerRoutedEventArgs e)
@@ -681,26 +689,28 @@ namespace GraphX.Controls
             Storyboard.SetTargetProperty(animation, dpName);
             sb.Children.Add(animation);
             */
-            var sb = AnimationHelper.CreateDoubleAnimation(null, toValue, duration.TimeSpan.TotalMilliseconds, dpName, this);
+            _currentZoomAnimation = AnimationHelper.CreateDoubleAnimation(null, toValue, duration.TimeSpan.TotalMilliseconds, dpName, this);
             if (dp == ZoomProperty)
             {
                 _zoomAnimCount++;
-                sb.Completed += (s, args) =>
-                                           {
-                                               _zoomAnimCount--;
-                                               if (_zoomAnimCount > 0)
-                                                   return;
-                                               var zoom = Zoom;
-                                               SetValue(ZoomProperty, zoom);
-                                               _isZooming = false;
-                                               //VF UpdateViewport();
-                                               OnZoomAnimationCompleted();
-                                           };
+                _currentZoomAnimation.Completed += (s, args) =>
+                {
+                    _zoomAnimCount--;
+                    if (_zoomAnimCount > 0 && _currentZoomAnimation != s)
+                        return;
+                    var zoom = Zoom;
+                    SetValue(ZoomProperty, zoom);
+                    _isZooming = false;
+                    //VF UpdateViewport();
+                    OnZoomAnimationCompleted();
+                };
             }
-  
-
-            sb.Begin();
+            _currentZoomAnimation.Begin();
         }
+
+        private int _zoomAnimCount;
+
+
         #endregion
 
         /// <summary>

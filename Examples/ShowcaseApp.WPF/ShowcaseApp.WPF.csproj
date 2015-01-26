@@ -186,6 +186,7 @@
     <Compile Include="Models\ColorModel.cs" />
     <Compile Include="Models\DataItem.cs" />
     <Compile Include="Models\EditorObjectManager.cs" />
+    <Compile Include="Models\EditorOperationMode.cs" />
     <Compile Include="Models\ImageLoader.cs" />
     <Compile Include="Models\ShadowChrome.cs" />
     <Compile Include="Models\ShowcaseHelper.cs" />

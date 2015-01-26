@@ -99,7 +99,7 @@
                                 <CheckBox Name="tg_dragEnabled" Content="Vertex drag enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_dragEnabled_Checked" Unchecked="tg_dragEnabled_Checked"/>
                                 <CheckBox Name="tg_dragMoveEdges" Content="Update edges on move" Margin="3" DockPanel.Dock="Top"/>
 
-                                <CheckBox Name="tg_highlightEnabled" Content="Is feature enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
+                                <CheckBox Name="tg_highlightEnabled" Content="Highlight enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
                                 <TextBlock DockPanel.Dock="Top" Text="Affected control type" HorizontalAlignment="Center"/>
                                 <ComboBox x:Name="tg_highlightType"  Margin="3" SelectionChanged="tg_highlightType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
                                 <TextBlock DockPanel.Dock="Top" Text="Strategy" HorizontalAlignment="Center"/>

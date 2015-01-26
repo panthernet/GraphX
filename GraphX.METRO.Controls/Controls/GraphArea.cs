@@ -215,6 +215,21 @@ namespace GraphX
         #region Edge & vertex controls operations
 
         /// <summary>
+        /// Returns first vertex that is found under specified coordinates
+        /// </summary>
+        /// <param name="position">GraphArea coordinate space position</param>
+        public VertexControl GetVertexControlAt(Point position)
+        {
+            Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            return VertexList.Values.FirstOrDefault(a =>
+            {
+                var pos = a.GetPosition();
+                var rect = new Measure.Rect(pos.X, pos.Y, a.ActualWidth, a.ActualHeight);
+                return rect.Contains(position.ToGraphX());
+            });
+        }
+
+        /// <summary>
         /// Returns all existing VertexControls added into the layout as new Array
         /// </summary>
         public override VertexControl[] GetAllVertexControls() { return _vertexlist.Values.ToArray(); }

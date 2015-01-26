@@ -9,14 +9,14 @@ namespace GraphX.Converters
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            double val = (double)value; 
-            return Math.Log10(val);
+            var val = Math.Log10((double)value);
+            return double.IsNegativeInfinity(val) ? 0 : val;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            double val = (double) value;
-            return Math.Pow(10, val);
+            var val = Math.Pow(10, (double)value);
+            return double.IsNegativeInfinity(val) ? 0 : val;
         }
 
         #endregion
