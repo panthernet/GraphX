@@ -1,3 +1,5 @@
+**THIS BRANCH IS NO LONGER SUPPORTED**. Consider visiting PCL branch.
+
 GraphX for .NET v2
 http://www.panthernet.ru
 
