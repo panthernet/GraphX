@@ -25,8 +25,7 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <ContentPresenter Content="{TemplateBinding Vertex}" />
-                            <Image Source="{Binding DataImage, UpdateSourceTrigger=PropertyChanged}" Margin="3" Grid.Row="1" Width="80" Stretch="UniformToFill"/>
+                            <ContentPresenter Content="{TemplateBinding Vertex}" />                          
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -60,7 +59,7 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
                             x:Name="PART_edgeArrowPath"/>
-                        <gxl:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <gxl:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
