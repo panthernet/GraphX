@@ -26,8 +26,8 @@ Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms
   Library supports following platforms:
   
     * Windows Desktop (WPF & WinForms on Windows XP SP3 and later)
-    * Microsoft Silverlight 4-5 (WIP, only logic core is available)
-    * Windows Metro 8 and later (BETA)
+    * Microsoft Silverlight 5 (WIP, only logic core is available)
+    * Windows Metro 8.1 and later (BETA)
     * Windows Phone 8 (WIP, only logic core is available)
     
   Features:
@@ -49,6 +49,7 @@ Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms
         Optional parallel edges visualization support between vertices
 	Advanced graph vertex features:
 		Easy vertex drag and highlight support including on-the-fly edge routing updates
+		Filtering feature provides selective vertex rendering leaving supplied graph untouched
 		Customizable vertex labels support that allows to set text, positionand angle
 		Support for different vertex math shapes for proper edge connections rendering
 		Support for different vertex and edge animations including the ability to easily create custom animations
