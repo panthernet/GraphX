@@ -17,7 +17,15 @@ namespace GraphX
         /// <summary>
         /// Action that will take place when LogicCore property is changed. Default: None.
         /// </summary>
-        public LogicCoreChangedAction LogicCoreChangeAction { get; set; }
+        public LogicCoreChangedAction LogicCoreChangeAction 
+        {
+            get { return (LogicCoreChangedAction) GetValue(LogicCoreChangeActionProperty); }
+            set { SetValue(LogicCoreChangeActionProperty, value); }
+        }
+
+        public static readonly DependencyProperty LogicCoreChangeActionProperty =
+            DependencyProperty.Register("LogicCoreChangeAction", typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
+
 
         /// <summary>
         /// Gets or sets special mode for WinForms interoperability
