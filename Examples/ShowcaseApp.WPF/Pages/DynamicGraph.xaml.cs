@@ -53,7 +53,7 @@ namespace ShowcaseApp.WPF.Pages
             dg_zoomctrl.DragEnter += dg_Area_DragEnter;
 
             dg_zoomctrl.IsAnimationDisabled = true;
-            ZoomControl.SetViewFinderVisibility(dg_zoomctrl, Visibility.Visible);
+            //ZoomControl.SetViewFinderVisibility(dg_zoomctrl, Visibility.Visible);
 
             dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;

@@ -7,6 +7,7 @@ using GraphX.Models;
 using System;
 using System.Collections.Generic;
 using GraphX.Animations;
+using GraphX.METRO.Controls.Enums;
 using GraphX.Models.Interfaces;
 
 namespace GraphX
@@ -18,9 +19,15 @@ namespace GraphX
         /// </summary>
         public bool AutoAssignMissingDataId { get; set; }
 
+        /// <summary>
+        /// Action that will take place when LogicCore property is changed. Default: None.
+        /// </summary>
+        public LogicCoreChangedAction LogicCoreChangeAction { get; set; }
+
         public GraphAreaBase()
         {
             AutoAssignMissingDataId = true;
+            LogicCoreChangeAction = LogicCoreChangedAction.None;
         }
 
         #region Attached Dependency Property registrations

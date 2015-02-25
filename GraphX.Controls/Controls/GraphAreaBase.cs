@@ -7,11 +7,18 @@ using GraphX.Animations;
 using System.Windows.Input;
 using GraphX.Models.Interfaces;
 using System.ComponentModel;
+using GraphX.Controls.Enums;
 
 namespace GraphX
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
+
+        /// <summary>
+        /// Action that will take place when LogicCore property is changed. Default: None.
+        /// </summary>
+        public LogicCoreChangedAction LogicCoreChangeAction { get; set; }
+
         /// <summary>
         /// Gets or sets special mode for WinForms interoperability
         /// </summary>
@@ -25,6 +32,7 @@ namespace GraphX
         public GraphAreaBase()
         {
             AutoAssignMissingDataId = true;
+            LogicCoreChangeAction = LogicCoreChangedAction.None;
         }
     
         #region Attached Dependency Property registrations

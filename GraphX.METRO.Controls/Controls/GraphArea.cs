@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using GraphX.METRO.Controls.Enums;
 
 
 namespace GraphX
@@ -35,6 +36,26 @@ namespace GraphX
             //automaticaly assign default file service provider 
             if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
                 ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider = new FileServiceProviderMETRO();
+
+            var graph = d as GraphArea<TVertex, TEdge, TGraph>;
+            if (graph == null) return;
+            switch (graph.LogicCoreChangeAction)
+            {
+                case LogicCoreChangedAction.GenerateGraph:
+                    graph.GenerateGraph();
+                    break;
+                case LogicCoreChangedAction.GenerateGraphWithEdges:
+                    graph.GenerateGraph(true);
+                    break;
+                case LogicCoreChangedAction.RelayoutGraph:
+                    graph.RelayoutGraph();
+                    break;
+                case LogicCoreChangedAction.RelayoutGraphWithEdges:
+                    graph.RelayoutGraph(true);
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>

@@ -111,6 +111,7 @@
     <Compile Include="Controls\EdgeLabelControl.cs" />
     <Compile Include="Enums\DeleteAnimation.cs" />
     <Compile Include="Enums\EdgeDashStyle.cs" />
+    <Compile Include="Enums\LogicCoreChangedAction.cs" />
     <Compile Include="Enums\MouseOverAnimation.cs" />
     <Compile Include="Enums\MoveAnimation.cs" />
     <Compile Include="Controls\GraphArea.cs" />

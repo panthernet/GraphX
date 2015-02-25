@@ -2,6 +2,7 @@
 + Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
 + Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left [WPF, METRO]
 + Added new showcase example: Templates/Graph editor [WPF]
++ Added new option GraphArea::LogicCoreChangeAction which defines what action will be taken on LogicCore property change. You can rebuild graph now. [WPF, METRO]
 + Fixed annoying data binding error in ZoomControl slider binding [METRO, WPF]
 + Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
 + Fixed ZoomControl::Zoom property bug on empty content window resize [WPF, METRO]

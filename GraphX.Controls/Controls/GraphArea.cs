@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Controls;
+using GraphX.Controls.Enums;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
@@ -31,14 +32,31 @@ namespace GraphX
 
         #region My properties
 
+
         public static readonly DependencyProperty LogicCoreProperty =
             DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null, logic_core_changed));
 
         private static void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //automaticaly assign default file service provider 
-            //if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
-            //    ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider = new FileServiceProviderWpf();
+            var graph = d as GraphArea<TVertex, TEdge, TGraph>;
+            if(graph == null) return;
+            switch(graph.LogicCoreChangeAction)
+            {
+                case LogicCoreChangedAction.GenerateGraph:
+                    graph.GenerateGraph();
+                    break;
+                case LogicCoreChangedAction.GenerateGraphWithEdges:
+                    graph.GenerateGraph(true);
+                    break;
+                case LogicCoreChangedAction.RelayoutGraph:
+                    graph.RelayoutGraph();
+                    break;
+                case LogicCoreChangedAction.RelayoutGraphWithEdges:
+                    graph.RelayoutGraph(true);
+                    break;
+                default:
+                    break;
+            }
         }
 
         /// <summary>

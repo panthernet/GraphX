@@ -2,7 +2,6 @@
 using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using GraphX.Measure;
-using GraphX.Models;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
