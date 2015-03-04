@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Controls;
 using GraphX.Controls.Enums;
+using GraphX.Logic.Models;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
@@ -1367,6 +1368,7 @@ namespace GraphX
             RemoveAllEdges();
             RemoveAllVertices();
 
+
             var data = LogicCore.FileServiceProvider.DeserializeDataFromFile(filename);
 
             if (LogicCore.Graph == null) LogicCore.Graph = Activator.CreateInstance<TGraph>();                
@@ -1404,6 +1406,21 @@ namespace GraphX
             UpdateLayout();
             foreach (var item in EdgesList.Values)
                item.OnApplyTemplate();
+
+            RestoreAlgorithmStorage();
+        }
+
+        private void RestoreAlgorithmStorage()
+        {
+            //if (LogicCore.AlgorithmStorage.Layout == null)
+           // {
+                var vPositions = GetVertexPositions();
+                var vSizeRectangles = GetVertexSizeRectangles();
+                var lay = LogicCore.GenerateLayoutAlgorithm(GetVertexSizes());
+                var or = LogicCore.GenerateOverlapRemovalAlgorithm(vSizeRectangles);
+                var er = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX(), vPositions, vSizeRectangles);
+                LogicCore.CreateNewAlgorithmStorage(lay, or, er);
+           // }
         }
 
         #endregion

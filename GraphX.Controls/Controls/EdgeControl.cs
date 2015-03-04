@@ -25,13 +25,25 @@ namespace GraphX
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source",
                                                                                                typeof(VertexControl),
                                                                                                typeof(EdgeControl),
-                                                                                               new UIPropertyMetadata(null));
+                                                                                               new UIPropertyMetadata(null, OnSourceChanged));
+
+        private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue == null) return;
+            ((EdgeControl)d).ActivateSourceListener();
+        }
 
 
         public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target",
                                                                                                typeof(VertexControl),
                                                                                                typeof(EdgeControl),
-                                                                                               new UIPropertyMetadata(null));
+                                                                                               new UIPropertyMetadata(null, OnTargetChanged));
+
+        private static void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.NewValue == null) return;
+            ((EdgeControl)d).ActivateTargetListener();
+        }
 
         public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register("Edge", typeof(object),
                                                                                              typeof(EdgeControl),
@@ -325,22 +337,9 @@ namespace GraphX
                 foreach (var item in Enum.GetValues(typeof (EventType)).Cast<EventType>())
                     UpdateEventhandling(item);
 
-                if (source != null)
-                {
-                    _sourceTrace = source.EventOptions.PositionChangeNotification;
-                    source.EventOptions.PositionChangeNotification = true;
-                    source.PositionChanged += source_PositionChanged;
-                    _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
-                    _sourceListener.ValueChanged += SourceChanged;
-                }
-                if (target != null)
-                {
-                    _targetTrace = target.EventOptions.PositionChangeNotification;
-                    target.EventOptions.PositionChangeNotification = true;
-                    target.PositionChanged += source_PositionChanged;
-                    _targetListener = new PropertyChangeNotifier(this, TargetProperty);
-                    _targetListener.ValueChanged += TargetChanged;
-                }
+                ActivateSourceListener();
+                ActivateTargetListener();
+
             }
             /*var dpd = DependencyPropertyDescriptor.FromProperty(SourceProperty, typeof(EdgeControl));
             if (dpd != null) dpd.AddValueChanged(this, SourceChanged);
@@ -349,6 +348,35 @@ namespace GraphX
 
             IsSelfLooped = _isSelfLooped;
         }
+
+        private void ActivateSourceListener()
+        {
+            if (Source != null && !_posTracersActivatedS)
+            {
+                _sourceTrace = Source.EventOptions.PositionChangeNotification;
+                Source.EventOptions.PositionChangeNotification = true;
+                Source.PositionChanged += source_PositionChanged;
+                _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
+                _sourceListener.ValueChanged += SourceChanged;
+                _posTracersActivatedS = true;
+            } 
+        }
+
+        private void ActivateTargetListener()
+        {
+            if (Target != null && !_posTracersActivatedT)
+            {
+                _targetTrace = Target.EventOptions.PositionChangeNotification;
+                Target.EventOptions.PositionChangeNotification = true;
+                Target.PositionChanged += source_PositionChanged;
+                _targetListener = new PropertyChangeNotifier(this, TargetProperty);
+                _targetListener.ValueChanged += TargetChanged;
+                _posTracersActivatedT = true;
+            }
+        }
+
+        private bool _posTracersActivatedS;
+        private bool _posTracersActivatedT;
 
         static EdgeControl()
         {

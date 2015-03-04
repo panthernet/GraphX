@@ -41,26 +41,19 @@ namespace GraphX.Logic
 
         public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes)
         {
-            if (ExternalLayoutAlgorithm != null)
-            {
-                var alg = ExternalLayoutAlgorithm;
-                if (alg.NeedVertexSizes) alg.VertexSizes = vertexSizes;
-                return alg;
-            }
-            else return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, null, vertexSizes, DefaultLayoutAlgorithmParams);
+            if (ExternalLayoutAlgorithm == null) return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, null, vertexSizes, DefaultLayoutAlgorithmParams);
+            var alg = ExternalLayoutAlgorithm;
+            if (alg.NeedVertexSizes) alg.VertexSizes = vertexSizes;
+            return alg;
         }
 
-        public IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size DesiredSize)
+        public IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size desiredSize, IDictionary<TVertex, Point> positions = null, IDictionary<TVertex, Rect> rectangles = null)
         {
             if (ExternalEdgeRoutingAlgorithm == null && DefaultEdgeRoutingAlgorithm != EdgeRoutingAlgorithmTypeEnum.None)
             {
-                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(DesiredSize), Graph, null, null, DefaultEdgeRoutingAlgorithmParams);
+                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(desiredSize), Graph, positions, rectangles, DefaultEdgeRoutingAlgorithmParams);
             }
-            else if (ExternalEdgeRoutingAlgorithm != null)
-            {
-                return ExternalEdgeRoutingAlgorithm;
-            }
-            else return null;
+            return ExternalEdgeRoutingAlgorithm;
         }
     }
 }

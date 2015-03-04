@@ -39,6 +39,7 @@ namespace ShowcaseApp.WPF.Pages
             gg_Area.GenerateGraphFinished += gg_Area_GenerateGraphFinished;
             ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             ggLogic.EdgeCurvingEnabled = true;
+            
 
 
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
@@ -134,7 +135,7 @@ namespace ShowcaseApp.WPF.Pages
             try
             {
                 gg_Area.DeserializeFromFile(dlg.FileName);
-                gg_Area.SetVerticesDrag(true);
+                gg_Area.SetVerticesDrag(true, true);
                 gg_Area.UpdateAllEdges();
                 gg_zoomctrl.ZoomToFill();
             }

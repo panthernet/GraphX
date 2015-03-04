@@ -7,6 +7,7 @@
 + Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
 + Fixed ZoomControl::Zoom property bug on empty content window resize [WPF, METRO]
 + Fixed dynamic graph showcase example first vertex auto zooming onto [WPF]
++ Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs
 + Optimized showcase app media files
 
 !Breaking changes

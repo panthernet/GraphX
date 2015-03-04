@@ -1366,6 +1366,19 @@ namespace GraphX
             //TODO
             //foreach (var item in EdgesList.Values)
             //   item.OnApplyTemplate();
+
+            RestoreAlgorithmStorage();
+
+        }
+
+        private void RestoreAlgorithmStorage()
+        {
+            var vPositions = GetVertexPositions();
+            var vSizeRectangles = GetVertexSizeRectangles();
+            var lay = LogicCore.GenerateLayoutAlgorithm(GetVertexSizes());
+            var or = LogicCore.GenerateOverlapRemovalAlgorithm(vSizeRectangles);
+            var er = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX(), vPositions, vSizeRectangles);
+            LogicCore.CreateNewAlgorithmStorage(lay, or, er);
         }
 
         #endregion
