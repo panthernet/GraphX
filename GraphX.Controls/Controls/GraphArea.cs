@@ -1024,7 +1024,7 @@ namespace GraphX
                 if (item.Source == null || item.Target == null) continue;
                 if (!_vertexlist.ContainsKey(item.Source) || !_vertexlist.ContainsKey(item.Target)) continue;
                 var edgectrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], _vertexlist[item.Target],
-                                                                    item, false, true, defaultVisibility);
+                                                                    item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true, defaultVisibility);
                 InternalInsertEdge(item, edgectrl);
                 //setup path
                 if (_svShowEdgeLabels == true)
@@ -1213,7 +1213,7 @@ namespace GraphX
                 foreach (var item in inlist)
                 {
 					if(gotSelfLoop) continue;
-                    var ctrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], vc, item, false, true,
+                    var ctrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], vc, item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true,
                                                                      defaultVisibility);                   
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
@@ -1222,8 +1222,8 @@ namespace GraphX
             if (outlist != null)
                 foreach (var item in outlist)
                 {
-					if(gotSelfLoop) continue;                    
-                    var ctrl = ControlFactory.CreateEdgeControl(vc, _vertexlist[item.Target], item, false, true,
+					if(gotSelfLoop) continue;
+                    var ctrl = ControlFactory.CreateEdgeControl(vc, _vertexlist[item.Target], item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true,
                                                  defaultVisibility);
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();

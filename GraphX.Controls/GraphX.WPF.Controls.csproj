@@ -92,6 +92,7 @@
     <Compile Include="Animations\MoveSimpleAnimation.cs" />
     <Compile Include="Behaviours\DragBehaviour.cs" />
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
+    <Compile Include="Controls\EdgePointerImage.cs" />
     <Compile Include="Controls\ITrackableContent.cs" />
     <Compile Include="Controls\VertexLabelControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\GeometryToPathGeometryConverter.cs" />

@@ -57,10 +57,11 @@
                           StrokeThickness="2" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <Path Stroke="{TemplateBinding Foreground}"
+                        <!--<Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
-                            x:Name="PART_edgeArrowPath"/>
+                            x:Name="PART_edgeArrowPath"/>-->
                         <gxl:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />
+
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

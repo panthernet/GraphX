@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using GraphX.METRO.Controls;
+using GraphX.METRO.Controls.Controls;
 
 namespace GraphX.Controls
 {
@@ -229,6 +230,7 @@ namespace GraphX.Controls
         /// Templated Path object to operate with routed path arrow head
         /// </summary>
         private Path _arrowPathObject;
+
         /// <summary>
         /// Templated label control to display labels
         /// </summary>
@@ -519,6 +521,7 @@ namespace GraphX.Controls
                 {
                     _arrowPathObject.Data = _arrowgeometry;
                 }
+
                 _edgeLabelControl = this.FindDescendantByName("PART_edgeLabel") as EdgeLabelControl;
                 //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
                 UpdateEdge();
@@ -548,6 +551,8 @@ namespace GraphX.Controls
 
                 if (_arrowPathObject != null)
                     _arrowPathObject.Data = ShowArrows ? _arrowgeometry : null;
+                //if (_endEdgePointerImage != null)
+                //    _endEdgePointerImage.Update();
                 if (_edgeLabelControl != null)
                     _edgeLabelControl.Visibility = ShowLabel ? Visibility.Visible : Visibility.Collapsed;
             }
@@ -709,6 +714,8 @@ namespace GraphX.Controls
                         var cLast = oPolyLineSegment.Points.Last();
                         var cPrev = oPolyLineSegment.Points.Count == 1 ? oPolyLineSegment.Points.Last() : oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2];
                         arrowFigure = GeometryHelper.GenerateOldArrow(cPrev, cLast);
+                        //if(_endEdgePointerImage != null)
+                        //    _endEdgePointerImage.Update(cLast);
                         //freeze and create resulting geometry
                     }
                     else

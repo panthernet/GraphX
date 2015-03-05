@@ -18,6 +18,8 @@ namespace GraphX
     [TemplatePart(Name = "PART_edgePath", Type = typeof(Path))]
     [TemplatePart(Name = "PART_edgeArrowPath", Type = typeof(Path))]
     [TemplatePart(Name = "PART_edgeLabel", Type = typeof(EdgeLabelControl))]
+    [TemplatePart(Name = "PART_EdgePointerImageForSource", Type = typeof(EdgePointerImage))]
+    [TemplatePart(Name = "PART_EdgePointerImageForTarget", Type = typeof(EdgePointerImage))]
     public class EdgeControl : Control, IGraphControl, IDisposable
     {
         #region Dependency Properties
@@ -180,7 +182,17 @@ namespace GraphX
         /// <summary>
         /// Show arrows on the edge ends. Default value is true.
         /// </summary>
-        public bool ShowArrows { get { return _showarrows; } set { _showarrows = value; UpdateEdge(false); } }
+        public bool ShowArrows { 
+            get { return _showarrows; } 
+            set { 
+                _showarrows = value;
+                if (_edgePointerImageForSource != null && !IsSelfLooped)
+                    _edgePointerImageForSource.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                if (_edgePointerImageForTarget != null && !IsSelfLooped)
+                    _edgePointerImageForTarget.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                UpdateEdge(false); 
+            } 
+        }
         private bool _showarrows;
 
 
@@ -252,6 +264,8 @@ namespace GraphX
         /// </summary>
         private EdgeLabelControl _edgeLabelControl;
 
+        private EdgePointerImage _edgePointerImageForSource;
+        private EdgePointerImage _edgePointerImageForTarget;
 
         public EdgeEventOptions EventOptions { get; private set; }
 
@@ -316,6 +330,8 @@ namespace GraphX
             _arrowgeometry = null;
             _linePathObject = null;
             _arrowPathObject = null;
+            _edgePointerImageForSource = null;
+            _edgePointerImageForTarget = null;
             if (EventOptions != null)
                 EventOptions.Clean();
         }
@@ -580,8 +596,11 @@ namespace GraphX
             _linePathObject.Data = _linegeometry;
             _arrowPathObject = Template.FindName("PART_edgeArrowPath", this) as Path;
             if (_arrowPathObject == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeArrowPath' Path object to draw!");
-            else _arrowPathObject.Data = _arrowgeometry;
-            
+            else if(ShowArrows) _arrowPathObject.Data = _arrowgeometry;
+
+            _edgePointerImageForSource = Template.FindName("PART_EdgePointerImageForSource", this) as EdgePointerImage;
+            _edgePointerImageForTarget = Template.FindName("PART_EdgePointerImageForTarget", this) as EdgePointerImage;
+
             _edgeLabelControl = Template.FindName("PART_edgeLabel", this) as EdgeLabelControl;
             //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
             UpdateEdge();
@@ -724,6 +743,11 @@ namespace GraphX
                     _linegeometry = geo;
                     GeometryHelper.TryFreeze(_arrowgeometry);
                     GeometryHelper.TryFreeze(_linegeometry);
+
+                    if (_edgePointerImageForSource != null)
+                        _edgePointerImageForSource.Visibility = Visibility.Collapsed;
+                    if (_edgePointerImageForTarget != null)
+                        _edgePointerImageForTarget.Visibility = Visibility.Collapsed;
                     return;
                 }
 
@@ -750,7 +774,7 @@ namespace GraphX
                 TargetConnectionPoint = p2;
 
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
-                _arrowgeometry = new PathGeometry(); PathFigure arrowFigure;
+                _arrowgeometry = new PathGeometry(); PathFigure arrowFigure = null;
 
                 //if we have route and route consist of 2 or more points
                 if (RootArea != null && hasRouteInfo)
@@ -769,14 +793,16 @@ namespace GraphX
                         //get two last points of curved path to generate correct arrow
                         var cLast = oPolyLineSegment.Points.Last();
                         var cPrev = oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2];
-                        arrowFigure = GeometryHelper.GenerateOldArrow(cPrev, cLast);
+                        if(_arrowPathObject != null)
+                            arrowFigure = GeometryHelper.GenerateOldArrow(cPrev, cLast);
                         //freeze and create resulting geometry
                         GeometryHelper.TryFreeze(oPolyLineSegment);
                     }
                     else
                     {
                         lineFigure = new PathFigure(p1, new PathSegment[] { new PolyLineSegment(routePoints.ToArray(), true) }, false);
-                        arrowFigure = GeometryHelper.GenerateOldArrow(routePoints[routePoints.Count - 2], p2);
+                        if(_arrowPathObject != null)
+                            arrowFigure = GeometryHelper.GenerateOldArrow(routePoints[routePoints.Count - 2], p2);
                     }
 
                 }
@@ -787,7 +813,8 @@ namespace GraphX
                     // Vector n = new Vector(-v.Y, v.X) * 0.7;
                     //segments[0] = new LineSegment(p2 + v, true);
                     lineFigure = new PathFigure(p1, new PathSegment[] { new LineSegment(p2, true) }, false);
-                    arrowFigure = GeometryHelper.GenerateOldArrow(p1, p2);
+                    if(_arrowPathObject != null)
+                        arrowFigure = GeometryHelper.GenerateOldArrow(p1, p2);
                 }
                 GeometryHelper.TryFreeze(lineFigure);
                 (_linegeometry as PathGeometry).Figures.Add(lineFigure);
@@ -796,6 +823,13 @@ namespace GraphX
                     GeometryHelper.TryFreeze(arrowFigure);
                     _arrowgeometry.Figures.Add(arrowFigure);
                 }
+
+
+                if (_edgePointerImageForSource != null)
+                    _edgePointerImageForSource.Update(SourceConnectionPoint);
+                if (_edgePointerImageForTarget != null)
+                    _edgePointerImageForTarget.Update(TargetConnectionPoint);
+
                 
                 GeometryHelper.TryFreeze(_linegeometry);
                 GeometryHelper.TryFreeze(_arrowgeometry);

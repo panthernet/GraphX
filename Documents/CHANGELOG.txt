@@ -1,4 +1,9 @@
 ﻿RELEASE 2.1.8
++ Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF]
+	1. EdgePointerImage class with name "PART_EdgePointerImageForSource" - marks edge source pointer (new!)
+	2. EdgePointerImage class with name "PART_EdgePointerImageForTarget" - marks edge target pointer
+	Look in GeneralTemplate.xaml of ShowcaseApp.WPF project.
+	
 + Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
 + Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left [WPF, METRO]
 + Added new showcase example: Templates/Graph editor [WPF]
