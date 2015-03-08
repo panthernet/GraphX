@@ -8,6 +8,7 @@ using System.Windows.Input;
 using GraphX.Models.Interfaces;
 using System.ComponentModel;
 using GraphX.Controls.Enums;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX
 {

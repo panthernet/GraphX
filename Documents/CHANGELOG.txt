@@ -3,7 +3,8 @@
 	1. EdgePointerImage class with name "PART_EdgePointerImageForSource" - marks edge source pointer (new!)
 	2. EdgePointerImage class with name "PART_EdgePointerImageForTarget" - marks edge target pointer
 	Look in GeneralTemplate.xaml of ShowcaseApp.WPF project.
-	
+	Added rotation support for image based edge pointers
++ Added extensibility to corresponding controls by inheriting from IEdgeLabelControl and IEdgePointer [WPF]
 + Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
 + Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left [WPF, METRO]
 + Added new showcase example: Templates/Graph editor [WPF]
@@ -12,12 +13,13 @@
 + Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
 + Fixed ZoomControl::Zoom property bug on empty content window resize [WPF, METRO]
 + Fixed dynamic graph showcase example first vertex auto zooming onto [WPF]
-+ Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs
++ Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs [WPF, METRO]
 + Optimized showcase app media files
 
 !Breaking changes
 + Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]
 + Expanded EdgeControl event args with mouse and keyboard modifiers [WPF]
++ Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace
 
 RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.

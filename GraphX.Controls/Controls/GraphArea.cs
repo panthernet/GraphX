@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using System.Windows.Controls;
 using GraphX.Controls.Enums;
+using GraphX.Controls.Models.Interfaces;
 using GraphX.Logic.Models;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;

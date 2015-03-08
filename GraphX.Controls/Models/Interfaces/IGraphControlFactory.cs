@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 
-namespace GraphX.Controls.Models
+namespace GraphX.Controls.Models.Interfaces
 {
     public interface IGraphControlFactory
     {

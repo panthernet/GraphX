@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX.Controls.Models
 {

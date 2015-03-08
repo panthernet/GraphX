@@ -3,6 +3,17 @@ using System.Windows;
 
 namespace GraphX
 {
+    public static class DoubleExtensions
+    {
+        /// <summary>
+        /// Convert angle value to degrees
+        /// </summary>
+        public static double ToDegrees(this double value)
+        {
+            return MathHelper.ToDegrees(value);
+        }
+    }
+
     public static class MathHelper
     {
         private const int LEFT  = 1;  /* двоичное 0001 */
@@ -19,6 +30,19 @@ namespace GraphX
             Tangent30Degrees = Math.Tan(D30_DEGREES_IN_RADIANS);
         }
 
+        public static Vector GetDirection(Point from, Point to)
+        {
+            var dir = from - to;
+            dir.Normalize();
+            return dir;
+        }
+
+
+        public static double ToDegrees(double value)
+        {
+            return value * 180 / Math.PI;
+        }
+        
         public static double GetAngleBetweenPoints(Point point1, Point point2)
         {
             return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);

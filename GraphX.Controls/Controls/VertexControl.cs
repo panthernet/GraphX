@@ -5,6 +5,7 @@ using System.Linq;
 using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
+using GraphX.Controls.Models.Interfaces;
 using GraphX.Models;
 
 namespace GraphX

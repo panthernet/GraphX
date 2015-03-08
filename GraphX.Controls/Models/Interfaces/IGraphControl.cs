@@ -1,5 +1,6 @@
 ﻿using System.Windows;
-namespace GraphX
+
+namespace GraphX.Controls.Models.Interfaces
 {
     public interface IGraphControl
     {

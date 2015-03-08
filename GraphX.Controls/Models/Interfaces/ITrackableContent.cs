@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using GraphX.Models;
 
-namespace GraphX
+namespace GraphX.Controls.Models.Interfaces
 {
     /// <summary>
     /// Interface that represents trackable content object

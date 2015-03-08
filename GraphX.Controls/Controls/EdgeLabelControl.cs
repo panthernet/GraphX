@@ -1,17 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX
 {
-    public class EdgeLabelControl : ContentControl    
+    public class EdgeLabelControl : ContentControl, IEdgeLabelControl
     {
+        internal Rect LastKnownRectSize;
 
-       public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
+        #region Common part
+        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(EdgeLabelControl),
                                                                                        new UIPropertyMetadata(0.0));
@@ -30,27 +32,8 @@ namespace GraphX
             }
         }
 
-        public EdgeLabelControl()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this)) return;
-
-            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
-            HorizontalAlignment = HorizontalAlignment.Left;
-            VerticalAlignment = VerticalAlignment.Top;
-        }
-
-        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
-        {
-            //TODO optimize parent call by calling it once from constructor
-            var edgeControl = GetEdgeControl(VisualParent);
-            if(edgeControl == null || !edgeControl.ShowLabel) return;
-            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
-            {
-                UpdateLayout();
-                UpdatePosition();
-            } 
-            else Arrange(LastKnownRectSize);
-        }
+        private EdgeControl _edgeControl;
+        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(VisualParent)); } }
 
         private static EdgeControl GetEdgeControl(DependencyObject parent)
         {
@@ -63,23 +46,58 @@ namespace GraphX
             return null;
         }
 
+        public void Show()
+        {
+            Visibility = Visibility.Visible;
+        }
 
+        public void Hide()
+        {
+            Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        public EdgeLabelControl()
+        {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+
+            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
+            HorizontalAlignment = HorizontalAlignment.Left;
+            VerticalAlignment = VerticalAlignment.Top;
+
+
+        }
+
+        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
+        {
+            //TODO optimize parent call by calling it once from constructor
+            if (EdgeControl == null || !EdgeControl.ShowLabel) return;
+            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            {
+                UpdateLayout();
+                UpdatePosition();
+            } 
+            else Arrange(LastKnownRectSize);
+        }
+
+        
 
         private static double GetLabelDistance(double edgeLength)
         {
             return edgeLength / 2;  // set the label halfway the length of the edge
         }
 
-        internal void UpdatePosition()
+
+        /// <summary>
+        /// Automaticaly update edge label position
+        /// </summary>
+        public void UpdatePosition()
         {
             if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 
-           // if (!IsLoaded)
-           //     return;
-            var edgeControl = GetEdgeControl(VisualParent);
-            if (edgeControl == null)
+            if (EdgeControl == null)
                 return;
-            if (edgeControl.Source == null || edgeControl.Target == null)
+            if (EdgeControl.Source == null || EdgeControl.Target == null)
             {
                 Debug.WriteLine("EdgeLabelControl_LayoutUpdated() -> Got empty edgecontrol!");
                 return;
@@ -98,11 +116,11 @@ namespace GraphX
                 p1 = edgeControl.GetParallelOffset(source, target, edgeControl.SourceOffset);
                 p2 = edgeControl.GetParallelOffset(target, source, edgeControl.TargetOffset);
             }*/
-            var p1 = edgeControl.SourceConnectionPoint.GetValueOrDefault();
-            var p2 = edgeControl.TargetConnectionPoint.GetValueOrDefault();
+            var p1 = EdgeControl.SourceConnectionPoint.GetValueOrDefault();
+            var p2 = EdgeControl.TargetConnectionPoint.GetValueOrDefault();
 
             double edgeLength = 0;
-            var routingInfo = edgeControl.Edge as IRoutingInfo;
+            var routingInfo = EdgeControl.Edge as IRoutingInfo;
             if (routingInfo != null) 
             {
                 var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToWindows();
@@ -157,7 +175,7 @@ namespace GraphX
             double tmpAngle;
             var angleBetweenPoints = tmpAngle = MathHelper.GetAngleBetweenPoints(p1, p2);
             //set angle in degrees
-            if (edgeControl.AlignLabelsToEdges)
+            if (EdgeControl.AlignLabelsToEdges)
             {
                 if (p1.X > p2.X)
                     tmpAngle = MathHelper.GetAngleBetweenPoints(p2, p1);
@@ -165,8 +183,8 @@ namespace GraphX
             }
   
             p.Offset(edgeLength * Math.Cos(angleBetweenPoints), -edgeLength * Math.Sin(angleBetweenPoints));
-            if(edgeControl.AlignLabelsToEdges)
-                p = MathHelper.RotatePoint(new Point(p.X, p.Y - edgeControl.LabelVerticalOffset), p, Angle);
+            if (EdgeControl.AlignLabelsToEdges)
+                p = MathHelper.RotatePoint(new Point(p.X, p.Y - EdgeControl.LabelVerticalOffset), p, Angle);
             //optimized offset here
             /*float x = 12.5f, y = 12.5f;
             double sin = Math.Sin(angleBetweenPoints);
@@ -177,7 +195,25 @@ namespace GraphX
             Arrange(LastKnownRectSize);
         }
 
-        internal Rect LastKnownRectSize;
+        /// <summary>
+        /// Get label rectangular size
+        /// </summary>
+        public Rect GetSize()
+        {
+            return LastKnownRectSize;
+        }
+        /// <summary>
+        /// Set label rectangular size
+        /// </summary>
+        public void SetSize(Rect size)
+        {
+            LastKnownRectSize = size;
+            Arrange(LastKnownRectSize);
+        }
 
+        public void Dispose()
+        {
+            _edgeControl = null;
+        }
     }
 }

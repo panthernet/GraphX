@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX.Animations
 {

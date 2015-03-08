@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Animation;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX.Models.Animations
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GraphX
+namespace GraphX.Controls.Models.Interfaces
 {
     public interface IGraphArea<TVertex>
     {

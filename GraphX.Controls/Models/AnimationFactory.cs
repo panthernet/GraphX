@@ -4,6 +4,7 @@ using GraphX.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX.Models
 {

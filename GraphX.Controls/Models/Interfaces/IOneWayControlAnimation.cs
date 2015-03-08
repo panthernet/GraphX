@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GraphX.Models;
 
-namespace GraphX.Models.Interfaces
+namespace GraphX.Controls.Models.Interfaces
 {
     public interface IOneWayControlAnimation
     {

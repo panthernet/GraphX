@@ -66,8 +66,8 @@
                               >
                         </Path>
 
-                        <!--<gxl:EdgePointerImage NeedRotation="False" x:Name="PART_EdgePointerImageForSource" Source="/Assets/circle_green.png" Width="15" Height="15" />
-                        <gxl:EdgePointerImage NeedRotation="False" x:Name="PART_EdgePointerImageForTarget" Source="/Assets/circle_red.png" Width="15" Height="15" />-->
+                        <!--"<gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
+                        <gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

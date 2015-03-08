@@ -14,7 +14,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         public SimpleEdgeRouting(TGraph graph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null)
             : base(graph, vertexPositions, vertexSizes, parameters)
         {
-            if (parameters != null && parameters is SimpleERParameters)
+            if (parameters is SimpleERParameters)
             {
                 drawback_distance = (parameters as SimpleERParameters).BackStep;
                 side_distance = (parameters as SimpleERParameters).SideStep;
@@ -59,34 +59,34 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                 throw new GX_InvalidDataException("SimpleEdgeRouting() -> You must assign unique ID for each vertex to use SimpleER algo!");
             if (ctrl.Source.ID == ctrl.Target.ID || !VertexPositions.ContainsKey(ctrl.Target)) return;
 
-            var start_point = VertexPositions[ctrl.Source];// new Point(GraphAreaBase.GetX(ctrl.Source), GraphAreaBase.GetY(ctrl.Source));
-            var end_point = VertexPositions[ctrl.Target];// new Point(GraphAreaBase.GetX(ctrl.Target), GraphAreaBase.GetY(ctrl.Target));
+            var startPoint = VertexPositions[ctrl.Source];// new Point(GraphAreaBase.GetX(ctrl.Source), GraphAreaBase.GetY(ctrl.Source));
+            var endPoint = VertexPositions[ctrl.Target];// new Point(GraphAreaBase.GetX(ctrl.Target), GraphAreaBase.GetY(ctrl.Target));
 
-            if (start_point == end_point) return;
+            if (startPoint == endPoint) return;
 
-            var originalSizes = getSizesCollection(ctrl, end_point);
-            var CHECKLIST = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(originalSizes);
-            var leftSIZES = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(originalSizes);
+            var originalSizes = getSizesCollection(ctrl, endPoint);
+            var checklist = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(originalSizes);
+            var leftSizes = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(originalSizes);
 
 
             var tempList = new List<Point>();
-            tempList.Add(start_point);
+            tempList.Add(startPoint);
 
-            bool HaveIntersections = true;
+            bool haveIntersections = true;
 
             //while we have some intersections - proceed
-            while (HaveIntersections)
+            while (haveIntersections)
             {
-                var cur_drawback = drawback_distance;
+                var curDrawback = drawback_distance;
                 while (true)
                 {
-                    var item = CHECKLIST.Keys.FirstOrDefault();
+                    var item = checklist.Keys.FirstOrDefault();
                     //set last route point as current start point
-                    start_point = tempList.Last();
+                    startPoint = tempList.Last();
                     if (item == null)
                     {
                         //checked all vertices and no intersection was found - quit
-                        HaveIntersections = false;
+                        haveIntersections = false;
                         break;
                     }
                     else
@@ -94,23 +94,23 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                         var r = originalSizes[item].Value;
                         Point checkpoint;
                         //check for intersection point. if none found - remove vertex from checklist
-                        if (GetIntersectionPoint(r, start_point, end_point, out checkpoint) == -1)
+                        if (GetIntersectionPoint(r, startPoint, endPoint, out checkpoint) == -1)
                         {
-                            CHECKLIST.Remove(item); continue;
+                            checklist.Remove(item); continue;
                         }
-                        var main_vector = new Vector(end_point.X - start_point.X, end_point.Y - start_point.Y);
+                        var mainVector = new Vector(endPoint.X - startPoint.X, endPoint.Y - startPoint.Y);
                         double X = 0; double Y = 0;
                         //calculate drawback X coordinate
-                        if (start_point.X == checkpoint.X || Math.Abs(start_point.X - checkpoint.X) < cur_drawback) X = start_point.X;
-                        else if (start_point.X < checkpoint.X) X = checkpoint.X - cur_drawback;
-                        else X = checkpoint.X + cur_drawback;
+                        if (startPoint.X == checkpoint.X || Math.Abs(startPoint.X - checkpoint.X) < curDrawback) X = startPoint.X;
+                        else if (startPoint.X < checkpoint.X) X = checkpoint.X - curDrawback;
+                        else X = checkpoint.X + curDrawback;
                         //calculate drawback Y coordinate
-                        if (start_point.Y == checkpoint.Y || Math.Abs(start_point.Y - checkpoint.Y) < cur_drawback) Y = start_point.Y;
-                        else if (start_point.Y < checkpoint.Y) Y = checkpoint.Y - cur_drawback;
-                        else Y = checkpoint.Y + cur_drawback;
+                        if (startPoint.Y == checkpoint.Y || Math.Abs(startPoint.Y - checkpoint.Y) < curDrawback) Y = startPoint.Y;
+                        else if (startPoint.Y < checkpoint.Y) Y = checkpoint.Y - curDrawback;
+                        else Y = checkpoint.Y + curDrawback;
                         //set drawback checkpoint
                         checkpoint = new Point(X, Y);
-                        bool isStartPoint = checkpoint == start_point;
+                        bool isStartPoint = checkpoint == startPoint;
 
                         bool routeFound = false;
                         bool viceversa = false;
@@ -123,8 +123,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                             var signedDistance = viceversa ? side_distance : -side_distance;
                             //get new point coordinate
                             joint = new Point(
-                                 checkpoint.X + signedDistance * counter * (main_vector.Y / main_vector.Length),
-                                 checkpoint.Y - signedDistance * counter * (main_vector.X / main_vector.Length));
+                                 checkpoint.X + signedDistance * counter * (mainVector.Y / mainVector.Length),
+                                 checkpoint.Y - signedDistance * counter * (mainVector.X / mainVector.Length));
 
                             //now check if new point is in some other vertex
                             var iresult = false;
@@ -144,7 +144,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                             if (forcedBreak) break;
 
                             //get vector intersection if its ok
-                            if(!iresult) iresult = IsIntersected(r, joint, end_point);
+                            if(!iresult) iresult = IsIntersected(r, joint, endPoint);
                             
                             //if no vector intersection - we've found it!
                             if (!iresult)
@@ -155,7 +155,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                             else
                             {
                                 //still have an intersection with current vertex
-                                HaveIntersections = true;
+                                haveIntersections = true;
                                 //skip point search if too many attempts was made (bad logic hack)
                                 if (counter > 300) break;
                                 counter++;
@@ -169,26 +169,26 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                         if (blocked_direction != null && !isStartPoint)
                         {
                             //search has been blocked - need to drawback
-                            cur_drawback += drawback_distance;
+                            curDrawback += drawback_distance;
                         }
                         else
                         {
                             //add new route point if we found it
                             // if(routeFound) 
                             tempList.Add(joint);
-                            leftSIZES.Remove(item);
+                            leftSizes.Remove(item);
                         }
                     }
                     //remove currently evaded obstacle vertex from the checklist
-                    CHECKLIST.Remove(item);
+                    checklist.Remove(item);
                 }
                 //assign possible left vertices as a new checklist if any intersections was found
-                if (HaveIntersections)
-                    CHECKLIST = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(leftSIZES);
+                if (haveIntersections)
+                    checklist = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(leftSizes);
             }
             //finally, add an end route point
 
-            tempList.Add(end_point);
+            tempList.Add(endPoint);
 
 
             if (EdgeRoutes.ContainsKey(ctrl))

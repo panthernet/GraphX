@@ -1,13 +1,12 @@
-﻿using System.Drawing;
-using GraphX.Controls;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GraphX.Controls.Models.Interfaces;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace GraphX
 {
@@ -134,7 +133,7 @@ namespace GraphX
                     imgdpi,
                     pixelFormat);
 
-            vis.SetValue(Panel.BackgroundProperty, System.Windows.Media.Brushes.White);
+            vis.SetValue(Panel.BackgroundProperty, Brushes.White);
             //Render the graphlayout onto the bitmap.
             renderBitmap.Render(vis);
 
