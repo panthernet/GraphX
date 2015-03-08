@@ -1,26 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using GraphX.Controls.Models.Interfaces;
 
 namespace GraphX
 {
-    public class VertexLabelControl : ContentControl    
+    public class VertexLabelControl : ContentControl , IVertexLabelControl   
     {
 
        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(VertexLabelControl),
                                                                                        new UIPropertyMetadata(0.0) );
-
-
-
-
-
-
-
 
         /// <summary>
         /// Gets or sets label drawing angle in degrees
@@ -100,7 +93,7 @@ namespace GraphX
         }
 
 
-        internal void UpdatePosition()
+        public void UpdatePosition()
         {
             if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 
@@ -145,6 +138,16 @@ namespace GraphX
                 LastKnownRectSize = new Rect(LabelPosition, DesiredSize);
             }
             Arrange(LastKnownRectSize);
+        }
+
+        public void Hide()
+        {
+            Visibility = Visibility.Collapsed;
+        }
+
+        public void Show()
+        {
+            Visibility = Visibility.Visible;
         }
 
         internal Rect LastKnownRectSize;

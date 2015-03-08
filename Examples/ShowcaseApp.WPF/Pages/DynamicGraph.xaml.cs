@@ -58,7 +58,7 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;
             dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;
-            dg_Area.SetVerticesDrag(true);
+            dg_Area.SetVerticesDrag(true, true);
         }
 
         void MoveAnimation_Completed(object sender, EventArgs e)
@@ -226,7 +226,8 @@ namespace ShowcaseApp.WPF.Pages
             if (!e.Data.GetDataPresent(typeof (object))) return;
             //how to get dragged data by its type
             var pos = dg_zoomctrl.TranslatePoint(e.GetPosition(dg_zoomctrl), dg_Area);
-            var data = new DataVertex("Vertex " + (dg_Area.VertexList.Count() + 1));
+            var data = new DataVertex();
+            ThemedDataStorage.FillDataVertex(data);
             dg_Area.LogicCore.Graph.AddVertex(data);
             var vc = new VertexControl(data);
             dg_Area.AddVertex(data, vc);

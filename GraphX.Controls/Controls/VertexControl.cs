@@ -14,7 +14,7 @@ namespace GraphX
 	/// Visual vertex control
 	/// </summary>
     [Serializable]
-    [TemplatePart(Name = "PART_vertexLabel", Type = typeof(VertexLabelControl))]
+    [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
     public class VertexControl: Control, IGraphControl
     {
         #region Properties
@@ -85,8 +85,8 @@ namespace GraphX
         private static void ShowLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var obj = d as VertexControl;
-            if (obj._vertexLabelControl != null)
-                obj._vertexLabelControl.Visibility = ((bool)e.NewValue) ? Visibility.Visible : Visibility.Collapsed;
+            if (obj._vertexLabelControl == null) return;
+            if((bool)e.NewValue) obj._vertexLabelControl.Show();else obj._vertexLabelControl.Hide();
         }
 
 
@@ -201,24 +201,21 @@ namespace GraphX
                 UpdateEventhandling(item);
         }
 
-	    private VertexLabelControl _vertexLabelControl;
+        private IVertexLabelControl _vertexLabelControl;
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            if (Template != null)
+            if (Template == null) return;
+            _vertexLabelControl = Template.FindName("PART_vertexLabel", this) as IVertexLabelControl;
+
+            if (_vertexLabelControl != null)
             {
-                _vertexLabelControl = Template.FindName("PART_vertexLabel", this) as VertexLabelControl;
-
-                if (_vertexLabelControl != null)
-                {
-                    _vertexLabelControl.Visibility = ShowLabel ? Visibility.Visible : Visibility.Collapsed;
-                    UpdateLayout(); 
-                    _vertexLabelControl.UpdatePosition();
-                }
+                if(ShowLabel) _vertexLabelControl.Show(); else _vertexLabelControl.Hide();
+                UpdateLayout(); 
+                _vertexLabelControl.UpdatePosition();
             }
-
         }
 
         #region Events handling

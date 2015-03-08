@@ -95,7 +95,7 @@
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
     <Compile Include="Models\Interfaces\IEdgeLabelControl.cs" />
     <Compile Include="Models\Interfaces\ITrackableContent.cs" />
-    <Compile Include="Controls\VertexLabelControl.cs" />
+    <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\GeometryToPathGeometryConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\VisibilityToBoolConverter.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="Enums\MoveAnimation.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
+    <Compile Include="Models\Interfaces\IVertexLabelControl.cs" />
     <Compile Include="Models\Interfaces\IZoomControl.cs" />
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="MathHelper.cs" />
