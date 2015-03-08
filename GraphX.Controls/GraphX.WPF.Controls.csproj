@@ -110,7 +110,7 @@
     <Compile Include="DesignerExampleData\EdgeDataExample.cs" />
     <Compile Include="DesignerExampleData\VertexDataExample.cs" />
     <Compile Include="Controls\EdgeControl.cs" />
-    <Compile Include="Controls\EdgeLabelControl.cs" />
+    <Compile Include="Controls\EdgeLabels\EdgeLabelControl.cs" />
     <Compile Include="Enums\DeleteAnimation.cs" />
     <Compile Include="Enums\EdgeDashStyle.cs" />
     <Compile Include="Enums\LogicCoreChangedAction.cs" />
