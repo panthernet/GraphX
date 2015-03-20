@@ -87,7 +87,7 @@ namespace GraphX
         /// <summary>
         /// Update edge pointer position and angle
         /// </summary>
-        public void Update(Point? position, Vector direction, double angle = 0d)
+        public virtual void Update(Point? position, Vector direction, double angle = 0d)
         {
             var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
             position = position - new Vector(direction.X * Width * .5, direction.Y * Height * .5);// + vecOffset;
