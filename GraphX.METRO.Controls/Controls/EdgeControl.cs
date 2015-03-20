@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using GraphX.METRO.Controls;
 using GraphX.METRO.Controls.Controls;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX.Controls
 {
@@ -17,10 +18,13 @@ namespace GraphX.Controls
     /// </summary>
     [TemplatePart(Name = "PART_edgePath", Type = typeof(Path))]
     [TemplatePart(Name = "PART_edgeArrowPath", Type = typeof(Path))]
-    [TemplatePart(Name = "PART_edgeLabel", Type = typeof(EdgeLabelControl))]
+    [TemplatePart(Name = "PART_edgeLabel", Type = typeof(IEdgeLabelControl))]
+    [TemplatePart(Name = "PART_EdgePointerForSource", Type = typeof(IEdgePointer))]
+    [TemplatePart(Name = "PART_EdgePointerForTarget", Type = typeof(IEdgePointer))]
     public class EdgeControl : Control, IGraphControl, IDisposable
     {
         #region Dependency Properties
+
 
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source",
                                                                                                typeof(VertexControl),
@@ -234,7 +238,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Templated label control to display labels
         /// </summary>
-        private EdgeLabelControl _edgeLabelControl;
+        private IEdgeLabelControl _edgeLabelControl;
 
 
         public EdgeEventOptions EventOptions { get; private set; }
@@ -274,6 +278,9 @@ namespace GraphX.Controls
             get { return (double)GetValue(StrokeThicknessProperty); }
             set { SetValue(StrokeThicknessProperty, value); }
         }
+
+        private IEdgePointer _edgePointerForSource;
+        private IEdgePointer _edgePointerForTarget;
         #endregion
 
         #region public Clean()
@@ -298,6 +305,22 @@ namespace GraphX.Controls
             _arrowgeometry = null;
             _linePathObject = null;
             _arrowPathObject = null;
+            if (_edgeLabelControl != null)
+            {
+                _edgeLabelControl.Dispose();
+                _edgeLabelControl = null;
+            }
+
+            if (_edgePointerForSource != null)
+            {
+                _edgePointerForSource.Dispose();
+                _edgePointerForSource = null;
+            }
+            if (_edgePointerForTarget != null)
+            {
+                _edgePointerForTarget.Dispose();
+                _edgePointerForTarget = null;
+            }
             if (EventOptions != null)
                 EventOptions.Clean();
         }
@@ -522,7 +545,11 @@ namespace GraphX.Controls
                     _arrowPathObject.Data = _arrowgeometry;
                 }
 
-                _edgeLabelControl = this.FindDescendantByName("PART_edgeLabel") as EdgeLabelControl;
+                _edgeLabelControl = this.FindDescendantByName("PART_edgeLabel") as IEdgeLabelControl;
+
+                _edgePointerForSource = this.FindDescendantByName("PART_EdgePointerForSource") as IEdgePointer;
+                _edgePointerForTarget = this.FindDescendantByName("PART_EdgePointerForTarget") as IEdgePointer;
+
                 //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
                 UpdateEdge();
             }
@@ -554,7 +581,7 @@ namespace GraphX.Controls
                 //if (_endEdgePointerImage != null)
                 //    _endEdgePointerImage.Update();
                 if (_edgeLabelControl != null)
-                    _edgeLabelControl.Visibility = ShowLabel ? Visibility.Visible : Visibility.Collapsed;
+                    if(ShowLabel) _edgeLabelControl.Show(); else _edgeLabelControl.Hide();
             }
         }
 
@@ -656,6 +683,9 @@ namespace GraphX.Controls
                     Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target))
                 };
 
+                var hasEpImgSource = _edgePointerForSource != null;
+                var hasEpImgTarget = _edgePointerForTarget != null;
+
                 //if self looped edge
                 if (IsSelfLooped)
                 {
@@ -668,6 +698,11 @@ namespace GraphX.Controls
                     var aPoint = sourcePos1;
                     _arrowgeometry.Figures.Add(GeometryHelper.GenerateArrow(aPoint, new Point(), new Point(), dArrowAngle));
                     _linegeometry = geo;
+
+                    if (hasEpImgSource)
+                        _edgePointerForSource.Hide();
+                    if (hasEpImgTarget)
+                        _edgePointerForTarget.Hide();
                     return;
                 }
 
@@ -717,6 +752,8 @@ namespace GraphX.Controls
                         //if(_endEdgePointerImage != null)
                         //    _endEdgePointerImage.Update(cLast);
                         //freeze and create resulting geometry
+                        if (hasEpImgTarget) UpdateTargetEpData(cLast, cPrev);
+                        if (hasEpImgSource) UpdateSourceEpData(oPolyLineSegment.Points.First(), oPolyLineSegment.Points[1]);
                     }
                     else
                     {
@@ -726,6 +763,8 @@ namespace GraphX.Controls
 
                         lineFigure = new PathFigure {StartPoint = p1, Segments = new PathSegmentCollection {new PolyLineSegment {Points = pcol}}, IsClosed = false};
                         arrowFigure = GeometryHelper.GenerateOldArrow(routePoints[routePoints.Count - 2], p2);
+                        if (hasEpImgSource) UpdateSourceEpData(routePoints.First(), routePoints[1]);
+                        if (hasEpImgTarget) UpdateTargetEpData(routePoints[routePoints.Count - 2], p2);
                     }
 
                 }
@@ -737,6 +776,10 @@ namespace GraphX.Controls
                     //segments[0] = new LineSegment(p2 + v, true);
                     lineFigure = new PathFigure {StartPoint = p1, Segments = new PathSegmentCollection {new LineSegment() {Point = p2}}, IsClosed = false};
                     arrowFigure = GeometryHelper.GenerateOldArrow(p1, p2);
+                    if (hasEpImgSource) UpdateSourceEpData(p1, p2);
+                    if (hasEpImgTarget) UpdateTargetEpData(p2, p1);
+                    //Debug.WriteLine("p1: " + p1 + " p2: " + p2);
+
                 }
                 //GeometryHelper.TryFreeze(lineFigure);
                 (_linegeometry as PathGeometry).Figures.Add(lineFigure);
@@ -758,6 +801,19 @@ namespace GraphX.Controls
             }
 
         }
+
+        private void UpdateSourceEpData(Point from, Point to)
+        {
+            var dir = MathHelper.GetDirection(from, to);
+            _edgePointerForSource.Update(from, dir, _edgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
+        }
+
+        private void UpdateTargetEpData(Point from, Point to)
+        {
+            var dir = MathHelper.GetDirection(from, to);
+            _edgePointerForTarget.Update(from, dir, _edgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
+        }
+
         #endregion
 
         public void Dispose()
@@ -767,19 +823,18 @@ namespace GraphX.Controls
 
         public Measure.Rect GetLabelSize()
         {
-            return _edgeLabelControl.LastKnownRectSize.ToGraphX();
+            return _edgeLabelControl.GetSize();
         }
 
         public void SetCustomLabelSize(Rect rect)
         {
-            _edgeLabelControl.LastKnownRectSize = rect;
-            _edgeLabelControl.Arrange(rect);
+           _edgeLabelControl.SetSize(rect);
         }
 
         internal void UpdateLabelLayout()
         {
-            _edgeLabelControl.Visibility = Visibility.Visible;
-            if (_edgeLabelControl.LastKnownRectSize == Rect.Empty || double.IsNaN(_edgeLabelControl.Width))
+            _edgeLabelControl.Show();
+            if (_edgeLabelControl.GetSize() == GraphX.Measure.Rect.Empty)// || double.IsNaN(_edgeLabelControl.Width)))
             {
                 _edgeLabelControl.UpdateLayout();
                 _edgeLabelControl.UpdatePosition();

@@ -93,7 +93,7 @@ namespace GraphX
         }
 
 
-        public void UpdatePosition()
+        public virtual void UpdatePosition()
         {
             if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 

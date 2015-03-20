@@ -1,9 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System;
-using System.Linq;
+﻿using System;
 using System.ComponentModel;
-using System.Windows.Data;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.Controls.Models.Interfaces;
 using GraphX.Models;

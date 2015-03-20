@@ -1,4 +1,4 @@
-﻿namespace GraphX
+﻿namespace GraphX.METRO.Controls.Models.Interfaces
 {
     /// <summary>
     /// Interface that implements means to notify on objetc position changes (implemented to track attached property changes parent -> child)

@@ -116,6 +116,18 @@
                           StrokeThickness="{Binding VisualEdgeThickness}"
                           Opacity="{Binding VisualEdgeTransparency}"
                         />
+
+                        <!--<controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" >
+                            <controls:EdgePointerImage.Image>
+                                <Image Source="/Assets/tr_red.png" Width="15" Height="15"/>
+                            </controls:EdgePointerImage.Image>
+                        </controls:EdgePointerImage>
+                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <controls:EdgePointerImage.Image>
+                                <Image Source="/Assets/tr_grren.png" Width="15" Height="15"/>
+                            </controls:EdgePointerImage.Image>
+                        </controls:EdgePointerImage>-->
+
                         <controls:EdgeLabelControl x:Name="PART_edgeLabel" 
                           Content="{Binding Text}"
                           Opacity="{Binding VisualEdgeTransparency}"

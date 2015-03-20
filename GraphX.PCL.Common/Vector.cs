@@ -179,5 +179,10 @@ namespace GraphX.Measure
             this._x = -this._x;
             this._y = -this._y;
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:{1}", _x, _y);
+        }
     }
 }

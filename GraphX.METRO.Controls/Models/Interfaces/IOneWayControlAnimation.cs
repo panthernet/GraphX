@@ -1,6 +1,7 @@
 ﻿using GraphX.Controls;
+using GraphX.Models;
 
-namespace GraphX.Models.Interfaces
+namespace GraphX.METRO.Controls.Models.Interfaces
 {
     public interface IOneWayControlAnimation
     {

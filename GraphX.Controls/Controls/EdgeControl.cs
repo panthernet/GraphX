@@ -633,7 +633,7 @@ namespace GraphX
         #region public PrepareEdgePath()
 
 
-        internal void UpdateEdge(bool updateLabel = true)
+        internal virtual void UpdateEdge(bool updateLabel = true)
         {
             if ((Visibility == Visibility.Visible || IsHiddenEdgesUpdated) && _linePathObject != null)
             {
@@ -657,7 +657,7 @@ namespace GraphX
         /// <param name="source">Source vertex</param>
         /// <param name="target">Target vertex</param>
         /// <param name="sideDistance">Distance between edges</param>
-        internal Point GetParallelOffset(VertexControl source, VertexControl target, int sideDistance)
+        internal virtual Point GetParallelOffset(VertexControl source, VertexControl target, int sideDistance)
         {
             var sourcepos = source.GetPosition();
             var targetpos = target.GetPosition();
@@ -684,7 +684,7 @@ namespace GraphX
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
         /// <param name="externalRoutingPoints">Provided custom routing points will be used instead of stored ones.</param>
         /// <param name="updateLabel">Should edge label be updated in this pass</param>
-        public void PrepareEdgePath(bool useCurrentCoords = false, Measure.Point[] externalRoutingPoints = null, bool updateLabel = true)
+        public virtual void PrepareEdgePath(bool useCurrentCoords = false, Measure.Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
             if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && Source == null || Target == null || ManualDrawing) return;
@@ -794,9 +794,6 @@ namespace GraphX
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
                 _arrowgeometry = new PathGeometry(); PathFigure arrowFigure = null;
 
-                var edgeEpSourceAngle = 0d;
-                var edgeEpTargetAngle = 0d;
-
                 //if we have route and route consist of 2 or more points
                 if (RootArea != null && hasRouteInfo)
                 {
@@ -883,7 +880,7 @@ namespace GraphX
 
         #endregion
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Clean();
         }

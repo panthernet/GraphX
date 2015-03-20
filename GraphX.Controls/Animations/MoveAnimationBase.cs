@@ -32,10 +32,7 @@ namespace GraphX.Animations
         /// <summary>
         /// Optional cleanup that needs to be performed before or after class usage
         /// </summary>
-        public virtual void Cleanup()
-        {
-
-        }
+        public abstract void Cleanup();
 
         /*int _vCount;
         int _eCount;

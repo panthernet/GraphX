@@ -1,7 +1,6 @@
-﻿using System.Windows;
-using Windows.Foundation;
+﻿using Windows.Foundation;
 
-namespace GraphX
+namespace GraphX.METRO.Controls.Models.Interfaces
 {
     public interface IGraphControl : IPositionChangeNotify
     {

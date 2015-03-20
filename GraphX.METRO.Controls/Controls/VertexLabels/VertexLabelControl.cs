@@ -5,11 +5,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX.Controls
 {
     [Bindable]
-    public class VertexLabelControl : ContentControl
+    public class VertexLabelControl : ContentControl, IVertexLabelControl
     {
 
         #region Properties
@@ -120,7 +121,7 @@ namespace GraphX.Controls
         }
 
 
-        internal void UpdatePosition()
+        public void UpdatePosition()
         {
             if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 
@@ -166,7 +167,15 @@ namespace GraphX.Controls
             Arrange(LastKnownRectSize);
         }
 
+        public void Hide()
+        {
+            Visibility = Visibility.Collapsed;
+        }
 
+        public void Show()
+        {
+            Visibility = Visibility.Visible;
+        }
     }
 
     /// <summary>

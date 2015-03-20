@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
+using GraphX.Controls;
 
-namespace GraphX.Controls.Models
+namespace GraphX.METRO.Controls.Models.Interfaces
 {
     public interface IGraphControlFactory
     {

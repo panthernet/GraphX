@@ -70,7 +70,6 @@ namespace GraphX
 
         void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
         {
-            //TODO optimize parent call by calling it once from constructor
             if (EdgeControl == null || !EdgeControl.ShowLabel) return;
             if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
             {
@@ -91,7 +90,7 @@ namespace GraphX
         /// <summary>
         /// Automaticaly update edge label position
         /// </summary>
-        public void UpdatePosition()
+        public virtual void UpdatePosition()
         {
             if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 
@@ -102,20 +101,7 @@ namespace GraphX
                 Debug.WriteLine("EdgeLabelControl_LayoutUpdated() -> Got empty edgecontrol!");
                 return;
             }
-            /* Old source commented due to incorrect calculation: was getting center coord instead of connection point
-             * Now we get connection point from EdgeControls last calculation
-             var source = edgeControl.Source;
-            var p1 = source.GetPosition();
-            p1.Offset(source.DesiredSize.Width * .5, source.DesiredSize.Height * .5);
-            var target = edgeControl.Target;
-            var p2 = target.GetPosition();
-            p2.Offset(target.DesiredSize.Width * .5, target.DesiredSize.Height * .5);
 
-            if (edgeControl.RootArea.EnableParallelEdges)
-            {
-                p1 = edgeControl.GetParallelOffset(source, target, edgeControl.SourceOffset);
-                p2 = edgeControl.GetParallelOffset(target, source, edgeControl.TargetOffset);
-            }*/
             var p1 = EdgeControl.SourceConnectionPoint.GetValueOrDefault();
             var p2 = EdgeControl.TargetConnectionPoint.GetValueOrDefault();
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
@@ -15,6 +13,11 @@ namespace GraphX.Animations
 
         int _maxCount;
         int _counter;
+        public override void Cleanup()
+        {
+            
+        }
+
         public override void RunVertexAnimation()
         {
             _maxCount = VertexStorage.Count * 2;

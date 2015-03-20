@@ -1,4 +1,4 @@
-﻿namespace GraphX.Controls.Models.Interfaces
+﻿namespace GraphX.METRO.Controls.Models.Interfaces
 {
     public interface IVertexLabelControl
     {

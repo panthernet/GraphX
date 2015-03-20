@@ -11,6 +11,7 @@ using GraphX.METRO.Controls.Controls.ZoomControl.SupportClasses;
 using GraphX.Models;
 using System;
 using System.ComponentModel;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX.Controls
 {

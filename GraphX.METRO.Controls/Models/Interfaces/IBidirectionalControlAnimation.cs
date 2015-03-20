@@ -1,6 +1,6 @@
 ﻿using GraphX.Controls;
 
-namespace GraphX.Models.Interfaces
+namespace GraphX.METRO.Controls.Models.Interfaces
 {
     public interface IBidirectionalControlAnimation
     {

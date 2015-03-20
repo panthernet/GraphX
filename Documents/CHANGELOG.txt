@@ -1,11 +1,11 @@
 ﻿RELEASE 2.1.8
-+ Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF]
++ Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]
 	1. EdgePointerImage class with name "PART_EdgePointerImageForSource" - marks edge source pointer (new!)
 	2. EdgePointerImage class with name "PART_EdgePointerImageForTarget" - marks edge target pointer
 	Look in GeneralTemplate.xaml of ShowcaseApp.WPF project.
 	Added rotation support for image based edge pointers
-+ Added extensibility to corresponding controls by inheriting from IEdgeLabelControl and IEdgePointer [WPF]
-+ Added extensibility to corresponding controls by inheriting from IVertexLabelControl [WPF]
++ Added extensibility to corresponding controls by inheriting from IEdgeLabelControl and IEdgePointer [WPF, METRO]
++ Added extensibility to corresponding controls by inheriting from IVertexLabelControl [WPF, METRO]
 + Added support method GraphArea::GetVertexControlAt(Point position) to get VC by coordinates [METRO, WPF]
 + Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left [WPF, METRO]
 + Added new showcase example: Templates/Graph editor [WPF]
@@ -17,11 +17,12 @@
 + Fixed some issues in ShowcaseApp.WPF
 + Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs [WPF, METRO]
 + Optimized showcase app media files
++ Improved extensibility by making some methods virtual for EdgeLabelControl, VertexLabelControl, EdgeControl
 
 !Breaking changes
 + Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]
 + Expanded EdgeControl event args with mouse and keyboard modifiers [WPF]
-+ Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace
++ Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace and all METRO interfaces to GraphX.METRO.Controls.Models.Interfaces [WPF, METRO]
 
 RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.

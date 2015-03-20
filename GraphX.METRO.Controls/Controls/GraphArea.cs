@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using GraphX.METRO.Controls.Enums;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 
 namespace GraphX

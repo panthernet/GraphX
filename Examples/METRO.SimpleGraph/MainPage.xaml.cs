@@ -120,6 +120,15 @@ namespace METRO.SimpleGraph
             var dataGraph = new GraphExample();
             var vlist = new List<DataVertex>();;
 
+            //debug
+           /* dataGraph.AddVertex(new DataVertex("MyVertex " + 1) { ID = 1, VisualDiameter = 10, VisualInnerDiameter = 10 });
+            dataGraph.AddVertex(new DataVertex("MyVertex " + 2) { ID = 2, VisualDiameter = 10, VisualInnerDiameter = 10 });
+            vlist = dataGraph.Vertices.ToList();
+            AddEdge(dataGraph, 0, 1, vlist);
+            return dataGraph;*/
+
+
+
             switch ((LayoutAlgorithmTypeEnum)cboxLayout.SelectedItem)
             {
                 case LayoutAlgorithmTypeEnum.EfficientSugiyama:

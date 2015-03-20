@@ -1,7 +1,4 @@
-﻿using GraphX.Models.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Windows;
 using System.Windows.Media.Animation;
 using GraphX.Controls.Models.Interfaces;

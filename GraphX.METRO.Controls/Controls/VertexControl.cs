@@ -5,6 +5,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
+using GraphX.METRO.Controls.Models.Interfaces;
 using GraphX.Models;
 
 namespace GraphX.Controls
@@ -12,7 +13,7 @@ namespace GraphX.Controls
 	/// <summary>
 	/// Visual vertex control
 	/// </summary>
-    [TemplatePart(Name = "PART_vertexLabel", Type = typeof(VertexLabelControl))]
+    [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
     [TemplateVisualState(GroupName = "CommonStates", Name = "Normal")]
     [TemplateVisualState(GroupName = "CommonStates", Name = "Pressed")]
     [TemplateVisualState(GroupName = "CommonStates", Name = "PointerOver")]
@@ -87,7 +88,7 @@ namespace GraphX.Controls
             {
                 _showLabel = value;
                 if (_vertexLabelControl != null)
-                    _vertexLabelControl.Visibility = _showLabel ? Visibility.Visible : Visibility.Collapsed;
+                    if(_showLabel) _vertexLabelControl.Show(); else _vertexLabelControl.Hide();
             }
         }
 
@@ -213,23 +214,20 @@ namespace GraphX.Controls
             VisualStateManager.GoToState(this, IsEnabled ? "Normal" : "Disabled", true);
         }
 
-	    private VertexLabelControl _vertexLabelControl;
+        private IVertexLabelControl _vertexLabelControl;
 
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            if (Template != null)
+            if (Template == null) return;
+            _vertexLabelControl = this.FindDescendantByName("PART_vertexLabel") as IVertexLabelControl;
+            if (_vertexLabelControl != null)
             {
-                _vertexLabelControl = this.FindDescendantByName("PART_vertexLabel") as VertexLabelControl;
-                if (_vertexLabelControl != null)
-                {
-                    _vertexLabelControl.Visibility = ShowLabel ? Visibility.Visible : Visibility.Collapsed;
-                    UpdateLayout();
-                    _vertexLabelControl.UpdatePosition();
-                }
+                if(ShowLabel) _vertexLabelControl.Show(); else _vertexLabelControl.Hide();
+                UpdateLayout();
+                _vertexLabelControl.UpdatePosition();
             }
-
         }
 
         #region Events handling

@@ -1,7 +1,7 @@
 ﻿using Windows.Foundation;
 using GraphX.Models;
 
-namespace GraphX
+namespace GraphX.METRO.Controls.Models.Interfaces
 {
     /// <summary>
     /// Interface that represents trackable content object (e.g. provides means to notify about it's content changes)

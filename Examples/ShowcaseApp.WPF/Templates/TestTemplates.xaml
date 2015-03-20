@@ -82,4 +82,24 @@
         </Setter>
     </Style>
 
+    <!--EDGE LABLE CONTROL -->
+    <Style TargetType="{x:Type gxl:EdgeLabelControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type gxl:EdgeLabelControl}">
+                    <Grid>
+                        <Border BorderBrush="Black" BorderThickness="1" Background="LightCoral" CornerRadius="8">
+                            <ContentPresenter Margin="3"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=gxl:EdgeLabelControl} , Path=Angle}"/>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
 </ResourceDictionary>

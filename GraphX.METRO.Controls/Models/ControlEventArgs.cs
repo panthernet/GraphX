@@ -1,4 +1,6 @@
-﻿namespace GraphX.Models
+﻿using GraphX.METRO.Controls.Models.Interfaces;
+
+namespace GraphX.Models
 {
     public sealed class ControlEventArgs : System.EventArgs
     {

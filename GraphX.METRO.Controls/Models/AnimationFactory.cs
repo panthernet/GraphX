@@ -1,7 +1,7 @@
 ﻿using GraphX.Animations;
 using GraphX.Models.Animations;
-using GraphX.Models.Interfaces;
 using System;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX.Models
 {

@@ -1,8 +1,8 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using GraphX.Controls;
-using GraphX.Models.Interfaces;
 using System;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX.Models.Animations
 {

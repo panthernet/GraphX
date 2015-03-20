@@ -9,7 +9,7 @@ namespace GraphX.Controls.Models.Interfaces
         /// <summary>
         /// Root graph area for the factory
         /// </summary>
-        GraphAreaBase FactoryRootArea { set; get; }
+        GraphAreaBase FactoryRootArea { get; }
         
     }
 

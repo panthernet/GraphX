@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using GraphX.Animations;
 using GraphX.METRO.Controls.Enums;
-using GraphX.Models.Interfaces;
+using GraphX.METRO.Controls.Models.Interfaces;
 
 namespace GraphX
 {
