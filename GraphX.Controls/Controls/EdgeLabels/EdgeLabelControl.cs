@@ -13,6 +13,26 @@ namespace GraphX
         internal Rect LastKnownRectSize;
 
         #region Common part
+
+        public static readonly DependencyProperty DisplayForSelfLoopedEdgesProperty = DependencyProperty.Register("DisplayForSelfLoopedEdges",
+                                                                               typeof(bool),
+                                                                               typeof(EdgeLabelControl),
+                                                                               new UIPropertyMetadata(false));
+        /// <summary>
+        /// Gets or sets if label should be visible for self looped edge
+        /// </summary>
+        public bool DisplayForSelfLoopedEdges
+        {
+            get
+            {
+                return (bool)GetValue(DisplayForSelfLoopedEdgesProperty);
+            }
+            set
+            {
+                SetValue(DisplayForSelfLoopedEdgesProperty, value);
+            }
+        }
+
         public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(EdgeLabelControl),
@@ -48,6 +68,7 @@ namespace GraphX
 
         public void Show()
         {
+            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
             Visibility = Visibility.Visible;
         }
 
@@ -64,8 +85,13 @@ namespace GraphX
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
             VerticalAlignment = VerticalAlignment.Top;
+            this.Initialized += EdgeLabelControl_Initialized;
+        }
 
-
+        void EdgeLabelControl_Initialized(object sender, EventArgs e)
+        {
+            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
+            else Show();
         }
 
         void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
@@ -99,6 +125,18 @@ namespace GraphX
             if (EdgeControl.Source == null || EdgeControl.Target == null)
             {
                 Debug.WriteLine("EdgeLabelControl_LayoutUpdated() -> Got empty edgecontrol!");
+                return;
+            }
+            //if hidden
+            if (Visibility != Visibility.Visible) return;
+
+            if(EdgeControl.IsSelfLooped)
+            {
+                var idesiredSize = DesiredSize;
+                var pt = EdgeControl.Source.GetCenterPosition();
+                pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
+                LastKnownRectSize = new Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+                Arrange(LastKnownRectSize);
                 return;
             }
 

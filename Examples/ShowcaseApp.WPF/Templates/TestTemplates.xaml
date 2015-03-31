@@ -84,6 +84,7 @@
 
     <!--EDGE LABLE CONTROL -->
     <Style TargetType="{x:Type gxl:EdgeLabelControl}">
+        <Setter Property="DisplayForSelfLoopedEdges" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type gxl:EdgeLabelControl}">
