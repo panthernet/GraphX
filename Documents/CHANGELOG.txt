@@ -18,6 +18,9 @@
 + Fixed dynamic graph showcase example first vertex auto zooming onto [WPF]
 + Fixed some issues in ShowcaseApp.WPF
 + Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs [WPF, METRO]
++ Fixed calculation of label control position and angle [WPF, METRO] thanks to jorgensigvardsson
++ Made EdgeControl::LabelVerticalOffset property dependecy [WPF, METRO]
++ Updated default control templstes to include some new properties setup by default [WPF, METRO]
 + Optimized showcase app media files
 + Improved extensibility by making some methods virtual for EdgeLabelControl, VertexLabelControl, EdgeControl
 
@@ -25,6 +28,7 @@
 + Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]
 + Expanded EdgeControl event args with mouse and keyboard modifiers [WPF]
 + Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace and all METRO interfaces to GraphX.METRO.Controls.Models.Interfaces [WPF, METRO]
++ Edge rotation now needs additional modification for all custom EdgeLabelControl templates. Please add: <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />[WPF, METRO]
 
 RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.

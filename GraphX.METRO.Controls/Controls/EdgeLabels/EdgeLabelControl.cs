@@ -217,34 +217,34 @@ namespace GraphX.Controls
                     p2 = newp2;
                 }
             }
-            // align the point so that it  passes through the center of the label content
-            var p = p1;
+            // The label control should be laid out on a rectangle, in the middle of the edge
+            var angleBetweenPoints = MathHelper.GetAngleBetweenPoints(p1, p2);
             var desiredSize = DesiredSize;
-            p = p.Offset(-desiredSize.Width / 2, -desiredSize.Height / 2);
+            bool flipAxis = p1.X > p2.X; // Flip axis if source is "after" target
 
-            // move it "edgLength" on the segment
-            double tmpAngle;
-            var angleBetweenPoints = tmpAngle = MathHelper.GetAngleBetweenPoints(p1, p2);
-            //set angle in degrees
+            // Calculate the center point of the edge
+            var centerPoint = new Point(p1.X + edgeLength * Math.Cos(angleBetweenPoints), p1.Y - edgeLength * Math.Sin(angleBetweenPoints));
             if (EdgeControl.AlignLabelsToEdges)
             {
-                if (p1.X > p2.X)
-                    tmpAngle = MathHelper.GetAngleBetweenPoints(p2, p1);
-                Angle = -tmpAngle * 180 / Math.PI;
+                // If we're aligning labels to the edges make sure add the label vertical offset
+                var yEdgeOffset = EdgeControl.LabelVerticalOffset;
+                if (flipAxis) // If we've flipped axis, move the offset to the other side of the edge
+                    yEdgeOffset = -yEdgeOffset;
+
+                // Adjust offset for rotation. Remember, the offset is perpendicular from the edge tangent.
+                // Slap on 90 degrees to the angle between the points, to get the direction of the offset.
+                centerPoint.Y -= yEdgeOffset * Math.Sin(angleBetweenPoints + Math.PI / 2);
+                centerPoint.X += yEdgeOffset * Math.Cos(angleBetweenPoints + Math.PI / 2);
+
+                // Angle is in degrees
+                Angle = -angleBetweenPoints * 180 / Math.PI;
+                if (flipAxis)
+                    Angle += 180; // Reorient the label so that it's always "pointing north"
             }
-  
-            p = p.Offset(edgeLength * Math.Cos(angleBetweenPoints), -edgeLength * Math.Sin(angleBetweenPoints));
-            if (EdgeControl.AlignLabelsToEdges)
-                p = MathHelper.RotatePoint(new Point(p.X, p.Y - EdgeControl.LabelVerticalOffset), p, Angle);
-            //optimized offset here
-            /*float x = 12.5f, y = 12.5f;
-            double sin = Math.Sin(angleBetweenPoints);
-            double cos = Math.Cos(angleBetweenPoints);
-            double sign = sin * cos / Math.Abs(sin * cos);
-            p.Offset(x * sin * sign + edgeLength * cos, y * cos * sign - edgeLength * sin);*/
-            if (double.IsNaN(p.X)) p.X = 0;
-            if (double.IsNaN(p.Y)) p.Y = 0;
-            LastKnownRectSize = new Rect(p.X, p.Y, desiredSize.Width, desiredSize.Height);
+
+            if (double.IsNaN(centerPoint.X)) centerPoint.X = 0;
+            if (double.IsNaN(centerPoint.Y)) centerPoint.Y = 0;
+            LastKnownRectSize = new Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
             Arrange(LastKnownRectSize);
         }
 

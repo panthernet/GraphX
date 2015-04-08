@@ -497,8 +497,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
-        
+
+        <!-- AVAILABLE CUSTOM PROPERTIES -->
+        <!-- 
+        <Setter Property="LabelVerticalOffset" Value="30"/>
+        <Setter Property="DashStyle" Value="Solid"/>
+        <Setter Property="ShowLabel" Value="True"/> -->
+
+
         <Setter Property="MinWidth"
                 Value="1" />
         <Setter Property="MinHeight"
@@ -525,6 +531,9 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
         <Setter Property="RenderTransform">
             <Setter.Value>
                 <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=local:EdgeLabelControl} , Path=Angle}"/>

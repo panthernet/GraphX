@@ -206,10 +206,16 @@ namespace GraphX.Controls
         }
         private bool _alignLabelsToEdges;
 
+        public static readonly DependencyProperty LabelVerticalOffsetProperty = DependencyProperty.Register("LabelVerticalOffset",
+                                                                               typeof(double),
+                                                                               typeof(EdgeControl),
+                                                                               new PropertyMetadata(0));
+
+        
         /// <summary>
         /// Offset for labels Y axis to display it above/below the edge
         /// </summary>
-        public double LabelVerticalOffset { get; set; }
+        public double LabelVerticalOffset { get { return (double)GetValue(LabelVerticalOffsetProperty); } set { SetValue(LabelVerticalOffsetProperty, value); } }
 
         /// <summary>
         ///  Gets or Sets that user controls the path geometry object or it is generated automatically
