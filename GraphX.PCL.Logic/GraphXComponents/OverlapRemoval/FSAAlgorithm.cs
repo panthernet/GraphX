@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using GraphX.Measure;
 
 namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
@@ -28,16 +29,16 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
         {
         }
 
-        protected override void RemoveOverlap()
+        protected override void RemoveOverlap(CancellationToken cancellationToken)
         {
             DateTime t0 = DateTime.Now;
-            double cost = HorizontalImproved();
+            double cost = HorizontalImproved(cancellationToken);
             DateTime t1 = DateTime.Now;
 
             Debug.WriteLine( "PFS horizontal: cost=" + cost + " time=" + ( t1 - t0 ) );
 
             t1 = DateTime.Now;
-            cost = VerticalImproved();
+            cost = VerticalImproved(cancellationToken);
             DateTime t2 = DateTime.Now;
             Debug.WriteLine( "PFS vertical: cost=" + cost + " time=" + ( t2 - t1 ) );
             Debug.WriteLine( "PFS total: time=" + ( t2 - t0 ) );
@@ -108,7 +109,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
             return 0;
         }
 
-        protected void Horizontal()
+        protected void Horizontal(CancellationToken cancellationToken)
         {
             wrappedRectangles.Sort( XComparison );
             int i = 0, n = wrappedRectangles.Count;
@@ -120,6 +121,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 //TODO plus 1 check
                 for ( int j = i + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     RectangleWrapper<TObject> v = wrappedRectangles[j];
                     if ( u.CenterX == v.CenterX )
                     {
@@ -137,6 +139,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int j = k + 1; j < n; j++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         Vector f = force( wrappedRectangles[m].Rectangle, wrappedRectangles[j].Rectangle );
                         if ( f.X > delta )
                         {
@@ -146,6 +150,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 }
                 for ( int j = k + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     RectangleWrapper<TObject> r = wrappedRectangles[j];
                     r.Rectangle.Offset( delta, 0 );
                 }
@@ -154,7 +159,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
 
         }
 
-        protected double HorizontalImproved()
+        protected double HorizontalImproved(CancellationToken cancellationToken)
         {
             if (wrappedRectangles.Count == 0) return 0;
             wrappedRectangles.Sort( XComparison );
@@ -173,6 +178,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 int k = i;
                 for ( int j = i + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     RectangleWrapper<TObject> v = wrappedRectangles[j];
                     if ( u.CenterX == v.CenterX )
                     {
@@ -194,6 +200,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                         double ggg = 0;
                         for ( int j = 0; j < i; j++ )
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
                             Vector f = force( wrappedRectangles[j].Rectangle, wrappedRectangles[m].Rectangle );
                             ggg = Math.Max( f.X + gamma[j], ggg );
                         }
@@ -209,6 +216,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 //bal szélõ elemet újra meghatározzuk
                 for ( int m = i; m <= k; m++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     gamma[m] = g;
                     RectangleWrapper<TObject> r = wrappedRectangles[m];
                     x[m] = r.Rectangle.Left + g;
@@ -225,6 +233,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int j = k + 1; j < n; j++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         Vector f = force( wrappedRectangles[m].Rectangle, wrappedRectangles[j].Rectangle );
                         if ( f.X > delta )
                         {
@@ -238,6 +247,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
             double cost = 0;
             for ( i = 0; i < n; i++ )
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 RectangleWrapper<TObject> r = wrappedRectangles[i];
                 double oldPos = r.Rectangle.Left;
                 double newPos = x[i];
@@ -266,7 +277,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
             return 0;
         }
 
-        protected void Vertical()
+        protected void Vertical(CancellationToken cancellationToken)
         {
             wrappedRectangles.Sort( YComparison );
             int i = 0, n = wrappedRectangles.Count;
@@ -277,6 +288,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 RectangleWrapper<TObject> u = wrappedRectangles[i];
                 for ( int j = i; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     RectangleWrapper<TObject> v = wrappedRectangles[j];
                     if ( u.CenterY == v.CenterY )
                     {
@@ -294,6 +307,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int j = k + 1; j < n; j++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         Vector f = force2( wrappedRectangles[m].Rectangle, wrappedRectangles[j].Rectangle );
                         if ( f.Y > delta )
                         {
@@ -303,6 +318,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 }
                 for ( int j = k + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     RectangleWrapper<TObject> r = wrappedRectangles[j];
                     r.Rectangle.Offset( 0, delta );
                 }
@@ -311,7 +328,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
 
         }
 
-        protected double VerticalImproved()
+        protected double VerticalImproved(CancellationToken cancellationToken)
         {
             if (wrappedRectangles.Count == 0) return 0;
             wrappedRectangles.Sort( YComparison );
@@ -326,6 +343,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 int k = i;
                 for ( int j = i + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     RectangleWrapper<TObject> v = wrappedRectangles[j];
                     if ( u.CenterY == v.CenterY )
                     {
@@ -342,6 +361,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int m = i; m <= k; m++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         double ggg = 0;
                         for ( int j = 0; j < i; j++ )
                         {
@@ -358,6 +379,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 }
                 for ( int m = i; m <= k; m++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     gamma[m] = g;
                     RectangleWrapper<TObject> r = wrappedRectangles[m];
                     y[m] = r.Rectangle.Top + g;
@@ -372,6 +395,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int j = k + 1; j < n; j++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         Vector f = force( wrappedRectangles[m].Rectangle, wrappedRectangles[j].Rectangle );
                         if ( f.Y > delta )
                         {

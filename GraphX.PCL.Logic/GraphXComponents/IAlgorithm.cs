@@ -1,5 +1,4 @@
-using System;
-using QuickGraph.Algorithms;
+using System.Threading;
 
 namespace GraphX.GraphSharp.Algorithms
 {
@@ -8,15 +7,6 @@ namespace GraphX.GraphSharp.Algorithms
 	/// </summary>
 	public interface IAlgorithm
 	{
-		object SyncRoot { get;}
-		ComputationState State { get;}
-
-		void Compute();
-		void Abort();
-
-		event EventHandler StateChanged;
-		event EventHandler Started;
-		event EventHandler Finished;
-		event EventHandler Aborted;
+        void Compute(CancellationToken cancellationToken);
 	}
 }

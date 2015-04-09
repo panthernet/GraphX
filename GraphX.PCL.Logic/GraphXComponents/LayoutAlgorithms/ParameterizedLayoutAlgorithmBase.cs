@@ -160,10 +160,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout
 
 		protected virtual void NormalizePositions()
 		{
-			lock ( SyncRoot )
-			{
-				NormalizePositions( VertexPositions );
-			}
+    		NormalizePositions( VertexPositions );
 		}
 
 		protected static void NormalizePositions( IDictionary<TVertex, Point> vertexPositions )

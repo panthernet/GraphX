@@ -1,4 +1,5 @@
-﻿using GraphX.Measure;
+﻿using System.Threading;
+using GraphX.Measure;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
@@ -29,15 +30,15 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 
         public override Point[] ComputeSingle(TEdge edge)
         {
-            EdgeRoutingTest(edge);
+            EdgeRoutingTest(edge, CancellationToken.None);
             return EdgeRoutes.ContainsKey(edge) ? EdgeRoutes[edge] : null;
         }
 
-        public override void Compute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             EdgeRoutes.Clear();
             foreach (var item in _graph.Edges)
-                EdgeRoutingTest(item);
+                EdgeRoutingTest(item, cancellationToken);
         }
 
         double drawback_distance = 10;
@@ -52,7 +53,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             return list;
         }
 
-        private void EdgeRoutingTest(TEdge ctrl)
+        private void EdgeRoutingTest(TEdge ctrl, CancellationToken cancellationToken)
         {
             //bad edge data check
             if (ctrl.Source.ID == -1 || ctrl.Target.ID == -1)
@@ -80,6 +81,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                 var curDrawback = drawback_distance;
                 while (true)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var item = checklist.Keys.FirstOrDefault();
                     //set last route point as current start point
                     startPoint = tempList.Last();
@@ -119,6 +122,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
                         bool? blocked_direction = null;
                         while (!routeFound)
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
+
                             //choose opposite vector side each cycle
                             var signedDistance = viceversa ? side_distance : -side_distance;
                             //get new point coordinate

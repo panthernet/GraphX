@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using QuickGraph;
 using System.Diagnostics.Contracts;
 using GraphX.GraphSharp;
@@ -27,7 +28,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// Minimizes the crossings between the layers by sweeping up and down
         /// while there could be something optimized.
         /// </summary>
-        private void DoCrossingMinimizations()
+        private void DoCrossingMinimizations(CancellationToken cancellationToken)
         {
             int prevCrossings = int.MaxValue;
             int crossings = int.MaxValue;
@@ -47,6 +48,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             bool wasPhase2 = false;
             do
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 changed = false;
                 prevCrossings = crossings;
                 if (phase == 1)
@@ -55,12 +58,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     phase2iterationLeft--;
                 wasPhase2 = (phase == 2);
 
-                crossings = Sweeping(0, _layers.Count - 1, 1, enableSameMeasureOptimization, out c, ref phase);
+                crossings = Sweeping(0, _layers.Count - 1, 1, enableSameMeasureOptimization, out c, ref phase, cancellationToken);
                 changed = changed || c;
                 if (crossings == 0)
                     break;
 
-                crossings = Sweeping(_layers.Count - 1, 0, -1, enableSameMeasureOptimization, out c, ref phase);
+                crossings = Sweeping(_layers.Count - 1, 0, -1, enableSameMeasureOptimization, out c, ref phase, cancellationToken);
                 changed = changed || c;
                 if (phase == 1 && (!changed || crossings >= prevCrossings) && phase2iterationLeft > 0)
                     phase = 2;
@@ -79,7 +82,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// <param name="endLayerIndex">The index of the last layer (where the sweeping ends).</param>
         /// <param name="step">Increment or decrement of the layer index. (1 or -1)</param>
         /// <returns>The number of the edge crossings.</returns>
-        private int Sweeping(int startLayerIndex, int endLayerIndex, int step, bool enableSameMeasureOptimization, out bool changed, ref int phase)
+        private int Sweeping(int startLayerIndex, int endLayerIndex, int step, bool enableSameMeasureOptimization, out bool changed, ref int phase, CancellationToken cancellationToken)
         {
             int crossings = 0;
             changed = false;
@@ -105,11 +108,11 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 {
                     alternatingLayer.SetPositions();
                     _alternatingLayers[i + step].SetPositions();
-                    prevCrossCount = DoCrossCountingAndOptimization(alternatingLayer, _alternatingLayers[i + step], (i < i + step), false, (phase == 2), int.MaxValue);
+                    prevCrossCount = DoCrossCountingAndOptimization(alternatingLayer, _alternatingLayers[i + step], (i < i + step), false, (phase == 2), int.MaxValue, cancellationToken);
                     _crossCounts[ci] = prevCrossCount;
                 }
 
-                int crossCount = CrossingMinimizationBetweenLayers(ref alternatingLayer, i, i + step, enableSameMeasureOptimization, prevCrossCount, phase);
+                int crossCount = CrossingMinimizationBetweenLayers(ref alternatingLayer, i, i + step, enableSameMeasureOptimization, prevCrossCount, phase, cancellationToken);
 
                 if (crossCount < prevCrossCount || phase == 2 || changed)
                 {
@@ -179,7 +182,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             int nextLayerIndex,
             bool enableSameMeasureOptimization,
             int prevCrossCount,
-            int phase)
+            int phase, 
+            CancellationToken cancellationToken)
         {
             //decide which way we are sweeping (up or down)
             //straight = down, reverse = up
@@ -190,18 +194,18 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             AppendSegmentsToAlternatingLayer(nextAlternatingLayer, straightSweep);
 
             /* 2 */
-            ComputeMeasureValues(alternatingLayer, nextLayerIndex, straightSweep);
+            ComputeMeasureValues(alternatingLayer, nextLayerIndex, straightSweep, cancellationToken);
             nextAlternatingLayer.SetPositions();
 
             /* 3 */
             nextAlternatingLayer = InitialOrderingOfNextLayer(nextAlternatingLayer, _layers[nextLayerIndex], straightSweep);
 
             /* 4 */
-            PlaceQVertices(nextAlternatingLayer, _layers[nextLayerIndex], straightSweep);
+            PlaceQVertices(nextAlternatingLayer, _layers[nextLayerIndex], straightSweep, cancellationToken);
             nextAlternatingLayer.SetPositions();
 
             /* 5 */
-            int crossCount = DoCrossCountingAndOptimization(alternatingLayer, nextAlternatingLayer, straightSweep, enableSameMeasureOptimization, (phase == 2), prevCrossCount);
+            int crossCount = DoCrossCountingAndOptimization(alternatingLayer, nextAlternatingLayer, straightSweep, enableSameMeasureOptimization, (phase == 2), prevCrossCount, cancellationToken);
 
             /* 6 */
             nextAlternatingLayer.EnsureAlternatingAndPositions();
@@ -210,7 +214,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return crossCount;
         }
 
-        private IList<SugiVertex> FindVerticesWithSameMeasure(AlternatingLayer nextAlternatingLayer, bool straightSweep, out IList<int> ranges, out int maxRangeLength)
+        private IList<SugiVertex> FindVerticesWithSameMeasure(CancellationToken cancellationToken, AlternatingLayer nextAlternatingLayer, bool straightSweep, out IList<int> ranges, out int maxRangeLength)
         {
             var ignorableVertexType = straightSweep ? VertexTypes.QVertex : VertexTypes.PVertex;
             var verticesWithSameMeasure = new List<SugiVertex>();
@@ -221,6 +225,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             ranges = new List<int>();
             for (startIndex = 0; startIndex < vertices.Length; startIndex = endIndex + 1)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 for (endIndex = startIndex + 1;
                       endIndex < vertices.Length && vertices[startIndex].MeasuredPosition == vertices[endIndex].MeasuredPosition;
                       endIndex++) { }
@@ -231,6 +237,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     int rangeLength = 0;
                     for (int i = startIndex; i <= endIndex; i++)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (vertices[i].Type == ignorableVertexType || vertices[i].DoNotOpt)
                             continue;
 
@@ -318,7 +326,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             bool straightSweep,
             bool enableSameMeasureOptimization,
             bool reverseVerticesWithSameMeasure,
-            int prevCrossCount)
+            int prevCrossCount,
+            CancellationToken cancellationToken)
         {
             IList<CrossCounterPair> virtualEdgePairs, realEdgePairs;
             IList<SugiEdge> realEdges;
@@ -332,13 +341,13 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             secondLayerSize = lastOnBottomLayer.Position + (lastOnBottomLayer is ISegmentContainer ? ((ISegmentContainer)lastOnBottomLayer).Count : 1);
 
             virtualEdgePairs = FindVirtualEdgePairs(topLayer, bottomLayer);
-            realEdges = FindRealEdges(topLayer);
+            realEdges = FindRealEdges(topLayer, cancellationToken);
 
             if (enableSameMeasureOptimization || reverseVerticesWithSameMeasure)
             {
                 IList<int> ranges;
                 int maxRangeLength;
-                var verticesWithSameMeasure = FindVerticesWithSameMeasure(nextAlternatingLayer, straightSweep, out ranges, out maxRangeLength);
+                var verticesWithSameMeasure = FindVerticesWithSameMeasure(cancellationToken, nextAlternatingLayer, straightSweep, out ranges, out maxRangeLength);
                 var verticesWithSameMeasureSet = new HashSet<SugiVertex>(verticesWithSameMeasure);
 
                 //initialize permutation indices
@@ -402,7 +411,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     edgePairs.AddRange(virtualEdgePairs);
                     edgePairs.AddRange(realEdgePairs);
 
-                    int crossCount = BiLayerCrossCount(edgePairs, firstLayerSize, secondLayerSize);
+                    int crossCount = BiLayerCrossCount(edgePairs, firstLayerSize, secondLayerSize, cancellationToken);
 
                     if (reverseVerticesWithSameMeasure)
                         return crossCount;
@@ -446,7 +455,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 edgePairs.AddRange(virtualEdgePairs);
                 edgePairs.AddRange(realEdgePairs);
 
-                return BiLayerCrossCount(edgePairs, firstLayerSize, secondLayerSize);
+                return BiLayerCrossCount(edgePairs, firstLayerSize, secondLayerSize, cancellationToken);
             }
         }
 
@@ -491,7 +500,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return pairs;
         }
 
-        private IList<SugiEdge> FindRealEdges(AlternatingLayer topLayer)
+        private IList<SugiEdge> FindRealEdges(AlternatingLayer topLayer, CancellationToken cancellationToken)
         {
             var realEdges = new List<SugiEdge>();
             foreach (var item in topLayer)
@@ -501,7 +510,11 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     continue;
 
                 foreach (var edge in _graph.OutEdges(vertex))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     realEdges.Add(edge);
+                }
             }
             return realEdges;
         }
@@ -612,7 +625,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return true; //new permutation generated
         }
 
-        private static int BiLayerCrossCount(IEnumerable<CrossCounterPair> pairs, int firstLayerVertexCount, int secondLayerVertexCount)
+        private static int BiLayerCrossCount(IEnumerable<CrossCounterPair> pairs, int firstLayerVertexCount, int secondLayerVertexCount, CancellationToken cancellationToken)
         {
             if (pairs == null)
                 return 0;
@@ -647,6 +660,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
                 foreach (var pair in list)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     //get the radix where the pair should be inserted
                     r = radixByFirst[pair.First];
                     if (r == null)
@@ -698,6 +713,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     }
                     while (index > 0)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (index % 2 > 0)
                         {
                             crossCount += tree[index + 1].Accumulator * pair.Weight;
@@ -760,7 +777,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return queue;
         }
 
-        private void PlaceQVertices(AlternatingLayer alternatingLayer, IList<SugiVertex> nextLayer, bool straightSweep)
+        private void PlaceQVertices(AlternatingLayer alternatingLayer, IList<SugiVertex> nextLayer, bool straightSweep, CancellationToken cancellationToken)
         {
             var type = straightSweep ? VertexTypes.QVertex : VertexTypes.PVertex;
             var qVertices = new HashSet<SugiVertex>();
@@ -779,6 +796,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     continue;
                 for (int j = 0; j < segmentContainer.Count; j++)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var segment = segmentContainer[j];
                     var vertex = straightSweep ? segment.QVertex : segment.PVertex;
                     if (!qVertices.Contains(vertex))
@@ -824,10 +843,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             }
         }
 
-        private void ComputeMeasureValues(AlternatingLayer alternatingLayer, int nextLayerIndex, bool straightSweep)
+        private void ComputeMeasureValues(AlternatingLayer alternatingLayer, int nextLayerIndex, bool straightSweep, CancellationToken cancellationToken)
         {
             AssignPositionsOnActualLayer(alternatingLayer);
-            AssignMeasuresOnNextLayer(_layers[nextLayerIndex], straightSweep);
+            AssignMeasuresOnNextLayer(_layers[nextLayerIndex], straightSweep, cancellationToken);
         }
 
         private AlternatingLayer InitialOrderingOfNextLayer(AlternatingLayer alternatingLayer, IList<SugiVertex> nextLayer, bool straightSweep)
@@ -910,7 +929,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             }
         }
 
-        private void AssignMeasuresOnNextLayer(IList<SugiVertex> layer, bool straightSweep)
+        private void AssignMeasuresOnNextLayer(IList<SugiVertex> layer, bool straightSweep, CancellationToken cancellationToken)
         {
             //measures of the containers is the same as their positions
             //so we should set the measures only for the vertices
@@ -927,6 +946,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 int count = 0;
                 foreach (var edge in edges)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var otherVertex = edge.OtherVertex(vertex);
                     vertex.MeasuredPosition += otherVertex.Position;
                     count++;

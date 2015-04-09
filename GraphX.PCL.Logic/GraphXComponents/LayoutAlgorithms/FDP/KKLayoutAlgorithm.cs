@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -40,7 +41,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
             : base( visitedGraph, vertexPositions, oldParameters ) { }
         #endregion
 
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             if (VisitedGraph.VertexCount == 1)
             {
@@ -80,8 +81,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
             //calculating the ideal distance between the nodes
             for ( int i = 0; i < VisitedGraph.VertexCount - 1; i++ )
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 for ( int j = i + 1; j < VisitedGraph.VertexCount; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     //distance between non-adjacent vertices
                     double dist = diameter * Parameters.DisconnectedMultiplier;
 
@@ -104,6 +107,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
             //TODO check this condition
             for ( int currentIteration = 0; currentIteration < Parameters.MaxIterations; currentIteration++ )
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 #region An iteration
                 double maxDeltaM = double.NegativeInfinity;
                 int pm = -1;
@@ -111,6 +116,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
                 //get the 'p' with the max delta_m
                 for ( int i = 0; i < n; i++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     double deltaM = CalculateEnergyGradient( i );
                     if ( maxDeltaM < deltaM )
                     {
@@ -140,8 +147,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
                     double energy = CalcEnergy();
                     for ( int i = 0; i < n - 1; i++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         for ( int j = i + 1; j < n; j++ )
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
+
                             double xenergy = CalcEnergyIfExchanged( i, j );
                             if ( energy > xenergy )
                             {

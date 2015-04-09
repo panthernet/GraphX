@@ -1,4 +1,5 @@
-﻿using GraphX.GraphSharp.Algorithms.EdgeRouting;
+﻿using System.Threading;
+using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using System.Collections.Generic;
 using GraphX.Measure;
 
@@ -6,7 +7,7 @@ namespace ShowcaseApp.WPF
 {
     public class ExampleExternalEdgeRoutingAlgorithm<TVertex, TEdge> : IExternalEdgeRouting<TVertex, TEdge>
     {
-        public void Compute()
+        public void Compute(CancellationToken cancellationToken)
         {
         }
 

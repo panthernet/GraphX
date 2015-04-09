@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 		#endregion
 
 
-		protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
 		{
 			if ( VisitedGraph.VertexCount == 0 ) return;
             if (VisitedGraph.VertexCount == 1)
@@ -64,6 +65,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 
 			for ( int step = 1; step <= Parameters.iterationCount; step++ )
 			{
+                cancellationToken.ThrowIfCancellationRequested();
+
 				ComputeBaryCenter();
 				quadTree = BuildQuadTree();
 
@@ -92,6 +95,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 				#region Move each node
 				for ( int i = 0; i < vertices.Length; i++ )
 				{
+                    cancellationToken.ThrowIfCancellationRequested();
+
 					var v = vertices[i];
 					double oldEnergy = GetEnergy( i, quadTree );
 
@@ -110,6 +115,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 					      multiple >= 1 && ( bestMultiple == 0 || bestMultiple / 2 == multiple );
 					      multiple /= 2 )
 					{
+                        cancellationToken.ThrowIfCancellationRequested();
+
 						v.Position = oldPos + bestDir * multiple;
 						double curEnergy = GetEnergy( i, quadTree );
 						if ( curEnergy < bestEnergy )
@@ -124,6 +131,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 					      multiple <= 128 && bestMultiple == multiple / 2;
 					      multiple *= 2 )
 					{
+                        cancellationToken.ThrowIfCancellationRequested();
+
 						v.Position = oldPos + bestDir * multiple;
 						double curEnergy = GetEnergy( i, quadTree );
 						if ( curEnergy < bestEnergy )

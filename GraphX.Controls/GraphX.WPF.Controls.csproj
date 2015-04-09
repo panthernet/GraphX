@@ -93,6 +93,7 @@
     <Compile Include="Behaviours\DragBehaviour.cs" />
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Models\Interfaces\IEdgeLabelControl.cs" />
     <Compile Include="Models\Interfaces\ITrackableContent.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />

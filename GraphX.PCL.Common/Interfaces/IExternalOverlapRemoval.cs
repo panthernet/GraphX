@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 
 namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
@@ -12,6 +13,6 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
         /// <summary>
         /// Implements algorithm computation
         /// </summary>
-        void Compute();
+        void Compute(CancellationToken cancellationToken);
     }
 }

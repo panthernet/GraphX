@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -46,7 +47,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 		}
 		#endregion
 
-		protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
 		{
             if (VisitedGraph.VertexCount == 1)
             {
@@ -71,7 +72,9 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 			radius = Parameters.InitialRadius;
 			for ( int epoch = 0; epoch < Parameters.MaxEpoch; epoch++ )
 			{
-				Adjust();
+                cancellationToken.ThrowIfCancellationRequested();
+
+				Adjust(cancellationToken);
 
 				//Update Parameters
 				double factor = Math.Exp( -1 * Parameters.CoolingFactor * ( 1.0 * epoch / Parameters.MaxEpoch ) );
@@ -92,7 +95,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 		/// <summary>
 		/// Rántsunk egyet az összes ponton.
 		/// </summary>
-		protected void Adjust()
+		protected void Adjust(CancellationToken cancellationToken)
 		{
 			_tempPos = new Point();
 
@@ -110,10 +113,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 				vid.Distance = 0;
 				vid.Visited = false;
 			}
-			AdjustVertex( closest );
+			AdjustVertex( closest, cancellationToken );
 		}
 
-		private void AdjustVertex( TVertex closest )
+		private void AdjustVertex( TVertex closest, CancellationToken cancellationToken )
 		{
 			_queue.Clear();
 			ISOMData vid = _isomDataDict[closest];
@@ -123,6 +126,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 
 			while ( _queue.Count > 0 )
 			{
+                cancellationToken.ThrowIfCancellationRequested();
+
 				TVertex current = _queue.Dequeue();
 				ISOMData currentVid = _isomDataDict[current];
 				Point pos = VertexPositions[current];
@@ -139,6 +144,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
 					//akkor a szomszedokra is hatassal vagyunk
 					foreach ( TVertex neighbour in VisitedGraph.GetNeighbours<TVertex, TEdge>( current ) )
 					{
+                        cancellationToken.ThrowIfCancellationRequested();
+
 						ISOMData nvid = _isomDataDict[neighbour];
 						if ( !nvid.Visited )
 						{

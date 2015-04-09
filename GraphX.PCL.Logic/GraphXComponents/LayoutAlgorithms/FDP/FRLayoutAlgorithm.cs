@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -35,7 +36,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
         /// <summary>
         /// It computes the layout of the vertices.
         /// </summary>
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             if (VisitedGraph.VertexCount == 1)
             {
@@ -62,11 +63,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
             _temperature = Parameters.InitialTemperature;
             for (int i = 0;
                   i < Parameters._iterationLimit
-                  && _temperature > minimalTemperature
-                  && State != QuickGraph.Algorithms.ComputationState.PendingAbortion;
+                  && _temperature > minimalTemperature;
                   i++)
             {
-                IterateOne();
+                IterateOne(cancellationToken);
 
                 //make some cooling
                 switch (Parameters._coolingFunction)
@@ -89,7 +89,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
         }
 
 
-        protected void IterateOne()
+        protected void IterateOne(CancellationToken cancellationToken)
         {
             //create the forces (zero forces)
             var forces = new Dictionary<Vertex, Vector>();
@@ -102,6 +102,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
                 Point posV = VertexPositions[v];
                 foreach (Vertex u in VisitedGraph.Vertices)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     //doesn't repulse itself
                     if (u.Equals(v))
                         continue;
