@@ -1,4 +1,6 @@
 using System.Drawing;
+using System.Threading;
+using System.Threading.Tasks;
 using GraphX.Controls;
 using GraphX.Controls.Models;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
@@ -20,7 +22,6 @@ using Microsoft.Win32;
 using System.Windows.Controls;
 using GraphX.Controls.Enums;
 using GraphX.Controls.Models.Interfaces;
-using GraphX.Logic.Models;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
@@ -30,7 +31,8 @@ namespace GraphX
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
-    { 
+    {
+        private readonly TaskScheduler _uiTaskScheduler;
 
         #region My properties
 
@@ -196,6 +198,8 @@ namespace GraphX
 
         public GraphArea()
         {
+            _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+
             ControlFactory = new GraphControlFactory(this);
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
@@ -532,7 +536,17 @@ namespace GraphX
         #endregion
 
         #region RelayoutGraph()
-        private void _relayoutGraph()
+        private Task _layoutTask = null;
+        private CancellationTokenSource _layoutCancellationSource; 
+
+        private enum Event
+        {
+            LayoutCalculationFinished,
+            OverlapRemovalCalculationFinished,
+            EdgeRoutingCalculationFinished
+        }
+  
+        private void _relayoutGraph(CancellationToken cancellationToken)
         {
             Dictionary<TVertex, Measure.Size> vertexSizes = null;
             IExternalLayout<TVertex> alg = null; //layout algorithm
@@ -540,9 +554,7 @@ namespace GraphX
             IExternalOverlapRemoval<TVertex> overlap = null;//overlap removal algorithm
             IExternalEdgeRouting<TVertex, TEdge> eralg = null;
 
-            var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
-
-            if(!(bool)dispatcher.Invoke(DispatcherPriority.Normal, new Func<bool>(() =>
+            if(!RunOnDispatcherThread(() =>
             {
                 if (LogicCore == null)
                     throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -568,14 +580,14 @@ namespace GraphX
                 //setup Edge Routing algorithm
                 eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
                 return alg != null || LogicCore.IsCustomLayout;
-            }))) return;
+            })) return;
             
 
             IDictionary<TVertex, Measure.Point> resultCoords;
             if (alg != null)
             {
-                alg.Compute();
-                if (Worker != null) Worker.ReportProgress(33, 0);
+                alg.Compute(cancellationToken);
+                ReportProgress(33, Event.LayoutCalculationFinished);
                 //result data storage
                 resultCoords = alg.VertexPositions;
             }//get default coordinates if using Custom layout
@@ -590,17 +602,16 @@ namespace GraphX
             {
                 //generate rectangle data from sizes
                 var coords = resultCoords;
-                dispatcher.Invoke(DispatcherPriority.Normal, new Action(() => { rectangles = GetVertexSizeRectangles(coords, vertexSizes, true); }));
+                RunOnDispatcherThread(() => { rectangles = GetVertexSizeRectangles(coords, vertexSizes, true); });
                 overlap.Rectangles = rectangles;
-                overlap.Compute();
+                overlap.Compute(cancellationToken);
                 resultCoords = new Dictionary<TVertex, Measure.Point>();
                 foreach (var res in overlap.Rectangles)
                     resultCoords.Add(res.Key, new Measure.Point(res.Value.Left, res.Value.Top));
-                if (Worker != null) Worker.ReportProgress(66, 1);
+                ReportProgress(66, Event.OverlapRemovalCalculationFinished);
             }
-
-
-            dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            
+            RunOnDispatcherThread(() =>
             {
                 LogicCore.CreateNewAlgorithmStorage(alg, overlap, eralg);
 
@@ -634,33 +645,34 @@ namespace GraphX
                         MoveAnimation.RunEdgeAnimation();
                 }
                 UpdateLayout(); //need to update before edge routing
-            }));
+            });
 
             //Edge Routing
             if (eralg != null)
             {
-                dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+                RunOnDispatcherThread(() =>
                 {
                     //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
                     eralg.AreaRectangle = ContentSize.ToGraphX();// new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
                     rectangles = GetVertexSizeRectangles(resultCoords, vertexSizes);
-                }));
+                });
                 eralg.VertexPositions = resultCoords;
                 eralg.VertexSizes = rectangles;
-                eralg.Compute();
+                eralg.Compute(cancellationToken);
                 if (eralg.EdgeRoutes != null)
                     foreach (var item in eralg.EdgeRoutes)
                         item.Key.RoutingPoints = item.Value;
-                if (Worker != null) Worker.ReportProgress(99, 1);
-                dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+
+                ReportProgress(99, Event.EdgeRoutingCalculationFinished);
+
+                RunOnDispatcherThread(() =>
                 {
                     UpdateLayout();
                     LogicCore.CreateNewAlgorithmStorage(alg, overlap, eralg);
-                }));
+                });
             }
         }
 
-        protected BackgroundWorker Worker;
         /// <summary>
         /// Relayout graph using the same vertexes
         /// </summary>
@@ -670,73 +682,138 @@ namespace GraphX
             _relayoutGraphMain(generateAllEdges);
         }
 
+        private void ReportProgress(int percent, Event @event)
+        {
+            RunOnDispatcherThread(() =>
+            {
+                switch (@event)
+                {
+                    case Event.LayoutCalculationFinished:
+                        OnLayoutCalculationFinished();
+                        break;
+                    case Event.OverlapRemovalCalculationFinished:
+                        OnOverlapRemovalCalculationFinished();
+                        break;
+                    case Event.EdgeRoutingCalculationFinished:
+                        OnEdgeRoutingCalculationFinished();
+                        break;
+                }
+            });
+        }
 
         private void _relayoutGraphMain(bool generateAllEdges = false, bool standalone = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+
             if (LogicCore.AsyncAlgorithmCompute)
             {
                 CancelRelayout();
-                Worker = new BackgroundWorker
-                {
-                    WorkerSupportsCancellation = true,
-                    WorkerReportsProgress = true
-                };
-                Worker.DoWork += ((sender, e) => _relayoutGraph());
-                Worker.ProgressChanged += ((s, e) =>
-                        {
-                            var value = (int)e.UserState;
-                            switch (value)
-                            {
-                                case 0: OnLayoutCalculationFinished(); break;
-                                case 1: OnOverlapRemovalCalculationFinished(); break;
-                                case 2: OnEdgeRoutingCalculationFinished(); break;
-                            }
-                        });
-                Worker.RunWorkerCompleted += ((s, e) =>
-                        {
-                            if (generateAllEdges)
-                            {
-                                if (_edgeslist.Count == 0)
-                                {
-                                    this.generateAllEdges();
-                                    if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
-                                }
-                                else UpdateAllEdges();
-                            }
-                            if (!standalone)
-                            {
-                                if (EnableVisualPropsRecovery) ReapplyVertexVisualProperties(); 
-                                OnGenerateGraphFinished();
-                            }
-                            else OnRelayoutFinished();
 
-                            Worker = null;
-                        });
-                Worker.RunWorkerAsync();
+                _layoutCancellationSource = new CancellationTokenSource();
+
+                // Launch _relayoutGraph on a background thread using the task thread pool
+                _layoutTask = Task.Factory.StartNew(() => _relayoutGraph(_layoutCancellationSource.Token), _layoutCancellationSource.Token)
+                                  .ContinueWith(t => // When finished, finish up the relayout on the UI thread
+                                  {
+                                      RunOnDispatcherThread(() => _finishUpRelayoutGraph(generateAllEdges, standalone));
+                                  }, _layoutCancellationSource.Token);
             }
             else
             {
-                _relayoutGraph();
-                if (generateAllEdges)
-                {
-                    if (_edgeslist.Count == 0)
-                    {
-                        this.generateAllEdges();
-                        if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
-                    }
-                    else UpdateAllEdges();
-                }
-                if (!standalone)
-                {
-                    if (EnableVisualPropsRecovery) ReapplyVertexVisualProperties();
-                    OnGenerateGraphFinished();
-                }
-                else OnRelayoutFinished();
+                _relayoutGraph(CancellationToken.None);
+                _finishUpRelayoutGraph(generateAllEdges, standalone);
             }  
         }
 
+        private void _finishUpRelayoutGraph(bool generateAllEdges, bool standalone)
+        {
+            if (generateAllEdges)
+            {
+                if (_edgeslist.Count == 0)
+                {
+                    this.generateAllEdges();
+                    if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
+                }
+                else UpdateAllEdges();
+            }
+            if (!standalone)
+            {
+                if (EnableVisualPropsRecovery) ReapplyVertexVisualProperties();
+                OnGenerateGraphFinished();
+            }
+            else OnRelayoutFinished();
+        }
+
+        private void RunOnDispatcherThread(Action action)
+        {
+            var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
+            if (dispatcher.CheckAccess())
+                action(); // On UI thread already, so make a direct call
+            else
+            {
+                try
+                {
+                    // Run through a task on the ui task scheduler. A dispatcher invoke will leave exceptions behind on the UI thread
+                    // and it will kill the application.
+                    Task.Factory.StartNew(action, CancellationToken.None, TaskCreationOptions.None, _uiTaskScheduler).Wait();
+                }
+                catch (AggregateException ex)
+                {
+                    UnwrapAndRethrow(ex);
+                }
+            }
+        }
+
+        private T RunOnDispatcherThread<T>(Func<T> expr)
+        {
+            var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
+            if (dispatcher.CheckAccess())
+                return expr();
+
+            try
+            {
+                // Run through a task on the ui task scheduler. A dispatcher invoke will leave exceptions behind on the UI thread
+                // and it will kill the application.
+                return Task.Factory.StartNew(expr, CancellationToken.None, TaskCreationOptions.None, _uiTaskScheduler).Result;
+            }
+            catch (AggregateException ex)
+            {
+                UnwrapAndRethrow(ex);
+                throw; // Just to make the compiler shut up about not returning a value.
+            }
+        }
+
+        private void UnwrapAndRethrow(AggregateException ex)
+        {
+            if (ex.InnerExceptions.Count == 1)
+            {
+                var innerException = ex.InnerExceptions[0];
+                innerException.PreserveStackTrace();
+                throw innerException;
+            }
+
+            // It's truly an aggregate exception, so throw as is
+            ex.PreserveStackTrace();
+            throw ex;
+        }
+
+        // Faking "await" from C# 5 / .NET 4.5 - see here: http://blogs.msdn.com/b/pfxteam/archive/2010/05/04/10007499.aspx
+        private void Await(Task task)
+        {
+            var nestedFrame = new DispatcherFrame();
+            task.ContinueWith(_ => nestedFrame.Continue = false);
+            Dispatcher.PushFrame(nestedFrame);
+
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                UnwrapAndRethrow(ex);
+            }
+        }
         #endregion
 
         /// <summary>
@@ -744,8 +821,23 @@ namespace GraphX
         /// </summary>
         public void CancelRelayout()
         {
-            if (Worker != null && Worker.IsBusy && Worker.WorkerSupportsCancellation)
-                Worker.CancelAsync();
+            if (_layoutTask == null)
+                return;
+
+            _layoutCancellationSource.Cancel();
+
+            try
+            {
+                // Wait, but don't block the dispatcher, because the background task might be trying to execute on the UI thread.
+                Await(_layoutTask);
+
+                _layoutCancellationSource = null;
+                _layoutTask = null;
+            }
+            catch (OperationCanceledException)
+            {
+                // This is expected if the task was indeed canceled
+            }
         }
 
         /// <summary>
@@ -1054,7 +1146,7 @@ namespace GraphX
             }
   
             var orAlgo = LogicCore.AlgorithmFactory.CreateFSAA(sizes, 15f, 15f);
-            orAlgo.Compute();
+            orAlgo.Compute(CancellationToken.None);
             foreach (var item in orAlgo.Rectangles)
             {
                 if (item.Key.IsVertex)
@@ -1076,7 +1168,7 @@ namespace GraphX
             {
                 LogicCore.AlgorithmStorage.EdgeRouting.VertexSizes = GetVertexSizeRectangles();
                 LogicCore.AlgorithmStorage.EdgeRouting.VertexPositions = GetVertexPositions();
-                LogicCore.AlgorithmStorage.EdgeRouting.Compute();
+                LogicCore.AlgorithmStorage.EdgeRouting.Compute(CancellationToken.None);
                 if (LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes != null)
                     foreach (var item in LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes)
                         item.Key.RoutingPoints = item.Value;
@@ -1498,6 +1590,8 @@ namespace GraphX
         #region IDisposable
         public void Dispose()
         {
+            CancelRelayout(); // In case some asynchronouse relayout is active
+
             if (StateStorage != null)
             {
                 StateStorage.Dispose();

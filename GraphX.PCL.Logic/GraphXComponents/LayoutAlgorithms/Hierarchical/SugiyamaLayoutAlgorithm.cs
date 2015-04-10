@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 using QuickGraph.Algorithms.Search;
@@ -195,7 +196,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// putting down the vertices to the layer above  
         /// its descendants.
         /// </summary>
-        protected void MinimizeHierarchicalEdgeLong()
+        protected void MinimizeHierarchicalEdgeLong(CancellationToken cancellationToken)
         {
             if ( !Parameters.MinimizeHierarchicalEdgeLong )
                 return;
@@ -205,6 +206,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 var layer = _layers[i];
                 foreach ( var v in layer.ToList() )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     if ( _graph.OutHierarchicalEdgeCount( v ) == 0 ) continue;
 
                     //put the vertex above the descendant on the highest layer
@@ -225,7 +227,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// span(e) edges (1 edge between every 2 neighbor layer)
         /// and span(e)-1 dummy vertices will be added to graph.
         /// </summary>
-        protected void ReplaceLongEdges()
+        protected void ReplaceLongEdges(CancellationToken cancellationToken)
         {
             //if an edge goes through multiple layers, we split the edge at every layer and insert a dummy node
             //  (only for the hierarchical edges)
@@ -252,6 +254,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 SugiVertex prev = edge.Source;
                 for ( int i = sourceLayerIndex + 1; i <= targetLayerIndex; i++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     //the last vertex is the Target, the other ones are dummy vertices
                     SugiVertex dummy;
                     if ( i == targetLayerIndex )
@@ -274,9 +278,9 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             //TODO implement
         }
 
-        protected void PrepareForSugiyama()
+        protected void PrepareForSugiyama(CancellationToken cancellationToken)
         {
-            MinimizeHierarchicalEdgeLong();
+            MinimizeHierarchicalEdgeLong(cancellationToken);
 
             #region 1) Unhide general edges between vertices participating in the hierarchy
             var analyze = new HashSet<SugiVertex>();
@@ -328,11 +332,11 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             _graph.HideEdgesIf( e => ( e.Type == EdgeTypes.General && e.Source.LayerIndex != e.Target.LayerIndex ), GeneralEdgesBetweenDifferentLayersTag );
 
             //replace long edges with more segments and dummy vertices
-            ReplaceLongEdges();
+            ReplaceLongEdges(cancellationToken);
 
             ConstrainWidth();
 
-            CopyPositions();
+            CopyPositions(cancellationToken);
             OnIterationEnded( "Preparation of the positions done." );
         }
         #endregion
@@ -348,7 +352,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// <param name="dirty">If this is a dirty sweep</param>
         /// <param name="byRealPosition"></param>
         /// <returns></returns>
-        protected bool SugiyamaPhase1Sweep( int start, int end, int step, BaryCenter baryCenter, bool dirty, bool byRealPosition )
+        protected bool SugiyamaPhase1Sweep( int start, int end, int step, BaryCenter baryCenter, bool dirty, bool byRealPosition, CancellationToken cancellationToken )
         {
             bool hasOptimization = false;
             CrossCount crossCounting = baryCenter == BaryCenter.Up ? CrossCount.Up : CrossCount.Down;
@@ -378,12 +382,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
                 if ( byRealPosition )
                 {
-                    HorizontalPositionAssignmentOnLayer( i, baryCenter );
+                    HorizontalPositionAssignmentOnLayer( i, baryCenter, cancellationToken );
                     CopyPositionsSilent( false );
                 }
                 else
                 {
-                    CopyPositions();
+                    CopyPositions(cancellationToken);
                 }
                 OnIterationEnded( " Phase 1 sweepstep finished [" + baryCenter + "-barycentering on layer " + i + "]" );
             }
@@ -400,7 +404,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// <param name="byRealPosition"></param>
         /// <returns>The index of the layer which is not ordered by <paramref name="baryCenter"/> anymore.
         /// If all of the layers ordered, and phase2 sweep done it returns with -1.</returns>
-        protected int SugiyamaPhase2Sweep( int start, int end, int step, BaryCenter baryCenter, bool byRealPosition )
+        protected int SugiyamaPhase2Sweep( int start, int end, int step, BaryCenter baryCenter, bool byRealPosition, CancellationToken cancellationToken )
         {
             CrossCount crossCountDirection = baryCenter == BaryCenter.Up ? CrossCount.Up : CrossCount.Down;
             for ( int i = start; i != end; i += step )
@@ -413,12 +417,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
                 if ( byRealPosition )
                 {
-                    HorizontalPositionAssignmentOnLayer( i, baryCenter );
+                    HorizontalPositionAssignmentOnLayer( i, baryCenter, cancellationToken );
                     CopyPositionsSilent( false );
                 }
                 else
                 {
-                    CopyPositions();
+                    CopyPositions(cancellationToken);
                 }
                 OnIterationEnded( " Phase 2 sweepstep finished [" + baryCenter + "-barycentering on layer " + i + "]" );
                 if ( i + step != end )
@@ -431,17 +435,17 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return -1;
         }
 
-        protected void SugiyamaDirtyPhase( bool byRealPosition )
+        protected void SugiyamaDirtyPhase( bool byRealPosition, CancellationToken cancellationToken )
         {
             if ( _layers.Count < 2 )
                 return;
 
             const bool dirty = true;
-            SugiyamaPhase1Sweep( 1, _layers.Count, 1, BaryCenter.Up, dirty, byRealPosition );
-            SugiyamaPhase1Sweep( _layers.Count - 2, -1, -1, BaryCenter.Down, dirty, byRealPosition );
+            SugiyamaPhase1Sweep( 1, _layers.Count, 1, BaryCenter.Up, dirty, byRealPosition, cancellationToken );
+            SugiyamaPhase1Sweep( _layers.Count - 2, -1, -1, BaryCenter.Down, dirty, byRealPosition, cancellationToken );
         }
 
-        protected bool SugiyamaPhase1( int startLayerIndex, BaryCenter startBaryCentering, bool ByRealPosition )
+        protected bool SugiyamaPhase1( int startLayerIndex, BaryCenter startBaryCentering, bool ByRealPosition, CancellationToken cancellationToken )
         {
             if ( _layers.Count < 2 ) return false;
 
@@ -450,24 +454,24 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
             if ( startBaryCentering == BaryCenter.Up )
             {
-                sweepDownOptimized = SugiyamaPhase1Sweep( startLayerIndex == -1 ? 1 : startLayerIndex, _layers.Count, 1, BaryCenter.Up, dirty, ByRealPosition );
+                sweepDownOptimized = SugiyamaPhase1Sweep( startLayerIndex == -1 ? 1 : startLayerIndex, _layers.Count, 1, BaryCenter.Up, dirty, ByRealPosition, cancellationToken );
                 startLayerIndex = -1;
             }
 
-            bool sweepUpOptimized = SugiyamaPhase1Sweep( startLayerIndex == -1 ? _layers.Count - 2 : startLayerIndex, -1, -1, BaryCenter.Down, dirty, ByRealPosition );
+            bool sweepUpOptimized = SugiyamaPhase1Sweep( startLayerIndex == -1 ? _layers.Count - 2 : startLayerIndex, -1, -1, BaryCenter.Down, dirty, ByRealPosition, cancellationToken );
 
             return sweepUpOptimized || sweepDownOptimized;
         }
 
-        protected bool SugiyamaPhase1( bool byRealPosition )
+        protected bool SugiyamaPhase1( bool byRealPosition, CancellationToken cancellationToken )
         {
-            return SugiyamaPhase1( -1, BaryCenter.Up, byRealPosition );
+            return SugiyamaPhase1( -1, BaryCenter.Up, byRealPosition, cancellationToken );
         }
 
-        protected bool SugiyamaPhase2( out int unorderedLayerIndex, out BaryCenter baryCentering, bool byRealPosition )
+        protected bool SugiyamaPhase2( out int unorderedLayerIndex, out BaryCenter baryCentering, bool byRealPosition, CancellationToken cancellationToken )
         {
             //Sweeping up
-            unorderedLayerIndex = SugiyamaPhase2Sweep( 1, _layers.Count, 1, BaryCenter.Up, byRealPosition );
+            unorderedLayerIndex = SugiyamaPhase2Sweep( 1, _layers.Count, 1, BaryCenter.Up, byRealPosition, cancellationToken );
             if ( unorderedLayerIndex != -1 )
             {
                 baryCentering = BaryCenter.Up;
@@ -475,7 +479,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             }
 
             //Sweeping down
-            unorderedLayerIndex = SugiyamaPhase2Sweep( _layers.Count - 2, -1, -1, BaryCenter.Down, byRealPosition );
+            unorderedLayerIndex = SugiyamaPhase2Sweep( _layers.Count - 2, -1, -1, BaryCenter.Down, byRealPosition, cancellationToken );
             baryCentering = BaryCenter.Down;
             if ( unorderedLayerIndex != -1 )
                 return false;
@@ -484,12 +488,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return true;
         }
 
-        protected void SugiyamaLayout()
+        protected void SugiyamaLayout(CancellationToken cancellationToken)
         {
             bool baryCenteringByRealPositions = Parameters.PositionCalculationMethod == PositionCalculationMethodTypes.PositionBased;
             if ( Parameters.DirtyRound )
                 //start with a dirty round (sort by barycenters, even if the number of the crossings will rise)
-                SugiyamaDirtyPhase( baryCenteringByRealPositions );
+                SugiyamaDirtyPhase( baryCenteringByRealPositions, cancellationToken );
 
             bool changed = true;
             int iteration1Left = Parameters.Phase1IterationCount;
@@ -506,8 +510,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 //
                 // Phase 1 - while there's any optimization
                 //
-                while ( iteration1Left > 0 && SugiyamaPhase1( startLayerIndex, startBaryCentering, baryCenteringByRealPositions ) )
+                while ( iteration1Left > 0 && SugiyamaPhase1( startLayerIndex, startBaryCentering, baryCenteringByRealPositions, cancellationToken ) )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     iteration1Left--;
                     changed = true;
                 }
@@ -520,7 +526,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 //
                 if ( iteration2Left > 0 )
                 {
-                    SugiyamaPhase2( out startLayerIndex, out startBaryCentering, baryCenteringByRealPositions );
+                    SugiyamaPhase2( out startLayerIndex, out startBaryCentering, baryCenteringByRealPositions, cancellationToken );
                     iteration2Left--;
                 }
 
@@ -559,10 +565,13 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         #endregion
 
         #region Last phase - Horizontal Assignment, edge routing, copying of the positions
-        protected void AssignPriorities()
+        protected void AssignPriorities(CancellationToken cancellationToken)
         {
-            foreach ( var v in _graph.Vertices )
-                v.Priority = ( v.IsDummyVertex ? int.MaxValue : _graph.HierarchicalEdgeCountFor( v ) );
+            foreach (var v in _graph.Vertices)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                v.Priority = (v.IsDummyVertex ? int.MaxValue : _graph.HierarchicalEdgeCountFor(v));
+            }
         }
 
         private double CalculateOverlap( SugiVertex a, SugiVertex b )
@@ -575,7 +584,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return Math.Max( 0, ( ( b.Size.Width + a.Size.Width ) * 0.5 + plusGap + Parameters.HorizontalGap ) - ( b.RealPosition.X - a.RealPosition.X ) );
         }
 
-        protected void HorizontalPositionAssignmentOnLayer( int layerIndex, BaryCenter baryCenter )
+        protected void HorizontalPositionAssignmentOnLayer( int layerIndex, BaryCenter baryCenter, CancellationToken cancellationToken )
         {
             var layer = _layers[layerIndex];
 
@@ -607,9 +616,12 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
                 //get the index of the 'v' vertex between the vertices which position has already been set
                 int indexOfV;
-                for ( indexOfV = 0;
-                      indexOfV < alreadySetVertices.Length && alreadySetVertices[indexOfV].Position < v.Position;
-                      indexOfV++ ) { }
+                for (indexOfV = 0;
+                    indexOfV < alreadySetVertices.Length && alreadySetVertices[indexOfV].Position < v.Position;
+                    indexOfV++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
 
                 SugiVertex leftNeighbor = null, rightNeighbor = null;
                 double leftOverlap = 0, rightOverlap = 0;
@@ -720,6 +732,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                           && ( leftOverlap = CalculateOverlap( alreadySetVertices[index - 1], alreadySetVertices[index] ) ) > 0;
                           index-- )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         alreadySetVertices[index - 1].RealPosition.X -= leftOverlap;
                     }
 
@@ -730,31 +743,32 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                           && ( rightOverlap = CalculateOverlap( alreadySetVertices[index], alreadySetVertices[index + 1] ) ) > 0;
                           index++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         alreadySetVertices[index + 1].RealPosition.X += rightOverlap;
                     }
             }
         }
 
-        protected void HorizontalPositionAssignmentSweep( int start, int end, int step, BaryCenter baryCenter )
+        protected void HorizontalPositionAssignmentSweep( int start, int end, int step, BaryCenter baryCenter, CancellationToken cancellationToken )
         {
             for ( int i = start; i != end; i += step )
-                HorizontalPositionAssignmentOnLayer( i, baryCenter );
+                HorizontalPositionAssignmentOnLayer( i, baryCenter, cancellationToken );
         }
 
-        protected void HorizontalPositionAssignment()
+        protected void HorizontalPositionAssignment(CancellationToken cancellationToken)
         {
             //sweeping up & down, assigning the positions for the vertices in the order of the priorities
             //positions computed with the barycenter method, based on the realpositions
-            AssignPriorities();
+            AssignPriorities(cancellationToken);
 
             if ( _layers.Count > 1 )
             {
-                HorizontalPositionAssignmentSweep( 1, _layers.Count, 1, BaryCenter.Up );
-                HorizontalPositionAssignmentSweep( _layers.Count - 2, -1, -1, BaryCenter.Down );
+                HorizontalPositionAssignmentSweep( 1, _layers.Count, 1, BaryCenter.Up, cancellationToken );
+                HorizontalPositionAssignmentSweep( _layers.Count - 2, -1, -1, BaryCenter.Down, cancellationToken );
             }
         }
 
-        protected void AssignPositions()
+        protected void AssignPositions(CancellationToken cancellationToken)
         {
             //initialize positions
             double verticalPos = 0;
@@ -764,6 +778,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 double layerHeight = _layers[i].Height;
                 foreach ( var v in _layers[i] )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     v.RealPosition.X = pos;
                     v.RealPosition.Y =
                         ( ( i == 0 )
@@ -776,7 +792,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             }
 
             //assign the horizontal positions
-            HorizontalPositionAssignment();
+            HorizontalPositionAssignment(cancellationToken);
         }
 
         protected void CopyPositionsSilent()
@@ -844,15 +860,15 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// <summary>
         /// Copies the coordinates of the vertices to the VertexPositions dictionary.
         /// </summary>
-        protected void CopyPositions()
+        protected void CopyPositions(CancellationToken cancellationToken)
         {
-            AssignPositions();
+            AssignPositions(cancellationToken);
 
             CopyPositionsSilent();
         }
         #endregion
 
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             if(_graph.VertexCount == 0) return;
             if (_graph.VertexCount == 1)
@@ -875,14 +891,14 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             //
             //Phase 3 - Crossing reduction
             //
-            PrepareForSugiyama();
-            SugiyamaLayout();
+            PrepareForSugiyama(cancellationToken);
+            SugiyamaLayout(cancellationToken);
             _statusInPercent = percentOfPreparation + percentOfSugiyama;
 
             //
             //Phase 4 - Horizontal position assignment
             //
-            CopyPositions();
+            CopyPositions(cancellationToken);
             OnIterationEnded( "Position adjusting finished" );
 
             //Phase 5 - Incremental extension, add vertices connected with only general edges

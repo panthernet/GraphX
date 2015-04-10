@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using QuickGraph;
@@ -22,9 +23,9 @@ namespace GraphX.GraphSharp.Algorithms.Layout
         {
             _graph = graph;
             _positions = positions;
-        }        
-    
-        public void Compute()
+        }
+
+        public void Compute(CancellationToken cancellationToken)
         {
             _vertexPositions.Clear();
             foreach (var item in _graph.Vertices)

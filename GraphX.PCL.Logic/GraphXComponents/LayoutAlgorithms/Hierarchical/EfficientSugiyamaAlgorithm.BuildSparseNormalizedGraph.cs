@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using QuickGraph;
 using System.Diagnostics.Contracts;
 
@@ -59,19 +60,19 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
         /// From the original graph it creates a sparse normalized graph
         /// with segments and dummy vertices (p-vertex, q-vertex, s-vertex).
         /// </summary>
-        private void BuildSparseNormalizedGraph()
+        private void BuildSparseNormalizedGraph(CancellationToken cancellationToken)
         {
-            CreateInitialLayering();
+            CreateInitialLayering(cancellationToken);
             if (Parameters.OptimizeWidth)
-                DoWidthAndHeightOptimization();
+                DoWidthAndHeightOptimization(cancellationToken);
             CreateDummyVerticesAndSegments();
-            RemoveParallelEdges();
+            RemoveParallelEdges(cancellationToken);
         }
 
-        private void DoWidthAndHeightOptimization()
+        private void DoWidthAndHeightOptimization(CancellationToken cancellationToken)
         {
             CreateVertexWHOptInfos();
-            CreateLayerWHOptInfos();
+            CreateLayerWHOptInfos(cancellationToken);
 
             if (_actualWidthPerHeight <= Parameters.WidthPerHeight)
                 return;
@@ -81,16 +82,18 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             {
                 optimized = DoWHOptimizationStep();
             } while (optimized);
-            RewriteLayerIndexes();
+            RewriteLayerIndexes(cancellationToken);
         }
 
-        private void RewriteLayerIndexes()
+        private void RewriteLayerIndexes(CancellationToken cancellationToken)
         {
             int i = 0;
             foreach (var layer in _layers)
             {
                 foreach (var vertex in layer)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     vertex.LayerIndex = i;
                 }
                 i++;
@@ -183,7 +186,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             return true;
         }
 
-        private void CreateLayerWHOptInfos()
+        private void CreateLayerWHOptInfos(CancellationToken cancellationToken)
         {
             _actualHeight = 0;
             _actualWidth = 0;
@@ -193,6 +196,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 layerInfo.IsInsertedLayer = false;
                 foreach (var vertex in layer)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     layerInfo.LayerHeight = Math.Max(vertex.Size.Height, layerInfo.LayerHeight);
                     layerInfo.LayerWidth += vertex.Size.Width;
                     WHOptimizationVertexInfo vertexInfo;
@@ -207,6 +212,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 var vertexList = new List<WHOptimizationVertexInfo>();
                 foreach (var v in layerInfo.Vertices)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     if (!double.IsNaN(v.ValuePerCost) && !double.IsPositiveInfinity(v.ValuePerCost) && !double.IsNegativeInfinity(v.ValuePerCost))
                         vertexList.Add(v);
                 }
@@ -216,6 +223,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                 layerInfo.Vertices.Clear();
                 foreach (var v in vertexList)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     layerInfo.Vertices.Enqueue(v);
                 }
                 _whOptLayerInfos.Add(layerInfo);
@@ -243,20 +252,22 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
             _whAverageVertexHeight /= vertexCount;
         }
 
-        private void RemoveParallelEdges()
+        private void RemoveParallelEdges(CancellationToken cancellationToken)
         {
             foreach (var vertex in _graph.Vertices)
             {
                 var targets = new HashSet<SugiVertex>();
                 foreach (var edge in _graph.OutEdges(vertex).ToArray())
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     if (targets.Contains(edge.Target))
                         _graph.RemoveEdge(edge);
                 }
             }
         }
 
-        private void CreateInitialLayering()
+        private void CreateInitialLayering(CancellationToken cancellationToken)
         {
             var lts = new LayeredTopologicalSortAlgorithm<SugiVertex, SugiEdge>(_graph);
             lts.Compute();
@@ -268,7 +279,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
 
                 //assign the layerindex
                 foreach (var v in _layers[i])
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
                     v.LayerIndex = i;
+                }
             }
 
             //minimize edge length
@@ -279,6 +293,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical
                     var layer = _layers[i];
                     foreach (var v in layer.ToList())
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (_graph.OutDegree(v) == 0) continue;
 
                         //put the vertex above the descendant on the highest layer

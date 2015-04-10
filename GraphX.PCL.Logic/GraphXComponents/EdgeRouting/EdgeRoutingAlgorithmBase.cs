@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 using System;
@@ -36,7 +37,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// <summary>
         /// Run algorithm calculation
         /// </summary>
-        public virtual void Compute()
+        public virtual void Compute(CancellationToken cancellationToken)
         {
         }
 

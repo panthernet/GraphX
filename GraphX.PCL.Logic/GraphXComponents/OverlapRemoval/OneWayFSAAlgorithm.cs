@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 
 namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
@@ -12,22 +13,22 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
         {
         }
 
-        protected override void RemoveOverlap()
+        protected override void RemoveOverlap(CancellationToken cancellationToken)
         {
             switch ( Parameters.Way )
             {
                 case OneWayFSAWayEnum.Horizontal:
-                    HorizontalImproved();
+                    HorizontalImproved(cancellationToken);
                     break;
                 case OneWayFSAWayEnum.Vertical:
-                    VerticalImproved();
+                    VerticalImproved(cancellationToken);
                     break;
                 default:
                     break;
             }
         }
 
-        protected new double HorizontalImproved()
+        protected new double HorizontalImproved(CancellationToken cancellationToken)
         {
             wrappedRectangles.Sort( XComparison );
             int i = 0, n = wrappedRectangles.Count;
@@ -45,6 +46,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 int k = i;
                 for ( int j = i + 1; j < n; j++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var v = wrappedRectangles[j];
                     if ( u.CenterX == v.CenterX )
                     {
@@ -61,6 +64,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 //ne legyenek ugyanabban a pontban
                 for ( int z = i + 1; z <= k; z++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var v = wrappedRectangles[z];
                     v.Rectangle.X += ( z - i ) * 0.0001;
                 }
@@ -73,6 +78,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                         double ggg = 0;
                         for ( int j = 0; j < i; j++ )
                         {
+                            cancellationToken.ThrowIfCancellationRequested();
+
                             var f = force( wrappedRectangles[j].Rectangle, wrappedRectangles[m].Rectangle );
                             ggg = Math.Max( f.X + gamma[j], ggg );
                         }
@@ -85,6 +92,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 //bal szélő elemet újra meghatározzuk
                 for ( int m = i; m <= k; m++ )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     gamma[m] = g;
                     var r = wrappedRectangles[m];
                     x[m] = r.Rectangle.Left + g;
@@ -101,6 +110,8 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
                 {
                     for ( int j = k + 1; j < n; j++ )
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         var f = force( wrappedRectangles[m].Rectangle, wrappedRectangles[j].Rectangle );
                         if ( f.X > delta )
                         {

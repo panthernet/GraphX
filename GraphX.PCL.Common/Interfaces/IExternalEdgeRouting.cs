@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 
 namespace GraphX.GraphSharp.Algorithms.EdgeRouting
@@ -8,7 +9,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// <summary>
         /// Run algorithm calculation
         /// </summary>
-        void Compute();
+        void Compute(CancellationToken cancellationToken);
         /// <summary>
         /// Compute edge routing for single edge
         /// </summary>

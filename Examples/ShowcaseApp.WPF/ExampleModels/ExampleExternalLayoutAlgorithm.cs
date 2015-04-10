@@ -1,4 +1,5 @@
-﻿using GraphX.GraphSharp.Algorithms.Layout;
+﻿using System.Threading;
+using GraphX.GraphSharp.Algorithms.Layout;
 using GraphX.Measure;
 using QuickGraph;
 using System.Collections.Generic;
@@ -25,11 +26,11 @@ namespace ShowcaseApp.WPF
             _graph = graph;
         }
 
-        public void Compute()
+        public void Compute(CancellationToken cancellationToken)
         {
             var pars = new EfficientSugiyamaLayoutParameters { LayerDistance = 200 };
             var algo = new EfficientSugiyamaLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(_graph, pars, _vertexPositions, VertexSizes);
-            algo.Compute();
+            algo.Compute(cancellationToken);
 
             // now you can use = algo.VertexPositions for custom manipulations
 

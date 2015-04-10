@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 
 namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
@@ -24,7 +25,7 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
 		protected List<RectangleWrapper<TObject>> wrappedRectangles;
 
 
-		public OverlapRemovalAlgorithmBase( IDictionary<TObject, Rect> rectangles, TParam parameters )
+		public OverlapRemovalAlgorithmBase(IDictionary<TObject, Rect> rectangles, TParam parameters )
 		{
 			//eredeti téglalapok listája
 			originalRectangles = rectangles;
@@ -44,13 +45,13 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
             }
         }
 
-		protected sealed override void InternalCompute()
+        public sealed override void Compute(CancellationToken cancellationToken)
 		{
             GenerateWrappedRectangles(originalRectangles);
 
 			AddGaps();
 
-			RemoveOverlap();
+			RemoveOverlap(cancellationToken);
 
 			RemoveGaps();
 
@@ -78,6 +79,6 @@ namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
 			}
 		}
 
-		protected abstract void RemoveOverlap();
+		protected abstract void RemoveOverlap(CancellationToken cancellationToken);
 	}
 }

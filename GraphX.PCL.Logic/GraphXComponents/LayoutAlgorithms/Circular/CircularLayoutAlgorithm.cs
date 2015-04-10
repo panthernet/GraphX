@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -21,7 +22,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             sizes = vertexSizes;
         }
 
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             //calculate the size of the circle
             double perimeter = 0;
@@ -29,6 +30,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             int i = 0;
             foreach ( var v in VisitedGraph.Vertices )
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 Size s = sizes[v];
                 halfSize[i] = Math.Sqrt( s.Width * s.Width + s.Height * s.Height ) * 0.5;
                 perimeter += halfSize[i] * 2;
@@ -44,6 +47,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             i = 0;
             foreach ( var v in VisitedGraph.Vertices )
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 a = Math.Sin( halfSize[i] * 0.5 / radius ) * 2;
                 angle += a;
                 //if ( ReportOnIterationEndNeeded )
@@ -62,6 +67,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             i = 0;
             foreach ( var v in VisitedGraph.Vertices )
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 a = Math.Sin( halfSize[i] * 0.5 / radius ) * 2;
                 angle += a;
                 VertexPositions[v] = new Point( Math.Cos( angle ) * radius + radius, Math.Sin( angle ) * radius + radius );

@@ -49,56 +49,60 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
             }
         }
 
-        public override void Compute()
+        public override void Compute(CancellationToken cancellationToken)
         {
-            BundleAllEdges(_graph);
+            BundleAllEdges(_graph, cancellationToken);
         }
         public override Point[] ComputeSingle(TEdge edge)
         {
             BundleEdges(_graph, new List<TEdge>() { edge });
             return EdgeRoutes.ContainsKey(edge) ? EdgeRoutes[edge] : null;
         }
-    
+
         /// <summary>
         /// Bundles edges of the graph.
         /// </summary>
-        /// 
         /// <param name="graph">
-        /// Graph whose edges should be bundled
+        ///     Graph whose edges should be bundled
         /// </param>
-        /// 
+        /// <param name="cancellationToken"></param>
         /// <param name="rectangle">
         /// Rectangle in which the graph is laid out.
         /// Control points of bundled edges should not fall outside of this rectangle.
         /// </param>
-        public void BundleAllEdges(TGraph graph)
+        public void BundleAllEdges(TGraph graph, CancellationToken cancellationToken)
         {
             EdgeRoutes.Clear();
 
             //this.rectangle = rectangle;
             directed = true; // as we use bidirectional by default
 
-            AddDataForAllEdges(graph.Edges);
+            AddDataForAllEdges(graph.Edges, cancellationToken);
 
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
 
-            FindCompatibleEdges(edgeGroupData);
+            FindCompatibleEdges(edgeGroupData, cancellationToken);
 
             //sw.Stop();
 
 
-            DivideAllEdges(subdivisionPoints);
+            DivideAllEdges(subdivisionPoints, cancellationToken);
 
             //sw = new Stopwatch();
             //sw.Start();
 
             for (var i = 0; i < iterations; i++)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 MoveControlPoints(edgeGroupData);
+            }
 
             //prevents oscillating movements
             for (var i = 0; i < 5; i++)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 cooldown *= 0.5f;
                 MoveControlPoints(edgeGroupData);
             }
@@ -112,6 +116,8 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 
             foreach (var e in graph.Edges)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (!e.IsSelfLoop)
                 {
                     var key = new KeyPair(e.Source.ID, e.Target.ID);
@@ -151,7 +157,7 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
 
             AddAllExistingData(graph.Edges);
             AddEdgeDataForMovedEdges(edges);
-            FindCompatibleEdges(movedEdgeGroupData);
+            FindCompatibleEdges(movedEdgeGroupData, CancellationToken.None);
             ResetMovedEdges();
 
             for (var i = 0; i < iterations; i++)
@@ -216,11 +222,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// Collects edge data from all edges in the specified collection.
         /// Used by the <see cref="BundleAllEdges"/> method.
         /// </summary>
-        /// 
         /// <param name="edges">
-        /// Collection of edges whose data should be collected
+        ///     Collection of edges whose data should be collected
         /// </param>
-        private void AddDataForAllEdges(IEnumerable<TEdge> edges)
+        /// <param name="cancellationToken"></param>
+        private void AddDataForAllEdges(IEnumerable<TEdge> edges, CancellationToken cancellationToken)
         {
             foreach (var e in edges)
                 if (!e.IsSelfLoop)
@@ -584,11 +590,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// <summary>
         /// Finds compatible edges for the specified set of edges
         /// </summary>
-        /// 
         /// <param name="edgeSet">
-        /// Edges for which we should find compatible edges
+        ///     Edges for which we should find compatible edges
         /// </param>
-        private void FindCompatibleEdges(Dictionary<KeyPair, EdgeGroupData> edgeSet)
+        /// <param name="cancellationToken"></param>
+        private void FindCompatibleEdges(Dictionary<KeyPair, EdgeGroupData> edgeSet, CancellationToken cancellationToken)
         {
             foreach (var p1 in edgeSet)
             {
@@ -615,11 +621,11 @@ namespace GraphX.GraphSharp.Algorithms.EdgeRouting
         /// <summary>
         /// Divides edges into segments by adding subdivision points to them
         /// </summary>
-        /// 
         /// <param name="subdivisionPointsNum">
-        /// Number of subdivision points that should be created
+        ///     Number of subdivision points that should be created
         /// </param>
-        private void DivideAllEdges(int subdivisionPointsNum)
+        /// <param name="cancellationToken"></param>
+        private void DivideAllEdges(int subdivisionPointsNum, CancellationToken cancellationToken)
         {
             if (subdivisionPointsNum < 1) return;
 

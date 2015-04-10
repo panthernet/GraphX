@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 using QuickGraph.Algorithms.Search;
@@ -28,7 +29,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             sizes = new Dictionary<TVertex, Size>( vertexSizes );
         }
 
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             if ( Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft )
             {
@@ -42,7 +43,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             else
                 direction = 1;
 
-            GenerateSpanningTree();
+            GenerateSpanningTree(cancellationToken);
             //DoWidthAndHeightOptimization();
 
             //first layout the vertices with 0 in-edge
@@ -53,10 +54,10 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             foreach ( var source in spanningTree.Vertices )
                 CalculatePosition( source, null, 0 );
 
-            AssignPositions();
+            AssignPositions(cancellationToken);
         }
 
-        private void GenerateSpanningTree()
+        private void GenerateSpanningTree(CancellationToken cancellationToken)
         {
             spanningTree = new BidirectionalGraph<TVertex, Edge<TVertex>>( false );
             spanningTree.AddVertexRange( VisitedGraph.Vertices );
@@ -66,12 +67,20 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             {
                 case SpanningTreeGeneration.BFS:
                     var bfsAlgo = new BreadthFirstSearchAlgorithm<TVertex, TEdge>( VisitedGraph, vb, new Dictionary<TVertex, GraphColor>() );
-                    bfsAlgo.TreeEdge += e => spanningTree.AddEdge( new Edge<TVertex>( e.Source, e.Target ) );
+                    bfsAlgo.TreeEdge += e =>
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        spanningTree.AddEdge(new Edge<TVertex>(e.Source, e.Target));
+                    };
                     bfsAlgo.Compute();
                     break;
                 case SpanningTreeGeneration.DFS:
                     var dfsAlgo = new DepthFirstSearchAlgorithm<TVertex, TEdge>( VisitedGraph );
-                    dfsAlgo.TreeEdge += e => spanningTree.AddEdge( new Edge<TVertex>( e.Source, e.Target ) );
+                    dfsAlgo.TreeEdge += e =>
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        spanningTree.AddEdge(new Edge<TVertex>(e.Source, e.Target));
+                    };
                     dfsAlgo.Compute();
                     break;
             }
@@ -131,7 +140,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             return d.position;
         }
 
-        protected void AssignPositions()
+        protected void AssignPositions(CancellationToken cancellationToken)
         {
             double layerSize = 0;
             bool changeCoordinates = ( Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft );
@@ -140,6 +149,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
             {
                 foreach ( var v in layer.Vertices )
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     Size size = sizes[v];
                     var d = data[v];
                     if ( d.parent != null )

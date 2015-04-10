@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -37,7 +38,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Tree
 			this.vertexSizes = vertexSizes;
 		}
 
-		protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
 		{
 			InitializeData();
 

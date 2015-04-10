@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using GraphX.Measure;
 using QuickGraph;
 
@@ -78,7 +79,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
         /// <summary>
         /// This method is the skeleton of the layout algorithm.
         /// </summary>
-        protected override void InternalCompute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             //call initialize
             Init(_vertexSizes, _vertexBorders, _layoutTypes);
@@ -117,21 +118,23 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
                      (_step > 0 && true/*error > _errorThresholds[_phase - 1] */) || (_phase == 2 && !_allTreesGrown);
                      _step--)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     /*error = 0;*/
 
                     ApplySpringForces();
-                    ApplyRepulsionForces();
+                    ApplyRepulsionForces(cancellationToken);
 
                     if (_phase > 1)
                     {
-                        ApplyGravitationForces();
+                        ApplyGravitationForces(cancellationToken);
                         ApplyApplicationSpecificForces();
                     }
 
                    // if (ReportOnIterationEndNeeded)
                   //      SavePositions();
 
-                    CalcNodePositionsAndSizes();
+                    CalcNodePositionsAndSizes(cancellationToken);
 
                     if (_phase == 2 && !_allTreesGrown && _step % _treeGrowingStep == 0)
                         GrowTreesOneLevel();
@@ -311,7 +314,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
         /// <summary>
         /// Applies the repulsion forces between every node-pair.
         /// </summary>
-        private void ApplyRepulsionForces()
+        private void ApplyRepulsionForces(CancellationToken cancellationToken)
         {
             var repulsionRange = Parameters.IdealEdgeLength * Parameters.SeparationMultiplier;
             for (int i = _levels.Count - 1; i >= 0; i--)
@@ -323,6 +326,8 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
                     var u = _vertexDatas[uVertex];
                     foreach (var vVertex in _levels[i])
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
+
                         if (checkedVertices.Contains(vVertex))
                             continue;
                         var v = _vertexDatas[vVertex];
@@ -346,12 +351,14 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
         /// <summary>
         /// Applies the gravitation forces.
         /// </summary>
-        private void ApplyGravitationForces()
+        private void ApplyGravitationForces(CancellationToken cancellationToken)
         {
             for (int i = _levels.Count - 1; i >= 0; i--)
             {
                 foreach (var uVertex in _levels[i])
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var u = _vertexDatas[uVertex];
                     var center = u.Parent.InnerCanvasCenter;
 
@@ -374,12 +381,14 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Compound.FDP
         {
         }
 
-        private void CalcNodePositionsAndSizes()
+        private void CalcNodePositionsAndSizes(CancellationToken cancellationToken)
         {
             for (int i = _levels.Count - 1; i >= 0; i--)
             {
                 foreach (var uVertex in _levels[i])
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var u = _vertexDatas[uVertex];
                     var force = u.ApplyForce(_temperature * Math.Max(1, _step) / 100.0 * Parameters.DisplacementLimitMultiplier);
                 }

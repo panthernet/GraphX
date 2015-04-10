@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.Measure;
 using GustavoAlgorithms;
@@ -41,17 +42,19 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
 
         public override Point[] ComputeSingle(TEdge edge)
         {
-            calculateMatrix();//maybe shouldnt do this cause can be used from algo storage and already inited
+            calculateMatrix(CancellationToken.None);//maybe shouldnt do this cause can be used from algo storage and already inited
             setupPathFinder();//
-            ComputeER(edge);
+            ComputeER(edge, CancellationToken.None);
             return EdgeRoutes.ContainsKey(edge) ? EdgeRoutes[edge] : null;
         }
 
-        public override void Compute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             if(VertexPositions == null || VertexPositions.Count < 3) return;
             foreach (var item in VertexPositions.Values)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 _minPoint.X = Math.Min(item.X, _minPoint.X);
                 _minPoint.Y = Math.Min(item.Y, _minPoint.Y);
                 _maxPoint.X = Math.Max(item.X, _maxPoint.X);
@@ -60,12 +63,12 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
 
             EdgeRoutes.Clear();
 
-            calculateMatrix();
+            calculateMatrix(cancellationToken);
             setupPathFinder();
 
 
             foreach (var item in _graph.Edges)
-                ComputeER(item);
+                ComputeER(item, cancellationToken);
         }
 
         private Point _minPoint = new Point(double.PositiveInfinity, double.PositiveInfinity);
@@ -124,7 +127,7 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
         #endregion
 
         #region Calculate matrix
-        private void calculateMatrix()
+        private void calculateMatrix(CancellationToken cancellationToken)
         {
             var tl = new Point(_minPoint.X - _sideAreaOffset, _minPoint.Y - _sideAreaOffset);
             var br = new Point(_maxPoint.X + _sideAreaOffset, _maxPoint.Y + _sideAreaOffset);
@@ -141,11 +144,14 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
             for (int i = 0; i < hCount; i++)
                 for (int j = 0; j < vCount; j++)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     lastPt = new Point(tl.X + _horizontalGS * i, tl.Y + _verticalGS * j);
                     resMatrix[i, j] = new MatrixItem(lastPt, IsOverlapped(lastPt), i, j);
                     if (!resMatrix[i, j].IsIntersected) validPoints.Add(resMatrix[i, j]);
                 }
             ////////////debug
+#if DEBUG
             for (int i = 0; i < vCount; i++)
             {
                 var str = "";
@@ -155,11 +161,12 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
                 }
                 Debug.WriteLine(str);
             }
+#endif
             /////////
         }
         #endregion
 
-        private void ComputeER(TEdge item)
+        private void ComputeER(TEdge item, CancellationToken cancellationToken)
         {
             var startPt = getClosestPoint(validPoints, VertexPositions[item.Source]);
             var endPt = getClosestPoint(validPoints, VertexPositions[item.Target]);
@@ -169,6 +176,8 @@ namespace GraphX.GraphSharpComponents.EdgeRouting
             var ptlst = new List<Point>();
             foreach (var pt in lst)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 var mi = resMatrix[pt.X, pt.Y];
                 ptlst.Add(mi.Point);
             }
