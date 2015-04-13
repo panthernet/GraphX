@@ -10,8 +10,9 @@
 + Added VertexControl::GetCenterPosition() method to get vertex center position instead the default top-left [WPF, METRO]
 + Added new showcase example: Templates/Graph editor [WPF]
 + Added new option GraphArea::LogicCoreChangeAction which defines what action will be taken on LogicCore property change. You can rebuild graph now. [WPF, METRO]
-+ Fixed edge labels display for self looped edges [WPF, METRO]
++ Added new sync calculation cancellation feature [WPF, METRO] thanks to jorgensigvardsson
 + Added new property EdgeLabelControl::DisplayForSelfLoopedEdges which is self explaining [WPF, METRO]
++ Fixed edge labels display for self looped edges [WPF, METRO]
 + Fixed annoying data binding error in ZoomControl slider binding [METRO, WPF]
 + Fixed ZoomControl unresponsivness after startup (prev needed to change zoom/translation first to work fine) [WPF,METRO]
 + Fixed ZoomControl::Zoom property bug on empty content window resize [WPF, METRO]
@@ -19,8 +20,8 @@
 + Fixed some issues in ShowcaseApp.WPF
 + Fixed GraphArea::DeserializeFromFile() logic and filestorage logic to properly restore internal data for loaded graphs [WPF, METRO]
 + Fixed calculation of label control position and angle [WPF, METRO] thanks to jorgensigvardsson
-+ Made EdgeControl::LabelVerticalOffset property dependecy [WPF, METRO]
-+ Updated default control templstes to include some new properties setup by default [WPF, METRO]
++ Implemented EdgeControl::LabelVerticalOffset property as dependecy [WPF, METRO]
++ Updated default control templates to include some new properties setup by default [WPF, METRO]
 + Optimized showcase app media files
 + Improved extensibility by making some methods virtual for EdgeLabelControl, VertexLabelControl, EdgeControl
 
@@ -29,6 +30,9 @@
 + Expanded EdgeControl event args with mouse and keyboard modifiers [WPF]
 + Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace and all METRO interfaces to GraphX.METRO.Controls.Models.Interfaces [WPF, METRO]
 + Edge rotation now needs additional modification for all custom EdgeLabelControl templates. Please add: <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />[WPF, METRO]
++ Due to new calc cancelation feature the following has been changed:
+	- IExternalEdgeRouting, IExternalLayout, IExternalOverlapRemoval interfaces and different algorithm base classes now implement Compute(CancellationToken cancellationToken) method with an additional param
+	- METRO now works only in async mode. Added GraphArea graph generation methods postfix Async.
 
 RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.
