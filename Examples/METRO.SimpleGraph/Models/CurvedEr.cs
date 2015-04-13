@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX;
 using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.Measure;
@@ -18,7 +19,7 @@ namespace InteractiveGraph.Models
             _curveOffset = prms != null ? prms.VerticalCurveOffset : 20;
         }
 
-        public override void Compute()
+        public override void Compute(CancellationToken cancellationToken)
         {
             EdgeRoutes.Clear();
             foreach (var edge in _graph.Edges)

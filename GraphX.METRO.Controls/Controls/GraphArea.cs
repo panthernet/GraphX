@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -32,7 +33,7 @@ namespace GraphX
         public static readonly DependencyProperty LogicCoreProperty =
             DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
 
-        private static void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             //automaticaly assign default file service provider 
             if(e.NewValue != null && ((IGXLogicCore<TVertex, TEdge, TGraph>)e.NewValue).FileServiceProvider == null)
@@ -43,16 +44,16 @@ namespace GraphX
             switch (graph.LogicCoreChangeAction)
             {
                 case LogicCoreChangedAction.GenerateGraph:
-                    graph.GenerateGraph();
+                    await graph.GenerateGraphAsync();
                     break;
                 case LogicCoreChangedAction.GenerateGraphWithEdges:
-                    graph.GenerateGraph(true);
+                    await graph.GenerateGraphAsync(true);
                     break;
                 case LogicCoreChangedAction.RelayoutGraph:
-                    graph.RelayoutGraph();
+                    await graph.RelayoutGraphAsync();
                     break;
                 case LogicCoreChangedAction.RelayoutGraphWithEdges:
-                    graph.RelayoutGraph(true);
+                    await graph.RelayoutGraphAsync(true);
                     break;
                 default:
                     break;
@@ -520,21 +521,9 @@ namespace GraphX
         #endregion
 
         #region RelayoutGraph()
-
-        private bool IsCalculating;
-        private object calcLocker = new object();
-
-        private async Task _relayoutGraph(bool generateAllEdges = false, bool standalone = true)
+        private Task _relayoutGraph(CancellationToken cancellationToken, bool generateAllEdges = false, bool standalone = true)
         {
-            //lock to GraphArea instance and check if calculation is already running
-            lock (calcLocker)
-            {
-                //do not allow new calculation to begin until previous isn't finished
-                if (IsCalculating) return;
-                IsCalculating = true;
-            }
-
-            try
+            return Task.Run(async () =>
             {
                 Dictionary<TVertex, Measure.Size> vertexSizes = null;
                 IExternalLayout<TVertex> alg = null; //layout algorithm
@@ -543,12 +532,12 @@ namespace GraphX
                 IExternalEdgeRouting<TVertex, TEdge> eralg = null;
 
                 var result = false;
-                await DispatcherHelper.CheckBeginInvokeOnUi(new Action(() =>
+                await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                 {
                     if (LogicCore == null)
                         throw new GX_InvalidDataException("LogicCore -> Not initialized!");
                     if (LogicCore.Graph == null)
-                        throw new GX_InvalidDataException("LogicCore -> Graph property is not set!"); 
+                        throw new GX_InvalidDataException("LogicCore -> Graph property is not set!");
                     if (_vertexlist.Count == 0)
                         return; // no vertexes == no edges
 
@@ -571,13 +560,13 @@ namespace GraphX
                     //setup Edge Routing algorithm
                     eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
                     result = true;
-                }));
+                });
                 if (!result) return;
 
                 IDictionary<TVertex, Measure.Point> resultCoords;
                 if (alg != null)
                 {
-                    alg.Compute();
+                    alg.Compute(cancellationToken);
                     OnLayoutCalculationFinished();
                     //if (Worker != null) Worker.ReportProgress(33, 0);
                     //result data storage
@@ -594,13 +583,13 @@ namespace GraphX
                 {
                     //generate rectangle data from sizes
                     var coords = resultCoords;
-                    UpdateLayout();
                     await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                     {
+                        UpdateLayout();
                         rectangles = GetVertexSizeRectangles(coords, vertexSizes, true);
                     });
                     overlap.Rectangles = rectangles;
-                    overlap.Compute();
+                    overlap.Compute(cancellationToken);
                     OnOverlapRemovalCalculationFinished();
                     resultCoords = new Dictionary<TVertex, Measure.Point>();
                     foreach (var res in overlap.Rectangles)
@@ -637,13 +626,14 @@ namespace GraphX
                         if (MoveAnimation.VertexStorage.Count > 0)
                             MoveAnimation.RunVertexAnimation();
 
-                        
+
                         foreach (var item in _edgeslist.Values)
                             MoveAnimation.AddEdgeData(item);
                         if (MoveAnimation.EdgeStorage.Count > 0)
                             MoveAnimation.RunEdgeAnimation();
-                        
+
                     }
+                        
                     UpdateLayout(); //need to update before edge routing
                 });
 
@@ -653,18 +643,19 @@ namespace GraphX
                     await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                     {
                         //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
-                        eralg.AreaRectangle = ContentSize.ToGraphX(); // new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
+                        eralg.AreaRectangle = ContentSize.ToGraphX();
+                        // new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
                         rectangles = GetVertexSizeRectangles(resultCoords, vertexSizes);
                     });
                     eralg.VertexPositions = resultCoords;
                     eralg.VertexSizes = rectangles;
-                    eralg.Compute();
+                    eralg.Compute(cancellationToken);
                     OnEdgeRoutingCalculationFinished();
                     if (eralg.EdgeRoutes != null)
                         foreach (var item in eralg.EdgeRoutes)
                             item.Key.RoutingPoints = item.Value;
                     //if (Worker != null) Worker.ReportProgress(99, 1);
-                    
+
                 }
                 await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                 {
@@ -688,64 +679,99 @@ namespace GraphX
                     }
                     else OnRelayoutFinished();
                 });
-            }
-            finally
-            {
-                IsCalculating = false;
-            }
+            }, cancellationToken);
         }
 
         /// <summary>
         /// Relayout graph using the same vertexes
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
-        public void RelayoutGraph(bool generateAllEdges = false)
+        public Task RelayoutGraphAsync(bool generateAllEdges = false)
         {
-            _relayoutGraphMain(generateAllEdges);
+            return RelayoutGraphAsync(CancellationToken.None, generateAllEdges);
         }
 
-        private void _relayoutGraphMain(bool generateAllEdges = false, bool standalone = true)
+        public Task RelayoutGraphAsync(CancellationToken cancellationToken, bool generateAllEdges = false)
         {
-            if (LogicCore == null)
-                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, standalone: true);
+        }
 
-            if (LogicCore.AsyncAlgorithmCompute)
+        private async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
+        {
+            await CancelRelayout();
+
+            _layoutCancellationSource = new CancellationTokenSource();
+
+            if (externalCancellationToken != CancellationToken.None)
+                _linkedLayoutCancellationSource = CancellationTokenSource.CreateLinkedTokenSource(_layoutCancellationSource.Token, externalCancellationToken);
+
+            _layoutTask = _relayoutGraph((_linkedLayoutCancellationSource ?? _layoutCancellationSource).Token, generateAllEdges, standalone);
+            await _layoutTask;
+        }
+
+        private Task _layoutTask = null;
+        private CancellationTokenSource _layoutCancellationSource;
+        private CancellationTokenSource _linkedLayoutCancellationSource;
+
+        public async Task CancelRelayout()
+        {
+            if (_layoutTask != null)
             {
-                _relayoutGraph(generateAllEdges, standalone);
-                return;
-            }
-            _relayoutGraph(generateAllEdges, standalone).Wait();
-        }
+                _layoutCancellationSource.Cancel();
+                try
+                {
+                    await _layoutTask;
+                }
+                catch (OperationCanceledException)
+                {
+                    // This is expected, so just ignore it
+                }
 
+                _layoutTask = null;
+                _layoutCancellationSource.Dispose();
+                _layoutCancellationSource = null;
+
+                if (_linkedLayoutCancellationSource != null)
+                {
+                    _linkedLayoutCancellationSource.Dispose();
+                    _linkedLayoutCancellationSource = null;
+                }
+            }
+        }
         #endregion
 
         /// <summary>
-        /// Generate visual graph
+        /// Generate visual graph asynchronously
         /// </summary>
         /// <param name="graph">Data graph</param>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(TGraph graph, bool generateAllEdges = false, bool dataContextToDataItem = true)
+        public Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = false, bool dataContextToDataItem = true)
+        {
+            return GenerateGraphAsync(graph, CancellationToken.None, generateAllEdges, dataContextToDataItem);
+        }
+
+        public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = false, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
                 AutoresolveIds(graph);
-            if(!LogicCore.IsCustomLayout)
+            if (!LogicCore.IsCustomLayout)
                 PreloadVertexes(graph, dataContextToDataItem);
-            _relayoutGraphMain(generateAllEdges, false);
+            return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, false);
         }
 
         /// <summary>
-        /// Generate visual graph using Graph property (it must be set before this method is called)
+        /// Generate visual graph asynchronously using Graph property (it must be set before this method is called)
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(bool generateAllEdges = false, bool dataContextToDataItem = true)
+        public Task GenerateGraphAsync(bool generateAllEdges = false, bool dataContextToDataItem = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
             if (LogicCore.Graph == null)
                 throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
-            GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
+            return GenerateGraphAsync(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 
         private void AutoresolveIds(TGraph graph = null)
@@ -1025,7 +1051,7 @@ namespace GraphX
             }
   
             var orAlgo = LogicCore.AlgorithmFactory.CreateFSAA(sizes, 15f, 15f);
-            orAlgo.Compute();
+            orAlgo.Compute(CancellationToken.None);
             foreach (var item in orAlgo.Rectangles)
             {
                 if (item.Key.IsVertex)
@@ -1047,7 +1073,7 @@ namespace GraphX
             {
                 LogicCore.AlgorithmStorage.EdgeRouting.VertexSizes = GetVertexSizeRectangles();
                 LogicCore.AlgorithmStorage.EdgeRouting.VertexPositions = GetVertexPositions();
-                LogicCore.AlgorithmStorage.EdgeRouting.Compute();
+                LogicCore.AlgorithmStorage.EdgeRouting.Compute(CancellationToken.None);
                 if (LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes != null)
                     foreach (var item in LogicCore.AlgorithmStorage.EdgeRouting.EdgeRoutes)
                         item.Key.RoutingPoints = item.Value;
