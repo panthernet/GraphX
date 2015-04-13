@@ -60,11 +60,11 @@
                           StrokeThickness="3" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <Path Stroke="{TemplateBinding Foreground}"
+                        <!--<Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
                             x:Name="PART_edgeArrowPath"
                               >
-                        </Path>
+                        </Path>-->
 
                         <gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
                         <gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />

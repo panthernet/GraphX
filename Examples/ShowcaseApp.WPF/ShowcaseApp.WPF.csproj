@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accordion">
       <HintPath>..\..\packages\Accordion.1.0.0\lib\Accordion.dll</HintPath>
@@ -316,6 +319,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\tr_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

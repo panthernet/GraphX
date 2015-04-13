@@ -32,7 +32,7 @@
 + Edge rotation now needs additional modification for all custom EdgeLabelControl templates. Please add: <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />[WPF, METRO]
 + Due to new calc cancelation feature the following has been changed:
 	- IExternalEdgeRouting, IExternalLayout, IExternalOverlapRemoval interfaces and different algorithm base classes now implement Compute(CancellationToken cancellationToken) method with an additional param
-	- METRO now works only in async mode. Added GraphArea graph generation methods postfix Async.
+	- METRO now works only in async mode. Postfix Async has been added for GraphArea graph generation and relayout methods.
 
 RELEASE 2.1.7
 + Added new ShowcaseApp.WPF with mostly the same functionality as before but in a new nutshell and with refactored code. Expect new showcases soon.
