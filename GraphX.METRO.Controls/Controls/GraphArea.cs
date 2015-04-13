@@ -698,7 +698,7 @@ namespace GraphX
 
         private async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
         {
-            await CancelRelayout();
+            await CancelRelayoutAsync();
 
             _layoutCancellationSource = new CancellationTokenSource();
 
@@ -713,7 +713,7 @@ namespace GraphX
         private CancellationTokenSource _layoutCancellationSource;
         private CancellationTokenSource _linkedLayoutCancellationSource;
 
-        public async Task CancelRelayout()
+        public async Task CancelRelayoutAsync()
         {
             if (_layoutTask != null)
             {
