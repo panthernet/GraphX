@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -51,15 +52,32 @@ namespace METRO.SimpleGraph
             zc.ZoomToFill();
         }
 
-        void butGenerate_Click(object sender, RoutedEventArgs e)
+        private async void butGenerate_Click(object sender, RoutedEventArgs e)
         {
             GraphAreaExample_Setup();
-            graph.GenerateGraph(true);
+
+            try
+            {
+                await graph.GenerateGraphAsync(true);
+            }
+            catch (OperationCanceledException)
+            {
+                // User may have canceled
+            }
         }
 
-        void butRelayout_Click(object sender, RoutedEventArgs e)
+        async void butRelayout_Click(object sender, RoutedEventArgs e)
         {
-            graph.RelayoutGraph(); 
+            try
+            {
+                var t0 = DateTime.Now;
+                await graph.RelayoutGraphAsync();
+                Debug.WriteLine("Time elapsed: {0}", DateTime.Now - t0);
+            }
+            catch (OperationCanceledException)
+            {
+                // User may have canceled
+            }
         }
 
         void cboxEdgeRouting_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -80,12 +98,19 @@ namespace METRO.SimpleGraph
             graph.LogicCore.DefaultLayoutAlgorithm = (LayoutAlgorithmTypeEnum) cboxLayout.SelectedItem;
         }
 
-        void MainPage_Loaded(object sender, RoutedEventArgs e)
+        async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             InitialSetup();
             GraphAreaExample_Setup();
 
-            graph.GenerateGraph(true);
+            try
+            {
+                await graph.GenerateGraphAsync(true);
+            }
+            catch (OperationCanceledException)
+            {
+                // User may have canceled
+            }
 
             //graph.RelayoutGraph(true);
             //zc.ZoomToFill();

@@ -831,6 +831,7 @@ namespace GraphX
                 // Wait, but don't block the dispatcher, because the background task might be trying to execute on the UI thread.
                 Await(_layoutTask);
 
+                _layoutCancellationSource.Dispose();
                 _layoutCancellationSource = null;
                 _layoutTask = null;
             }
