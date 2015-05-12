@@ -1,38 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using GraphX.GraphSharp.Algorithms.Layout;
+using GraphX.GraphSharp.Algorithms.Layout.Simple.Circular;
 using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
 using QuickGraph;
 
-namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
+namespace GraphX.PCL.Logic.GraphXComponents.LayoutAlgorithms.Circular
 {
     public class CircularLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, CircularLayoutParameters>
-        where TVertex : class
+        where TVertex : class, IIdentifiableGraphDataObject
         where TEdge : IEdge<TVertex>
         where TGraph : IBidirectionalGraph<TVertex, TEdge>
     {
-        readonly IDictionary<TVertex, Size> sizes;
+        readonly IDictionary<TVertex, Size> _sizes;
 
         public CircularLayoutAlgorithm( TGraph visitedGraph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Size> vertexSizes, CircularLayoutParameters parameters )
             : base( visitedGraph, vertexPositions, parameters )
         {
-            //Contract.Requires( vertexSizes != null );
-            //Contract.Requires( visitedGraph.Vertices.All( v => vertexSizes.ContainsKey( v ) ) );
-
-            sizes = vertexSizes;
+            _sizes = vertexSizes;
         }
 
         public override void Compute(CancellationToken cancellationToken)
         {
             //calculate the size of the circle
             double perimeter = 0;
-            double[] halfSize = new double[VisitedGraph.VertexCount];
+            var usableVertices = VisitedGraph.Vertices.Where(v => v.SkipProcessing != ProcessingOptionEnum.Freeze).ToList();
+            //if we have empty input positions list we have to fill positions for frozen vertices manualy
+            if(VertexPositions.Count == 0)
+                foreach(var item in VisitedGraph.Vertices.Where(v => v.SkipProcessing == ProcessingOptionEnum.Freeze))
+                    VertexPositions.Add(item, new Point());
+            double[] halfSize = new double[usableVertices.Count];
             int i = 0;
-            foreach ( var v in VisitedGraph.Vertices )
+            foreach ( var v in usableVertices)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                Size s = sizes[v];
+                Size s = _sizes[v];
                 halfSize[i] = Math.Sqrt( s.Width * s.Width + s.Height * s.Height ) * 0.5;
                 perimeter += halfSize[i] * 2;
                 i++;
@@ -45,7 +51,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             //
             double angle = 0, a;
             i = 0;
-            foreach ( var v in VisitedGraph.Vertices )
+            foreach (var v in usableVertices)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -65,7 +71,7 @@ namespace GraphX.GraphSharp.Algorithms.Layout.Simple.Circular
             //calculation
             angle = 0;
             i = 0;
-            foreach ( var v in VisitedGraph.Vertices )
+            foreach (var v in usableVertices)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 

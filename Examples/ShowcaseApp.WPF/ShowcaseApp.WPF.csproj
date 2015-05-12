@@ -117,6 +117,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\NNGraph.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\EditorGraph.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -199,6 +203,9 @@
     <Compile Include="Models\VCTemplateBehaviour.cs" />
     <Compile Include="Pages\DebugGraph.xaml.cs">
       <DependentUpon>DebugGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NNGraph.xaml.cs">
+      <DependentUpon>NNGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\EditorGraph.xaml.cs">
       <DependentUpon>EditorGraph.xaml</DependentUpon>

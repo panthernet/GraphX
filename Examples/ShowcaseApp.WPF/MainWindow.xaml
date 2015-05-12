@@ -27,6 +27,7 @@
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="General" Source="/Pages/ThemedGraph.xaml" />
                 <mui:Link DisplayName="Editor" Source="/Pages/EditorGraph.xaml" />
+                <!--<mui:Link DisplayName="Neural Network" Source="/Pages/NNGraph.xaml" />-->
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="Edge routing">

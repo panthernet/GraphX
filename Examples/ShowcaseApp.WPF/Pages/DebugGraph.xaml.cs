@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GraphX;
 using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using GraphX.Models;
+using GraphX.PCL.Common.Enums;
 using ShowcaseApp.WPF.Models;
+using Point = GraphX.Measure.Point;
 
 namespace ShowcaseApp.WPF.Pages
 {
@@ -19,6 +22,12 @@ namespace ShowcaseApp.WPF.Pages
             DataContext = this;
             butRun.Click += butRun_Click;
             butTest.Click += butTest_Click;
+            butRelay.Click +=ButRelayOnClick;
+        }
+
+        private void ButRelayOnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            dg_Area.RelayoutGraph(true);
         }
 
         void butTest_Click(object sender, RoutedEventArgs e)
@@ -40,8 +49,12 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.GenerateGraph(true);*/
 
             var logicCore = new LogicCoreExample() { Graph = ShowcaseHelper.GenerateDataGraph(25) };
+            foreach (var item in logicCore.Graph.Vertices.Take(4))
+            {
+                item.SkipProcessing = ProcessingOptionEnum.Freeze;
+            }
 
-            logicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.ISOM;
+            logicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Circular;
             logicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
             logicCore.DefaultOverlapRemovalAlgorithmParams = logicCore.AlgorithmFactory.CreateOverlapRemovalParameters(GraphX.OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)logicCore.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
@@ -59,6 +72,11 @@ namespace ShowcaseApp.WPF.Pages
             //dg_Area.InvalidateVisual();
 
             dg_Area.GenerateGraph(true);
+            foreach (var item in logicCore.Graph.Vertices.Take(4))
+            {
+                dg_Area.VertexList[item].SetPosition(new System.Windows.Point());
+            }
+
             //dg_Area.RelayoutGraph();
             //dg_zoomctrl.ZoomToFill();
 

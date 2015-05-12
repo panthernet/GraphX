@@ -9,7 +9,7 @@ namespace GraphX
         /// </summary>
         int ID { get; set; }
         /// <summary>
-        /// Skip edge in algorithm calc and visual control generation
+        /// Skip object in algorithm calc and visual control generation
         /// </summary>
         ProcessingOptionEnum SkipProcessing { get; set; }
     }

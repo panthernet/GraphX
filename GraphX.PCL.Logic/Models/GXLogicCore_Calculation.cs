@@ -39,9 +39,9 @@ namespace GraphX.Logic
             }
         }
 
-        public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes)
+        public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes, IDictionary<TVertex, Point> vertexPositions)
         {
-            if (ExternalLayoutAlgorithm == null) return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, null, vertexSizes, DefaultLayoutAlgorithmParams);
+            if (ExternalLayoutAlgorithm == null) return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
             var alg = ExternalLayoutAlgorithm;
             if (alg.NeedVertexSizes) alg.VertexSizes = vertexSizes;
             return alg;

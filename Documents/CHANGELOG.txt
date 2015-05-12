@@ -1,4 +1,13 @@
-﻿RELEASE 2.1.8
+﻿RELEASE 2.1.9
++ Added selective vertex and edge support to METRO version [METRO]
++ Added selective vertex and edge support for following algorithms: Circular [ALL]
++ Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
+	This will fix selective VaE support for default algorithms. [WPF, METRO]
+
+!BREAKING CHANGES
+
+
+RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]
 	1. EdgePointerImage class with name "PART_EdgePointerImageForSource" - marks edge source pointer (new!)
 	2. EdgePointerImage class with name "PART_EdgePointerImageForTarget" - marks edge target pointer

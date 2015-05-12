@@ -20,29 +20,7 @@
 							        BorderThickness="1"
 							        CornerRadius="10,10,10,10"
 							        Padding="{TemplateBinding Padding}">
-
-                        <StackPanel Orientation="Vertical">
-
-                            <Expander x:Name="exp" IsExpanded="True">
-                                <ContentPresenter Content="{TemplateBinding Vertex}" />
-                            </Expander>
-                            <Button x:Name="btn" Tag="{Binding Path=Vertex.ID, RelativeSource={RelativeSource TemplatedParent}}" 
-                                        Content="open" Width="50" Height="25" Margin="5">
-                                <Button.ToolTip>
-                                    <ToolTip>
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Path=Vertex.ID, RelativeSource={RelativeSource TemplatedParent}}" Foreground="Black" />
-                                        </StackPanel>
-                                    </ToolTip>
-                                </Button.ToolTip>
-                            </Button>
-
-                        </StackPanel>
-
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="2" Color="LightGray" 
-                                    Opacity="0.3" Direction="315"/>
-                        </Border.Effect>
+                        <ContentPresenter Content="{TemplateBinding Vertex}" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

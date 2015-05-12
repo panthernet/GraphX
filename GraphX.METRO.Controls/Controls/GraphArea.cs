@@ -18,6 +18,7 @@ using System.IO;
 using System.Linq;
 using GraphX.METRO.Controls.Enums;
 using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
 
 
 namespace GraphX
@@ -444,11 +445,27 @@ namespace GraphX
         {          
             //measure if needed and get all vertex sizes
             Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count);
+            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude));
             //go through the vertex presenters and get the actual layoutpositions
-            foreach (var vc in VertexList)
+            foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
             {
                 vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+            }
+            return vertexSizes;
+        }
+
+        public Dictionary<TVertex, Measure.Size> GetVertexSizesAndPositions(out IDictionary<TVertex, Measure.Point> vertexPositions)
+        {
+            //measure if needed and get all vertex sizes
+            Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            var count = _vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude);
+            var vertexSizes = new Dictionary<TVertex, Measure.Size>(count);
+            vertexPositions = new Dictionary<TVertex, Measure.Point>(count);
+            //go through the vertex presenters and get the actual layoutpositions
+            foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
+            {
+                vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+                vertexPositions[vc.Key] = vc.Value.GetPositionGraphX();
             }
             return vertexSizes;
         }
@@ -467,7 +484,7 @@ namespace GraphX
             if (vertexSizes == null) vertexSizes = GetVertexSizes();
             if (positions == null) positions = GetVertexPositions();
             var rectangles = new Dictionary<TVertex, Measure.Rect>();
-            foreach (var vertex in LogicCore.Graph.Vertices)
+            foreach (var vertex in LogicCore.Graph.Vertices.Where(vc => vc.SkipProcessing != ProcessingOptionEnum.Exclude))
             {
                 Measure.Point position; Measure.Size size;
                 if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;
@@ -483,7 +500,7 @@ namespace GraphX
         /// </summary>
         public Dictionary<TVertex, Measure.Point> GetVertexPositions()
         {
-            return VertexList.ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPositionGraphX());
+            return VertexList.Where(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude).ToDictionary(vertex => vertex.Key, vertex => vertex.Value.GetPositionGraphX());
         }
 
         #endregion
@@ -506,7 +523,7 @@ namespace GraphX
             RemoveAllEdges();
 
             //preload vertex controls
-            foreach (var it in graph.Vertices)
+            foreach (var it in graph.Vertices.Where(a => a.SkipProcessing != ProcessingOptionEnum.Exclude))
             {
                 var vc = ControlFactory.CreateVertexControl(it);
                 vc.DataContext = dataContextToDataItem ? it : null;
@@ -530,6 +547,7 @@ namespace GraphX
                 Dictionary<TVertex, Measure.Rect> rectangles = null; //rectangled size data
                 IExternalOverlapRemoval<TVertex> overlap = null; //overlap removal algorithm
                 IExternalEdgeRouting<TVertex, TEdge> eralg = null;
+                IDictionary<TVertex, Measure.Point> vertexPositions = null;
 
                 var result = false;
                 await DispatcherHelper.CheckBeginInvokeOnUi(() =>
@@ -544,8 +562,10 @@ namespace GraphX
                     UpdateLayout(); //update layout so we can get actual control sizes
 
                     if (LogicCore.AreVertexSizesNeeded())
-                        vertexSizes = GetVertexSizes();
-                    alg = LogicCore.GenerateLayoutAlgorithm(vertexSizes);
+                        vertexSizes = GetVertexSizesAndPositions(out vertexPositions);
+                    else vertexPositions = GetVertexPositions();
+
+                    alg = LogicCore.GenerateLayoutAlgorithm(vertexSizes, vertexPositions);
                     if (alg == null && !LogicCore.IsCustomLayout)
                     {
                         //await new MessageDialog("Layout type not supported yet!").ShowAsync();
@@ -575,7 +595,7 @@ namespace GraphX
                 else
                 {
                     //UpdateLayout();
-                    resultCoords = GetVertexPositions();
+                    resultCoords = vertexPositions;
                 }
 
                 //overlap removal
@@ -1402,7 +1422,7 @@ namespace GraphX
         {
             var vPositions = GetVertexPositions();
             var vSizeRectangles = GetVertexSizeRectangles();
-            var lay = LogicCore.GenerateLayoutAlgorithm(GetVertexSizes());
+            var lay = LogicCore.GenerateLayoutAlgorithm(GetVertexSizes(), GetVertexPositions());
             var or = LogicCore.GenerateOverlapRemovalAlgorithm(vSizeRectangles);
             var er = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX(), vPositions, vSizeRectangles);
             LogicCore.CreateNewAlgorithmStorage(lay, or, er);

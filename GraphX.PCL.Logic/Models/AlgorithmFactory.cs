@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using GraphX.GraphSharp.Algorithms.Layout.Compound.FDP;
 using GraphX.GraphSharp.Algorithms.Layout.Compound;
 using GraphX.GraphSharpComponents.EdgeRouting;
+using GraphX.PCL.Logic.GraphXComponents.LayoutAlgorithms.Circular;
 
 namespace GraphX.Logic.Models
 {

@@ -234,8 +234,7 @@ namespace ShowcaseApp.WPF.Pages
             if(_editorManager != null)
                 _editorManager.Dispose();
             if(graphArea != null)
-                graphArea.Dispose();
-                        
+                graphArea.Dispose();                       
         }
     }
 

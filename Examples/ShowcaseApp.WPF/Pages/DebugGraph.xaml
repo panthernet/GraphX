@@ -32,6 +32,7 @@
         
         <DockPanel Grid.Row="1" Grid.Column="1">
             <Button DockPanel.Dock="Top" Name="butRun">Run</Button>
+            <Button DockPanel.Dock="Top" Name="butRelay">Relay</Button>
             <Button DockPanel.Dock="Top" Name="butTest">Test</Button>
         </DockPanel>
         
