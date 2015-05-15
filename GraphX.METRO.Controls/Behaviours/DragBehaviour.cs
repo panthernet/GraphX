@@ -2,9 +2,9 @@
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
-using GraphX.Controls;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
 	public static class DragBehaviour
 	{

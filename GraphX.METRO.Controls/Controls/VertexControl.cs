@@ -5,10 +5,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using GraphX.METRO.Controls.Models.Interfaces;
-using GraphX.Models;
+using GraphX.METRO.Controls.Models;
+using GraphX.PCL.Common.Enums;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
 	/// <summary>
 	/// Visual vertex control

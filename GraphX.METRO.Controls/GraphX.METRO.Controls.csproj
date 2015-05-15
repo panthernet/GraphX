@@ -131,12 +131,12 @@
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
-    <Compile Include="Models\Interfaces\IEdgeLabelControl.cs" />
-    <Compile Include="Models\Interfaces\IEdgePointer.cs" />
-    <Compile Include="Models\Interfaces\IPositionChangeNotify.cs" />
-    <Compile Include="Models\Interfaces\ITrackableContent.cs" />
-    <Compile Include="Models\Interfaces\IVertexLabelControl.cs" />
-    <Compile Include="Models\Interfaces\IZoomControl.cs" />
+    <Compile Include="Controls\Misc\IEdgeLabelControl.cs" />
+    <Compile Include="Controls\Misc\IEdgePointer.cs" />
+    <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />
+    <Compile Include="Controls\Misc\ITrackableContent.cs" />
+    <Compile Include="Controls\Misc\IVertexLabelControl.cs" />
+    <Compile Include="Controls\Misc\IZoomControl.cs" />
     <Compile Include="Controls\VertexControl.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
@@ -158,11 +158,11 @@
     <Compile Include="DesignerExampleData\EdgeDataExample.cs" />
     <Compile Include="DesignerExampleData\VertexDataExample.cs" />
     <Compile Include="DpExtensions.cs" />
-    <Compile Include="Enums\DeleteAnimation.cs" />
-    <Compile Include="Enums\EdgeDashStyle.cs" />
-    <Compile Include="Enums\LogicCoreChangedAction.cs" />
-    <Compile Include="Enums\MouseOverAnimation.cs" />
-    <Compile Include="Enums\MoveAnimation.cs" />
+    <Compile Include="Animations\Enum\DeleteAnimation.cs" />
+    <Compile Include="Controls\Misc\EdgeDashStyle.cs" />
+    <Compile Include="Controls\Misc\LogicCoreChangedAction.cs" />
+    <Compile Include="Animations\Enum\MouseOverAnimation.cs" />
+    <Compile Include="Animations\Enum\MoveAnimation.cs" />
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Models\AnimationFactory.cs" />
@@ -176,11 +176,11 @@
     <Compile Include="Models\EdgeSelectedEventHandler.cs" />
     <Compile Include="Models\FileServiceProviderMETRO.cs" />
     <Compile Include="Models\GraphControlFactory.cs" />
-    <Compile Include="Models\Interfaces\IBidirectionalControlAnimation.cs" />
-    <Compile Include="Models\Interfaces\IGraphArea.cs" />
-    <Compile Include="Models\Interfaces\IGraphControl.cs" />
+    <Compile Include="Controls\Misc\IBidirectionalControlAnimation.cs" />
+    <Compile Include="Controls\Misc\IGraphArea.cs" />
+    <Compile Include="Controls\Misc\IGraphControl.cs" />
     <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
-    <Compile Include="Models\Interfaces\IOneWayControlAnimation.cs" />
+    <Compile Include="Controls\Misc\IOneWayControlAnimation.cs" />
     <Compile Include="Models\ModifierKeys.cs" />
     <Compile Include="Models\MouseButtonEventArgs.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
@@ -214,6 +214,7 @@
       <HintPath>..\packages\QuickGraph.3.6.61119.7\lib\net4\QuickGraph.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

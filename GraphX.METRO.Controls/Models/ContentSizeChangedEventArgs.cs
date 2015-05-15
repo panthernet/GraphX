@@ -1,6 +1,6 @@
 using Windows.Foundation;
 
-namespace GraphX.Models
+namespace GraphX.METRO.Controls.Models
 {
     public sealed class ContentSizeChangedEventArgs : System.EventArgs
     {

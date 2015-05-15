@@ -2,22 +2,14 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
   public class ViewFinderDisplay : FrameworkElement
   {
-    #region Constructors
-
     static ViewFinderDisplay()
     {
-      ViewFinderDisplay.DefaultStyleKeyProperty.OverrideMetadata( typeof( ViewFinderDisplay ), new FrameworkPropertyMetadata( typeof( ViewFinderDisplay ) ) );
+      DefaultStyleKeyProperty.OverrideMetadata( typeof( ViewFinderDisplay ), new FrameworkPropertyMetadata( typeof( ViewFinderDisplay ) ) );
     }
-
-    public ViewFinderDisplay()
-    {
-    }
-
-    #endregion
 
     #region Background Property
 
@@ -29,11 +21,11 @@ namespace GraphX.Controls
     {
       get
       {
-          return (Brush)this.GetValue(ViewFinderDisplay.BackgroundProperty);
+          return (Brush)GetValue(BackgroundProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.BackgroundProperty, value);
+          SetValue(BackgroundProperty, value);
       }
     }
 
@@ -43,19 +35,19 @@ namespace GraphX.Controls
 
     private static readonly DependencyPropertyKey ContentBoundsPropertyKey =
       DependencyProperty.RegisterReadOnly("ContentBounds", typeof(Rect), typeof(ViewFinderDisplay),
-        new FrameworkPropertyMetadata( ( Rect )Rect.Empty, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender ) );
+        new FrameworkPropertyMetadata( Rect.Empty, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender ) );
 
-    public static readonly DependencyProperty ContentBoundsProperty = ViewFinderDisplay.ContentBoundsPropertyKey.DependencyProperty;
+    public static readonly DependencyProperty ContentBoundsProperty = ContentBoundsPropertyKey.DependencyProperty;
 
     internal Rect ContentBounds
     {
       get
       {
-          return (Rect)this.GetValue(ViewFinderDisplay.ContentBoundsProperty);
+          return (Rect)GetValue(ContentBoundsProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.ContentBoundsPropertyKey, value);
+          SetValue(ContentBoundsPropertyKey, value);
       }
     }
 
@@ -71,11 +63,11 @@ namespace GraphX.Controls
     {
       get
       {
-          return (Brush)this.GetValue(ViewFinderDisplay.ShadowBrushProperty);
+          return (Brush)GetValue(ShadowBrushProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.ShadowBrushProperty, value);
+          SetValue(ShadowBrushProperty, value);
       }
     }
 
@@ -91,11 +83,11 @@ namespace GraphX.Controls
     {
       get
       {
-          return (Brush)this.GetValue(ViewFinderDisplay.ViewportBrushProperty);
+          return (Brush)GetValue(ViewportBrushProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.ViewportBrushProperty, value);
+          SetValue(ViewportBrushProperty, value);
       }
     }
 
@@ -111,11 +103,11 @@ namespace GraphX.Controls
     {
       get
       {
-          return (Pen)this.GetValue(ViewFinderDisplay.ViewportPenProperty);
+          return (Pen)GetValue(ViewportPenProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.ViewportPenProperty, value);
+          SetValue(ViewportPenProperty, value);
       }
     }
 
@@ -131,11 +123,11 @@ namespace GraphX.Controls
     {
       get
       {
-          return (Rect)this.GetValue(ViewFinderDisplay.ViewportRectProperty);
+          return (Rect)GetValue(ViewportRectProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.ViewportRectProperty, value);
+          SetValue(ViewportRectProperty, value);
       }
     }
 
@@ -147,17 +139,17 @@ namespace GraphX.Controls
       DependencyProperty.RegisterReadOnly("VisualBrush", typeof(VisualBrush), typeof(ViewFinderDisplay),
         new FrameworkPropertyMetadata( ( VisualBrush )null ) );
 
-    public static readonly DependencyProperty VisualBrushProperty = ViewFinderDisplay.VisualBrushPropertyKey.DependencyProperty;
+    public static readonly DependencyProperty VisualBrushProperty = VisualBrushPropertyKey.DependencyProperty;
 
     internal VisualBrush VisualBrush
     {
       get
       {
-          return (VisualBrush)this.GetValue(ViewFinderDisplay.VisualBrushProperty);
+          return (VisualBrush)GetValue(VisualBrushProperty);
       }
       set
       {
-          this.SetValue(ViewFinderDisplay.VisualBrushPropertyKey, value);
+          SetValue(VisualBrushPropertyKey, value);
       }
     }
 
@@ -201,7 +193,7 @@ namespace GraphX.Controls
       // because a ViewFinderDisplay has no children
 
       // the control's RenderSize should always match its DesiredSize
-      return this.DesiredSize;
+      return DesiredSize;
     }
 
     protected override Size MeasureOverride( Size availableSize )
@@ -216,8 +208,8 @@ namespace GraphX.Controls
       // Simulate size-to-content for the display panel by ensuring a width and height
       // based on the content bounds. Otherwise, the display panel may have no size, since it doesn't 
       // contain content.
-      double width = DoubleHelper.IsNaN( this.ContentBounds.Width ) ? 0 : Math.Max( 0, this.ContentBounds.Width );
-      double height = DoubleHelper.IsNaN( this.ContentBounds.Height ) ? 0 : Math.Max( 0, this.ContentBounds.Height );
+      double width = DoubleHelper.IsNaN( ContentBounds.Width ) ? 0 : Math.Max( 0, ContentBounds.Width );
+      double height = DoubleHelper.IsNaN( ContentBounds.Height ) ? 0 : Math.Max( 0, ContentBounds.Height );
       Size displayPanelSize = new Size( width, height );
 
       // Now ensure that the result fits within the available size while maintaining
@@ -237,30 +229,30 @@ namespace GraphX.Controls
     {
       base.OnRender( dc );
 
-      dc.DrawRectangle( this.Background, null, this.ContentBounds );
+      dc.DrawRectangle( Background, null, ContentBounds );
 
-      dc.DrawRectangle( this.VisualBrush, null, this.ContentBounds );
+      dc.DrawRectangle( VisualBrush, null, ContentBounds );
 
-      if( this.ViewportRect.IntersectsWith( new Rect( this.RenderSize ) ) )
+      if( ViewportRect.IntersectsWith( new Rect( RenderSize ) ) )
       {
         // draw shadow rectangles over the non-viewport regions
-        Rect r1 = new Rect( new Point( 0, 0 ), new Size( this.RenderSize.Width, Math.Max( 0, this.ViewportRect.Top ) ) );
-        Rect r2 = new Rect( new Point( 0, this.ViewportRect.Top ), new Size( Math.Max( 0, this.ViewportRect.Left ), this.ViewportRect.Height ) );
-        Rect r3 = new Rect( new Point( this.ViewportRect.Right, this.ViewportRect.Top ), new Size( Math.Max( 0, this.RenderSize.Width - this.ViewportRect.Right ), this.ViewportRect.Height ) );
-        Rect r4 = new Rect( new Point( 0, this.ViewportRect.Bottom ), new Size( this.RenderSize.Width, Math.Max( 0, this.RenderSize.Height - this.ViewportRect.Bottom ) ) );
-        dc.DrawRectangle( this.ShadowBrush, null, r1 );
-        dc.DrawRectangle( this.ShadowBrush, null, r2 );
-        dc.DrawRectangle( this.ShadowBrush, null, r3 );
-        dc.DrawRectangle( this.ShadowBrush, null, r4 );
+        Rect r1 = new Rect( new Point( 0, 0 ), new Size( RenderSize.Width, Math.Max( 0, ViewportRect.Top ) ) );
+        Rect r2 = new Rect( new Point( 0, ViewportRect.Top ), new Size( Math.Max( 0, ViewportRect.Left ), ViewportRect.Height ) );
+        Rect r3 = new Rect( new Point( ViewportRect.Right, ViewportRect.Top ), new Size( Math.Max( 0, RenderSize.Width - ViewportRect.Right ), ViewportRect.Height ) );
+        Rect r4 = new Rect( new Point( 0, ViewportRect.Bottom ), new Size( RenderSize.Width, Math.Max( 0, RenderSize.Height - ViewportRect.Bottom ) ) );
+        dc.DrawRectangle( ShadowBrush, null, r1 );
+        dc.DrawRectangle( ShadowBrush, null, r2 );
+        dc.DrawRectangle( ShadowBrush, null, r3 );
+        dc.DrawRectangle( ShadowBrush, null, r4 );
 
         // draw the rectangle around the viewport region
-        dc.DrawRectangle( this.ViewportBrush, this.ViewportPen, this.ViewportRect );
+        dc.DrawRectangle( ViewportBrush, ViewportPen, ViewportRect );
       }
       else
       {
         // if no part of the Rect is visible, just draw a 
         // shadow over the entire content bounds
-        dc.DrawRectangle( this.ShadowBrush, null, new Rect( this.RenderSize ) );
+        dc.DrawRectangle( ShadowBrush, null, new Rect( RenderSize ) );
       }
     }
   }

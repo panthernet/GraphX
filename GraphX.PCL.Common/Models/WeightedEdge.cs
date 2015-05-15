@@ -1,7 +1,6 @@
-using QuickGraph;
-using System;
+using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models
 {
 
     public class WeightedEdge<TVertex> : IWeightedEdge<TVertex>
@@ -13,37 +12,29 @@ namespace GraphX
 
 		public WeightedEdge(TVertex source, TVertex target, double weight)
 		{
-            _source = source;
-            _target = target;
-			this.Weight = weight;
+            Source = source;
+            Target = target;
+			Weight = weight;
 		}
 
-        private TVertex _source;
         /// <summary>
         /// Source vertex data
         /// </summary>
-        public TVertex Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
-        private TVertex _target;
+        public TVertex Source { get; set; }
+
         /// <summary>
         /// Target vertex data
         /// </summary>
-        public TVertex Target
-        {
-            get { return _target; }
-            set { _target = value; }
-        }
+        public TVertex Target { get; set; }
+
         /// <summary>
         /// Update vertices (probably needed for serialization TODO)
         /// </summary>
         /// <param name="source">Source vertex data</param>
-        /// <param name="Target">Target vertex data</param>
-        public void UpdateVertices(TVertex source, TVertex Target)
+        /// <param name="target">Target vertex data</param>
+        public void UpdateVertices(TVertex source, TVertex target)
         {
-            _source = source; _target = Target;
+            Source = source; Target = target;
         }
 
     }

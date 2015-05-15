@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
-             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:controls1="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="380" d:DesignWidth="600">
     <Grid>
@@ -38,9 +38,9 @@
                     </VisualBrush.Visual>
                 </VisualBrush>
             </Border.Background>
-            <controls:ZoomControl x:Name="zoomCtrl" Background="Transparent" VerticalContentAlignment="Center" VerticalAlignment="Center">
+            <controls1:ZoomControl x:Name="zoomCtrl" Background="Transparent" VerticalContentAlignment="Center" VerticalAlignment="Center">
                 <wpf:GraphAreaExample x:Name="graphArea"/>
-            </controls:ZoomControl>
+            </controls1:ZoomControl>
         </Border>
 
 

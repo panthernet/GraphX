@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.Animations
+namespace GraphX.WPF.Controls.Animations
 {
     /// <summary>
     /// Base class for move animation.

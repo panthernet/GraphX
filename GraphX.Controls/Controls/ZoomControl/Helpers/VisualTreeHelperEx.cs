@@ -18,7 +18,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
   public static class VisualTreeHelperEx
   {

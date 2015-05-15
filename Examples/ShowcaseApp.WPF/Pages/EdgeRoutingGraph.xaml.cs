@@ -6,9 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
-using GraphX.Controls;
-using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharpComponents.EdgeRouting;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Logic.Algorithms.EdgeRouting;
+using GraphX.WPF.Controls;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 

@@ -3,9 +3,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using GraphX;
-using GraphX.Controls;
 using System;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.METRO.Controls;
 
 namespace METRO.SimpleGraph
 {

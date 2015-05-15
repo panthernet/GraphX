@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public static class TypeExtensions
     {

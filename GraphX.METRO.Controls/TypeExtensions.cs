@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public static class TypeExtensions
     {

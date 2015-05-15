@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GraphX.PCL.Common.Models;
 
-namespace GraphX.DesignerExampleData
+namespace GraphX.WPF.Controls.DesignerExampleData
 {
     internal sealed class VertexDataExample : VertexBase
     {

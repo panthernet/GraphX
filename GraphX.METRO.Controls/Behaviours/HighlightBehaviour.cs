@@ -2,9 +2,9 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public static class HighlightBehaviour
     {

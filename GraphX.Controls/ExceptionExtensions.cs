@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Reflection;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
     internal static class ExceptionExtensions
     {
         internal static void PreserveStackTrace(this Exception exception)
         {
             // In .NET 4.5 and later this isn't needed... (yes, this is a brutal hack!)
-            MethodInfo preserveStackTrace = typeof(Exception).GetMethod(
+            var preserveStackTrace = typeof(Exception).GetMethod(
                 "InternalPreserveStackTrace",
                 BindingFlags.Instance | BindingFlags.NonPublic);
 

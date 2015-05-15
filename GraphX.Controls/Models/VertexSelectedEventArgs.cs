@@ -1,7 +1,6 @@
-using System.Windows;
 using System.Windows.Input;
 
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class VertexSelectedEventArgs : System.EventArgs
     {
@@ -10,7 +9,6 @@ namespace GraphX.Models
         public ModifierKeys Modifiers { get; private set; }
 
         public VertexSelectedEventArgs(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
-            : base()
         {
             VertexControl = vc;
             MouseArgs = e;

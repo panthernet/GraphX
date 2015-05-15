@@ -1,5 +1,4 @@
-﻿
-namespace GraphX.GraphSharp.Algorithms.Layout
+﻿namespace GraphX.PCL.Common.Interfaces
 {
 	public interface ILayoutParameters : IAlgorithmParameters
 	{

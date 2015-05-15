@@ -5,7 +5,7 @@
     xmlns:local="using:METRO.SimpleGraph"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:GraphX.Controls"
+    xmlns:controls1="using:GraphX.METRO.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
@@ -15,9 +15,9 @@
         </Grid.RowDefinitions>
 
 
-        <controls:ZoomControl x:Name="zc" ViewFinderVisibility="Collapsed" Grid.Row="1">
+        <controls1:ZoomControl x:Name="zc" ViewFinderVisibility="Collapsed" Grid.Row="1">
             <local:GraphAreaExample x:Name="graph" />
-        </controls:ZoomControl>
+        </controls1:ZoomControl>
 
         <Grid Grid.Row="0" Margin="5">
             <Grid.Resources>

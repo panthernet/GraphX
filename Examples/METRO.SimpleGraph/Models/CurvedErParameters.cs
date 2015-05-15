@@ -1,4 +1,4 @@
-﻿using GraphX.GraphSharp.Algorithms.EdgeRouting;
+﻿using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 
 namespace InteractiveGraph.Models
 {

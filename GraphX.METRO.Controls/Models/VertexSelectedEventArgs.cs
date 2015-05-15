@@ -1,7 +1,6 @@
 using Windows.UI.Xaml.Input;
-using GraphX.Controls;
 
-namespace GraphX.Models
+namespace GraphX.METRO.Controls.Models
 {
     public sealed class VertexSelectedEventArgs : System.EventArgs
     {

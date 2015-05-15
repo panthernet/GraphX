@@ -1,4 +1,4 @@
-﻿namespace GraphX
+﻿namespace GraphX.PCL.Common.Enums
 {
     /// <summary>
     /// Built-in layout algorithm types

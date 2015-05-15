@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GraphX.Measure;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models
 {
     public sealed class GraphState<TVertex, TEdge, TGraph>
     {

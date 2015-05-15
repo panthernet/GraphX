@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
     public sealed class ZoomContentPresenter : ContentPresenter, INotifyPropertyChanged
     {

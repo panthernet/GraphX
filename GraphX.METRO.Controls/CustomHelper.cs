@@ -3,20 +3,18 @@ using System.Text.RegularExpressions;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public static class CustomHelper
     {
         public static bool IsIntegerInput(string text)
         {
-            if (text == "\r") return false;
-            return new Regex("[^0-9]+").IsMatch(text); //regex that matches disallowed text
+            return text != "\r" && new Regex("[^0-9]+").IsMatch(text);
         }
 
         public static bool IsDoubleInput(string text)
         {
-            if (text == "\r") return false;
-            return new Regex("[^0-9.]+").IsMatch(text); //regex that matches disallowed text
+            return text != "\r" && new Regex("[^0-9.]+").IsMatch(text);
         }
 
         public static ScaleTransform GetScaleTransform(FrameworkElement target)

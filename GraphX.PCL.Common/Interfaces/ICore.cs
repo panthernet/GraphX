@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace GraphX
+﻿namespace GraphX.PCL.Common.Interfaces
 {
     public interface ICore
     {

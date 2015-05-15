@@ -1,6 +1,4 @@
-﻿using GraphX.Controls.Controls.ZoomControl.SupportClasses;
-using GraphX.Models;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows;
@@ -9,9 +7,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.WPF.Controls.Models;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZoomContentPresenter))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged

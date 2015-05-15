@@ -1,9 +1,7 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrls="using:GraphX.Controls"
-    xmlns:zc="using:GraphX.Controls.Zoom"
-    xmlns:conv="using:GraphX.Converters"
+    xmlns:ctrls="using:GraphX.METRO.Controls"
 	xmlns:local="using:GraphX">
 
     <!-- REGION ZoomControl -->
@@ -53,13 +51,13 @@
     </Style>
 
     <!-- ENDREGION -->
-    <conv:VisibilityToBoolConverter x:Key="TrueIfVisibleConverter"
+    <ctrls:VisibilityToBoolConverter x:Key="TrueIfVisibleConverter"
       Inverted="False" Not="False" />
-    <conv:VisibilityToBoolConverter x:Key="TrueIfNotVisibleConverter"
+    <ctrls:VisibilityToBoolConverter x:Key="TrueIfNotVisibleConverter"
       Inverted="False" Not="True" />
-    <conv:VisibilityToBoolConverter x:Key="VisibleIfTrueConverter"
+    <ctrls:VisibilityToBoolConverter x:Key="VisibleIfTrueConverter"
       Inverted="True" Not="False" />
-    <conv:VisibilityToBoolConverter x:Key="VisibleIfNotTrueConverter"
+    <ctrls:VisibilityToBoolConverter x:Key="VisibleIfNotTrueConverter"
       Inverted="True" Not="True" />
 
    
@@ -74,7 +72,7 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}">
-                            <zc:ZCP x:Name="PART_Presenter" />
+                            <ctrls:ZCP x:Name="PART_Presenter" />
                         </Border>
 
                         <Border Background="Gray" BorderBrush="White" BorderThickness="4" CornerRadius="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" Opacity=".8">

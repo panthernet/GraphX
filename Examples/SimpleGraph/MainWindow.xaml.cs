@@ -1,13 +1,12 @@
 ﻿using GraphX;
-using GraphX.Controls;
-using GraphX.GraphSharp.Algorithms.Layout.Simple.FDP;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.Logic;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.WPF.Controls;
 
 /* Some notes about the main objects and types in this example:
  * 

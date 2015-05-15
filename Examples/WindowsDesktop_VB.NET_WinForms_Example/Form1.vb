@@ -1,50 +1,51 @@
 ﻿Imports System.Windows
-Imports GraphX.GraphSharp.Algorithms.Layout.Simple.FDP
-Imports GraphX.Controls
-Imports GraphX.Logic
-Imports GraphX.GraphSharp.Algorithms.OverlapRemoval
 Imports WindowsDesktop_VB.NET_WinForms_Example.Models
+Imports GraphX.PCL.Common.Enums
+Imports GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
+Imports GraphX.PCL.Logic.Algorithms.OverlapRemoval
+Imports GraphX.PCL.Logic.Models
+Imports GraphX.WPF.Controls
 Imports QuickGraph
 
 Public Class Form1
 
-    Dim zoomctrl As ZoomControl
-    Dim gArea As GraphAreaExample
+    Dim _zoomctrl As ZoomControl
+    Dim _gArea As GraphAreaExample
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         wpfHost.Child = GenerateWpfVisuals()
 
-        gArea.GenerateGraph(True)
+        _gArea.GenerateGraph(True)
 
-        zoomctrl.ZoomToFill()
+        _zoomctrl.ZoomToFill()
     End Sub
 
     Private Function GenerateWpfVisuals() As UIElement
-        zoomctrl = New ZoomControl()
-        ZoomControl.SetViewFinderVisibility(zoomctrl, System.Windows.Visibility.Visible)
+        _zoomctrl = New ZoomControl()
+        ZoomControl.SetViewFinderVisibility(_zoomctrl, Visibility.Visible)
         ' ENABLES WINFORMS HOSTING MODE --- >
 
         Dim logic = New GXLogicCore(Of DataVertex, DataEdge, BidirectionalGraph(Of DataVertex, DataEdge))()
-        gArea = New GraphAreaExample()
-        gArea.EnableWinFormsHostingMode = True
-        gArea.LogicCore = logic
+        _gArea = New GraphAreaExample()
+        _gArea.EnableWinFormsHostingMode = True
+        _gArea.LogicCore = logic
 
         logic.Graph = GenerateGraph()
-        logic.DefaultLayoutAlgorithm = GraphX.LayoutAlgorithmTypeEnum.KK
-        logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(GraphX.LayoutAlgorithmTypeEnum.KK)
+        logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK
+        logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.KK)
         DirectCast(logic.DefaultLayoutAlgorithmParams, KKLayoutParameters).MaxIterations = 100
-        logic.DefaultOverlapRemovalAlgorithm = GraphX.OverlapRemovalAlgorithmTypeEnum.FSA
-        logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(GraphX.OverlapRemovalAlgorithmTypeEnum.FSA)
+        logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA
+        logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA)
         DirectCast(logic.DefaultOverlapRemovalAlgorithmParams, OverlapRemovalParameters).HorizontalGap = 50
         DirectCast(logic.DefaultOverlapRemovalAlgorithmParams, OverlapRemovalParameters).VerticalGap = 50
-        logic.DefaultEdgeRoutingAlgorithm = GraphX.EdgeRoutingAlgorithmTypeEnum.None
+        logic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None
         logic.AsyncAlgorithmCompute = False
-        zoomctrl.Content = gArea
+        _zoomctrl.Content = _gArea
         Dim myResourceDictionary = New ResourceDictionary()
         myResourceDictionary.Source = New Uri("Templates\template.xaml", UriKind.Relative)
-        zoomctrl.Resources.MergedDictionaries.Add(myResourceDictionary)
+        _zoomctrl.Resources.MergedDictionaries.Add(myResourceDictionary)
 
-        Return zoomctrl
+        Return _zoomctrl
     End Function
 
     Private Function GenerateGraph() As BidirectionalGraph(Of DataVertex, DataEdge)

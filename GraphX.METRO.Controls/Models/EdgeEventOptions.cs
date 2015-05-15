@@ -1,7 +1,6 @@
-﻿using System;
-using GraphX.Controls;
+﻿using GraphX.PCL.Common.Enums;
 
-namespace GraphX
+namespace GraphX.METRO.Controls.Models
 {
     public sealed class EdgeEventOptions
     {

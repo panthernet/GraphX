@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.Animations
+namespace GraphX.METRO.Controls.Animations
 {
     /// <summary>
     /// Base class for move animation.

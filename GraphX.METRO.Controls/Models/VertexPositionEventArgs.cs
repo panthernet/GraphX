@@ -1,8 +1,7 @@
 ﻿using System;
 using Windows.Foundation;
-using GraphX.Controls;
 
-namespace GraphX.Models
+namespace GraphX.METRO.Controls.Models
 {
     public sealed class VertexPositionEventArgs : EventArgs
     {

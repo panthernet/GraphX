@@ -3,16 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 using QuickGraph;
 
-namespace GraphX
+namespace GraphX.WPF.Controls.Models
 {
     public class StateStorage<TVertex, TEdge, TGraph>: IDisposable
         where TEdge : class, IGraphXEdge<TVertex>
         where TVertex: class, IGraphXVertex
         where TGraph: class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
-        private Dictionary<string, GraphState<TVertex, TEdge, TGraph>> _states;
+        private readonly Dictionary<string, GraphState<TVertex, TEdge, TGraph>> _states;
         private GraphArea<TVertex, TEdge, TGraph> _area;
 
         public StateStorage(GraphArea<TVertex, TEdge, TGraph> area)
@@ -40,13 +43,8 @@ namespace GraphX
         {
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            var vposlist = new Dictionary<TVertex, Measure.Point>();
-            foreach (var item in _area.VertexList)
-                vposlist.Add(item.Key, item.Value.GetPositionGraphX());
-            var vedgelist = new List<TEdge>();
-            foreach (var item in _area.EdgesList)
-                if (item.Value.Visibility == Visibility.Visible)
-                    vedgelist.Add(item.Key);
+            var vposlist = _area.VertexList.ToDictionary(item => item.Key, item => item.Value.GetPositionGraphX());
+            var vedgelist = (from item in _area.EdgesList where item.Value.Visibility == Visibility.Visible select item.Key).ToList();
 
 
             var state = new GraphState<TVertex, TEdge, TGraph>(id, _area.LogicCore.Graph, vposlist, vedgelist, description);
@@ -60,7 +58,7 @@ namespace GraphX
         public void LoadState(string id)
         {
             if (_area.LogicCore == null)
-                throw new GraphX.GX_InvalidDataException("GraphArea.LogicCore -> Not initialized!");
+                throw new GX_InvalidDataException("GraphArea.LogicCore -> Not initialized!");
 
             if (!_states.ContainsKey(id))
             {
@@ -76,7 +74,7 @@ namespace GraphX
             //setup vertex positions
             foreach (var item in _states[id].VertexPositions)
             {
-                _area.VertexList[item.Key].SetPosition(item.Value.X, item.Value.Y, true);
+                _area.VertexList[item.Key].SetPosition(item.Value.X, item.Value.Y);
                 _area.VertexList[item.Key].Visibility = Visibility.Visible;
             }
             //setup visible edges

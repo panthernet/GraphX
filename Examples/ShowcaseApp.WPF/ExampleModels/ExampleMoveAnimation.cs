@@ -1,5 +1,5 @@
 ﻿using System;
-using GraphX.Animations;
+using GraphX.WPF.Controls.Animations;
 
 namespace ShowcaseApp.WPF
 {

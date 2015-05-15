@@ -1,13 +1,13 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace GraphX.Converters
+namespace GraphX.METRO.Controls
 {
     public sealed class EqualityToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return object.Equals(value, parameter);
+            return Equals(value, parameter);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

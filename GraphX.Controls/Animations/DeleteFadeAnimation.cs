@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Media.Animation;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.WPF.Controls.Models;
 
-namespace GraphX.Models.Animations
+namespace GraphX.WPF.Controls.Animations
 {
     public sealed class DeleteFadeAnimation : IOneWayControlAnimation
     {

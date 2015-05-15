@@ -1,13 +1,14 @@
-﻿using GraphX.Controls;
-using GraphX.GraphSharp.Algorithms.Layout.Simple.FDP;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.Logic;
-using QuickGraph;
+﻿using QuickGraph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using GraphX.PCL.Logic.Models;
+using GraphX.WPF.Controls;
 
 namespace WindowsFormsProject
 {
@@ -36,14 +37,14 @@ namespace WindowsFormsProject
             var logic = new GXLogicCore<DataVertex, DataEdge, BidirectionalGraph<DataVertex, DataEdge>>();
             gArea = new GraphAreaExample() { EnableWinFormsHostingMode = true, LogicCore = logic };
             logic.Graph = GenerateGraph();
-            logic.DefaultLayoutAlgorithm = GraphX.LayoutAlgorithmTypeEnum.KK;
-            logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(GraphX.LayoutAlgorithmTypeEnum.KK);
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
+            logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.KK);
             ((KKLayoutParameters)logic.DefaultLayoutAlgorithmParams).MaxIterations = 100;
-            logic.DefaultOverlapRemovalAlgorithm = GraphX.OverlapRemovalAlgorithmTypeEnum.FSA;
-            logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(GraphX.OverlapRemovalAlgorithmTypeEnum.FSA);
+            logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
+            logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
             ((OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).VerticalGap = 50;
-            logic.DefaultEdgeRoutingAlgorithm = GraphX.EdgeRoutingAlgorithmTypeEnum.None;
+            logic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             logic.AsyncAlgorithmCompute = false;
             zoomctrl.Content = gArea;
             gArea.RelayoutFinished += gArea_RelayoutFinished;

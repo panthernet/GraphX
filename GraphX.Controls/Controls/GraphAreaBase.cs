@@ -1,14 +1,15 @@
-﻿using GraphX.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using GraphX.Animations;
 using System.Windows.Input;
-using GraphX.Models.Interfaces;
 using System.ComponentModel;
-using GraphX.Controls.Enums;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
+using GraphX.WPF.Controls;
+using GraphX.WPF.Controls.Animations;
+using GraphX.WPF.Controls.Models;
 
 namespace GraphX
 {

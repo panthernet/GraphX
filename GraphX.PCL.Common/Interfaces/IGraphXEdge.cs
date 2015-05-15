@@ -1,4 +1,6 @@
-﻿namespace GraphX
+﻿using GraphX.PCL.Common.Models;
+
+namespace GraphX.PCL.Common.Interfaces
 {
     /// <summary>
     /// Core vertex data interface

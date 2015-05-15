@@ -4,12 +4,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using GraphX.Measure;
-using GraphX.METRO.Controls.Models.Interfaces;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
-using Size = Windows.Foundation.Size;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
     public class EdgePointerImage: ContentControl, IEdgePointer
     {

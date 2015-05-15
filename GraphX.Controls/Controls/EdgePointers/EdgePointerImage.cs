@@ -2,9 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GraphX.Controls.Models.Interfaces;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public class EdgePointerImage: Image, IEdgePointer
     {

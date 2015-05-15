@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class VertexMovedEventArgs : System.EventArgs
     {
@@ -9,7 +8,6 @@ namespace GraphX.Models
         public Point Offset { get; private set; }
 
         public VertexMovedEventArgs(VertexControl vc, Point offset)
-            : base()
         {
             Offset = offset;
             VertexControl = vc;

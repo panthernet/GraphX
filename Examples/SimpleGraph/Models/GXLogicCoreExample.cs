@@ -1,8 +1,8 @@
-using GraphX.Logic;
 using QuickGraph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GraphX.PCL.Logic.Models;
 
 namespace SimpleGraph
 {

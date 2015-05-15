@@ -3,7 +3,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using GraphX;
-using GraphX.Controls;
+using GraphX.WPF.Controls;
+using GraphX.WPF.Controls.Models;
 
 namespace ShowcaseApp.WPF.Models
 {
@@ -77,7 +78,7 @@ namespace ShowcaseApp.WPF.Models
             Source.PositionChanged += Source_PositionChanged;
         }
 
-        void Source_PositionChanged(object sender, GraphX.Models.VertexPositionEventArgs args)
+        void Source_PositionChanged(object sender, VertexPositionEventArgs args)
         {
             UpdateGeometry(Source.GetCenterPosition(), TargetPos);
         }

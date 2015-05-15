@@ -1,8 +1,9 @@
+using System;
 using Windows.Foundation;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
-    public class AreaSelectedEventArgs : System.EventArgs
+    public class AreaSelectedEventArgs : EventArgs
     {
         /// <summary>
         /// Rectangle data in coordinates of content object

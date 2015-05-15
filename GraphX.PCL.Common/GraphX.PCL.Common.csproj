@@ -90,21 +90,21 @@
     <Compile Include="Models\EdgeBase.cs" />
     <Compile Include="Models\EdgeRoutingVisualData.cs" />
     <Compile Include="Models\GraphState.cs" />
-    <Compile Include="Models\IAlgorithmFactory.cs" />
-    <Compile Include="Models\IIdentifiableGraphDataObject.cs" />
-    <Compile Include="Models\IRoutingInfo.cs" />
+    <Compile Include="Interfaces\IAlgorithmFactory.cs" />
+    <Compile Include="Interfaces\IIdentifiableGraphDataObject.cs" />
+    <Compile Include="Interfaces\IRoutingInfo.cs" />
     <Compile Include="Models\Semaphore\BAutoResetEvent.cs" />
     <Compile Include="Models\Semaphore\BManualResetEvent.cs" />
     <Compile Include="Models\Semaphore\Semaphore.cs" />
     <Compile Include="Models\Semaphore\BWaitHandle.cs" />
     <Compile Include="Models\VertexBase.cs" />
     <Compile Include="Models\WeightedEdge.cs" />
-    <Compile Include="Point.cs" />
+    <Compile Include="Measure\Point.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rect.cs" />
-    <Compile Include="Size.cs" />
-    <Compile Include="Thickness.cs" />
-    <Compile Include="Vector.cs" />
+    <Compile Include="Measure\Rect.cs" />
+    <Compile Include="Measure\Size.cs" />
+    <Compile Include="Measure\Thickness.cs" />
+    <Compile Include="Measure\Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="QuickGraph">

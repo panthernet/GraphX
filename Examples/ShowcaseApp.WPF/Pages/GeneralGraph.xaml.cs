@@ -4,7 +4,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
-using GraphX.Controls;
+using GraphX.PCL.Common.Enums;
+using GraphX.WPF.Controls;
 using Microsoft.Win32;
 using QuickGraph;
 using ShowcaseApp.WPF.Models;
@@ -185,7 +186,15 @@ namespace ShowcaseApp.WPF.Pages
 
         private void gg_layalgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            gg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithm = (LayoutAlgorithmTypeEnum)gg_layalgo.SelectedItem;
+            var late = (LayoutAlgorithmTypeEnum)gg_layalgo.SelectedItem;
+            gg_Area.LogicCore.DefaultLayoutAlgorithm = late;
+            if (late == LayoutAlgorithmTypeEnum.BoundedFR)
+                gg_Area.LogicCore.DefaultLayoutAlgorithmParams
+                    = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.BoundedFR);
+            if (late == LayoutAlgorithmTypeEnum.FR)
+                gg_Area.LogicCore.DefaultLayoutAlgorithmParams
+                    = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.FR);
+
             if (gg_Area.LogicCore.Graph == null) gg_but_randomgraph_Click(null, null);
             else gg_Area.RelayoutGraph();
             gg_Area.GenerateAllEdges();

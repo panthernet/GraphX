@@ -1,17 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Diagnostics;
-using Windows.Foundation;
+using System.Linq;
+using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
-using GraphX.METRO.Controls;
-using GraphX.METRO.Controls.Controls;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.Measure;
+using GraphX.METRO.Controls.Models;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using Point = Windows.Foundation.Point;
+using Rect = GraphX.Measure.Rect;
+using Size = Windows.Foundation.Size;
+using Thickness = Windows.UI.Xaml.Thickness;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
     /// <summary>
     /// Visual edge control
@@ -605,7 +611,7 @@ namespace GraphX.Controls
             var sourcepos = source.GetPosition();
             var targetpos = target.GetPosition();
 
-            var mainVector = new Measure.Vector(targetpos.X - sourcepos.X, targetpos.Y - sourcepos.Y);
+            var mainVector = new Vector(targetpos.X - sourcepos.X, targetpos.Y - sourcepos.Y);
             //get new point coordinate
             var joint = new Point(
                  sourcepos.X + source.DesiredSize.Width * .5 + sideDistance * (mainVector.Y / mainVector.Length),
@@ -643,7 +649,7 @@ namespace GraphX.Controls
                     Width = Source.ActualWidth,
                     Height = Source.ActualHeight
                 };
-                if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) sourceSize = new Size(80, 20);
+                if (DesignMode.DesignModeEnabled) sourceSize = new Size(80, 20);
 
                 //get the position center of the source
                 var sourcePos = new Point
@@ -658,7 +664,7 @@ namespace GraphX.Controls
                     Width = Target.ActualWidth,
                     Height = Target.ActualHeight
                 };
-                if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) 
+                if (DesignMode.DesignModeEnabled) 
                     targetSize = new Size(80, 20);
 
                 //get the position center of the target
@@ -728,8 +734,8 @@ namespace GraphX.Controls
                 //Point p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.VertexShape);
                 //Point p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.VertexShape);
 
-                var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
-                var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.VertexShape);
+                var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Windows.Foundation.Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
+                var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Windows.Foundation.Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.VertexShape);
 
                 SourceConnectionPoint = p1;
                 TargetConnectionPoint = p2;
@@ -827,12 +833,12 @@ namespace GraphX.Controls
             Clean();
         }
 
-        public Measure.Rect GetLabelSize()
+        public Rect GetLabelSize()
         {
             return _edgeLabelControl.GetSize();
         }
 
-        public void SetCustomLabelSize(Rect rect)
+        public void SetCustomLabelSize(Windows.Foundation.Rect rect)
         {
            _edgeLabelControl.SetSize(rect);
         }
@@ -840,7 +846,7 @@ namespace GraphX.Controls
         internal void UpdateLabelLayout()
         {
             _edgeLabelControl.Show();
-            if (_edgeLabelControl.GetSize() == GraphX.Measure.Rect.Empty)// || double.IsNaN(_edgeLabelControl.Width)))
+            if (_edgeLabelControl.GetSize() == Rect.Empty)// || double.IsNaN(_edgeLabelControl.Width)))
             {
                 _edgeLabelControl.UpdateLayout();
                 _edgeLabelControl.UpdatePosition();

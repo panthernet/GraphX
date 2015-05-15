@@ -18,7 +18,7 @@ using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-    namespace GraphX.Converters
+namespace GraphX.METRO.Controls
     {
       [Bindable]
       public sealed class VisibilityToBoolConverter : IValueConverter

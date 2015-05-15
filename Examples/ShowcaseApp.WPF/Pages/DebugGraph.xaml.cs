@@ -3,9 +3,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GraphX;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.Models;
 using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using GraphX.WPF.Controls.Animations;
+using GraphX.WPF.Controls.Models;
 using ShowcaseApp.WPF.Models;
 using Point = GraphX.Measure.Point;
 
@@ -56,10 +57,10 @@ namespace ShowcaseApp.WPF.Pages
 
             logicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Circular;
             logicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
-            logicCore.DefaultOverlapRemovalAlgorithmParams = logicCore.AlgorithmFactory.CreateOverlapRemovalParameters(GraphX.OverlapRemovalAlgorithmTypeEnum.FSA);
+            logicCore.DefaultOverlapRemovalAlgorithmParams = logicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)logicCore.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
             ((OverlapRemovalParameters)logicCore.DefaultOverlapRemovalAlgorithmParams).VerticalGap = 50;
-            logicCore.DefaultEdgeRoutingAlgorithm = GraphX.EdgeRoutingAlgorithmTypeEnum.SimpleER;
+            logicCore.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             logicCore.AsyncAlgorithmCompute = false;
             logicCore.EdgeCurvingEnabled = true;
 

@@ -1,19 +1,19 @@
-﻿using Windows.ApplicationModel;
-using Windows.Foundation;
+﻿using System;
+using System.ComponentModel;
+using Windows.ApplicationModel;
 using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using GraphX.Controls.Zoom;
-using GraphX.METRO.Controls.Controls.ZoomControl.SupportClasses;
-using GraphX.Models;
-using System;
-using System.ComponentModel;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.Measure;
+using GraphX.METRO.Controls.Models;
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
+using Thickness = Windows.UI.Xaml.Thickness;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZCP))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged
@@ -217,7 +217,7 @@ namespace GraphX.Controls
         /// Applied to the presenter.
         /// </summary>
         private ScaleTransform _scaleTransform;
-        private GraphX.Measure.Vector _startTranslate;
+        private Vector _startTranslate;
         private TransformGroup _transformGroup;
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace GraphX.Controls
                 return;
 
             _mouseDownPos = e.GetCurrentPoint(this).Position;
-            _startTranslate = new Measure.Vector(TranslateX, TranslateY);
+            _startTranslate = new Vector(TranslateX, TranslateY);
             CapturePointer(e.Pointer);
             PointerMoved += ZoomControl_PreviewMouseMove;
         }
@@ -806,9 +806,9 @@ namespace GraphX.Controls
         /// <summary>
         /// Returns initial translate depending on container graph settings (to deal with optinal new coord system)
         /// </summary>
-        private GraphX.Measure.Vector GetTrackableTranslate()
+        private Vector GetTrackableTranslate()
         {
-            if (!IsContentTrackable) return new GraphX.Measure.Vector();
+            if (!IsContentTrackable) return new Vector();
             return DesignMode.DesignModeEnabled ? GetInitialTranslate(200,100) : GetInitialTranslate(TrackableContent.ContentSize.Width, TrackableContent.ContentSize.Height, TrackableContent.ContentSize.X, TrackableContent.ContentSize.Y);
         }
 
@@ -821,16 +821,16 @@ namespace GraphX.Controls
             DoZoomAnimation(1.0, initialTranslate.X, initialTranslate.Y);
         }
 
-        private GraphX.Measure.Vector GetInitialTranslate(double contentWidth, double contentHeight, double offsetX = 0, double offsetY = 0)
+        private Vector GetInitialTranslate(double contentWidth, double contentHeight, double offsetX = 0, double offsetY = 0)
         {
             if (_presenter == null)
-                return new GraphX.Measure.Vector(0.0, 0.0);
+                return new Vector(0.0, 0.0);
             var w = contentWidth - ActualWidth;
             var h = contentHeight - ActualHeight;
             var tX = -(w / 2.0 + offsetX);
             var tY = -(h / 2.0 + offsetY);
 
-            return new GraphX.Measure.Vector(tX, tY);
+            return new Vector(tX, tY);
         }
 
         private void DoZoomToFill()

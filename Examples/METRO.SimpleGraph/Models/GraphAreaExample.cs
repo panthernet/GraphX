@@ -1,4 +1,5 @@
 using GraphX;
+using GraphX.METRO.Controls;
 using QuickGraph;
 
 namespace METRO.SimpleGraph

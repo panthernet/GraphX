@@ -1,9 +1,8 @@
 ﻿<Window x:Class="SimpleGraph.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:graphxctrl="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
-        xmlns:gx="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
-        xmlns:local="clr-namespace:SimpleGraph"  
+        xmlns:local="clr-namespace:SimpleGraph"
+        xmlns:controls="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls"
         Title="Simple graph example. Read code comments for more info." Height="600" Width="825">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,9 +12,9 @@
 
         <!-- Here we create our GraphArea layout container wrapped into the Zoombox for vast zooming capabilities.
              This is the standard approach for GraphX.-->
-        <graphxctrl:ZoomControl x:Name="zoomctrl" Grid.Row="1">
+        <controls:ZoomControl x:Name="zoomctrl" Grid.Row="1">
             <local:GraphAreaExample x:Name="Area"/>
-        </graphxctrl:ZoomControl>
+        </controls:ZoomControl>
 
         <DockPanel LastChildFill="False" Grid.Column="1" Margin="3" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">

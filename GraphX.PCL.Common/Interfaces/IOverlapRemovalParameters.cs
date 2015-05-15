@@ -1,4 +1,4 @@
-﻿namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
+﻿namespace GraphX.PCL.Common.Interfaces
 {
 	public interface IOverlapRemovalParameters : IAlgorithmParameters
 	{

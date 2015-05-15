@@ -1,32 +1,28 @@
-using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
-using GraphX.Controls;
-using GraphX.Controls.Models;
-using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharp.Algorithms.Layout;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.DesignerExampleData;
-using GraphX.Models;
-using GraphX.PCL.Common.Enums;
-using QuickGraph;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
-using Microsoft.Win32;
 using System.Windows.Controls;
-using GraphX.Controls.Enums;
-using GraphX.Controls.Models.Interfaces;
+using System.Windows.Threading;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
+using GraphX.WPF.Controls.DesignerExampleData;
+using GraphX.WPF.Controls.Models;
+using Microsoft.Win32;
+using QuickGraph;
 using Point = System.Windows.Point;
-using Size = System.Windows.Size;
+using Rect = GraphX.Measure.Rect;
+using Size = GraphX.Measure.Size;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public class GraphArea<TVertex, TEdge, TGraph>  : GraphAreaBase, IDisposable
         where TVertex : class, IGraphXVertex
@@ -258,11 +254,11 @@ namespace GraphX
         /// <param name="position">GraphArea coordinate space position</param>
         public VertexControl GetVertexControlAt(Point position)
         {
-            if (!IsMeasureValid) Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
             return VertexList.Values.FirstOrDefault(a =>
             {
                 var pos = a.GetPosition();
-                var rect = new Measure.Rect(pos.X, pos.Y, a.ActualWidth, a.ActualHeight);
+                var rect = new Rect(pos.X, pos.Y, a.ActualWidth, a.ActualHeight);
                 return rect.Contains(position.ToGraphX());
             });
         }
@@ -456,31 +452,31 @@ namespace GraphX
         /// <summary>
         /// Get vertex control sizes
         /// </summary>
-        public Dictionary<TVertex, Measure.Size> GetVertexSizes()
+        public Dictionary<TVertex, Size> GetVertexSizes()
         {          
             //measure if needed and get all vertex sizes
-            if (!IsMeasureValid) Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            var vertexSizes = new Dictionary<TVertex, Measure.Size>(_vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude));
+            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            var vertexSizes = new Dictionary<TVertex, Size>(_vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude));
             //go through the vertex presenters and get the actual layoutpositions
             foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
             {
-                vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+                vertexSizes[vc.Key] = new Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
             }
             return vertexSizes;
         }
 
 
-        public Dictionary<TVertex, Measure.Size> GetVertexSizesAndPositions(out IDictionary<TVertex, Measure.Point> vertexPositions)
+        public Dictionary<TVertex, Size> GetVertexSizesAndPositions(out IDictionary<TVertex, Measure.Point> vertexPositions)
         {
             //measure if needed and get all vertex sizes
-            if (!IsMeasureValid) Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
             var count = _vertexlist.Count(a => ((IGraphXVertex) a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude);
-            var vertexSizes = new Dictionary<TVertex, Measure.Size>(count);
+            var vertexSizes = new Dictionary<TVertex, Size>(count);
             vertexPositions = new Dictionary<TVertex, Measure.Point>(count);
             //go through the vertex presenters and get the actual layoutpositions
             foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
             {
-                vertexSizes[vc.Key] = new Measure.Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+                vertexSizes[vc.Key] = new Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
                 vertexPositions[vc.Key] = vc.Value.GetPositionGraphX();
             }
             return vertexSizes;
@@ -492,20 +488,20 @@ namespace GraphX
         /// <param name="positions">Vertex positions collection (auto filled if null)</param>
         /// <param name="vertexSizes">Vertex sizes collection (auto filled if null)</param>
         /// <param name="getCenterPoints">True if you want center points returned instead of top-left (needed by overlap removal algo)</param>
-        public Dictionary<TVertex, Measure.Rect> GetVertexSizeRectangles(IDictionary<TVertex, Measure.Point> positions = null, Dictionary<TVertex, Measure.Size> vertexSizes = null, bool getCenterPoints = false)
+        public Dictionary<TVertex, Rect> GetVertexSizeRectangles(IDictionary<TVertex, Measure.Point> positions = null, Dictionary<TVertex, Size> vertexSizes = null, bool getCenterPoints = false)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
 
             if (vertexSizes == null) vertexSizes = GetVertexSizes();
             if (positions == null) positions = GetVertexPositions();
-            var rectangles = new Dictionary<TVertex, Measure.Rect>();
+            var rectangles = new Dictionary<TVertex, Rect>();
             foreach (var vertex in LogicCore.Graph.Vertices.Where(a => a.SkipProcessing != ProcessingOptionEnum.Exclude))
             {
-                Measure.Point position; Measure.Size size;
+                Measure.Point position; Size size;
                 if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;
-                if (!getCenterPoints) rectangles[vertex] = new Measure.Rect(position.X, position.Y, size.Width, size.Height);
-                else rectangles[vertex] = new Measure.Rect(position.X - size.Width * (float)0.5, position.Y - size.Height * (float)0.5, size.Width, size.Height);
+                if (!getCenterPoints) rectangles[vertex] = new Rect(position.X, position.Y, size.Width, size.Height);
+                else rectangles[vertex] = new Rect(position.X - size.Width * (float)0.5, position.Y - size.Height * (float)0.5, size.Width, size.Height);
             
             }
             return rectangles;
@@ -566,9 +562,9 @@ namespace GraphX
   
         private void _relayoutGraph(CancellationToken cancellationToken)
         {
-            Dictionary<TVertex, Measure.Size> vertexSizes = null;
+            Dictionary<TVertex, Size> vertexSizes = null;
             IExternalLayout<TVertex> alg = null; //layout algorithm
-            Dictionary<TVertex, Measure.Rect> rectangles = null; //rectangled size data
+            Dictionary<TVertex, Rect> rectangles = null; //rectangled size data
             IExternalOverlapRemoval<TVertex> overlap = null;//overlap removal algorithm
             IExternalEdgeRouting<TVertex, TEdge> eralg = null;
             IDictionary<TVertex, Measure.Point> vertexPositions = null;
@@ -1123,7 +1119,7 @@ namespace GraphX
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore is not initialized!");
-            LogicCore.ComputeEdgeRoutesByVertex((TVertex)vc.Vertex, vertexDataNeedUpdate ? (Measure.Point?)vc.GetPositionGraphX() : null, vertexDataNeedUpdate ? (Measure.Size?)new Measure.Size(vc.ActualWidth, vc.ActualHeight) : null);
+            LogicCore.ComputeEdgeRoutesByVertex((TVertex)vc.Vertex, vertexDataNeedUpdate ? (Measure.Point?)vc.GetPositionGraphX() : null, vertexDataNeedUpdate ? (Size?)new Size(vc.ActualWidth, vc.ActualHeight) : null);
         }
         #endregion
 
@@ -1556,7 +1552,7 @@ namespace GraphX
         /// <param name="quality">Optional image quality parameter</param>   
         public void ExportAsJpeg(int quality = 100)
         {
-            ExportAsImage(ImageType.JPEG, true, PrintHelper.DefaultDPI, quality);
+            ExportAsImage(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
         }
 
         /// <summary>
@@ -1566,7 +1562,7 @@ namespace GraphX
         /// <param name="dpi">Optional image DPI parameter</param>
         /// <param name="useZoomControlSurface">Use zoom control parent surface to render bitmap (only visible zoom content will be exported)</param>
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
-        public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DefaultDPI, int quality = 100)
+        public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
             string fileExt;
             string fileType = itype.ToString();
@@ -1592,7 +1588,7 @@ namespace GraphX
             }
         }
 
-        public Bitmap ExportToBitmap(double dpi = PrintHelper.DefaultDPI)
+        public Bitmap ExportToBitmap(double dpi = PrintHelper.DEFAULT_DPI)
         {
             return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
         }

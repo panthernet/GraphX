@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
 
-namespace GraphX
+namespace GraphX.METRO.Controls.Models
 {
     public static class DispatcherHelper
     {

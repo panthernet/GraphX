@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Exceptions
 {
     public sealed class GX_InvalidDataException: Exception
     {

@@ -1,16 +1,17 @@
-﻿using System;
-using System.Diagnostics;
-/* Code here is partially used from NodeXL (https://nodexl.codeplex.com/)
+﻿/* Code here is partially used from NodeXL (https://nodexl.codeplex.com/)
  * 
  * 
  * 
  * */
+using System;
+using System.Diagnostics;
 using Windows.UI.Xaml.Media;
 using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public static class GeometryHelper
     {

@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace GraphX.Converters
+namespace GraphX.WPF.Controls
 {
 
 
@@ -27,48 +27,24 @@ namespace GraphX.Converters
   {
     #region Inverted Property
 
-    public bool Inverted
-    {
-      get
-      {
-        return _inverted;
-      }
-      set
-      {
-        _inverted = value;
-      }
-    }
+    public bool Inverted { get; set; }
 
-    private bool _inverted; //false
-
-    #endregion
+      #endregion
 
     #region Not Property
 
-    public bool Not
-    {
-      get
-      {
-        return _not;
-      }
-      set
-      {
-        _not = value;
-      }
-    }
+    public bool Not { get; set; }
 
-    private bool _not; //false
-
-    #endregion
+      #endregion
 
     public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
     {
-      return this.Inverted ? this.BoolToVisibility( value ) : this.VisibilityToBool( value );
+      return Inverted ? BoolToVisibility( value ) : VisibilityToBool( value );
     }
 
     public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
     {
-      return this.Inverted ? this.VisibilityToBool( value ) : this.BoolToVisibility( value );
+      return Inverted ? VisibilityToBool( value ) : BoolToVisibility( value );
     }
 
     private object VisibilityToBool( object value )

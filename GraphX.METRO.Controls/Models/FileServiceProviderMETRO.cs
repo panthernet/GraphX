@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Windows.Storage;
-using GraphX.Models;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls.Models
 {
     /// <summary>
     /// WPF implementation of IFileServiceProvider

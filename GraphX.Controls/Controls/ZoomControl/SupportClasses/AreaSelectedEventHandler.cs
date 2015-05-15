@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GraphX.Controls
+﻿namespace GraphX.WPF.Controls
 {
     public delegate void AreaSelectedEventHandler(object sender, AreaSelectedEventArgs args);
 }

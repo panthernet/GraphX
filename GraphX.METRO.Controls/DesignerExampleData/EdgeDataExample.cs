@@ -1,4 +1,6 @@
-﻿namespace GraphX.DesignerExampleData
+﻿using GraphX.PCL.Common.Models;
+
+namespace GraphX.METRO.Controls.DesignerExampleData
 {
     internal sealed class EdgeDataExample<TVertex> : EdgeBase<TVertex>
     {

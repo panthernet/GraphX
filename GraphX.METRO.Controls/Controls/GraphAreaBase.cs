@@ -1,16 +1,16 @@
-﻿using Windows.Foundation;
+﻿using System;
+using System.Collections.Generic;
+using Windows.ApplicationModel;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using GraphX.Controls;
-using GraphX.Models;
-using System;
-using System.Collections.Generic;
-using GraphX.Animations;
-using GraphX.METRO.Controls.Enums;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.METRO.Controls.Animations;
+using GraphX.METRO.Controls.Models;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
@@ -511,7 +511,7 @@ namespace GraphX
                 child.Arrange(new Rect(x, y, child.DesiredSize.Width, child.DesiredSize.Height));
             }
 
-            return Windows.ApplicationModel.DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
+            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace GraphX
             var newSize = ContentSize;
             if (oldSize != newSize)
                 OnContentSizeChanged(oldSize, newSize);
-            return Windows.ApplicationModel.DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
+            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
         }
         #endregion
 

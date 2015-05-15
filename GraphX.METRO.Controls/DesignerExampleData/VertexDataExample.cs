@@ -1,8 +1,6 @@
-﻿using System;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Imaging;
+﻿using GraphX.PCL.Common.Models;
 
-namespace GraphX.DesignerExampleData
+namespace GraphX.METRO.Controls.DesignerExampleData
 {
     internal sealed class VertexDataExample : VertexBase
     {

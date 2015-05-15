@@ -1,4 +1,4 @@
-namespace GraphX.Models
+namespace GraphX.METRO.Controls.Models
 {
     public delegate void VertexSelectedEventHandler(object sender, VertexSelectedEventArgs args);
     public delegate void VertexMovedEventHandler(object sender, VertexMovedEventArgs e);

@@ -16,9 +16,12 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Windows.Foundation;
+using GraphX.Measure;
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
+using Size = Windows.Foundation.Size;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
   internal static class DoubleHelper
   {
@@ -56,7 +59,7 @@ namespace GraphX.Controls
           && AreVirtuallyEqual( r1.BottomRight(), r2.BottomRight() ) );
     }
 
-    public static bool AreVirtuallyEqual( GraphX.Measure.Vector v1, GraphX.Measure.Vector v2 )
+    public static bool AreVirtuallyEqual( Vector v1, Vector v2 )
     {
       return ( AreVirtuallyEqual( v1.X, v2.X )
           && AreVirtuallyEqual( v1.Y, v2.Y ) );

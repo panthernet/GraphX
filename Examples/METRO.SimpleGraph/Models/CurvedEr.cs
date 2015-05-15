@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using GraphX;
-using GraphX.GraphSharp.Algorithms.EdgeRouting;
 using GraphX.Measure;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using METRO.SimpleGraph;
 
 namespace InteractiveGraph.Models
@@ -22,7 +23,7 @@ namespace InteractiveGraph.Models
         public override void Compute(CancellationToken cancellationToken)
         {
             EdgeRoutes.Clear();
-            foreach (var edge in _graph.Edges)
+            foreach (var edge in Graph.Edges)
             {
                 EdgeRoutes.Add(edge, ComputeSingle(edge));
             }

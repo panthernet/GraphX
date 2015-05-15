@@ -1,10 +1,23 @@
 ﻿RELEASE 2.1.9
 + Added selective vertex and edge support to METRO version [METRO]
 + Added selective vertex and edge support for following algorithms: Circular [ALL]
++ Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix selective VaE support for default algorithms. [WPF, METRO]
++ Adjusted FR and BoundedFR default values for random initial positions [All]
++ Fixed some algorithm calculation problems, especial FR [ALL]
 
 !BREAKING CHANGES
+!!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 
+	almost ALL of the namespaces has been changed to better reflect PCL and multiplatform library versioning. Also i've get rid of the
+    several different XAML xmlns usings in favor of single one that reflects library platform. I'm very sorry that this changes will
+	force you to update your GraphX projects but i realy felt that i must do it once and for all. Hope there will be no more
+	such heavy changes in that direction.
+	Core changes:
+	- All controls, behaviours and their interfaces are moved to GraphX.WPF.Controls and GraphX.METRO.Controls namespace
+	- All algorithms are spreaded across GraphX.PCL.Logic.Algorithms namespace with additional OverlapRemoval, LayoutAlgorithms, EdgeRouting endings
+	- All base models and interfaces are now in GraphX.PCL.Common.Models namespace
+	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
 
 
 RELEASE 2.1.8

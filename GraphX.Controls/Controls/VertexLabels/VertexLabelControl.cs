@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public class VertexLabelControl : ContentControl , IVertexLabelControl   
     {

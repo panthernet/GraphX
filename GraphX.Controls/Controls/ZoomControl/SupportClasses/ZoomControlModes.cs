@@ -1,4 +1,4 @@
-﻿namespace GraphX.Controls
+﻿namespace GraphX.WPF.Controls
 {
     public enum ZoomControlModes
     {

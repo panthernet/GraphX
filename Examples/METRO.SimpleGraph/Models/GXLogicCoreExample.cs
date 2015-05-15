@@ -1,4 +1,4 @@
-using GraphX.Logic;
+using GraphX.PCL.Logic.Models;
 using QuickGraph;
 
 namespace METRO.SimpleGraph

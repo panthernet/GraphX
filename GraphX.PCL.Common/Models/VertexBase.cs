@@ -1,6 +1,7 @@
 ﻿using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models
 {
     public abstract class VertexBase: IGraphXVertex
     {

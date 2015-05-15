@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
 
-namespace GraphX.GraphSharp.Algorithms.EdgeRouting
+namespace GraphX.PCL.Common.Interfaces
 {
     public interface IExternalEdgeRouting<TVertex, TEdge>
     {

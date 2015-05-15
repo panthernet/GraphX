@@ -4,10 +4,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GraphX.Controls.Models.Interfaces;
-using GraphX.Models;
+using GraphX.PCL.Common.Enums;
+using GraphX.WPF.Controls.Models;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
 	/// <summary>
 	/// Visual vertex control

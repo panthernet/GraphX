@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Windows;
 using Windows.UI.Xaml;
+using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 using QuickGraph;
 
-namespace GraphX
+namespace GraphX.METRO.Controls.Models
 {
     public class StateStorage<TVertex, TEdge, TGraph>: IDisposable
         where TEdge : class, IGraphXEdge<TVertex>
@@ -61,7 +62,7 @@ namespace GraphX
         public void LoadState(string id)
         {
             if (_area.LogicCore == null)
-                throw new GraphX.GX_InvalidDataException("GraphArea.LogicCore -> Not initialized!");
+                throw new GX_InvalidDataException("GraphArea.LogicCore -> Not initialized!");
 
             if (!_states.ContainsKey(id))
             {

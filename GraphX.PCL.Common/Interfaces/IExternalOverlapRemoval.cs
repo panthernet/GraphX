@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
 
-namespace GraphX.GraphSharp.Algorithms.OverlapRemoval
+namespace GraphX.PCL.Common.Interfaces
 {
     public interface IExternalOverlapRemoval<TVertex>
     {

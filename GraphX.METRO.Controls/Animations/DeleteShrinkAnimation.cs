@@ -1,12 +1,11 @@
-﻿using Windows.Foundation;
+﻿using System;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using GraphX.Controls;
-using System;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.METRO.Controls.Models;
 
-namespace GraphX.Models.Animations
+namespace GraphX.METRO.Controls.Animations
 {
     public sealed class DeleteShrinkAnimation : IOneWayControlAnimation
     {

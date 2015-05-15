@@ -4,9 +4,10 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl
     {

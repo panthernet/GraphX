@@ -1,7 +1,6 @@
 ﻿using Windows.UI.Xaml;
-using GraphX.Controls;
 
-namespace GraphX.METRO.Controls.Models.Interfaces
+namespace GraphX.METRO.Controls.Models
 {
     public interface IGraphControlFactory
     {

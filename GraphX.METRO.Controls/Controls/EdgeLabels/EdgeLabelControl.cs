@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Windows.Foundation;
+using Windows.ApplicationModel;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.Measure;
+using GraphX.PCL.Common.Interfaces;
+using Point = Windows.Foundation.Point;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
     [Bindable]
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl
@@ -87,12 +89,12 @@ namespace GraphX.Controls
             Visibility = Visibility.Collapsed;
         }
 
-        public Measure.Rect GetSize()
+        public Rect GetSize()
         {
             return LastKnownRectSize.ToGraphX();
         }
 
-        public void SetSize(Rect size)
+        public void SetSize(Windows.Foundation.Rect size)
         {
             LastKnownRectSize = size;
         }
@@ -100,7 +102,7 @@ namespace GraphX.Controls
         public EdgeLabelControl()
         {
             DefaultStyleKey = typeof(EdgeLabelControl);
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) return;
+            if (DesignMode.DesignModeEnabled) return;
 
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
@@ -117,7 +119,7 @@ namespace GraphX.Controls
         void EdgeLabelControl_LayoutUpdated(object sender, object e)
         {
             if (EdgeControl == null || !EdgeControl.ShowLabel) return;
-            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            if (LastKnownRectSize == Windows.Foundation.Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
             {
                 UpdateLayout();
                 UpdatePosition();
@@ -163,7 +165,7 @@ namespace GraphX.Controls
                 var idesiredSize = DesiredSize;
                 var pt = EdgeControl.Source.GetCenterPosition();
                 pt = pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
-                LastKnownRectSize = new Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+                LastKnownRectSize = new Windows.Foundation.Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
                 Arrange(LastKnownRectSize);
                 return;
             }
@@ -244,11 +246,11 @@ namespace GraphX.Controls
 
             if (double.IsNaN(centerPoint.X)) centerPoint.X = 0;
             if (double.IsNaN(centerPoint.Y)) centerPoint.Y = 0;
-            LastKnownRectSize = new Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
+            LastKnownRectSize = new Windows.Foundation.Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
             Arrange(LastKnownRectSize);
         }
 
-        internal Rect LastKnownRectSize;
+        internal Windows.Foundation.Rect LastKnownRectSize;
 
         public void Dispose()
         {

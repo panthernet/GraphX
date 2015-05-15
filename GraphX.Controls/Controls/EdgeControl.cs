@@ -1,16 +1,19 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Linq;
-using System.Diagnostics;
-using System.ComponentModel;
-using GraphX.Controls.Models;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
+using GraphX.WPF.Controls.Models;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     /// <summary>
     /// Visual edge control

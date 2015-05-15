@@ -1,11 +1,10 @@
-﻿using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharp.Algorithms.Layout;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
+﻿using System.Collections.Generic;
 using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
-using System.Collections.Generic;
 
-namespace GraphX.Logic
+namespace GraphX.PCL.Logic.Models
 {
     public partial class GXLogicCore<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
@@ -31,12 +30,9 @@ namespace GraphX.Logic
                 //create default OR
                 return AlgorithmFactory.CreateOverlapRemovalAlgorithm(DefaultOverlapRemovalAlgorithm, null, DefaultOverlapRemovalAlgorithmParams);
             }
-            else
-            {
-                var overlap = ExternalOverlapRemovalAlgorithm;
-                overlap.Rectangles = rectangles;
-                return overlap;
-            }
+            var overlap = ExternalOverlapRemovalAlgorithm;
+            overlap.Rectangles = rectangles;
+            return overlap;
         }
 
         public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes, IDictionary<TVertex, Point> vertexPositions)

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Windows;
 using GraphX.Measure;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 
-namespace GraphX
+namespace GraphX.METRO.Controls
 {
     public static class DoubleExtensions
     {

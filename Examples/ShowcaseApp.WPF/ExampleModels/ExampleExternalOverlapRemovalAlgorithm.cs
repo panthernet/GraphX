@@ -1,8 +1,8 @@
 ﻿using System.Threading;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
 using System;
 using System.Collections.Generic;
 using GraphX.Measure;
+using GraphX.PCL.Common.Interfaces;
 
 namespace ShowcaseApp.WPF
 {

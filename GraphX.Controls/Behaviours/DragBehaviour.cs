@@ -1,9 +1,8 @@
-﻿using System;
+﻿using System.Diagnostics;
 using System.Windows;
-using System.Diagnostics;
-using System.Windows.Media;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
 	public static class DragBehaviour
 	{

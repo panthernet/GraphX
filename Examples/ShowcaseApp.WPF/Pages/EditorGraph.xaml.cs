@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
-using GraphX.Controls;
+using GraphX.PCL.Common.Enums;
+using GraphX.WPF.Controls;
+using GraphX.WPF.Controls.Models;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages
@@ -68,7 +70,7 @@ namespace ShowcaseApp.WPF.Pages
 
         }
 
-        void graphArea_EdgeSelected(object sender, GraphX.Models.EdgeSelectedEventArgs args)
+        void graphArea_EdgeSelected(object sender, EdgeSelectedEventArgs args)
         {
             if (args.MouseArgs.LeftButton == MouseButtonState.Pressed && _opMode == EditorOperationMode.Delete)
             {
@@ -77,7 +79,7 @@ namespace ShowcaseApp.WPF.Pages
             }
         }
 
-        void graphArea_VertexSelected(object sender, GraphX.Models.VertexSelectedEventArgs args)
+        void graphArea_VertexSelected(object sender, VertexSelectedEventArgs args)
         {
              if(args.MouseArgs.LeftButton == MouseButtonState.Pressed)            
              {

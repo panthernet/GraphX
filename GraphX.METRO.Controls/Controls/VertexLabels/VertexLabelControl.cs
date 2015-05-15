@@ -1,13 +1,14 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
-using GraphX.METRO.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
     [Bindable]
     public class VertexLabelControl : ContentControl, IVertexLabelControl
@@ -95,7 +96,7 @@ namespace GraphX.Controls
         public VertexLabelControl()
         {
             DefaultStyleKey = typeof(VertexLabelControl);
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled) return;
+            if (DesignMode.DesignModeEnabled) return;
 
             LayoutUpdated += VertexLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;

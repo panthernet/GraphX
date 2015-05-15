@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public static class HighlightBehaviour
     {

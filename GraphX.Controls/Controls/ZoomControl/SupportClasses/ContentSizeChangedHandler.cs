@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
     public delegate void ContentSizeChangedHandler(object sender, Size newSize);
 }

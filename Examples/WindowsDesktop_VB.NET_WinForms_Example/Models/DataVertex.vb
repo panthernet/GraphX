@@ -1,4 +1,5 @@
 ﻿Imports GraphX
+Imports GraphX.PCL.Common.Models
 Imports YAXLib
 
 Namespace Models

@@ -1,12 +1,11 @@
-﻿using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharp.Algorithms.Layout;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.Measure;
-using QuickGraph;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using GraphX.Measure;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Models;
+using QuickGraph;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Interfaces
 {
     public interface IGXLogicCore<TVertex, TEdge, TGraph>: IDisposable
         where TVertex : class, IGraphXVertex

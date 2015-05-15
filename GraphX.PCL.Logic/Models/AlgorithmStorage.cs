@@ -1,11 +1,6 @@
-﻿using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharp.Algorithms.Layout;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX.Logic.Models
+namespace GraphX.PCL.Logic.Models
 {
     public sealed class AlgorithmStorage<TVertex, TEdge> : IAlgorithmStorage<TVertex, TEdge>
     {

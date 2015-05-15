@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 
-namespace GraphX.Controls.Zoom
+namespace GraphX.METRO.Controls
 {
     [Bindable]
     public sealed class ZCP : ContentPresenter, INotifyPropertyChanged

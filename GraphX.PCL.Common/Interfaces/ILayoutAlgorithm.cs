@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using GraphX.Measure;
-using QuickGraph;
+﻿using QuickGraph;
 
-namespace GraphX.GraphSharp.Algorithms.Layout
+namespace GraphX.PCL.Common.Interfaces
 {
-    public interface ILayoutAlgorithm<TVertex, TEdge, TGraph> : IExternalLayout<TVertex>
+    public interface ILayoutAlgorithm<TVertex, TEdge, out TGraph> : IExternalLayout<TVertex>
 		where TVertex : class
 		where TEdge : IEdge<TVertex>
 		where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>

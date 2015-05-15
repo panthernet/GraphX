@@ -1,6 +1,6 @@
 ﻿using QuickGraph;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Interfaces
 {
     public interface IWeightedEdge<TVertex> : IEdge<TVertex>
     {

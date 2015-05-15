@@ -1,4 +1,6 @@
-﻿namespace GraphX
+﻿using GraphX.PCL.Common.Enums;
+
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class VertexEventOptions
     {

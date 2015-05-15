@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
              xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
+             xmlns:controls1="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
@@ -54,7 +54,7 @@
                         </VisualBrush.Visual>
                     </VisualBrush>
                 </Border.Background>
-                <controls:ZoomControl Margin="20" x:Name="tg_zoomctrl" Background="Transparent">
+                <controls1:ZoomControl Margin="20" x:Name="tg_zoomctrl" Background="Transparent">
                     <wpf:GraphAreaExample x:Name="tg_Area">
                         <wpf:GraphAreaExample.Resources>
                             <ResourceDictionary>
@@ -64,7 +64,7 @@
                             </ResourceDictionary>
                         </wpf:GraphAreaExample.Resources>
                     </wpf:GraphAreaExample>
-                </controls:ZoomControl>
+                </controls1:ZoomControl>
             </Border>
         </Border>
         <Border Name="tg_loader" Visibility="Collapsed" CornerRadius="4" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"

@@ -1,9 +1,7 @@
-﻿using GraphX.Animations;
-using GraphX.Models.Animations;
-using System;
-using GraphX.METRO.Controls.Models.Interfaces;
+﻿using System;
+using GraphX.METRO.Controls.Animations;
 
-namespace GraphX.Models
+namespace GraphX.METRO.Controls.Models
 {
     public static class AnimationFactory
     {

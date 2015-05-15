@@ -4,9 +4,9 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
-using GraphX.Controls;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.Animations
+namespace GraphX.METRO.Controls.Animations
 {
     public sealed class MoveFadeAnimation : MoveAnimationBase
     {

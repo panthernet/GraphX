@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.Animations
+namespace GraphX.WPF.Controls.Animations
 {
     public sealed class MoveFadeAnimation : MoveAnimationBase
     {

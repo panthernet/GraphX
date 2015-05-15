@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace GraphX.Converters
+namespace GraphX.METRO.Controls
 {
     public sealed class DoubleToLog10Converter : IValueConverter
     {

@@ -6,15 +6,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
-
+using GraphX.METRO.Controls.Animations;
+using GraphX.METRO.Controls.Models;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-using GraphX;
-using GraphX.GraphSharp.Algorithms.EdgeRouting;
-using GraphX.GraphSharp.Algorithms.Layout.Simple.FDP;
-using GraphX.GraphSharp.Algorithms.Layout.Simple.Hierarchical;
-using GraphX.GraphSharp.Algorithms.OverlapRemoval;
-using GraphX.Models;
-using InteractiveGraph.Models;
 
 namespace METRO.SimpleGraph
 {
@@ -27,7 +24,7 @@ namespace METRO.SimpleGraph
         {
             InitializeComponent();
 
-            cboxLayout.ItemsSource = Enum.GetValues(typeof(LayoutAlgorithmTypeEnum)).Cast<LayoutAlgorithmTypeEnum>();
+            cboxLayout.ItemsSource = Enum.GetValues(typeof(LayoutAlgorithmTypeEnum)).Cast<LayoutAlgorithmTypeEnum>();//.Where(a=> a != LayoutAlgorithmTypeEnum.FR && a != LayoutAlgorithmTypeEnum.BoundedFR).ToArray();
             cboxOverlap.ItemsSource = Enum.GetValues(typeof(OverlapRemovalAlgorithmTypeEnum)).Cast<OverlapRemovalAlgorithmTypeEnum>();
             cboxEdgeRouting.ItemsSource = Enum.GetValues(typeof(EdgeRoutingAlgorithmTypeEnum)).Cast<EdgeRoutingAlgorithmTypeEnum>();
 
@@ -95,7 +92,14 @@ namespace METRO.SimpleGraph
         void cboxLayout_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(graph.LogicCore == null) return;
-            graph.LogicCore.DefaultLayoutAlgorithm = (LayoutAlgorithmTypeEnum) cboxLayout.SelectedItem;
+            var late = (LayoutAlgorithmTypeEnum) cboxLayout.SelectedItem;
+            graph.LogicCore.DefaultLayoutAlgorithm = late;
+            if (late == LayoutAlgorithmTypeEnum.BoundedFR)
+                graph.LogicCore.DefaultLayoutAlgorithmParams
+                    = graph.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.BoundedFR);
+            if (late == LayoutAlgorithmTypeEnum.FR)
+                graph.LogicCore.DefaultLayoutAlgorithmParams
+                    = graph.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.FR);
         }
 
         async void MainPage_Loaded(object sender, RoutedEventArgs e)
@@ -256,7 +260,7 @@ namespace METRO.SimpleGraph
             logicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
             logicCore.DefaultLayoutAlgorithmParams = layParams;
 
-            logicCore.DefaultOverlapRemovalAlgorithmParams = logicCore.AlgorithmFactory.CreateOverlapRemovalParameters(GraphX.OverlapRemovalAlgorithmTypeEnum.FSA);
+            logicCore.DefaultOverlapRemovalAlgorithmParams = logicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)logicCore.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
             ((OverlapRemovalParameters)logicCore.DefaultOverlapRemovalAlgorithmParams).VerticalGap = 50;
 

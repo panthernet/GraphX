@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class EdgeSelectedEventArgs : System.EventArgs
     {
@@ -9,7 +9,6 @@ namespace GraphX.Models
         public MouseButtonEventArgs MouseArgs { get; set; }
 
         public EdgeSelectedEventArgs(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
-            : base()
         {
             EdgeControl = ec;
             Modifiers = keys;

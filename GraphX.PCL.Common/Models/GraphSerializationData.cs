@@ -1,6 +1,6 @@
 ﻿using GraphX.Measure;
 
-namespace GraphX.Models
+namespace GraphX.PCL.Common.Models
 {
     public class GraphSerializationData
     {

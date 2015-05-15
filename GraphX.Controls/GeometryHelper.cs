@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+using GraphX.PCL.Common.Enums;
 
 /* Code here is partially used from NodeXL (https://nodexl.codeplex.com/)
  * 
@@ -11,7 +10,7 @@ using System.Windows.Media;
  * 
  * */
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public static class GeometryHelper
     {
@@ -26,15 +25,15 @@ namespace GraphX
         /// <returns></returns>
         public static Vector? Intersects(Vector a1, Vector a2, Vector b1, Vector b2)
         {
-            Vector b = a2 - a1;
-            Vector d = b2 - b1;
+            var b = a2 - a1;
+            var d = b2 - b1;
             var bDotDPerp = b.X * d.Y - b.Y * d.X;
 
             // if b dot d == 0, it means the lines are parallel so have infinite intersection points
             if (bDotDPerp == 0)
                 return null;
 
-            Vector c = b1 - a1;
+            var c = b1 - a1;
             var t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
             if (t < 0 || t > 1)
             {
@@ -63,7 +62,7 @@ namespace GraphX
             Debug.Assert(points.Length >= 2);
             Debug.Assert(tolerance > 0);
 
-            PolyLineSegment oPolyLineSegment = new PolyLineSegment();
+            var oPolyLineSegment = new PolyLineSegment();
 
             if (points.Length == 2)
             {
@@ -72,9 +71,9 @@ namespace GraphX
             }
             else
             {
-                Int32 iPoints = points.Length;
+                var iPoints = points.Length;
 
-                for (Int32 i = 0; i < iPoints; i++)
+                for (var i = 0; i < iPoints; i++)
                 {
                     if (i == 0)
                     {
@@ -106,10 +105,10 @@ namespace GraphX
             Debug.Assert(oPolyLineSegment != null);
             Debug.Assert(dTolerance > 0);
 
-            Int32 iPoints = (Int32)((Math.Abs(oPoint1.X - oPoint2.X) +
+            var iPoints = (Int32)((Math.Abs(oPoint1.X - oPoint2.X) +
                 Math.Abs(oPoint1.Y - oPoint2.Y)) / dTolerance);
 
-            PointCollection oPolyLineSegmentPoints = oPolyLineSegment.Points;
+            var oPolyLineSegmentPoints = oPolyLineSegment.Points;
 
             if (iPoints <= 2)
             {
@@ -117,30 +116,30 @@ namespace GraphX
             }
             else
             {
-                Double dSX1 = dTension * (oPoint2.X - oPoint0.X);
-                Double dSY1 = dTension * (oPoint2.Y - oPoint0.Y);
-                Double dSX2 = dTension * (oPoint3.X - oPoint1.X);
-                Double dSY2 = dTension * (oPoint3.Y - oPoint1.Y);
+                var dSx1 = dTension * (oPoint2.X - oPoint0.X);
+                var dSy1 = dTension * (oPoint2.Y - oPoint0.Y);
+                var dSx2 = dTension * (oPoint3.X - oPoint1.X);
+                var dSy2 = dTension * (oPoint3.Y - oPoint1.Y);
 
-                Double dAX = dSX1 + dSX2 + 2 * oPoint1.X - 2 * oPoint2.X;
-                Double dAY = dSY1 + dSY2 + 2 * oPoint1.Y - 2 * oPoint2.Y;
-                Double dBX = -2 * dSX1 - dSX2 - 3 * oPoint1.X + 3 * oPoint2.X;
-                Double dBY = -2 * dSY1 - dSY2 - 3 * oPoint1.Y + 3 * oPoint2.Y;
+                var dAx = dSx1 + dSx2 + 2 * oPoint1.X - 2 * oPoint2.X;
+                var dAy = dSy1 + dSy2 + 2 * oPoint1.Y - 2 * oPoint2.Y;
+                var dBx = -2 * dSx1 - dSx2 - 3 * oPoint1.X + 3 * oPoint2.X;
+                var dBy = -2 * dSy1 - dSy2 - 3 * oPoint1.Y + 3 * oPoint2.Y;
 
-                Double dCX = dSX1;
-                Double dCY = dSY1;
-                Double dDX = oPoint1.X;
-                Double dDY = oPoint1.Y;
+                var dCx = dSx1;
+                var dCy = dSy1;
+                var dDx = oPoint1.X;
+                var dDy = oPoint1.Y;
 
                 // Note that this starts at 1, not 0.
 
-                for (int i = 1; i < iPoints; i++)
+                for (var i = 1; i < iPoints; i++)
                 {
-                    Double t = (Double)i / (iPoints - 1);
+                    var t = (Double)i / (iPoints - 1);
 
-                    Point oPoint = new Point(
-                        dAX * t * t * t + dBX * t * t + dCX * t + dDX,
-                        dAY * t * t * t + dBY * t * t + dCY * t + dDY
+                    var oPoint = new Point(
+                        dAx * t * t * t + dBx * t * t + dCx * t + dDx,
+                        dAy * t * t * t + dBy * t * t + dCy * t + dDy
                         );
 
                     oPolyLineSegmentPoints.Add(oPoint);
@@ -153,10 +152,10 @@ namespace GraphX
         {
             Debug.Assert(aoPathSegments != null);
 
-            PathFigure oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
-            PathSegmentCollection oSegments = oPathFigure.Segments;
+            var oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
+            var oSegments = oPathFigure.Segments;
 
-            foreach (PathSegment oPathSegment in aoPathSegments)
+            foreach (var oPathSegment in aoPathSegments)
             {
                 if (freezeAll) TryFreeze(oPathSegment);
                 oSegments.Add(oPathSegment);
@@ -169,16 +168,16 @@ namespace GraphX
         {
             Debug.Assert(aoPathSegments != null);
 
-            PathFigure oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
-            PathSegmentCollection oSegments = oPathFigure.Segments;
+            var oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
+            var oSegments = oPathFigure.Segments;
 
-            foreach (PathSegment oPathSegment in aoPathSegments)
+            foreach (var oPathSegment in aoPathSegments)
             {
                 TryFreeze(oPathSegment);
                 oSegments.Add(oPathSegment);
             }
             TryFreeze(oPathFigure);
-            PathGeometry oPathGeometry = new PathGeometry();
+            var oPathGeometry = new PathGeometry();
             oPathGeometry.Figures.Add(oPathFigure);
            // FreezeIfFreezable(oPathGeometry);
 
@@ -220,7 +219,7 @@ namespace GraphX
         {
             Debug.Assert(dVertexARadius >= 0);
 
-            Double dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
+            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
 
             return new Point(
                 oVertexALocation.X + (dVertexARadius * Math.Cos(dEdgeAngle)),
@@ -228,7 +227,7 @@ namespace GraphX
                 );
         }
 
-        public static Point GetEdgeEndpointOnTriangle(Point oVertexLocation, Double m_dHalfWidth, Point otherEndpoint)
+        public static Point GetEdgeEndpointOnTriangle(Point oVertexLocation, Double mDHalfWidth, Point otherEndpoint)
         {
             // Instead of doing geometry calculations similar to what is done in 
             // VertexDrawingHistory.GetEdgePointOnRectangle(), make use of that
@@ -237,10 +236,10 @@ namespace GraphX
             // side containing the endpoint is vertical and to the right of the
             // vertex location.
 
-            Double dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(
+            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(
                 oVertexLocation, otherEndpoint);
 
-            Double dEdgeAngleDegrees = MathHelper.RadiansToDegrees(dEdgeAngle);
+            var dEdgeAngleDegrees = MathHelper.RadiansToDegrees(dEdgeAngle);
 
             Double dAngleToRotateDegrees;
 
@@ -261,20 +260,20 @@ namespace GraphX
             // location and that has the vertical, endpoint-containing triangle
             // side as the rectangle's right edge.
 
-            Double dWidth = 2.0 * m_dHalfWidth;
+            var dWidth = 2.0 * mDHalfWidth;
 
-            Rect oRotatedRectangle = new Rect(
+            var oRotatedRectangle = new Rect(
                 oVertexLocation.X,
-                oVertexLocation.Y - m_dHalfWidth,
+                oVertexLocation.Y - mDHalfWidth,
                 dWidth * MathHelper.Tangent30Degrees,
                 dWidth
                 );
 
-            Matrix oMatrix = GetRotatedMatrix(oVertexLocation,
+            var oMatrix = GetRotatedMatrix(oVertexLocation,
                 dAngleToRotateDegrees);
 
             // Rotate the other vertex location.
-            Point oRotatedOtherVertexLocation = oMatrix.Transform(otherEndpoint);
+            var oRotatedOtherVertexLocation = oMatrix.Transform(otherEndpoint);
 
             // GetEdgeEndpointOnRectangle will compute an endpoint on the
             // rectangle's right edge.
@@ -288,24 +287,24 @@ namespace GraphX
             return oMatrix.Transform(oRotatedEdgeEndpoint);
         }
 
-        public static Point GetEdgeEndpointOnDiamond(Point oVertexLocation, Double m_dHalfWidth, Point otherEndpoint)
+        public static Point GetEdgeEndpointOnDiamond(Point oVertexLocation, Double mDHalfWidth, Point otherEndpoint)
         {
             // A diamond is just a rotated square, so the
             // GetEdgePointOnRectangle() can be used if the
             // diamond and the other vertex location are first rotated 45 degrees
             // about the diamond's center.
 
-            Double dHalfSquareWidth = m_dHalfWidth / Math.Sqrt(2.0);
+            var dHalfSquareWidth = mDHalfWidth / Math.Sqrt(2.0);
 
-            Rect oRotatedDiamond = new Rect(
+            var oRotatedDiamond = new Rect(
                 oVertexLocation.X - dHalfSquareWidth,
                 oVertexLocation.Y - dHalfSquareWidth,
                 2.0 * dHalfSquareWidth,
                 2.0 * dHalfSquareWidth
                 );
 
-            Matrix oMatrix = GetRotatedMatrix(oVertexLocation, 45);
-            Point oRotatedOtherVertexLocation = oMatrix.Transform(otherEndpoint);
+            var oMatrix = GetRotatedMatrix(oVertexLocation, 45);
+            var oRotatedOtherVertexLocation = oMatrix.Transform(otherEndpoint);
 
             var oRotatedEdgeEndpoint = GetEdgeEndpointOnRectangle(oVertexLocation, oRotatedDiamond, oRotatedOtherVertexLocation);
 
@@ -422,17 +421,17 @@ namespace GraphX
 
             //const Double WidthFactor = 1.5;
             var dArrowAngle = customAngle == 0.1 ? MathHelper.GetAngleBetweenPointsRadians(start, end) : customAngle;
-            Double dArrowTipX = oArrowTipLocation.X;
-            Double dArrowTipY = oArrowTipLocation.Y;
-            Double dArrowWidth = 3.0; //TODO dynamic width
-            Double dArrowHalfHeight = dArrowWidth / 2.0;
-            Double dX = dArrowTipX - dArrowWidth;
+            var dArrowTipX = oArrowTipLocation.X;
+            var dArrowTipY = oArrowTipLocation.Y;
+            const double dArrowWidth = 3.0; //TODO dynamic width
+            const double dArrowHalfHeight = dArrowWidth / 2.0;
+            var dX = dArrowTipX - dArrowWidth;
 
             // Compute the arrow's three points as if the arrow were at an angle of
             // zero degrees, then use a rotated transform to adjust for the actual
             // specified angle.
 
-            Point[] aoPoints = new Point[] {
+            var aoPoints = new[] {
 
             // Index 0: Arrow tip.
 
@@ -457,17 +456,17 @@ namespace GraphX
             new Point(dX + 0.2, dArrowTipY)
             };
 
-            Matrix oMatrix = GetRotatedMatrix(oArrowTipLocation,
+            var oMatrix = GetRotatedMatrix(oArrowTipLocation,
                 -MathHelper.RadiansToDegrees(dArrowAngle));
 
             oMatrix.Transform(aoPoints);
 
-            return GeometryHelper.GetPathFigureFromPoints(aoPoints[0], aoPoints[1], aoPoints[2]);
+            return GetPathFigureFromPoints(aoPoints[0], aoPoints[1], aoPoints[2]);
         }
 
         public static Matrix GetRotatedMatrix(Point centerOfRotation, Double angleToRotateDegrees)
         {
-            Matrix oMatrix = Matrix.Identity;
+            var oMatrix = Matrix.Identity;
 
             oMatrix.RotateAt(angleToRotateDegrees,
                 centerOfRotation.X, centerOfRotation.Y);
@@ -477,33 +476,33 @@ namespace GraphX
 
         public static PathFigure GetPathFigureFromPoints(Point startPoint, params Point[] otherPoints)
         {
-            Int32 iOtherPoints = otherPoints.Length;
+            var iOtherPoints = otherPoints.Length;
             var oPathFigure = new PathFigure() { StartPoint = startPoint };
             var oPathSegmentCollection = new PathSegmentCollection(iOtherPoints);
 
-            for (Int32 i = 0; i < iOtherPoints; i++)
+            for (var i = 0; i < iOtherPoints; i++)
                 oPathSegmentCollection.Add(new LineSegment(otherPoints[i], true));
 
             oPathFigure.Segments = oPathSegmentCollection;
             oPathFigure.IsClosed = true;
-            GeometryHelper.TryFreeze(oPathFigure);
+            TryFreeze(oPathFigure);
             return oPathFigure;
         }
 
-        public static PathGeometry GetPathGeometryFromPoints(System.Windows.Point startPoint, params Point[] otherPoints)
+        public static PathGeometry GetPathGeometryFromPoints(Point startPoint, params Point[] otherPoints)
         {
             Debug.Assert(otherPoints != null);
 
-            Int32 iOtherPoints = otherPoints.Length;
+            var iOtherPoints = otherPoints.Length;
 
             Debug.Assert(iOtherPoints > 0);
 
-            PathFigure oPathFigure = new PathFigure() { StartPoint = startPoint };
+            var oPathFigure = new PathFigure() { StartPoint = startPoint };
 
-            PathSegmentCollection oPathSegmentCollection =
+            var oPathSegmentCollection =
                 new PathSegmentCollection(iOtherPoints);
 
-            for (Int32 i = 0; i < iOtherPoints; i++)
+            for (var i = 0; i < iOtherPoints; i++)
             {
                 oPathSegmentCollection.Add(
                     new LineSegment(otherPoints[i], true));
@@ -511,12 +510,12 @@ namespace GraphX
 
             oPathFigure.Segments = oPathSegmentCollection;
             oPathFigure.IsClosed = true;
-            GeometryHelper.TryFreeze(oPathFigure);
+            TryFreeze(oPathFigure);
 
-            PathGeometry oPathGeometry = new PathGeometry();
+            var oPathGeometry = new PathGeometry();
 
             oPathGeometry.Figures.Add(oPathFigure);
-            GeometryHelper.TryFreeze(oPathGeometry);
+            TryFreeze(oPathGeometry);
 
             return (oPathGeometry);
         }

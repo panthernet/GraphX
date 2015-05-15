@@ -1,8 +1,4 @@
-using System;
-using System.Windows;
-using System.Windows.Input;
-
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public delegate void VertexSelectedEventHandler(object sender, VertexSelectedEventArgs args);
     public delegate void VertexMovedEventHandler(object sender, VertexMovedEventArgs e);

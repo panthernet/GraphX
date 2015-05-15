@@ -2,26 +2,23 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:ShowcaseApp.WPF"
-    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:gxl="clr-namespace:GraphX;assembly=GraphX.WPF.Controls"
-    xmlns:conv="clr-namespace:GraphX.Converters;assembly=GraphX.WPF.Controls"
-    >
+    xmlns:controls="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls">
 
     <local:ValueToImageConverter x:Key="ValueToImage"/>
     
     <!-- VERTEX CONTROL -->
-    <Style TargetType="{x:Type gxl:VertexControl}">
+    <Style TargetType="{x:Type controls:VertexControl}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="VertexShape" Value="Circle"/>
         <Setter Property="ShowLabel" Value="True"/>
         <Setter Property="Template">
 			<Setter.Value>
-                <ControlTemplate TargetType="{x:Type gxl:VertexControl}">
+                <ControlTemplate TargetType="{x:Type controls:VertexControl}">
 	
                     <Grid>
                         <Image Source="{Binding ImageId, Converter={StaticResource ValueToImage}}" Margin="1" Width="80" Stretch="UniformToFill"/>
                         <!--<TextBlock Text="{Binding Text}" Grid.Row="1" HorizontalAlignment="Center" Margin="2" />-->
-                        <gxl:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />
+                        <controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />
                     </Grid>
 
                 </ControlTemplate>
@@ -29,32 +26,32 @@
 		</Setter>
 
         <!-- VERTEX DRAGGING CONTROL -->
-        <Setter Property="gxl:DragBehaviour.IsDragEnabled"
+        <Setter Property="controls:DragBehaviour.IsDragEnabled"
                 Value="True" />
-        <Setter Property="gxl:DragBehaviour.UpdateEdgesOnMove"
+        <Setter Property="controls:DragBehaviour.UpdateEdgesOnMove"
                 Value="True" />
 
-        <Setter Property="gxl:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
+        <Setter Property="controls:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
 
         <Style.Triggers>
-            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
+            <Trigger Property="controls:HighlightBehaviour.Highlighted" Value="True">
                 <Setter Property="Background" Value="Gold"/>
                 <Setter Property="BorderThickness" Value="7"/>
             </Trigger>
-            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="False ">
+            <Trigger Property="controls:HighlightBehaviour.Highlighted" Value="False ">
                 <Setter Property="Background" Value="#FFE3E3E3"/>
                 <Setter Property="BorderThickness" Value="5"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <conv:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
+    <controls:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
 
     <!-- EDGE CONTROL -->
-    <Style TargetType="{x:Type gxl:EdgeControl}">
+    <Style TargetType="{x:Type controls:EdgeControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type gxl:EdgeControl}">
+                <ControlTemplate TargetType="{x:Type controls:EdgeControl}">
                     <Grid>
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="3" MinWidth="1" MinHeight="1"
@@ -66,8 +63,8 @@
                               >
                         </Path>-->
 
-                        <gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
-                        <gxl:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />
+                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
+                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -82,15 +79,15 @@
         <Setter Property="Opacity"
                 Value="1" />
 
-        <Setter Property="gxl:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
+        <Setter Property="controls:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
 
         
         <Style.Triggers>
-            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="True">
+            <Trigger Property="controls:HighlightBehaviour.Highlighted" Value="True">
                 <Setter Property="Foreground" Value="Gold"/>
                 <Setter Property="StrokeThickness" Value="5"/>
             </Trigger>
-            <Trigger Property="gxl:HighlightBehaviour.Highlighted" Value="False ">
+            <Trigger Property="controls:HighlightBehaviour.Highlighted" Value="False ">
                 <Setter Property="Foreground" Value="Silver"/>
                 <Setter Property="StrokeThickness" Value="2"/>
             </Trigger>

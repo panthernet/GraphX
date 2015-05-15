@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     public static class DoubleExtensions
     {
@@ -144,32 +144,32 @@ namespace GraphX
 
         public static int GetIntersectionPoint(Rect r, Point a, Point b, out Point pt)
         {
-            sides code; 
-            Point c; /* одна из точек */
             var start = new Point(a.X, a.Y);
             /* код конечных точек отрезка */
-            var code_a = GetIntersectionData(r, a);
-            var code_b = GetIntersectionData(r, b);
+            var codeA = GetIntersectionData(r, a);
+            var codeB = GetIntersectionData(r, b);
 
             /* пока одна из точек отрезка вне прямоугольника */
-            while (!code_a.IsInside() || !code_b.IsInside())
+            while (!codeA.IsInside() || !codeB.IsInside())
             {
                 /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
-                if (code_a.SameSide(code_b))
+                if (codeA.SameSide(codeB))
                 {
                     pt = new Point();
                     return -1;
                 }
 
                 /* выбираем точку c с ненулевым кодом */
-                if (!code_a.IsInside())
+                sides code;
+                Point c; /* одна из точек */
+                if (!codeA.IsInside())
                 {
-                    code = code_a;
+                    code = codeA;
                     c = a;
                 }
                 else
                 {
-                    code = code_b;
+                    code = codeB;
                     c = b;
                 }
 
@@ -198,15 +198,15 @@ namespace GraphX
                 }
 
                 /* обновляем код */
-                if (code == code_a)
+                if (code == codeA)
                 {
                     a = c;
-                    code_a = GetIntersectionData(r, a);
+                    codeA = GetIntersectionData(r, a);
                 }
                 else
                 {
                     b = c;
-                    code_b = GetIntersectionData(r, b);
+                    codeB = GetIntersectionData(r, b);
                 }
             }
             pt = GetCloserPoint(start, a, b);
@@ -227,8 +227,8 @@ namespace GraphX
 
             public bool SameSide(sides o)
             {
-                return (Left ==true && o.Left == true) || (Right == true && o.Right == true) || (Top == true && o.Top == true)
-                    || (Bottom == true && o.Bottom == true);
+                return (Left && o.Left) || (Right && o.Right) || (Top && o.Top)
+                    || (Bottom && o.Bottom);
             }
         }
 

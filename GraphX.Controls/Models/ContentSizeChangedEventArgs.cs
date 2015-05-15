@@ -1,7 +1,6 @@
 using System.Windows;
-using System.Windows.Input;
 
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class ContentSizeChangedEventArgs : System.EventArgs
     {
@@ -9,7 +8,6 @@ namespace GraphX.Models
         public Rect NewSize { get; private set; }
 
         public ContentSizeChangedEventArgs(Rect oldSize, Rect newSize)
-            : base()
         {
             OldSize = oldSize;
             NewSize = newSize;

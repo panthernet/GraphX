@@ -1,4 +1,4 @@
-﻿namespace GraphX.Helpers
+﻿namespace GraphX.PCL.Logic.Helpers
 {
     /* public partial class Form1
         {

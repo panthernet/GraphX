@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GraphX.Controls.Models.Interfaces
+namespace GraphX.WPF.Controls.Models
 {
     public interface IGraphControlFactory
     {

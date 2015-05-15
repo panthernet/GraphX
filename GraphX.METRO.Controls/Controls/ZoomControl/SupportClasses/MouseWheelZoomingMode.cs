@@ -1,4 +1,4 @@
-﻿namespace GraphX.METRO.Controls.Controls.ZoomControl.SupportClasses
+﻿namespace GraphX.METRO.Controls
 {
     public enum MouseWheelZoomingMode
     {

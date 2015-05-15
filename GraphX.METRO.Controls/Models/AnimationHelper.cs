@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls.Models
 {
     public static class AnimationHelper
     {

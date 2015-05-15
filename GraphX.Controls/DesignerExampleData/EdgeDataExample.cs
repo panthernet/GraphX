@@ -1,15 +1,15 @@
-﻿using System;
+﻿using GraphX.PCL.Common.Models;
 
-namespace GraphX.DesignerExampleData
+namespace GraphX.WPF.Controls.DesignerExampleData
 {
-    internal sealed class EdgeDataExample<Vertex> : EdgeBase<Vertex>
+    internal sealed class EdgeDataExample<TVertex> : EdgeBase<TVertex>
     {
-        public EdgeDataExample(Vertex source, Vertex target)
+        public EdgeDataExample(TVertex source, TVertex target)
             : base(source, target)
         {
             
         }
-        public EdgeDataExample(Vertex source, Vertex target, double weight)
+        public EdgeDataExample(TVertex source, TVertex target, double weight)
             : base(source, target, weight)
         {
             

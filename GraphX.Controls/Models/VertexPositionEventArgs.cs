@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GraphX.Models
+namespace GraphX.WPF.Controls.Models
 {
     public sealed class VertexPositionEventArgs : EventArgs
     {

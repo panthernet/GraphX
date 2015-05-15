@@ -1,6 +1,7 @@
 ﻿using GraphX.Measure;
+using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models
 {
     public class EdgeRoutingVisualData
     {

@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models.Semaphore
 {
     public class Semaphore : BWaitHandle, IDisposable
     {
-        int _count = 0;
-        int _maxCount = int.MaxValue;
+        int _count;
+        readonly int _maxCount = int.MaxValue;
         EventWaitHandle _ewh;
 
         public Semaphore()

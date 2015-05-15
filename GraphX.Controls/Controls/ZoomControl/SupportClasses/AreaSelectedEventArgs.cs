@@ -1,7 +1,6 @@
-using System;
 using System.Windows;
 
-namespace GraphX.Controls
+namespace GraphX.WPF.Controls
 {
     public class AreaSelectedEventArgs : System.EventArgs
     {
@@ -11,7 +10,6 @@ namespace GraphX.Controls
         public Rect Rectangle { get; set; }
 
         public AreaSelectedEventArgs(Rect rec)
-            : base()
         {
             Rectangle = rec;
         }

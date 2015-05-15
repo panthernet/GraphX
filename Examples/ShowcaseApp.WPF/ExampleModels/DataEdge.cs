@@ -2,6 +2,7 @@
 using GraphX;
 using System;
 using GraphX.Measure;
+using GraphX.PCL.Common.Models;
 using ShowcaseApp.WPF.FileSerialization;
 using YAXLib;
 

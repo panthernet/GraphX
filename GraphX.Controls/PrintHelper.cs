@@ -5,48 +5,56 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using GraphX.Controls.Models.Interfaces;
+using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Exceptions;
 using Brushes = System.Windows.Media.Brushes;
 
-namespace GraphX
+namespace GraphX.WPF.Controls
 {
     internal static class PrintHelper
     {
         /// <summary>
         /// Default image resolution
         /// </summary>
-        public const double DefaultDPI = 96d;
+        public const double DEFAULT_DPI = 96d;
 
         //Set pixelformat of image.
-        private static PixelFormat pixelFormat = PixelFormats.Pbgra32;
+        private static readonly PixelFormat PixelFormat = PixelFormats.Pbgra32;
 
         /// <summary>
         /// Method exports the GraphArea to an png image.
         /// </summary>
         /// <param name="surface">GraphArea control</param>
         /// <param name="path">Image destination path</param>
+        /// <param name="useZoomControlSurface"></param>
         /// <param name="imgdpi">Optional image DPI parameter</param>
         /// <param name="imgQuality">Optional image quality parameter (for some formats like JPEG)</param>
-        public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DefaultDPI, int imgQuality = 100)
+        /// <param name="itype"></param>
+        public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
             //Create a render bitmap and push the surface to it
             Visual vis = surface;
             if (useZoomControlSurface)
             {
-                if (surface.Parent != null && surface.Parent is IZoomControl)
-                    vis = (surface.Parent as IZoomControl).PresenterVisual;
-                else if(surface.Parent!=null && surface.Parent is FrameworkElement && (surface.Parent as FrameworkElement).Parent is IZoomControl)
-                    vis = ((surface.Parent as FrameworkElement).Parent as IZoomControl).PresenterVisual;
+                var zoomControl = surface.Parent as IZoomControl;
+                if (zoomControl != null)
+                    vis = zoomControl.PresenterVisual;
+                else
+                {
+                    var frameworkElement = surface.Parent as FrameworkElement;
+                    if(frameworkElement != null && frameworkElement.Parent is IZoomControl)
+                        vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
+                }
             }
             var renderBitmap =
                     new RenderTargetBitmap(
                                     //(int)surface.ActualWidth,
                                     //(int)surface.ActualHeight,
-                    (int)((vis as UIElement).DesiredSize.Width * (imgdpi / DefaultDPI) + 100),
-                    (int)((vis as UIElement).DesiredSize.Height * (imgdpi / DefaultDPI) + 100),
+                    (int)((vis as UIElement).DesiredSize.Width * (imgdpi / DEFAULT_DPI) + 100),
+                    (int)((vis as UIElement).DesiredSize.Height * (imgdpi / DEFAULT_DPI) + 100),
                     imgdpi,
                     imgdpi,
-                    pixelFormat);
+                    PixelFormat);
 
             //Render the graphlayout onto the bitmap.
             renderBitmap.Render(vis);
@@ -117,11 +125,15 @@ namespace GraphX
             Visual vis = surface;
             if (useZoomControlSurface)
             {
-                if (surface.Parent != null && surface.Parent is IZoomControl)
-                    vis = (surface.Parent as IZoomControl).PresenterVisual;
-                else if (surface.Parent != null && surface.Parent is FrameworkElement &&
-                         (surface.Parent as FrameworkElement).Parent is IZoomControl)
-                    vis = ((surface.Parent as FrameworkElement).Parent as IZoomControl).PresenterVisual;
+                var zoomControl = surface.Parent as IZoomControl;
+                if (zoomControl != null)
+                    vis = zoomControl.PresenterVisual;
+                else
+                {
+                    var frameworkElement = surface.Parent as FrameworkElement;
+                    if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
+                        vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
+                }
             }
             var renderBitmap =
                 new RenderTargetBitmap(
@@ -131,7 +143,7 @@ namespace GraphX
                     (int)((vis as UIElement).DesiredSize.Height * (imgdpi / 96) + 100),
                     imgdpi,
                     imgdpi,
-                    pixelFormat);
+                    PixelFormat);
 
             vis.SetValue(Panel.BackgroundProperty, Brushes.White);
             //Render the graphlayout onto the bitmap.

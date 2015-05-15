@@ -1,7 +1,8 @@
 ﻿using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX
+namespace GraphX.PCL.Common.Models
 {
     /// <summary>
     /// Base class for graph edge
@@ -14,7 +15,7 @@ namespace GraphX
         /// </summary>
         public ProcessingOptionEnum SkipProcessing { get; set; }
 
-        public EdgeBase(TVertex source, TVertex target, double weight = 1)
+        protected EdgeBase(TVertex source, TVertex target, double weight = 1)
         {
 
             Source = source;

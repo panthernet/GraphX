@@ -18,7 +18,7 @@ using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace GraphX.Controls
+namespace GraphX.METRO.Controls
 {
   public static class VisualTreeHelperEx
   {
@@ -30,7 +30,7 @@ namespace GraphX.Controls
       if(  element.GetType() == type )
         return element;
 
-      return VisualTreeHelperEx.FindAncestorByType( VisualTreeHelper.GetParent( element ), type, specificTypeOnly );
+      return FindAncestorByType( VisualTreeHelper.GetParent( element ), type, specificTypeOnly );
     }
 
     public static T FindAncestorByType<T>( DependencyObject depObj ) where T : DependencyObject
@@ -46,7 +46,7 @@ namespace GraphX.Controls
 
       T parent = default( T );
 
-      parent = VisualTreeHelperEx.FindAncestorByType<T>( VisualTreeHelper.GetParent( depObj ) );
+      parent = FindAncestorByType<T>( VisualTreeHelper.GetParent( depObj ) );
 
       return parent;
     }
@@ -63,7 +63,7 @@ namespace GraphX.Controls
       for( int i = 0; i < VisualTreeHelper.GetChildrenCount( element ); i++ )
       {
           var visual = VisualTreeHelper.GetChild(element, i) as UIElement;
-        foundElement = VisualTreeHelperEx.FindDescendantByName( visual, name );
+        foundElement = FindDescendantByName( visual, name );
         if( foundElement != null )
           break;
       }
@@ -73,7 +73,7 @@ namespace GraphX.Controls
 
     public static UIElement FindDescendantByType( UIElement element, Type type )
     {
-      return VisualTreeHelperEx.FindDescendantByType( element, type, true );
+      return FindDescendantByType( element, type, true );
     }
 
     public static UIElement FindDescendantByType(UIElement element, Type type, bool specificTypeOnly)
@@ -91,7 +91,7 @@ namespace GraphX.Controls
       for( int i = 0; i < VisualTreeHelper.GetChildrenCount( element ); i++ )
       {
           var visual = VisualTreeHelper.GetChild(element, i) as UIElement;
-        foundElement = VisualTreeHelperEx.FindDescendantByType( visual, type, specificTypeOnly );
+        foundElement = FindDescendantByType( visual, type, specificTypeOnly );
         if( foundElement != null )
           break;
       }
@@ -101,7 +101,7 @@ namespace GraphX.Controls
 
     public static T FindDescendantByType<T>(UIElement element) where T : UIElement
     {
-        UIElement temp = VisualTreeHelperEx.FindDescendantByType(element, typeof(T));
+        UIElement temp = FindDescendantByType(element, typeof(T));
 
       return ( T )temp;
     }
@@ -122,7 +122,7 @@ namespace GraphX.Controls
       for( int i = 0; i < VisualTreeHelper.GetChildrenCount( element ); i++ )
       {
           var visual = VisualTreeHelper.GetChild(element, i) as UIElement;
-        foundElement = VisualTreeHelperEx.FindDescendantWithPropertyValue( visual, dp, value );
+        foundElement = FindDescendantWithPropertyValue( visual, dp, value );
         if( foundElement != null )
           break;
       }
