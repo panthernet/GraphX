@@ -1,9 +1,9 @@
 ﻿RELEASE 2.1.9
-+ Added selective vertex and edge support to METRO version (SVAES) [METRO]
-+ Added SVAES for following algorithms: Circular [ALL]
++ Added vertex and edge skip processing support to METRO version (VAESPS) [METRO]
++ Added VAESPS for following algorithms: Circular [ALL]
 + Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
-	This will fix SVAES for default algorithms. [WPF, METRO]
+	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Fixed some algorithm calculation problems, especial FR [ALL]
 
