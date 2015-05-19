@@ -11,6 +11,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="180"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -25,7 +26,9 @@
             </ResourceDictionary>
         </Grid.Resources>
 
-        <Border CornerRadius="2" BorderBrush="{DynamicResource ButtonBorder}" Background="{DynamicResource ButtonBackground}" Margin="2" BorderThickness="1">
+        <GridSplitter VerticalAlignment="Stretch" Width="2" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1"/>
+
+        <Border Grid.Row="0" Grid.Column="0" CornerRadius="2" BorderBrush="{DynamicResource ButtonBorder}" Background="{DynamicResource ButtonBackground}" Margin="2" BorderThickness="1">
             <TextBlock Margin="1" TextWrapping="Wrap" TextAlignment="Center" Text="This graph is designed for templating, animation and visual behaviours preview. See vertex and edge tooltips, templated highlights and animations."/>
         </Border>
 
@@ -72,7 +75,7 @@
             <Label VerticalAlignment="Center" Content="Async loading graph..." Margin="10"/>
         </Border>
 
-        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+        <DockPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
                 <Button Height="50" Margin="3" Name="tg_but_randomgraph" Click="tg_but_randomgraph_Click"  DockPanel.Dock="Top" UseLayoutRounding="True" BorderBrush="{DynamicResource ModernButtonBorder}">
                     <Image Width="44"  Height="41.1667" Source="/Assets/dice.png" Stretch="Uniform"/>

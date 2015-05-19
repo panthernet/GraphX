@@ -21,8 +21,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
             if (parameters is PathFinderEdgeRoutingParameters)
             {
                 var prms = parameters as PathFinderEdgeRoutingParameters;
-                _horizontalGS = prms.HorizontalGridSize;
-                _verticalGS = prms.VerticalGridSize;
+                _horizontalGs = prms.HorizontalGridSize;
+                _verticalGs = prms.VerticalGridSize;
                 _sideAreaOffset = prms.SideGridOffset;
                 _useDiagonals = prms.UseDiagonals;
                 _pathAlgo = prms.PathFinderAlgorithm;
@@ -41,8 +41,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
         public override Point[] ComputeSingle(TEdge edge)
         {
-            calculateMatrix(CancellationToken.None);//maybe shouldnt do this cause can be used from algo storage and already inited
-            setupPathFinder();//
+            CalculateMatrix(CancellationToken.None);//maybe shouldnt do this cause can be used from algo storage and already inited
+            SetupPathFinder();//
             ComputeER(edge, CancellationToken.None);
             return EdgeRoutes.ContainsKey(edge) ? EdgeRoutes[edge] : null;
         }
@@ -62,8 +62,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
             EdgeRoutes.Clear();
 
-            calculateMatrix(cancellationToken);
-            setupPathFinder();
+            CalculateMatrix(cancellationToken);
+            SetupPathFinder();
 
 
             foreach (var item in Graph.Edges)
@@ -72,8 +72,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
         private Point _minPoint = new Point(double.PositiveInfinity, double.PositiveInfinity);
         private Point _maxPoint = new Point(double.NegativeInfinity, double.NegativeInfinity);
-        private double _horizontalGS = 100;
-        private double _verticalGS = 100;
+        private double _horizontalGs = 100;
+        private double _verticalGs = 100;
         private double _sideAreaOffset = 500;
         private bool _useDiagonals = true;
         private double _vertexSafeDistance = 30;
@@ -84,41 +84,41 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         private int _searchLimit = 50000;
         private PathFindAlgorithm _pathAlgo = PathFindAlgorithm.Manhattan;
 
-        private MatrixItem[,] resMatrix;
-        private List<MatrixItem> validPoints;
-        private PathFinder pathFinder;
+        private MatrixItem[,] _resMatrix;
+        private List<MatrixItem> _validPoints;
+        private PathFinder _pathFinder;
 
 
         #region Setup pathfinder
-        private void setupPathFinder()
+        private void SetupPathFinder()
         {
-            pathFinder = new PathFinder(resMatrix);
-            pathFinder.Diagonals = _useDiagonals;
-            pathFinder.HeuristicEstimate = _pfHeuristic;
-            pathFinder.HeavyDiagonals = _useHeavyDiagonals;
-            pathFinder.PunishChangeDirection = _punishChangeDirection;
-            pathFinder.TieBreaker = _useTieBreaker;
-            pathFinder.SearchLimit = _searchLimit;
+            _pathFinder = new PathFinder(_resMatrix);
+            _pathFinder.Diagonals = _useDiagonals;
+            _pathFinder.HeuristicEstimate = _pfHeuristic;
+            _pathFinder.HeavyDiagonals = _useHeavyDiagonals;
+            _pathFinder.PunishChangeDirection = _punishChangeDirection;
+            _pathFinder.TieBreaker = _useTieBreaker;
+            _pathFinder.SearchLimit = _searchLimit;
 
             switch (_pathAlgo)
             {
                 case PathFindAlgorithm.Manhattan:
-                    pathFinder.Formula = HeuristicFormula.Manhattan;
+                    _pathFinder.Formula = HeuristicFormula.Manhattan;
                     break;
                 case PathFindAlgorithm.MaxDXDY:
-                    pathFinder.Formula = HeuristicFormula.MaxDXDY;
+                    _pathFinder.Formula = HeuristicFormula.MaxDXDY;
                     break;
                 case PathFindAlgorithm.Euclidean:
-                    pathFinder.Formula = HeuristicFormula.Euclidean;
+                    _pathFinder.Formula = HeuristicFormula.Euclidean;
                     break;
                 case PathFindAlgorithm.EuclideanNoSQR:
-                    pathFinder.Formula = HeuristicFormula.EuclideanNoSQR;
+                    _pathFinder.Formula = HeuristicFormula.EuclideanNoSQR;
                     break;
                 case PathFindAlgorithm.DiagonalShortCut:
-                    pathFinder.Formula = HeuristicFormula.DiagonalShortCut;
+                    _pathFinder.Formula = HeuristicFormula.DiagonalShortCut;
                     break;
                 case PathFindAlgorithm.Custom1:
-                    pathFinder.Formula = HeuristicFormula.Custom1;
+                    _pathFinder.Formula = HeuristicFormula.Custom1;
                     break;
                 default: throw new Exception("setupPathFinder() -> Unknown formula!");
             }
@@ -126,16 +126,16 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         #endregion
 
         #region Calculate matrix
-        private void calculateMatrix(CancellationToken cancellationToken)
+        private void CalculateMatrix(CancellationToken cancellationToken)
         {
             var tl = new Point(_minPoint.X - _sideAreaOffset, _minPoint.Y - _sideAreaOffset);
             var br = new Point(_maxPoint.X + _sideAreaOffset, _maxPoint.Y + _sideAreaOffset);
 
-            var hCount = (int)((br.X - tl.X) / _horizontalGS) + 1;
-            var vCount = (int)((br.Y - tl.Y) / _verticalGS) + 1;
+            var hCount = (int)((br.X - tl.X) / _horizontalGs) + 1;
+            var vCount = (int)((br.Y - tl.Y) / _verticalGs) + 1;
 
-            resMatrix = new MatrixItem[hCount, vCount];
-            validPoints = new List<MatrixItem>();
+            _resMatrix = new MatrixItem[hCount, vCount];
+            _validPoints = new List<MatrixItem>();
 
             var lastPt = new Point(0, 0);
 
@@ -145,9 +145,9 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    lastPt = new Point(tl.X + _horizontalGS * i, tl.Y + _verticalGS * j);
-                    resMatrix[i, j] = new MatrixItem(lastPt, IsOverlapped(lastPt), i, j);
-                    if (!resMatrix[i, j].IsIntersected) validPoints.Add(resMatrix[i, j]);
+                    lastPt = new Point(tl.X + _horizontalGs * i, tl.Y + _verticalGs * j);
+                    _resMatrix[i, j] = new MatrixItem(lastPt, IsOverlapped(lastPt), i, j);
+                    if (!_resMatrix[i, j].IsIntersected) _validPoints.Add(_resMatrix[i, j]);
                 }
             ////////////debug
 #if DEBUG
@@ -156,7 +156,7 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
                 var str = "";
                 for (int j = 0; j < hCount; j++)
                 {
-                    str += resMatrix[j, i].IsIntersected ? "0 " : "1 ";
+                    str += _resMatrix[j, i].IsIntersected ? "0 " : "1 ";
                 }
                 Debug.WriteLine(str);
             }
@@ -167,9 +167,9 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
         private void ComputeER(TEdge item, CancellationToken cancellationToken)
         {
-            var startPt = getClosestPoint(validPoints, VertexPositions[item.Source]);
-            var endPt = getClosestPoint(validPoints, VertexPositions[item.Target]);
-            var lst = pathFinder.FindPath(startPt, endPt);
+            var startPt = GetClosestPoint(_validPoints, VertexPositions[item.Source]);
+            var endPt = GetClosestPoint(_validPoints, VertexPositions[item.Target]);
+            var lst = _pathFinder.FindPath(startPt, endPt);
 
             if (lst == null) return;
             var ptlst = new List<Point>();
@@ -177,7 +177,7 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var mi = resMatrix[pt.X, pt.Y];
+                var mi = _resMatrix[pt.X, pt.Y];
                 ptlst.Add(mi.Point);
             }
             if (EdgeRoutes.ContainsKey(item))
@@ -188,25 +188,19 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         private bool IsOverlapped(Point pt)
         {
             var trect = new Rect(pt.X, pt.Y, 2, 2);
-            foreach (var item in VertexSizes)
-            {
-                var rect = new Rect(item.Value.X - _vertexSafeDistance, item.Value.Y - _vertexSafeDistance, item.Value.Width + _vertexSafeDistance, item.Value.Height + _vertexSafeDistance);
-                if (rect.IntersectsWith(trect))
-                    return true;
-            }
-            return false;
+            return VertexSizes.Select(item => new Rect(item.Value.X - _vertexSafeDistance, item.Value.Y - _vertexSafeDistance, item.Value.Width + _vertexSafeDistance, item.Value.Height + _vertexSafeDistance)).Any(rect => rect.IntersectsWith(trect));
         }
 
-        private Point getClosestPoint(List<MatrixItem> points, Point pt)
+        private Point GetClosestPoint(IEnumerable<MatrixItem> points, Point pt)
         {
             var lst = points.Where(mi => mi.Point != pt).
-                           OrderBy(mi => getFakeDistance(pt, mi.Point)).
+                           OrderBy(mi => GetFakeDistance(pt, mi.Point)).
                            Take(1);
-            if (lst.Count() == 0) throw new Exception("GetClosestPoint() -> Can't find one!");
+            if (!lst.Any()) throw new Exception("GetClosestPoint() -> Can't find one!");
             return  new Point(lst.First().PlaceX, lst.First().PlaceY);
         }
 
-        private double getFakeDistance(Point source, Point target)
+        private double GetFakeDistance(Point source, Point target)
         {
             double dx = target.X - source.X; double dy = target.Y - source.Y;
             return dx * dx + dy * dy;

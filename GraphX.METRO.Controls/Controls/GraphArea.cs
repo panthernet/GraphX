@@ -617,7 +617,6 @@ namespace GraphX.METRO.Controls
                     resultCoords = new Dictionary<TVertex, Measure.Point>();
                     foreach (var res in overlap.Rectangles)
                         resultCoords.Add(res.Key, new Measure.Point(res.Value.Left, res.Value.Top));
-                    //if (Worker != null) Worker.ReportProgress(66, 1);
                 }
 
 
@@ -1050,7 +1049,8 @@ namespace GraphX.METRO.Controls
                 //setup path
                 if (_svShowEdgeLabels == true)
                     edgectrl.ShowLabel = true;
-                edgectrl.PrepareEdgePath();
+                    //TODO check it
+                else edgectrl.PrepareEdgePath();
                 //edgectrl.InvalidateChildren();
             }
             //this.InvalidateVisual();

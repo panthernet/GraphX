@@ -6,7 +6,7 @@
         TextOptions.TextFormattingMode ="Ideal"
         UseLayoutRounding="False"
         ContentSource="/Pages/Introduction.xaml"
-        Height="600" Width="999">
+        Height="720" Width="1280">
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="Settings" Source="/Pages/Settings.xaml" />
         <mui:Link DisplayName="Web" Source="http://panthernet.ru/forum/index.php?/forum/5-discussions/" />

@@ -582,9 +582,12 @@ namespace GraphX.METRO.Controls
 
         internal void UpdateEdge(bool updateLabel = true)
         {
-            if ((Visibility == Visibility.Visible || IsHiddenEdgesUpdated) && _linePathObject != null)
+            if (Visibility == Visibility.Visible || IsHiddenEdgesUpdated)
             {
+                if (_linePathObject == null)
+                    ApplyTemplate();
                 PrepareEdgePath(true, null, updateLabel);
+                if (_linePathObject == null) return;
                 _linePathObject.Data = _linegeometry;
                 _linePathObject.StrokeDashArray = StrokeDashArray;
 
@@ -695,8 +698,8 @@ namespace GraphX.METRO.Controls
                     Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target))
                 };
 
-                var hasEpImgSource = _edgePointerForSource != null;
-                var hasEpImgTarget = _edgePointerForTarget != null;
+                var hasEpSource = _edgePointerForSource != null;
+                var hasEpTarget = _edgePointerForTarget != null;
 
                 //if self looped edge
                 if (IsSelfLooped)
@@ -711,9 +714,9 @@ namespace GraphX.METRO.Controls
                     _arrowgeometry.Figures.Add(GeometryHelper.GenerateArrow(aPoint, new Point(), new Point(), dArrowAngle));
                     _linegeometry = geo;
 
-                    if (hasEpImgSource)
+                    if (hasEpSource)
                         _edgePointerForSource.Hide();
-                    if (hasEpImgTarget)
+                    if (hasEpTarget)
                         _edgePointerForTarget.Hide();
                     return;
                 }
@@ -730,17 +733,41 @@ namespace GraphX.METRO.Controls
 
                 /* Rectangular shapes implementation by bleibold */
 
+                var gEdge = Edge as IGraphXCommonEdge;
+                Point p1;
+                Point p2;
 
-                //Point p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Rect(sourceSize), (hasRouteInfo ? routeInformation[1] : (targetPos)), Source.VertexShape);
-                //Point p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Rect(targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2] : (sourcePos), Target.VertexShape);
+                if (gEdge != null && gEdge.SourceConnectionPointId.HasValue)
+                {
+                    var sourceCp = Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
+                    if (sourceCp.Shape == VertexShape.None) p1 = sourceCp.RectangularSize.Center();
+                    else
+                    {
+                        var targetCpPos = gEdge.TargetConnectionPointId.HasValue ? Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true).RectangularSize.Center() : (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos));
+                        p1 = GeometryHelper.GetEdgeEndpoint(sourceCp.RectangularSize.Center(), sourceCp.RectangularSize, targetCpPos, sourceCp.Shape);
+                    }
+                }
+                else
+                    p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Windows.Foundation.Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
 
-                var p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new Windows.Foundation.Rect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
-                var p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Windows.Foundation.Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.VertexShape);
+                if (gEdge != null && gEdge.TargetConnectionPointId.HasValue)
+                {
+                    var targetCp = Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
+                    if (targetCp.Shape == VertexShape.None) p2 = targetCp.RectangularSize.Center();
+                    else
+                    {
+                        var sourceCpPos = gEdge.SourceConnectionPointId.HasValue ? Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true).RectangularSize.Center() : hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos);
+                        p2 = GeometryHelper.GetEdgeEndpoint(targetCp.RectangularSize.Center(), targetCp.RectangularSize, sourceCpPos, targetCp.Shape);
+                    }
+                }
+                else
+                    p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new Windows.Foundation.Rect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.VertexShape);
 
                 SourceConnectionPoint = p1;
                 TargetConnectionPoint = p2;
 
                 _linegeometry = new PathGeometry(); PathFigure lineFigure;
+                //TODO clear in 2.2.0 in favor of new arrow path logic
                 _arrowgeometry = new PathGeometry(); PathFigure arrowFigure;
 
                 //if we have route and route consist of 2 or more points
@@ -756,56 +783,49 @@ namespace GraphX.METRO.Controls
                     if (RootArea.EdgeCurvingEnabled)
                     {
                         var oPolyLineSegment = GeometryHelper.GetCurveThroughPoints(routePoints.ToArray(), 0.5, RootArea.EdgeCurvingTolerance);
+
+                        if (hasEpTarget)
+                        {
+                            UpdateTargetEpData(oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 1], oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2]);
+                            oPolyLineSegment.Points.RemoveAt(oPolyLineSegment.Points.Count - 1);
+                        }
+                        if (hasEpSource) UpdateSourceEpData(oPolyLineSegment.Points.First(), oPolyLineSegment.Points[1]);
+
                         lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
                         //get two last points of curved path to generate correct arrow
                         var cLast = oPolyLineSegment.Points.Last();
                         var cPrev = oPolyLineSegment.Points.Count == 1 ? oPolyLineSegment.Points.Last() : oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2];
                         arrowFigure = GeometryHelper.GenerateOldArrow(cPrev, cLast);
-                        //if(_endEdgePointerImage != null)
-                        //    _endEdgePointerImage.Update(cLast);
-                        //freeze and create resulting geometry
-                        if (hasEpImgTarget) UpdateTargetEpData(cLast, cPrev);
-                        if (hasEpImgSource) UpdateSourceEpData(oPolyLineSegment.Points.First(), oPolyLineSegment.Points[1]);
                     }
                     else
                     {
+                        if (hasEpSource) UpdateSourceEpData(routePoints.First(), routePoints[1]);
+                        if (hasEpTarget)
+                            routePoints[routePoints.Count - 1] = routePoints[routePoints.Count - 1].Subtract(UpdateTargetEpData(p2, routePoints[routePoints.Count - 2]));
+
                         var pcol = new PointCollection();
                         foreach(var item in routePoints)
                             pcol.Add(item);
 
                         lineFigure = new PathFigure {StartPoint = p1, Segments = new PathSegmentCollection {new PolyLineSegment {Points = pcol}}, IsClosed = false};
                         arrowFigure = GeometryHelper.GenerateOldArrow(routePoints[routePoints.Count - 2], p2);
-                        if (hasEpImgSource) UpdateSourceEpData(routePoints.First(), routePoints[1]);
-                        if (hasEpImgTarget) UpdateTargetEpData(routePoints[routePoints.Count - 2], p2);
                     }
 
                 }
                 else // no route defined
                 {
-                    //!!! Here is the line calculation to not overlap an arrowhead
-                    //Vector v = p1 - p2; v = v / v.Length * 5;
-                    // Vector n = new Vector(-v.Y, v.X) * 0.7;
-                    //segments[0] = new LineSegment(p2 + v, true);
+                    if (hasEpSource) UpdateSourceEpData(p1, p2);
+                    if (hasEpTarget)
+                        p2 = p2.Subtract(UpdateTargetEpData(p2, p1));
+
                     lineFigure = new PathFigure {StartPoint = p1, Segments = new PathSegmentCollection {new LineSegment() {Point = p2}}, IsClosed = false};
                     arrowFigure = GeometryHelper.GenerateOldArrow(p1, p2);
-                    if (hasEpImgSource) UpdateSourceEpData(p1, p2);
-                    if (hasEpImgTarget) UpdateTargetEpData(p2, p1);
-                    //Debug.WriteLine("p1: " + p1 + " p2: " + p2);
-
                 }
-                //GeometryHelper.TryFreeze(lineFigure);
-                (_linegeometry as PathGeometry).Figures.Add(lineFigure);
+                ((PathGeometry) _linegeometry).Figures.Add(lineFigure);
                 if (arrowFigure != null)
-                {
-                   // GeometryHelper.TryFreeze(arrowFigure);
                     _arrowgeometry.Figures.Add(arrowFigure);
-                }
-                //GeometryHelper.TryFreeze(_linegeometry);
-                //GeometryHelper.TryFreeze(_arrowgeometry);
-
                 if (ShowLabel && _edgeLabelControl != null && _updateLabelPosition && updateLabel)
                     _edgeLabelControl.UpdatePosition();
-                //PathGeometry = (PathGeometry)_linegeometry;
             }
             else
             {
@@ -820,10 +840,10 @@ namespace GraphX.METRO.Controls
             _edgePointerForSource.Update(from, dir, _edgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
         }
 
-        private void UpdateTargetEpData(Point from, Point to)
+        private Point UpdateTargetEpData(Point from, Point to)
         {
             var dir = MathHelper.GetDirection(from, to);
-            _edgePointerForTarget.Update(from, dir, _edgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
+            return _edgePointerForTarget.Update(from, dir, _edgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
         }
 
         #endregion

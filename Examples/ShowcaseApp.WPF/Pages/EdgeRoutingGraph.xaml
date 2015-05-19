@@ -19,11 +19,14 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <GridSplitter VerticalAlignment="Stretch" Width="2" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
 
         <Border CornerRadius="2" BorderBrush="{DynamicResource ButtonBorder}" Background="{DynamicResource ButtonBackground}" Margin="2" BorderThickness="1">
             <TextBlock Margin="1" TextWrapping="Wrap" TextAlignment="Center" Text="Here is an example of the edges routing and handling. You can preview different edge routing and compiling algorithms along with applied visual styles and drag vertices to see routed path changes."/>

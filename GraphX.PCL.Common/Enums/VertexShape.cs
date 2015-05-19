@@ -5,6 +5,7 @@
         Rectangle,
         Diamond,
         Triangle,
-        Circle
+        Circle,
+        None
     }
 }

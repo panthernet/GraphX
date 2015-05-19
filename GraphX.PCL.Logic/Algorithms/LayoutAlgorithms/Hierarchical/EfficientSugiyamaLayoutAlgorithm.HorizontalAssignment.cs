@@ -45,12 +45,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 CalculateHorizontalPositions(LeftRightMode.Right, UpperLowerEdges.Lower);
 
             CalculateRealPositions();
-            DoEdgeRouting();
-
             SavePositions();
         }
 
-        private void DoEdgeRouting()
+        private void DoEdgeRouting(double offsetY)
         {
             switch (Parameters.EdgeRouting)
             {
@@ -58,7 +56,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     DoTraditionalEdgeRouting();
                     break;
                 case SugiyamaEdgeRoutings.Orthogonal:
-                    DoOrthogonalEdgeRouting();
+                    DoOrthogonalEdgeRouting(offsetY);
                     break;
                 default:
                     break;
@@ -66,9 +64,40 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         }
 
-        private void DoOrthogonalEdgeRouting()
+        private void DoOrthogonalEdgeRouting(double offsetY)
         {
             foreach (var edge in VisitedGraph.Edges)
+            {
+                var sourcePosition = VertexPositions[edge.Source];
+                var targetPosition = VertexPositions[edge.Target];
+                var sourceSize = _vertexSizes[edge.Source];
+                var targetSize = _vertexSizes[edge.Target];
+
+                if ((Parameters.Direction == LayoutDirection.TopToBottom ||  Parameters.Direction == LayoutDirection.BottomToTop) && sourcePosition.X != targetPosition.X)
+                {
+                    _edgeRoutingPoints[edge] =
+                        new[]
+                        {
+                            new Point(0, 0),
+                            new Point(targetPosition.X + targetSize.Width / 2, sourcePosition.Y + sourceSize.Height / 2),
+                            new Point(0, 0)
+                        };
+                }
+
+                if ((Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft) && sourcePosition.Y != targetPosition.Y)
+                {
+                    _edgeRoutingPoints[edge] =
+                        new[]
+                        {
+                            new Point(0, 0),
+                            new Point(sourcePosition.X + sourceSize.Width /2, targetPosition.Y + targetSize.Height / 2),
+                            new Point(0, 0)
+                        };
+                }
+
+
+            }
+           /* foreach (var edge in VisitedGraph.Edges)
             {
                 Point[] orthoRoutePoints = new Point[2];
                 var sourceVertex = _vertexMap[edge.Source];
@@ -105,7 +134,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 routePoints[kvp.Value.Count + 2] = new Point(routePoints[kvp.Value.Count + 1].X, routePoints[kvp.Value.Count + 3].Y);
                 _edgeRoutingPoints[kvp.Key] = routePoints;
             }
-
+            */
         }
 
         private void DoTraditionalEdgeRouting()

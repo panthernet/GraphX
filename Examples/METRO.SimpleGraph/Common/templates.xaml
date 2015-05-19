@@ -111,22 +111,23 @@
                                 <SolidColorBrush Color="{Binding VisualColor}"/>
                             </Path.Stroke>
                         </Path>
-                        <Path x:Name="PART_edgeArrowPath"
-                          Stroke="{TemplateBinding Foreground}" 
-                          StrokeThickness="{Binding VisualEdgeThickness}"
-                          Opacity="{Binding VisualEdgeTransparency}"
-                        />
 
-                        <!--<controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" >
-                            <controls:EdgePointerImage.Image>
+                       <controls1:EdgePointerPath x:Name="PART_EdgePointerForTarget" Opacity="239" Scale="8,8">
+                            <controls1:EdgePointerPath.Path>
+                                <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow" />
+                            </controls1:EdgePointerPath.Path>
+                        </controls1:EdgePointerPath>
+
+                        <!-- <controls1:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" >
+                            <controls1:EdgePointerImage.Image>
                                 <Image Source="/Assets/tr_red.png" Width="15" Height="15"/>
-                            </controls:EdgePointerImage.Image>
-                        </controls:EdgePointerImage>
-                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <controls:EdgePointerImage.Image>
+                            </controls1:EdgePointerImage.Image>
+                        </controls1:EdgePointerImage>
+                        <controls1:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <controls1:EdgePointerImage.Image>
                                 <Image Source="/Assets/tr_grren.png" Width="15" Height="15"/>
-                            </controls:EdgePointerImage.Image>
-                        </controls:EdgePointerImage>-->
+                            </controls1:EdgePointerImage.Image>
+                        </controls1:EdgePointerImage>-->
 
                         <controls1:EdgeLabelControl x:Name="PART_edgeLabel" 
                           Content="{Binding Text}"

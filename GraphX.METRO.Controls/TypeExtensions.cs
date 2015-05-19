@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace GraphX.METRO.Controls
@@ -113,6 +114,11 @@ namespace GraphX.METRO.Controls
         public static Rect ToWindows(this Measure.Rect rect)
         {
             return new Rect(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
+
+        public static Point Center(this Rect rect)
+        {
+            return new Point(rect.X + rect.Width * .5, rect.Y + rect.Height * .5);
         }
     }
 }

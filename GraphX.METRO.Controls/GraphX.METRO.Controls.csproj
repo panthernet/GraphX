@@ -129,14 +129,17 @@
     <Compile Include="Controls\EdgeControl.cs" />
     <Compile Include="Controls\EdgeLabels\EdgeLabelControl.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
+    <Compile Include="Controls\EdgePointers\EdgePointerPath.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
     <Compile Include="Controls\Misc\IEdgeLabelControl.cs" />
     <Compile Include="Controls\Misc\IEdgePointer.cs" />
     <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />
     <Compile Include="Controls\Misc\ITrackableContent.cs" />
+    <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />
     <Compile Include="Controls\Misc\IVertexLabelControl.cs" />
     <Compile Include="Controls\Misc\IZoomControl.cs" />
+    <Compile Include="Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs" />
     <Compile Include="Controls\VertexControl.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />

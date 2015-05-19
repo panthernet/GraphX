@@ -665,7 +665,8 @@ namespace GraphX.WPF.Controls
             });
 
             //Edge Routing
-            if (eralg != null)
+            var algEr = alg as ILayoutEdgeRouting<TEdge>;
+            if (eralg != null && (algEr == null || algEr.EdgeRoutes == null || !algEr.EdgeRoutes.Any()))
             {
                 RunOnDispatcherThread(() =>
                 {
@@ -687,6 +688,12 @@ namespace GraphX.WPF.Controls
                     UpdateLayout();
                     LogicCore.CreateNewAlgorithmStorage(alg, overlap, eralg);
                 });
+            }
+
+            if (algEr != null && algEr.EdgeRoutes != null)
+            {
+                foreach (var item in algEr.EdgeRoutes)
+                    item.Key.RoutingPoints = item.Value;
             }
         }
 

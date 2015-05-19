@@ -45,7 +45,7 @@
         </Style.Triggers>
     </Style>
 
-    <controls:VisibilityToBoolConverter Inverted="True" Not="True"  x:Key="BooleanToVisibility"/>
+    <controls:VisibilityToBoolConverter Inverted="True" Not="True" x:Key="BooleanToVisibility"/>
 
     <!-- EDGE CONTROL -->
     <Style TargetType="{x:Type controls:EdgeControl}">

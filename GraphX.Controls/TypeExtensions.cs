@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -52,6 +53,30 @@ namespace GraphX.WPF.Controls
         public static Rect ToWindows(this Measure.Rect rect)
         {
             return new Rect(rect.Left, rect.Top, rect.Width, rect.Height);
+        }
+
+        public static Point Center(this Rect rect)
+        {
+            return new Point(rect.X + rect.Width * .5, rect.Y + rect.Height * .5);
+        }
+
+        /// <summary>
+        /// Not for METRO
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> FindLogicalChildren<T>(this DependencyObject obj) 
+            where T : DependencyObject
+        {
+            if (obj == null) yield break;
+            var child = obj as T;
+            if (child != null) yield return child;
+
+            foreach (var c in LogicalTreeHelper.GetChildren(obj)
+                                               .OfType<DependencyObject>()
+                                               .SelectMany(FindLogicalChildren<T>))
+                yield return c;
         }
     }
 }

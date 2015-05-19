@@ -86,10 +86,11 @@ namespace GraphX.WPF.Controls
         /// <summary>
         /// Update edge pointer position and angle
         /// </summary>
-        public virtual void Update(Point? position, Vector direction, double angle = 0d)
+        public virtual Point Update(Point? position, Vector direction, double angle = 0d)
         {
-            var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
-            position = position - new Vector(direction.X * Width * .5, direction.Y * Height * .5);// + vecOffset;
+            //var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
+            if (DesiredSize.Width == 0 || DesiredSize.Height == 0) return new Point();
+            position = position - new Vector(direction.X * DesiredSize.Width * .5, direction.Y * DesiredSize.Height * .5);// + vecOffset;
 
             if (position.HasValue && DesiredSize != Size.Empty)
             {
@@ -97,8 +98,9 @@ namespace GraphX.WPF.Controls
                 Arrange(LastKnownRectSize);
             }
 
-            if(!NeedRotation) return;
-            RenderTransform = new RotateTransform(angle, 0, 0);
+            if(NeedRotation)
+                RenderTransform = new RotateTransform(angle, 0, 0);
+            return new Point(direction.X * DesiredSize.Width, direction.Y * DesiredSize.Height); ;
         }
 
         public void Dispose()

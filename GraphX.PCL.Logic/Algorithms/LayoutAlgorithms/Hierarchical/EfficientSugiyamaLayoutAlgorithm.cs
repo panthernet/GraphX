@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
     public partial class EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph> 
-        : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, EfficientSugiyamaLayoutParameters>/*,
-          IEdgeRoutingAlgorithm<TVertex, TEdge>*/
+        : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, EfficientSugiyamaLayoutParameters>,
+          ILayoutEdgeRouting<TEdge>
         where TVertex : class
         where TEdge : IEdge<TVertex>
         where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
@@ -105,11 +107,39 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             BuildSparseNormalizedGraph(cancellationToken);
             DoCrossingMinimizations(cancellationToken);
             CalculatePositions();
+            var offsetY = 0d;
+            if (Parameters.Direction == LayoutDirection.LeftToRight)
+            {
+                offsetY = VertexPositions.Values.Min(p => p.X);
+                if (offsetY < 0) offsetY = -offsetY;
+                foreach (var item in VertexPositions.ToDictionary(a=> a.Key, b=> b.Value))
+                {
+                    VertexPositions[item.Key] = new Point(item.Value.Y * 1.5 + 0, item.Value.X + offsetY);
+                }
+            }
+
+            if(Parameters.Direction == LayoutDirection.RightToLeft)
+            {
+                offsetY = VertexPositions.Values.Min(p => p.X);
+                if (offsetY < 0) offsetY = -offsetY;
+                foreach (var item in VertexPositions.ToDictionary(a => a.Key, b => b.Value))
+                {
+                    VertexPositions[item.Key] = new Point(-item.Value.Y * 1.5, -item.Value.X + offsetY);
+                }
+            }
+
+            if (Parameters.Direction == LayoutDirection.BottomToTop)
+            {
+                foreach (var item in VertexPositions.ToDictionary(a => a.Key, b => b.Value))
+                {
+                    VertexPositions[item.Key] = new Point(item.Value.X, -item.Value.Y);
+                }
+            }
+
+            DoEdgeRouting(offsetY);
         }
 
-        
-
-        #region IEdgeRoutingAlgorithm<TVertex,TEdge,TGraph> Members
+        #region ILayoutEdgeRouting<TEdge> Members
 
         public IDictionary<TEdge, Point[]> EdgeRoutes
         {

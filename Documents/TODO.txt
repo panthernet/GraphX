@@ -1,7 +1,6 @@
-﻿
- New things:
- 1. Sizes logic. Now matters only GraphArea::ContentSize
- 2. Now all vertices and edges positioned in GraphArea using TOP-LEFT corner as the position coordinates (previously coordinates was pointing at the object center)
+﻿TODO
+1. CUT source ep edge also
+
 
 
 Add edge labels - labels on path

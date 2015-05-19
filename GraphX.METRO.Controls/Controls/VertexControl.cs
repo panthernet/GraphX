@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -7,6 +8,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using GraphX.METRO.Controls.Models;
 using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Exceptions;
 
 namespace GraphX.METRO.Controls
 {
@@ -22,6 +24,13 @@ namespace GraphX.METRO.Controls
     public class VertexControl : Control, IGraphControl
     {
         #region Properties
+
+
+        /// <summary>
+        /// List of found vertex connection points
+        /// </summary>
+        internal List<IVertexConnectionPoint> VertexConnectionPointsList = new List<IVertexConnectionPoint>();
+
         /// <summary>
         /// Provides settings for event calls within single vertex control
         /// </summary>
@@ -228,6 +237,10 @@ namespace GraphX.METRO.Controls
                 UpdateLayout();
                 _vertexLabelControl.UpdatePosition();
             }
+
+            VertexConnectionPointsList = this.FindDescendantsOfType<IVertexConnectionPoint>().ToList();
+            if (VertexConnectionPointsList.GroupBy(x => x.Id).Count(group => @group.Count() > 1) > 0)
+                throw new GX_InvalidDataException("Vertex connection points in VertexControl template must have unique Id!");
         }
 
         #region Events handling
@@ -328,5 +341,16 @@ namespace GraphX.METRO.Controls
             return new Point(pos.X + ActualWidth * .5, pos.Y + ActualHeight * .5);
         }
 
+        /// <summary>
+        /// Returns first connection point found with specified Id
+        /// </summary>
+        /// <param name="id">Connection point identifier</param>
+        /// <param name="runUpdate">Update connection point size data if found</param>
+        public IVertexConnectionPoint GetConnectionPointById(int id, bool runUpdate = false)
+        {
+            var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
+            if (result != null) result.Update();
+            return result;
+        }
     }
 }

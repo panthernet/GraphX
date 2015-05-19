@@ -40,6 +40,10 @@ namespace GraphX.PCL.Common.Interfaces
         IOverlapRemovalParameters DefaultOverlapRemovalAlgorithmParams { get; set; }
         IEdgeRoutingParameters DefaultEdgeRoutingAlgorithmParams { get; set; }
 
+        IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
+        IExternalOverlapRemoval<TVertex> ExternalOverlapRemovalAlgorithm { get; set; }
+        IExternalEdgeRouting<TVertex, TEdge> ExternalEdgeRoutingAlgorithm { get; set; }
+
         void ComputeEdgeRoutesByVertex(TVertex dataVertex, Point? vertexPosition = null, Size? vertexSize = null);
         void CreateNewAlgorithmFactory();
         void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er);

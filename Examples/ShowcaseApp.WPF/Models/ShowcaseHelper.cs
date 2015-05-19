@@ -31,11 +31,13 @@ namespace ShowcaseApp.WPF.Models
         }
 
         #region GenerateDataGraph
+
         /// <summary>
         /// Generate example graph data
         /// </summary>
         /// <param name="count">Items count</param>
-        public static GraphExample GenerateDataGraph(int count)
+        /// <param name="addEdges"></param>
+        public static GraphExample GenerateDataGraph(int count, bool addEdges = true)
         {
             var graph = new GraphExample();
 
@@ -44,6 +46,9 @@ namespace ShowcaseApp.WPF.Models
 
             var vlist = graph.Vertices.ToList();
             var cnt = 1;
+
+            if (!addEdges) return graph;
+
             foreach (var item in vlist)
             {
                 if (Rand.Next(0, 50) > 25) continue;

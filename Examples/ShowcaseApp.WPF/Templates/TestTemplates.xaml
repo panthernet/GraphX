@@ -12,14 +12,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                    <Border x:Name="border" 
-                                    BorderBrush="White" 
-                                    Background="Beige"
-							        BorderThickness="1"
-							        CornerRadius="10,10,10,10"
-							        Padding="{TemplateBinding Padding}">
-                        <ContentPresenter Content="{TemplateBinding Vertex}" />
-                    </Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <ContentPresenter Content="{TemplateBinding Vertex}" Grid.Column="1"/>
+                        <controls:StaticVertexConnectionPoint Shape="Rectangle" Source="/Assets/dice.png" Width="10" Height="10" Id="1" Grid.Column="0" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Vertical" Grid.Column="2">
+                            <controls:StaticVertexConnectionPoint Shape="Circle" Source="/Assets/circle_red.png" Width="10" Height="10" Id="2" VerticalAlignment="Center"/>
+                            <controls:StaticVertexConnectionPoint Shape="Circle" Source="/Assets/circle_blue.png" Width="10" Height="10" Id="3" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -48,10 +53,12 @@
                           StrokeThickness="2" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <Path Stroke="{TemplateBinding Foreground}"
+                        <controls:EdgePointerPath x:Name="PART_EdgePointerForTarget" Data="M0,0.5 L1,1 1,0Z" Scale="8,8" Fill="Black" Opacity="239"/>
+                        
+                        <!--<Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1" 
-                            x:Name="PART_edgeArrowPath"/>
-                        <controls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}" />
+                            x:Name="PART_edgeArrowPath"/>-->
+                        <!--<controls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}" />-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

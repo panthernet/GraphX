@@ -100,23 +100,17 @@ namespace GraphX.METRO.Controls
 
         void EdgePointerImage_LayoutUpdated(object sender, object e)
         {
-            /*if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0 || double.IsNaN(LastKnownRectSize.X))
-            {
-                UpdateLayout();
-                if (EdgeControl != null && !EdgeControl.IsSelfLooped)
-                {
-                    EdgeControl.UpdateEdge(false);
-                }
-            }
-            else Arrange(LastKnownRectSize);*/
+            if (LastKnownRectSize != Rect.Empty && !double.IsNaN(LastKnownRectSize.Width) && LastKnownRectSize.Width != 0)
+                Arrange(LastKnownRectSize);
         }
 
         /// <summary>
         /// Update edge pointer position and angle
         /// </summary>
-        public void Update(Point? position, Vector direction, double angle = 0d)
+        public Point Update(Point? position, Vector direction, double angle = 0d)
         {
-            var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
+            //var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
+            if (DesiredSize.Width == 0 || DesiredSize.Height == 0) return new Point();
             var vecMove = new Vector(direction.X * ActualWidth * .5, direction.Y * ActualHeight * .5);
             position = new Point(position.Value.X - vecMove.X, position.Value.Y - vecMove.Y);// + vecOffset;
 
@@ -125,15 +119,11 @@ namespace GraphX.METRO.Controls
                 LastKnownRectSize = new Rect(new Point(position.Value.X - DesiredSize.Width * .5, position.Value.Y - DesiredSize.Height * .5), DesiredSize);
                 Measure(LastKnownRectSize.Size());
                 Arrange(LastKnownRectSize);
-                Debug.WriteLine("POS: "+position + " dir: "+ direction + " vecMoce: "+vecMove);
-            }
-            else
-            {
-
             }
 
-            if(!NeedRotation) return;
-            RenderTransform = new RotateTransform { Angle = angle, CenterX = 0, CenterY = 0 };
+            if(NeedRotation)
+                RenderTransform = new RotateTransform { Angle = angle, CenterX = 0, CenterY = 0 };
+            return new Point(direction.X * ActualWidth, direction.Y * ActualHeight);
         }
 
         public void Dispose()

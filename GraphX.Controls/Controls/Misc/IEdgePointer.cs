@@ -2,8 +2,7 @@
 using System.Windows;
 
 namespace GraphX.WPF.Controls
-{
-    
+{   
     public interface IEdgePointer: IDisposable
     {                                                                                             
         /// <summary>
@@ -14,7 +13,7 @@ namespace GraphX.WPF.Controls
         /// <summary>
         /// Update edge pointer position and angle
         /// </summary>
-        void Update(Point? position, Vector direction, double angle = 0d);
+        Point Update(Point? position, Vector direction, double angle = 0d);
 
         void Hide();
         void Show();

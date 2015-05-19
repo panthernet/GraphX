@@ -1,4 +1,5 @@
-﻿using GraphX;
+﻿using System.Windows.Media;
+using GraphX;
 using GraphX.PCL.Common.Models;
 
 namespace ShowcaseApp.WPF

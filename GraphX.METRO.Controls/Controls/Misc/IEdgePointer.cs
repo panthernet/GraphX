@@ -14,7 +14,7 @@ namespace GraphX.METRO.Controls
         /// <summary>
         /// Update edge pointer position and angle
         /// </summary>
-        void Update(Windows.Foundation.Point? position, Vector direction, double angle = 0d);
+        Windows.Foundation.Point Update(Windows.Foundation.Point? position, Vector direction, double angle = 0d);
 
         void Hide();
         void Show();

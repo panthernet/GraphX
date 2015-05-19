@@ -1,12 +1,10 @@
-﻿using GraphX.PCL.Common.Models;
-
-namespace GraphX.PCL.Common.Interfaces
+﻿namespace GraphX.PCL.Common.Interfaces
 {
     /// <summary>
-    /// Core vertex data interface
+    /// Core GraphX edge data interface
     /// </summary>
     /// <typeparam name="TVertex">Vertex data type</typeparam>
-    public interface IGraphXEdge<TVertex> : IWeightedEdge<TVertex>, IIdentifiableGraphDataObject, IRoutingInfo
+    public interface IGraphXEdge<TVertex> : IGraphXCommonEdge, IWeightedEdge<TVertex>
     {
         /// <summary>
         /// Source vertex
@@ -16,9 +14,25 @@ namespace GraphX.PCL.Common.Interfaces
         /// Target vertex
         /// </summary>
         new TVertex Target { get; set; }
+
+    }
+
+    /// <summary>
+    /// Core edge data interface
+    /// </summary>
+    public interface IGraphXCommonEdge: IIdentifiableGraphDataObject, IRoutingInfo
+    {
         /// <summary>
         /// If edge is self-looped
         /// </summary>
         bool IsSelfLoop { get; }
+        /// <summary>
+        /// Optional parameter to bind edge to static vertex connection point
+        /// </summary>
+        int? SourceConnectionPointId { get; }
+        /// <summary>
+        /// Optional parameter to bind edge to static vertex connection point
+        /// </summary>
+        int? TargetConnectionPointId { get; }
     }
 }

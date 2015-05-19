@@ -1,13 +1,34 @@
-﻿RELEASE 2.1.9
+﻿RELEASE 2.1.9 WIP
+NEW TERMS: 
+	VAESPS - vertex and edge skip processing support
+	VCP - vertex connection point
+
+HIGHLIGHTS:
+	I.   As new edge pointers logic has been added (image/path based pointers) the old logic that utilizes direct Path object in EdgeControl template will be removed in GraphX 2.2.0
+	II.  VCPs has been added into GraphX making edge endpoint fixation(binding) possible. By default GraphX automaticaly calculates edge endpoint position relative to vertex dimensions 
+	   and approximate math shape, but with this feature on you'll be able to bind edge endpoint to a separate customizable object. This will allow you to create static edge fixation
+	   endpoints on the vertex and give you full control over edge endpoints positioning.
+	III. Now you can easily customize edge pointers with the help of EdgePointerImage and EdgePointerPath classes. Changes include more precious edge endpoint calculations so the edge
+	   will overlap with the edge pointer no more.
+
+DETAILED CHANGELOG:
++ Added support for custom VCP [WPF, METRO]
+	* New control class added: StaticVertexConnectionPoint
+	* VCP support the same math shapes as VertexShape property or can use VertexShape::None value to disable roundtrip calculations
 + Added vertex and edge skip processing support to METRO version (VAESPS) [METRO]
 + Added VAESPS for following algorithms: Circular [ALL]
++ Added VertexShape::None enum option, currently affecting only VCP logic [ALL]
++ Added different layout options to EfficientSugiyama algorithm using new Direction param [ALL]
++ Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
 + Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
++ Fixed outdated edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
++ Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Fixed some algorithm calculation problems, especial FR [ALL]
 
-!BREAKING CHANGES
+BREAKING CHANGES:
 !!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 
 	almost ALL of the namespaces has been changed to better reflect PCL and multiplatform library versioning. Also i've get rid of the
     several different XAML xmlns usings in favor of single one that reflects library platform. I'm very sorry that this changes will
@@ -19,6 +40,7 @@
 	- All base models and interfaces are now in GraphX.PCL.Common.Models namespace
 	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
 
+IGXLogicCore now include ExternalLayoutAlgorithm, ExternalOverlapRemovalAlgorithm, ExternalEdgeRoutingAlgorithm for simplier external algo assignment
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]

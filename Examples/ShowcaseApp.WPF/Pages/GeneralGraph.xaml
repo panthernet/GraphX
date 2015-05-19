@@ -10,8 +10,9 @@
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" MinWidth="100"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" MinWidth="170"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height=" Auto"/>
@@ -40,7 +41,9 @@
             <Label VerticalAlignment="Center" Content="Async loading graph..." Margin="10"/>
         </Border>
 
-        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+        <GridSplitter VerticalAlignment="Stretch" Width="2" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"/>
+        
+        <DockPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
                 <Button Height="50" Margin="3" Name="gg_but_randomgraph"  DockPanel.Dock="Top" UseLayoutRounding="True" BorderBrush="{DynamicResource ModernButtonBorder}">
                     <Image Width="44" Source="/Assets/dice.png" Stretch="Uniform"/>

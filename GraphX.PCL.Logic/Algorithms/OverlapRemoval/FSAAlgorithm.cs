@@ -30,17 +30,17 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 
         protected override void RemoveOverlap(CancellationToken cancellationToken)
         {
-            DateTime t0 = DateTime.Now;
+            //DateTime t0 = DateTime.Now;
             double cost = HorizontalImproved(cancellationToken);
-            DateTime t1 = DateTime.Now;
+            //DateTime t1 = DateTime.Now;
 
-            Debug.WriteLine( "PFS horizontal: cost=" + cost + " time=" + ( t1 - t0 ) );
+            //Debug.WriteLine( "PFS horizontal: cost=" + cost + " time=" + ( t1 - t0 ) );
 
-            t1 = DateTime.Now;
+            //t1 = DateTime.Now;
             cost = VerticalImproved(cancellationToken);
-            DateTime t2 = DateTime.Now;
-            Debug.WriteLine( "PFS vertical: cost=" + cost + " time=" + ( t2 - t1 ) );
-            Debug.WriteLine( "PFS total: time=" + ( t2 - t0 ) );
+           // DateTime t2 = DateTime.Now;
+           // Debug.WriteLine( "PFS vertical: cost=" + cost + " time=" + ( t2 - t1 ) );
+           // Debug.WriteLine( "PFS total: time=" + ( t2 - t0 ) );
         }
 
         protected Vector Force( Rect vi, Rect vj )
@@ -66,7 +66,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             return f;
         }
 
-        protected Vector force2( Rect vi, Rect vj )
+        protected Vector Force2( Rect vi, Rect vj )
         {
             var f = new Vector( 0, 0 );
             Vector d = vj.GetCenter() - vi.GetCenter();
@@ -102,6 +102,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             return 0;
         }
 
+        /*
         protected void Horizontal(CancellationToken cancellationToken)
         {
             WrappedRectangles.Sort( XComparison );
@@ -144,14 +145,14 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
                 for ( int j = k + 1; j < n; j++ )
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    RectangleWrapper<TObject> r = WrappedRectangles[j];
+                    var r = WrappedRectangles[j];
                     r.Rectangle.Offset( delta, 0 );
                 }
                 i = k + 1;
             }
 
         }
-
+        */
         protected double HorizontalImproved(CancellationToken cancellationToken)
         {
             if (WrappedRectangles.Count == 0) return 0;
@@ -159,20 +160,20 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             int i = 0, n = WrappedRectangles.Count;
 
             //bal szelso
-            RectangleWrapper<TObject> lmin = WrappedRectangles[0];
+            var lmin = WrappedRectangles[0];
             double sigma = 0, x0 = lmin.CenterX;
             var gamma = new double[WrappedRectangles.Count];
             var x = new double[WrappedRectangles.Count];
             while ( i < n )
             {
-                RectangleWrapper<TObject> u = WrappedRectangles[i];
+                var u = WrappedRectangles[i];
 
                 //i-vel azonos középponttal rendelkezõ téglalapok meghatározása
                 int k = i;
                 for ( int j = i + 1; j < n; j++ )
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    RectangleWrapper<TObject> v = WrappedRectangles[j];
+                    var v = WrappedRectangles[j];
                     if ( u.CenterX == v.CenterX )
                     {
                         u = v;
@@ -197,7 +198,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
                             Vector f = Force( WrappedRectangles[j].Rectangle, WrappedRectangles[m].Rectangle );
                             ggg = Math.Max( f.X + gamma[j], ggg );
                         }
-                        RectangleWrapper<TObject> v = WrappedRectangles[m];
+                        var v = WrappedRectangles[m];
                         double gg =
                             v.Rectangle.Left + ggg < lmin.Rectangle.Left
                                 ? sigma
@@ -242,7 +243,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                RectangleWrapper<TObject> r = WrappedRectangles[i];
+                var r = WrappedRectangles[i];
                 double oldPos = r.Rectangle.Left;
                 double newPos = x[i];
 
@@ -269,7 +270,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             }
             return 0;
         }
-
+        /*
         protected void Vertical(CancellationToken cancellationToken)
         {
             WrappedRectangles.Sort( YComparison );
@@ -302,7 +303,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
                     {
                         cancellationToken.ThrowIfCancellationRequested();
 
-                        Vector f = force2( WrappedRectangles[m].Rectangle, WrappedRectangles[j].Rectangle );
+                        Vector f = Force2( WrappedRectangles[m].Rectangle, WrappedRectangles[j].Rectangle );
                         if ( f.Y > delta )
                         {
                             delta = f.Y;
@@ -320,7 +321,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             }
 
         }
-
+        */
         protected double VerticalImproved(CancellationToken cancellationToken)
         {
             if (WrappedRectangles.Count == 0) return 0;
@@ -359,7 +360,7 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
                         double ggg = 0;
                         for ( int j = 0; j < i; j++ )
                         {
-                            Vector f = force2( WrappedRectangles[j].Rectangle, WrappedRectangles[m].Rectangle );
+                            Vector f = Force2( WrappedRectangles[j].Rectangle, WrappedRectangles[m].Rectangle );
                             ggg = Math.Max( f.Y + gamma[j], ggg );
                         }
                         RectangleWrapper<TObject> v = WrappedRectangles[m];
