@@ -23,6 +23,7 @@ DETAILED CHANGELOG:
 + Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
++ Fixed edge pointer positioning bug [METRO]
 + Fixed outdated edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
 + Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
 + Adjusted FR and BoundedFR default values for random initial positions [All]
@@ -41,6 +42,9 @@ BREAKING CHANGES:
 	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
 
 IGXLogicCore now include ExternalLayoutAlgorithm, ExternalOverlapRemovalAlgorithm, ExternalEdgeRoutingAlgorithm for simplier external algo assignment
+
+
+
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]
