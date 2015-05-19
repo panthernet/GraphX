@@ -10,6 +10,7 @@ HIGHLIGHTS:
 	   endpoints on the vertex and give you full control over edge endpoints positioning.
 	III. Now you can easily customize edge pointers with the help of EdgePointerImage and EdgePointerPath classes. Changes include more precious edge endpoint calculations so the edge
 	   will overlap with the edge pointer no more.
+	IV.  Now GraphX for WPF requires only .NET Framework 4.0 to build & run. Deprecated all code that required .NET 4.0.3.
 
 DETAILED CHANGELOG:
 + Added support for custom VCP [WPF, METRO]
@@ -28,9 +29,10 @@ DETAILED CHANGELOG:
 + Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Fixed some algorithm calculation problems, especial FR [ALL]
++ Now GraphX for WPF requires only .NET Framework 4.0 to build & run [WPF]
 
 BREAKING CHANGES:
-!!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 
+* !!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 
 	almost ALL of the namespaces has been changed to better reflect PCL and multiplatform library versioning. Also i've get rid of the
     several different XAML xmlns usings in favor of single one that reflects library platform. I'm very sorry that this changes will
 	force you to update your GraphX projects but i realy felt that i must do it once and for all. Hope there will be no more
@@ -41,9 +43,9 @@ BREAKING CHANGES:
 	- All base models and interfaces are now in GraphX.PCL.Common.Models namespace
 	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
 
-IGXLogicCore now include ExternalLayoutAlgorithm, ExternalOverlapRemovalAlgorithm, ExternalEdgeRoutingAlgorithm for simplier external algo assignment
+* IGXLogicCore now include ExternalLayoutAlgorithm, ExternalOverlapRemovalAlgorithm, ExternalEdgeRoutingAlgorithm for simplier external algo assignment
 
-
+* Now GraphX for WPF requires only .NET Framework 4.0 to build & run
 
 
 RELEASE 2.1.8
