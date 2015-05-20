@@ -26,6 +26,7 @@ DETAILED CHANGELOG:
 + Fixed edge pointer positioning bug [METRO]
 + Fixed outdated edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
 + Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
++ Fixed use of ControlFactory for edge deserialization [WPF, METRO] thanks to perturbare
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Fixed some algorithm calculation problems, especial FR [ALL]
 + Now GraphX for WPF requires only .NET Framework 4.0 to build & run [WPF]
