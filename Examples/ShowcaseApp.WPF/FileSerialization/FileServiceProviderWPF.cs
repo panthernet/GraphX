@@ -8,16 +8,16 @@ using YAXLib;
 namespace ShowcaseApp.WPF.FileSerialization
 {
     /// <summary>
-    /// WPF implementation of IFileServiceProvider
+    /// WPF implementation of file serialization and deserialization
     /// </summary>
-    public class FileServiceProviderWpf: IFileServiceProvider
+    public static class FileServiceProviderWpf
     {
         /// <summary>
         /// Serializes data classes list to file
         /// </summary>
         /// <param name="filename">File name</param>
         /// <param name="modelsList">Data classes list</param>
-        public void SerializeDataToFile(string filename, List<GraphSerializationData> modelsList)
+        public static void SerializeDataToFile(string filename, List<GraphSerializationData> modelsList)
         {
             var serializer = new YAXSerializer(typeof(List<GraphSerializationData>));
             using (var textWriter = new StreamWriter(filename))
@@ -30,7 +30,7 @@ namespace ShowcaseApp.WPF.FileSerialization
         /// Deserializes data classes list from file
         /// </summary>
         /// <param name="filename">File name</param>
-        public List<GraphSerializationData> DeserializeDataFromFile(string filename)
+        public static List<GraphSerializationData> DeserializeDataFromFile(string filename)
         {
             var deserializer = new YAXSerializer(typeof(List<GraphSerializationData>));
             using (var textReader = new StreamReader(filename))

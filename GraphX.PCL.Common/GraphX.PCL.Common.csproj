@@ -78,7 +78,6 @@
     <Compile Include="Interfaces\IExternalEdgeRouting.cs" />
     <Compile Include="Interfaces\IExternalLayout.cs" />
     <Compile Include="Interfaces\IExternalOverlapRemoval.cs" />
-    <Compile Include="Interfaces\IFileServiceProvider.cs" />
     <Compile Include="Interfaces\IGraphXEdge.cs" />
     <Compile Include="Interfaces\IGraphXVertex.cs" />
     <Compile Include="Interfaces\IGXLogicCore.cs" />

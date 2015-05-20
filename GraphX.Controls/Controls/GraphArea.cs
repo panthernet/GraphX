@@ -1434,20 +1434,16 @@ namespace GraphX.WPF.Controls
         }
         #endregion
 
-        #region Save
+        #region Serialization support
 
         /// <summary>
-        /// Serialize graph layout to file using custom FileServiceProvider
+        /// Obtain graph layout data, which can then be used with a serializer.
         /// </summary>
-        /// <param name="filename">Output filename</param>
-        /// <exception cref="GX_InvalidDataException">Occures when LogicCore or object Id isn't set</exception>
-        /// <exception cref="GX_ObjectNotFoundException">Occures when FileServiceProvider not set</exception>
-        public void SerializeToFile(string filename)
+        /// <exception cref="GX_InvalidDataException">Occurs when LogicCore or object Id isn't set</exception>
+        public List<GraphSerializationData> ExtractSerializationData()
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            if (LogicCore.FileServiceProvider == null)
-                throw new GX_ObjectNotFoundException("LogicCore::FileServiceProvider must be set before using file operation methods!");
 
             if (AutoAssignMissingDataId)
                 AutoresolveIds();
@@ -1456,40 +1452,32 @@ namespace GraphX.WPF.Controls
             foreach (var item in VertexList) //ALWAYS serialize vertices first
             {
                 dlist.Add(new GraphSerializationData { Position = item.Value.GetPositionGraphX(), Data = item.Key });
-                if (item.Key.ID == -1) throw new GX_InvalidDataException("SerializeToFile() -> All vertex datas must have positive unique ID!");
+                if (item.Key.ID == -1) throw new GX_InvalidDataException("ExtractSerializationData() -> All vertex datas must have positive unique ID!");
             }
             foreach (var item in EdgesList)
             {
-               // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
+                // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
                 dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key });
-                if (item.Key.ID == -1) throw new GX_InvalidDataException("SerializeToFile() -> All edge datas must have positive unique ID!");
+                if (item.Key.ID == -1) throw new GX_InvalidDataException("ExtractSerializationData() -> All edge datas must have positive unique ID!");
             }
-
-            LogicCore.FileServiceProvider.SerializeDataToFile(filename, dlist);
-
+            return dlist;
         }
 
         /// <summary>
-        /// Deserializes previously serialized graph layout from file
+        /// Rebuilds the graph layout from serialization data.
         /// </summary>
-        /// <param name="filename">Input filename</param>
-        /// <exception cref="GX_InvalidDataException"></exception>
-        /// <exception cref="GX_ObjectNotFoundException"></exception>
-        /// <exception cref="GX_SerializationException"></exception>
-        public void DeserializeFromFile(string filename)
+        /// <param name="data">The serialization data</param>
+        /// <exception cref="GX_InvalidDataException">Occurs when LogicCore isn't set</exception>
+        /// <exception cref="GX_SerializationException">Occurs when edge source or target isn't set</exception>
+        public void RebuildFromSerializationData(IEnumerable<GraphSerializationData> data)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            if (LogicCore.FileServiceProvider == null)
-                throw new GX_ObjectNotFoundException("LogicCore::FileServiceProvider must be set before using file operation methods!");
 
             RemoveAllEdges();
             RemoveAllVertices();
 
-
-            var data = LogicCore.FileServiceProvider.DeserializeDataFromFile(filename);
-
-            if (LogicCore.Graph == null) LogicCore.Graph = Activator.CreateInstance<TGraph>();                
+            if (LogicCore.Graph == null) LogicCore.Graph = Activator.CreateInstance<TGraph>();
             else LogicCore.Graph.Clear();
 
             var vlist = data.Where(a => a.Data is TVertex);
@@ -1523,7 +1511,7 @@ namespace GraphX.WPF.Controls
             //to correctly draw arrows in any case except they are manually disabled
             UpdateLayout();
             foreach (var item in EdgesList.Values)
-               item.OnApplyTemplate();
+                item.OnApplyTemplate();
 
             RestoreAlgorithmStorage();
         }

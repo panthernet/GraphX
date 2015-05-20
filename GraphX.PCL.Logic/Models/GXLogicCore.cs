@@ -31,11 +31,6 @@ namespace GraphX.PCL.Logic.Models
         #endregion
 
         /// <summary>
-        /// Gets or sets file operations provider for GXCore
-        /// </summary>
-        public IFileServiceProvider FileServiceProvider { get; set; }
-
-        /// <summary>
         /// Gets or sets if if edge label overlap removal enabled
         /// </summary>
         public bool EnableEdgeLabelsOverlapRemoval { get; set; }
