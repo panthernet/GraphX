@@ -1515,7 +1515,7 @@ namespace GraphX.WPF.Controls
 
                 if (datasource == null || datatarget == null)
                     throw new GX_SerializationException("DeserializeFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
-                var ecc = new EdgeControl { Edge = edgedata, Source = _vertexlist[datasource], Target = _vertexlist[datatarget], DataContext = edgedata};
+                var ecc = ControlFactory.CreateEdgeControl(_vertexlist[datasource], _vertexlist[datatarget], edgedata);
                 InsertEdge(edgedata, ecc);
                 LogicCore.Graph.AddEdge(edgedata);
             }
