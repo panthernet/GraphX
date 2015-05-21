@@ -955,7 +955,7 @@ namespace GraphX.WPF.Controls
         private void ReapplySingleEdgeVisualProperties(EdgeControl item)
         {
             if (_svEdgeDashStyle != null) item.DashStyle = _svEdgeDashStyle.Value;
-            if (_svShowEdgeArrows != null) item.ShowArrows = _svShowEdgeArrows.Value;
+            if (_svShowEdgeArrows != null) item.SetCurrentValue(EdgeControl.ShowArrowsProperty, _svShowEdgeArrows.Value);
             if (_svShowEdgeLabels != null) item.ShowLabel = _svShowEdgeLabels.Value;
             if (_svAlignEdgeLabels != null) item.AlignLabelsToEdges = _svAlignEdgeLabels.Value;
             if (_svUpdateLabelPosition != null) item.UpdateLabelPosition = _svUpdateLabelPosition.Value;
@@ -993,7 +993,7 @@ namespace GraphX.WPF.Controls
         {
             _svShowEdgeArrows = isEnabled;
             foreach (var item in _edgeslist.Values)
-                item.ShowArrows = isEnabled;
+                item.SetCurrentValue(EdgeControl.ShowArrowsProperty, isEnabled);
         }
 
         private bool? _svShowEdgeLabels;
