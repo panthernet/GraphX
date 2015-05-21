@@ -8,6 +8,7 @@ using GraphX.PCL.Common.Enums;
 using GraphX.WPF.Controls;
 using Microsoft.Win32;
 using QuickGraph;
+using ShowcaseApp.WPF.FileSerialization;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 
@@ -116,7 +117,7 @@ namespace ShowcaseApp.WPF.Pages
             var dlg = new SaveFileDialog { Filter = "All files|*.*", Title = "Select layout file name", FileName = "laytest.xml" };
             if (dlg.ShowDialog() == true)
             {
-                gg_Area.SerializeToFile(dlg.FileName);
+				FileServiceProviderWpf.SerializeDataToFile(dlg.FileName, gg_Area.ExtractSerializationData());
             }
         }
         #endregion
@@ -135,7 +136,7 @@ namespace ShowcaseApp.WPF.Pages
             if (dlg.ShowDialog() != true) return;
             try
             {
-                gg_Area.DeserializeFromFile(dlg.FileName);
+				gg_Area.RebuildFromSerializationData(FileServiceProviderWpf.DeserializeDataFromFile(dlg.FileName));
                 gg_Area.SetVerticesDrag(true, true);
                 gg_Area.UpdateAllEdges();
                 gg_zoomctrl.ZoomToFill();
