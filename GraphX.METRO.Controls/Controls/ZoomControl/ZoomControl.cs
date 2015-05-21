@@ -196,13 +196,13 @@ namespace GraphX.METRO.Controls
             var zoom = (double)e.NewValue;
             zc._scaleTransform.ScaleX = zoom;
             zc._scaleTransform.ScaleY = zoom;
-            if (!zc._isZooming)
+           /* if (!zc._isZooming)
             {
                 var delta = (double)e.NewValue / (double)e.OldValue;
                 zc.TranslateX *= delta;
                 zc.TranslateY *= delta;
                 zc.Mode = ZoomControlModes.Custom;
-            }
+            }*/
             zc.OnPropertyChanged("Presenter");
             zc.Presenter.OnPropertyChanged("RenderTransform");
 
@@ -443,21 +443,6 @@ namespace GraphX.METRO.Controls
                 PointerPressed += ZoomControl_PreviewMouseDown;
                 PointerReleased += ZoomControl_MouseUp;
                 UseCtrlForMouseWheel = true;
-
-                /*var binding = new CommandBinding(Refocus, RefocusView, CanRefocusView);
-                CommandBindings.Add(binding);
-                binding = new CommandBinding(Center, CenterContent);
-                CommandBindings.Add(binding);
-
-                binding = new CommandBinding(Fill, FillToBounds);
-                CommandBindings.Add(binding);
-
-                binding = new CommandBinding(Fit, FitToBounds);
-                CommandBindings.Add(binding);*/
-
-
-//                AddHandler( new SizeChangedEventHandler(OnSizeChanged), true);
-                //VF SizeChanged += OnSizeChanged;
                 Loaded += ZoomControl_Loaded;
             }
 
@@ -685,12 +670,7 @@ namespace GraphX.METRO.Controls
                 }
                 return;
             }
-            /*var animation = new DoubleAnimation { To = toValue, Duration = duration, EnableDependentAnimation = true};
-            var sb = new Storyboard();
-            Storyboard.SetTarget(animation, this);
-            Storyboard.SetTargetProperty(animation, dpName);
-            sb.Children.Add(animation);
-            */
+
             _currentZoomAnimation = AnimationHelper.CreateDoubleAnimation(null, toValue, duration.TimeSpan.TotalMilliseconds, dpName, this);
             if (dp == ZoomProperty)
             {

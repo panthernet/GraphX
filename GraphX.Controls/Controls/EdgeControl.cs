@@ -620,8 +620,7 @@ namespace GraphX.WPF.Controls
             if (_linePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
             _linePathObject.Data = _linegeometry;
             _arrowPathObject = Template.FindName("PART_edgeArrowPath", this) as Path;
-            if (_arrowPathObject == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeArrowPath' Path object to draw!");
-            else if(ShowArrows) _arrowPathObject.Data = _arrowgeometry;
+            if (ShowArrows && _arrowPathObject != null) _arrowPathObject.Data = _arrowgeometry;
 
             _edgePointerForSource = Template.FindName("PART_EdgePointerForSource", this) as IEdgePointer;
             _edgePointerForTarget = Template.FindName("PART_EdgePointerForTarget", this) as IEdgePointer;

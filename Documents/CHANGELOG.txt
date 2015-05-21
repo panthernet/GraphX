@@ -20,16 +20,19 @@ DETAILED CHANGELOG:
 + Added VertexShape::None enum option, currently affecting only VCP logic [ALL]
 + Added different layout options to EfficientSugiyama algorithm using new Direction param [ALL]
 + Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
-+ Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Fixed edge pointer positioning bug [METRO]
 + Fixed outdated edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
 + Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
 + Fixed use of ControlFactory for edge deserialization [WPF, METRO] thanks to perturbare
-+ Adjusted FR and BoundedFR default values for random initial positions [All]
 + Fixed some algorithm calculation problems, especial FR [ALL]
++ Fixed EdgeControl.ShowArrows to implement DependencyProperty [WPF, METRO]  thanks to perturbare
++ Fixed minor performance problems in ZoomControl [METRO]
++ Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare
++ Adjusted FR and BoundedFR default values for random initial positions [All]
 + Now GraphX for WPF requires only .NET Framework 4.0 to build & run [WPF]
++ Refactored almost all of the GraphX code for improvements and code quality. Changed many namespaces for better name reflection [ALL]
 
 BREAKING CHANGES:
 * !!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 

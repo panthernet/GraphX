@@ -62,9 +62,10 @@
                             x:Name="PART_edgeArrowPath"
                               >
                         </Path>-->
+                        <controls:EdgePointerPath x:Name="PART_EdgePointerForTarget" Data="M0,0.5 L1,1 1,0Z" Scale="12,12" Fill="Black" Opacity="239" Stroke="Gray" StrokeThickness="1"/>
 
-                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
-                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />
+                        <!--<controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
+                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

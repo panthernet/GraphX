@@ -170,11 +170,25 @@ namespace GraphX.METRO.Controls
         public bool IsHiddenEdgesUpdated { get; set; }
 
 
+        public static readonly DependencyProperty ShowArrowsProperty = DependencyProperty.Register("ShowArrows", typeof(bool), typeof(EdgeControl), new PropertyMetadata(true, showarrows_changed));
+
+        private static void showarrows_changed(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            var ctrl = sender as EdgeControl;
+            if (ctrl == null)
+                return;
+
+            if (ctrl._edgePointerForSource != null && !ctrl.IsSelfLooped)
+                if (ctrl.ShowArrows) ctrl._edgePointerForSource.Show(); else ctrl._edgePointerForSource.Hide();
+            if (ctrl._edgePointerForTarget != null && !ctrl.IsSelfLooped)
+                if (ctrl.ShowArrows) ctrl._edgePointerForTarget.Show(); else ctrl._edgePointerForTarget.Hide();
+            ctrl.UpdateEdge(false);
+        }
+
         /// <summary>
         /// Show arrows on the edge ends. Default value is true.
         /// </summary>
-        public bool ShowArrows { get { return _showarrows; } set { _showarrows = value; UpdateEdge(false); } }
-        private bool _showarrows;
+        public bool ShowArrows { get { return (bool)GetValue(ShowArrowsProperty); } set { SetValue(ShowArrowsProperty, value); } }
 
 
         public static readonly DependencyProperty ShowLabelProperty = DependencyProperty.Register("ShowLabel",
@@ -551,11 +565,8 @@ namespace GraphX.METRO.Controls
                 if (_linePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
                 _linePathObject.Data = _linegeometry;
                 _arrowPathObject = this.FindDescendantByName("PART_edgeArrowPath") as Path;
-                if (_arrowPathObject == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeArrowPath' Path object to draw!");
-                else
-                {
+                if (_arrowPathObject != null)
                     _arrowPathObject.Data = _arrowgeometry;
-                }
 
                 _edgeLabelControl = this.FindDescendantByName("PART_edgeLabel") as IEdgeLabelControl;
 
@@ -567,15 +578,6 @@ namespace GraphX.METRO.Controls
             }
 
         }
-
-        /*protected override void OnRender(DrawingContext drawingContext)
-        {
-            base.OnRender(drawingContext);
-           // if(_geometry!=null)
-            //    drawingContext.DrawGeometry(new SolidColorBrush(Colors.Black), new Pen(new SolidColorBrush(Colors.Black), 2), _geometry);
-        }*/
-
-
 
         #region public PrepareEdgePath()
 
@@ -593,8 +595,6 @@ namespace GraphX.METRO.Controls
 
                 if (_arrowPathObject != null)
                     _arrowPathObject.Data = ShowArrows ? _arrowgeometry : null;
-                //if (_endEdgePointerImage != null)
-                //    _endEdgePointerImage.Update();
                 if (_edgeLabelControl != null)
                     if(ShowLabel) _edgeLabelControl.Show(); else _edgeLabelControl.Hide();
             }
@@ -866,7 +866,7 @@ namespace GraphX.METRO.Controls
         internal void UpdateLabelLayout()
         {
             _edgeLabelControl.Show();
-            if (_edgeLabelControl.GetSize() == Rect.Empty)// || double.IsNaN(_edgeLabelControl.Width)))
+            if (_edgeLabelControl.GetSize() == Rect.Empty)
             {
                 _edgeLabelControl.UpdateLayout();
                 _edgeLabelControl.UpdatePosition();
