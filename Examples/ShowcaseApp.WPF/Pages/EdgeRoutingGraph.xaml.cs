@@ -98,7 +98,7 @@ namespace ShowcaseApp.WPF.Pages
         void erg_randomizeArrows_Click(object sender, RoutedEventArgs e)
         {
             foreach (var item in erg_Area.EdgesList.ToList())
-                item.Value.ShowArrows = Convert.ToBoolean(ShowcaseHelper.Rand.Next(0, 2));
+                item.Value.SetCurrentValue(EdgeControl.ShowArrowsProperty, Convert.ToBoolean(ShowcaseHelper.Rand.Next(0, 2)));
         }
 
         void erg_showEdgeLabels_Checked(object sender, RoutedEventArgs e)

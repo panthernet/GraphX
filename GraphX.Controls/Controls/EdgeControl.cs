@@ -182,23 +182,25 @@ namespace GraphX.WPF.Controls
         /// </summary>
         public bool IsHiddenEdgesUpdated { get; set; }
 
+        public static readonly DependencyProperty ShowArrowsProperty = DependencyProperty.Register("ShowArrows", typeof(bool), typeof(EdgeControl), new PropertyMetadata(true, showarrows_changed));
+
+        private static void showarrows_changed(object sender, DependencyPropertyChangedEventArgs args)
+        {
+            var ctrl = sender as EdgeControl;
+            if (ctrl == null)
+                return;
+
+            if (ctrl._edgePointerForSource != null && !ctrl.IsSelfLooped)
+                if (ctrl.ShowArrows) ctrl._edgePointerForSource.Show(); else ctrl._edgePointerForSource.Hide();
+            if (ctrl._edgePointerForTarget != null && !ctrl.IsSelfLooped)
+                if (ctrl.ShowArrows) ctrl._edgePointerForTarget.Show(); else ctrl._edgePointerForTarget.Hide();
+            ctrl.UpdateEdge(false);
+        }
 
         /// <summary>
         /// Show arrows on the edge ends. Default value is true.
         /// </summary>
-        public bool ShowArrows { 
-            get { return _showarrows; } 
-            set { 
-                _showarrows = value;
-                if (_edgePointerForSource != null && !IsSelfLooped)
-                    if(value) _edgePointerForSource.Show(); else _edgePointerForSource.Hide();
-                if (_edgePointerForTarget != null && !IsSelfLooped)
-                    if (value) _edgePointerForTarget.Show(); else _edgePointerForTarget.Hide();
-                UpdateEdge(false); 
-            } 
-        }
-        private bool _showarrows;
-
+        public bool ShowArrows { get { return (bool)GetValue(ShowArrowsProperty); } set { SetValue(ShowArrowsProperty, value); } }
 
         public static readonly DependencyProperty ShowLabelProperty = DependencyProperty.Register("ShowLabel",
                                                                                typeof(bool),
@@ -365,7 +367,7 @@ namespace GraphX.WPF.Controls
             DataContext = edge;
             Source = source; Target = target;
             Edge = edge; DataContext = edge;
-            ShowArrows = showArrows;
+            SetCurrentValue(ShowArrowsProperty, showArrows);
             ShowLabel = showLabels;
             _updateLabelPosition = true;
             IsHiddenEdgesUpdated = true;
