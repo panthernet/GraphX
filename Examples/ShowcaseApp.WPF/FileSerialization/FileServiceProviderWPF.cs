@@ -33,7 +33,7 @@ namespace ShowcaseApp.WPF.FileSerialization
         {
             using (FileStream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                return DeserializeDataFromFile(stream);
+                return DeserializeDataFromStream(stream);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ShowcaseApp.WPF.FileSerialization
         /// </summary>
         /// <param name="stream">The stream</param>
         /// <returns>The graph data</returns>
-		public static List<GraphSerializationData> DeserializeDataFromFile(Stream stream)
+		public static List<GraphSerializationData> DeserializeDataFromStream(Stream stream)
         {
             var deserializer = new YAXSerializer(typeof(List<GraphSerializationData>));
             using (var textReader = new StreamReader(stream))
