@@ -45,7 +45,7 @@ namespace ShowcaseApp.WPF.Models
                 graph.AddVertex(new DataVertex(item.Text) { ID = item.ID, ImageId = Rand.Next(0,3)});
 
             var vlist = graph.Vertices.ToList();
-            var cnt = 1;
+            var edgeId = count + 1;
 
             if (!addEdges) return graph;
 
@@ -54,8 +54,8 @@ namespace ShowcaseApp.WPF.Models
                 if (Rand.Next(0, 50) > 25) continue;
                 var vertex2 = vlist[Rand.Next(0, graph.VertexCount - 1)];
                 var txt = string.Format("{0} -> {1}", item.Text, vertex2.Text);
-                graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ID = cnt, Text = txt, ToolTipText = txt });
-                cnt++;
+                graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ID = edgeId, Text = txt, ToolTipText = txt });
+                edgeId++;
             }
             return graph;
         }
