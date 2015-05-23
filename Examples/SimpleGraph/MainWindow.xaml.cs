@@ -111,7 +111,7 @@ namespace SimpleGraph
                 //This ID is needed for several features such as serialization and edge routing algorithms.
                 //If you don't need any custom IDs and you are using automatic Area.GenerateGraph() method then you can skip ID assignment
                 //because specified method automaticaly assigns missing data ids (this behavior controlled by method param).
-                var dataVertex = new DataVertex("MyVertex " + i) { ID = i };
+                var dataVertex = new DataVertex("MyVertex " + i);
                 //Add vertex to data graph
                 dataGraph.AddVertex(dataVertex);
             }

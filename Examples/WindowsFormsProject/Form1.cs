@@ -1,14 +1,12 @@
-﻿using QuickGraph;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
 using GraphX.PCL.Logic.Models;
 using GraphX.WPF.Controls;
+using QuickGraph;
 
 namespace WindowsFormsProject
 {
@@ -23,42 +21,42 @@ namespace WindowsFormsProject
         void Form1_Load(object sender, EventArgs e)
         {
             wpfHost.Child = GenerateWpfVisuals();
-            zoomctrl.ZoomToFill();
+            _zoomctrl.ZoomToFill();
         }
 
-        private ZoomControl zoomctrl;
-        private GraphAreaExample gArea;
+        private ZoomControl _zoomctrl;
+        private GraphAreaExample _gArea;
 
         private UIElement GenerateWpfVisuals()
         {
-            zoomctrl = new ZoomControl();
-            ZoomControl.SetViewFinderVisibility(zoomctrl, System.Windows.Visibility.Visible);
+            _zoomctrl = new ZoomControl();
+            ZoomControl.SetViewFinderVisibility(_zoomctrl, Visibility.Visible);
             /* ENABLES WINFORMS HOSTING MODE --- >*/
             var logic = new GXLogicCore<DataVertex, DataEdge, BidirectionalGraph<DataVertex, DataEdge>>();
-            gArea = new GraphAreaExample() { EnableWinFormsHostingMode = true, LogicCore = logic };
+            _gArea = new GraphAreaExample() { EnableWinFormsHostingMode = true, LogicCore = logic };
             logic.Graph = GenerateGraph();
-            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
-            logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.KK);
-            ((KKLayoutParameters)logic.DefaultLayoutAlgorithmParams).MaxIterations = 100;
+            logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
+            logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.LinLog);
+            //((LinLogLayoutParameters)logic.DefaultLayoutAlgorithmParams). = 100;
             logic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
             logic.DefaultOverlapRemovalAlgorithmParams = logic.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
             ((OverlapRemovalParameters)logic.DefaultOverlapRemovalAlgorithmParams).VerticalGap = 50;
             logic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             logic.AsyncAlgorithmCompute = false;
-            zoomctrl.Content = gArea;
-            gArea.RelayoutFinished += gArea_RelayoutFinished;
+            _zoomctrl.Content = _gArea;
+            _gArea.RelayoutFinished += gArea_RelayoutFinished;
 
             
             var myResourceDictionary = new ResourceDictionary {Source = new Uri("Templates\\template.xaml", UriKind.Relative)};
-            zoomctrl.Resources.MergedDictionaries.Add(myResourceDictionary);
+            _zoomctrl.Resources.MergedDictionaries.Add(myResourceDictionary);
 
-            return zoomctrl;
+            return _zoomctrl;
         }
 
         void gArea_RelayoutFinished(object sender, EventArgs e)
         {
-            zoomctrl.ZoomToFill();
+            _zoomctrl.ZoomToFill();
         }
 
         private GraphExample GenerateGraph()
@@ -67,7 +65,7 @@ namespace WindowsFormsProject
             var dataGraph = new GraphExample();
             for (int i = 1; i < 10; i++)
             {
-                var dataVertex = new DataVertex("MyVertex " + i) { ID = i };
+                var dataVertex = new DataVertex("MyVertex " + i);
                 dataGraph.AddVertex(dataVertex);
             }
             var vlist = dataGraph.Vertices.ToList();
@@ -85,14 +83,14 @@ namespace WindowsFormsProject
 
         private void but_generate_Click(object sender, EventArgs e)
         {
-            gArea.GenerateGraph(true);
-            gArea.SetVerticesDrag(true, true);
-            zoomctrl.ZoomToFill();
+            _gArea.GenerateGraph(true);
+            _gArea.SetVerticesDrag(true, true);
+            _zoomctrl.ZoomToFill();
         }
 
         private void but_reload_Click(object sender, EventArgs e)
         {
-            gArea.RelayoutGraph();
+            _gArea.RelayoutGraph();
         }
     }
 }

@@ -29,6 +29,7 @@ DETAILED CHANGELOG:
 + Fixed some algorithm calculation problems, especial FR [ALL]
 + Fixed EdgeControl.ShowArrows to implement DependencyProperty [WPF, METRO]  thanks to perturbare
 + Fixed minor performance problems in ZoomControl [METRO]
++ Fixed and enhanced automatic data object Id resolve logic [WPF,METRO] thanks to perturbare
 + Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Now GraphX for WPF requires only .NET Framework 4.0 to build & run [WPF]

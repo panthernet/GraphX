@@ -53,7 +53,6 @@ Public Class Form1
         Dim dataGraph = New GraphExample()
         For i As Integer = 1 To 9
             Dim dataVertex = New DataVertex("MyVertex " & i)
-            dataVertex.ID = i
             dataGraph.AddVertex(dataVertex)
         Next
         Dim vlist = dataGraph.Vertices.ToList()

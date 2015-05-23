@@ -798,27 +798,25 @@ namespace GraphX.METRO.Controls
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (graph == null) graph = LogicCore.Graph;
             if (graph == null) return;
-            _dataIdsCollection.Clear();
-            _dataIdCounter = 1;
-            var count = graph.Vertices.Count();
-            for (var i = 0; i < count; i++)
-            {
-                var element = graph.Vertices.ElementAt(i);
-                if (element.ID != -1 && !_dataIdsCollection.Contains(element.ID)) 
-                    _dataIdsCollection.Add(element.ID);
-            }
-            foreach (var item in graph.Vertices.Where(a => a.ID == -1))
-                item.ID = GetNextUniqueId();
 
             _dataIdsCollection.Clear();
             _dataIdCounter = 1;
-            count = graph.Edges.Count();
-            for (var i = 0; i < count; i++)
+
+            // First, rebuild data ID collection for all vertices and edges that already have assigned IDs.
+            foreach (var item in graph.Vertices.Where(a => a.ID != -1))
             {
-                var element2 = graph.Edges.ElementAt(i);
-                if (element2.ID != -1 && !_dataIdsCollection.Contains(element2.ID))
-                    _dataIdsCollection.Add(element2.ID);
+                bool added = _dataIdsCollection.Add(item.ID);
+                Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
             }
+            foreach (var item in graph.Edges.Where(a => a.ID != -1))
+            {
+                bool added = _dataIdsCollection.Add(item.ID);
+                Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
+            }
+
+            // Generate unique IDs for all vertices and edges that don't already have a unique ID.
+            foreach (var item in graph.Vertices.Where(a => a.ID == -1))
+                item.ID = GetNextUniqueId();
             foreach (var item in graph.Edges.Where(a => a.ID == -1))
                 item.ID = GetNextUniqueId();
         }
