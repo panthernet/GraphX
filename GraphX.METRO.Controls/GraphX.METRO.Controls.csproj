@@ -132,6 +132,7 @@
     <Compile Include="Controls\EdgePointers\EdgePointerPath.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
+    <Compile Include="Controls\Misc\ControlDrawOrder.cs" />
     <Compile Include="Controls\Misc\IEdgeLabelControl.cs" />
     <Compile Include="Controls\Misc\IEdgePointer.cs" />
     <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />

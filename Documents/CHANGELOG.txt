@@ -20,6 +20,7 @@ DETAILED CHANGELOG:
 + Added VertexShape::None enum option, currently affecting only VCP logic [ALL]
 + Added different layout options to EfficientSugiyama algorithm using new Direction param [ALL]
 + Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
++ Added new property GrphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Fixed edge pointer positioning bug [METRO]

@@ -29,6 +29,11 @@ namespace GraphX.METRO.Controls
 
         #region My properties
 
+        /// <summary>
+        /// Gets or sets in which order GraphX controls are drawn
+        /// </summary>
+        public ControlDrawOrder ControlsDrawOrder { get; set; }
+
         public static readonly DependencyProperty LogicCoreProperty =
             DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
 
@@ -401,7 +406,9 @@ namespace GraphX.METRO.Controls
             _edgeslist.Add(edgeData, edgeControl);
             try
             {
-                base.Children.Insert(num, edgeControl);
+                if (ControlsDrawOrder == ControlDrawOrder.VerticesOnTop || num != 0)
+                    base.Children.Insert(num, edgeControl);
+                else base.Children.Add(edgeControl);
             }
             catch (Exception ex)
             {

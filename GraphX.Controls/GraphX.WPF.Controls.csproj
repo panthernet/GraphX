@@ -95,6 +95,7 @@
     <Compile Include="Behaviours\DragBehaviour.cs" />
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerPath.cs" />
+    <Compile Include="Controls\Misc\ControlDrawOrder.cs" />
     <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />
     <Compile Include="Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />

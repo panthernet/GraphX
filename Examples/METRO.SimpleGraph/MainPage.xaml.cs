@@ -6,6 +6,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using GraphX.METRO.Controls;
 using GraphX.METRO.Controls.Animations;
 using GraphX.METRO.Controls.Models;
 using GraphX.PCL.Common.Enums;
@@ -41,6 +42,7 @@ namespace METRO.SimpleGraph
             graph.GenerateGraphFinished += OnFinishedLayout;
             graph.RelayoutFinished += OnFinishedLayout;
             graph.AlignAllEdgesLabels();
+            graph.ControlsDrawOrder = ControlDrawOrder.EdgesOnTop;
             Loaded += MainPage_Loaded;
         }
 
