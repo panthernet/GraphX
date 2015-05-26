@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public sealed class EqualityToBooleanConverter : IValueConverter
     {

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
   public class ViewFinderDisplay : FrameworkElement
   {

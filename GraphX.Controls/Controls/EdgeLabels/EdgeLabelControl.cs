@@ -7,7 +7,7 @@ using System.Windows.Media;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl
     {

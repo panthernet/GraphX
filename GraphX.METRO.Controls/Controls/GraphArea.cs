@@ -9,8 +9,8 @@ using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
-using GraphX.METRO.Controls.DesignerExampleData;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.DesignerExampleData;
+using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
@@ -19,7 +19,7 @@ using QuickGraph;
 using Rect = GraphX.Measure.Rect;
 using Size = GraphX.Measure.Size;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public class GraphArea<TVertex, TEdge, TGraph>  : GraphAreaBase, IDisposable
         where TVertex : class, IGraphXVertex
@@ -509,16 +509,48 @@ namespace GraphX.METRO.Controls
         #region PreloadVertexes()
 
         /// <summary>
-        /// Preloads vertex controls from specified graph. All vertices are created hidden by default.
-        /// This method can be used for custom external algorithm implementations or manual visual graph population.
+        /// For manual graph generation only!
+        /// Generates visual objects for all vertices and edges w/o any algorithms. Objects are hidden by default. Optionaly, sets vertex coordinates.
         /// </summary>
-        /// <param name="graph">Data graph</param>
-        /// <param name="dataContextToDataItem">Sets DataContext property to vertex data item of the control</param>
-        /// <param name="forceVisPropRecovery"></param>
-        public void PreloadVertexes(TGraph graph, bool dataContextToDataItem = true, bool forceVisPropRecovery = false)
+        /// <param name="positions">Optional vertex positions</param>
+        /// <param name="showObjectsIfPosSpecified">If True, all objects will be made visible when positions are specified</param>
+        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (LogicCore.Graph == null)
+                throw new GX_InvalidDataException("LogicCore.Graph -> Not initialized!");
+            PreloadVertexes();
+
+            if (positions != null)
+            {
+                foreach (var item in positions)
+                {
+                    if (VertexList.ContainsKey(item.Key))
+                        VertexList[item.Key].SetPosition(item.Value);
+                    if (showObjectsIfPosSpecified)
+                        VertexList[item.Key].Visibility = Visibility.Visible;
+                }
+            }
+
+            GenerateAllEdges(positions != null ? Visibility.Visible : Visibility.Collapsed);
+        }
+
+        /// <summary>
+        /// Preloads vertex controls from specified graph. All vertices are created hidden by default.
+        /// This method can be used for custom external algorithm implementations or manual visual graph population.
+        /// </summary>
+        /// <param name="graph">Data graph, by default is null and uses LogicCore.Graph as the source</param>
+        /// <param name="dataContextToDataItem">Sets DataContext property to vertex data item of the control</param>
+        /// <param name="forceVisPropRecovery"></param>
+        public void PreloadVertexes(TGraph graph = null, bool dataContextToDataItem = true, bool forceVisPropRecovery = false)
+        {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (graph == null && LogicCore.Graph == null)
+                throw new GX_InvalidDataException("graph param empty and LogicCore.Graph -> Not initialized!");
+            graph = graph ?? LogicCore.Graph;
+
             //clear edge and vertex controls
             RemoveAllVertices();
             RemoveAllEdges();

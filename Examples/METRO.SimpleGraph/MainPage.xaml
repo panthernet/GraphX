@@ -5,7 +5,7 @@
     xmlns:local="using:METRO.SimpleGraph"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls1="using:GraphX.METRO.Controls"
+    xmlns:controls1="using:GraphX.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">

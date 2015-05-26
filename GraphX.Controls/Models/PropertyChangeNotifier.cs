@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     public sealed class PropertyChangeNotifier : DependencyObject, IDisposable
     {

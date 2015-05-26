@@ -4,7 +4,7 @@ Imports GraphX.PCL.Common.Enums
 Imports GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 Imports GraphX.PCL.Logic.Algorithms.OverlapRemoval
 Imports GraphX.PCL.Logic.Models
-Imports GraphX.WPF.Controls
+Imports GraphX.Controls
 Imports QuickGraph
 
 Public Class Form1

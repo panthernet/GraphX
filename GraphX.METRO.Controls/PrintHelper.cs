@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     internal static class PrintHelper
     {

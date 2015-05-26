@@ -21,6 +21,8 @@ DETAILED CHANGELOG:
 + Added different layout options to EfficientSugiyama algorithm using new Direction param [ALL]
 + Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
 + Added new property GrphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
++ Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
+	w/o any algorithms and also sets vertices positions if needed [WPF, METRO]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Fixed edge pointer positioning bug [METRO]
@@ -31,6 +33,9 @@ DETAILED CHANGELOG:
 + Fixed EdgeControl.ShowArrows to implement DependencyProperty [WPF, METRO]  thanks to perturbare
 + Fixed minor performance problems in ZoomControl [METRO]
 + Fixed and enhanced automatic data object Id resolve logic [WPF,METRO] thanks to perturbare
++ Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
++ Fixed VB sample project dependencies and refactored code a bit
++ GraphArea::PreloadVertexes() now accepts graph param as optional (null by default) and uses LogicCore.Graph in that case [WPF, METRO]
 + Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare
 + Adjusted FR and BoundedFR default values for random initial positions [All]
 + Now GraphX for WPF requires only .NET Framework 4.0 to build & run [WPF]
@@ -38,12 +43,13 @@ DETAILED CHANGELOG:
 
 BREAKING CHANGES:
 * !!!WARNING!!! This GraphX version has fallen under the heavy hand of code refactoring and along with the numerous code improvements 
-	almost ALL of the namespaces has been changed to better reflect PCL and multiplatform library versioning. Also i've get rid of the
-    several different XAML xmlns usings in favor of single one that reflects library platform. I'm very sorry that this changes will
-	force you to update your GraphX projects but i realy felt that i must do it once and for all. Hope there will be no more
-	such heavy changes in that direction.
+	almost ALL of the namespaces has been changed to better reflect logical code grouping and ease additional platform support through code reusability. 
+	Also i've get rid of the several different XAML xmlns usings in favor of single one. I'm very sorry that this changes will force you to update your 
+	GraphX projects but i realy felt that i must do it once and for all. You will have to change most of the usings in code and XAML templates: i strongly
+    recommend you to use Resharper or any other code quality tool which will help to do this in minutes (or even seconds).
+
 	Core changes:
-	- All controls, behaviours and their interfaces are moved to GraphX.WPF.Controls and GraphX.METRO.Controls namespace
+	- All controls, behaviours and their interfaces are moved to GraphX.Controls namespace
 	- All algorithms are spreaded across GraphX.PCL.Logic.Algorithms namespace with additional OverlapRemoval, LayoutAlgorithms, EdgeRouting endings
 	- All base models and interfaces are now in GraphX.PCL.Common.Models namespace
 	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
@@ -83,7 +89,7 @@ RELEASE 2.1.8
 !Breaking changes
 + Renamed and changed to Enum - ZoomControl::UseAbsoluteZoomOnMouseWheel to MouseWheelZoomingMode [METRO, WPF]
 + Expanded EdgeControl event args with mouse and keyboard modifiers [WPF]
-+ Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace and all METRO interfaces to GraphX.METRO.Controls.Models.Interfaces [WPF, METRO]
++ Moved all WPF interfaces to GraphX.Controls.Models.Interfaces namespace and all METRO interfaces to GraphX.Controls.Models.Interfaces [WPF, METRO]
 + Edge rotation now needs additional modification for all custom EdgeLabelControl templates. Please add: <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />[WPF, METRO]
 + Due to new calc cancelation feature the following has been changed:
 	- IExternalEdgeRouting, IExternalLayout, IExternalOverlapRemoval interfaces and different algorithm base classes now implement Compute(CancellationToken cancellationToken) method with an additional param
@@ -147,7 +153,6 @@ RELEASE 2.1.3 WIP
 + Redesigned libraries for PCL implementation
 	This shouldn't lead to major problems but some breaks will definetly occur:
 	- All routines in Logic library now operates with custom System.Windows types (platform-specific libraries operates (externaly) with System.Windows types). This includes any custom algorithms. 
-	- GraphX.Controls assembly was renamed to GraphX.WPF.Controls assembly
 	- DataSaveModel class renamed to GraphSerializationData 
 	- Althought file operations such as Save/load layout remains the same for the end user the background logic of this features has been changed:
 		- Implemented IFileServiceProvider interface and corresponding property in GXLogicCore class
@@ -175,7 +180,7 @@ PCL-IMPROVEMENTS
 - Added YAXLib v2.13 project sources splitted into 2 different projects: main and PCL compliant (for attributes to be availbale in PCL libraries)
 - Implemented PCL version of GraphX.Common
 - Implemented PCL version of GraphX.Logic
-- Implemented GraphX.WPF.Controls platform-specific library
+- Implemented GraphX.Controls platform-specific library
 
 
 RELEASE 2.0.2

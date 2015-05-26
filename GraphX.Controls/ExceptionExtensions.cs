@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     internal static class ExceptionExtensions
     {

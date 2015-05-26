@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
-             xmlns:controls1="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:controls1="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
@@ -26,7 +26,7 @@
         
         <Border  Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1"  Margin="2" >
             <controls1:ZoomControl x:Name="dg_zoomctrl" Background="Transparent" VerticalContentAlignment="Center" VerticalAlignment="Center">
-                <wpf:GraphAreaExample x:Name="dg_Area"/>
+                <wpf:GraphAreaExample x:Name="dg_Area" LogicCore="{Binding LogicCore, UpdateSourceTrigger=PropertyChanged}"/>
             </controls1:ZoomControl>
         </Border>
         

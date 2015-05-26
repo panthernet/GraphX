@@ -1,5 +1,4 @@
-﻿Imports GraphX
-Imports GraphX.WPF.Controls
+﻿Imports GraphX.Controls
 Imports QuickGraph
 
 Namespace Models

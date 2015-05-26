@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
 using GraphX.PCL.Logic.Models;
-using GraphX.WPF.Controls;
+using GraphX.Controls;
 using QuickGraph;
 
 namespace WindowsFormsProject

@@ -8,7 +8,7 @@ using System.Windows.Input;
 using GraphX;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.EdgeRouting;
-using GraphX.WPF.Controls;
+using GraphX.Controls;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 

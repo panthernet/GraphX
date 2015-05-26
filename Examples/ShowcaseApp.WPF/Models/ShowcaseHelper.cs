@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using QuickGraph;
 
 namespace ShowcaseApp.WPF.Models
 {
@@ -28,6 +29,26 @@ namespace ShowcaseApp.WPF.Models
                 list.Add(new DataItem { ID = i, Text = "Vertex " + i });
             }
             DataSource = list;
+        }
+
+        public static void AddEdge(BidirectionalGraph<DataVertex, DataEdge> graph, DataVertex source, DataVertex target, int sourcePoint = 0, int targetPoint = 0, int weight = 0)
+        {
+            var edge = new DataEdge(source, target, weight)
+            {
+                Text = string.Empty,
+                SourceConnectionPointId = sourcePoint,
+                TargetConnectionPointId = targetPoint,
+            };
+
+            graph.AddEdge(edge);
+        }
+
+        public static DataEdge GenerateEdge(DataVertex source, DataVertex target, int weight = 0)
+        {
+            return new DataEdge(source, target, weight) 
+            {
+                Text = string.Empty
+            };
         }
 
         #region GenerateDataGraph

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public sealed class ZoomContentPresenter : ContentPresenter, INotifyPropertyChanged
     {

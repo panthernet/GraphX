@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
-using GraphX.WPF.Controls;
+using GraphX.Controls;
 using Microsoft.Win32;
 using QuickGraph;
 using ShowcaseApp.WPF.FileSerialization;

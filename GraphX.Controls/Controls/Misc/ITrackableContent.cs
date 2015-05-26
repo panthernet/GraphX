@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls.Models;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     /// <summary>
     /// Interface that represents trackable content object

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public class GeometryToPathGeometryConverter : IValueConverter
     {

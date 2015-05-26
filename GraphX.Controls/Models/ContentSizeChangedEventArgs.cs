@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     public sealed class ContentSizeChangedEventArgs : System.EventArgs
     {

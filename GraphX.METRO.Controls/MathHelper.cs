@@ -3,7 +3,7 @@ using GraphX.Measure;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public static class DoubleExtensions
     {
@@ -19,11 +19,6 @@ namespace GraphX.METRO.Controls
 
     public static class MathHelper
     {
-        private const int LEFT  = 1;  /* двоичное 0001 */
-        private const int RIGHT = 2;  /* двоичное 0010 */
-        private const int BOT   = 4;  /* двоичное 0100 */
-        private const int TOP   = 8;  /* двоичное 1000 */
-
         const double D30_DEGREES_IN_RADIANS = Math.PI / 6.0;
 
         public static double Tangent30Degrees { get; private set; }
@@ -77,23 +72,23 @@ namespace GraphX.METRO.Controls
         public static bool IsIntersected(Rect r, Point a, Point b)
         {
            // var start = new Point(a.X, a.Y);
-            /* код конечных точек отрезка */
+            /* line endpoints */
             var codeA = GetIntersectionData(r, a);
             var codeB = GetIntersectionData(r, b);
 
             if (codeA.IsInside() && codeB.IsInside())
                 return true;
-
-            /* пока одна из точек отрезка вне прямоугольника */
+           
+            /* while one of the endpoints are outside of rectangle */
             while (!codeA.IsInside() || !codeB.IsInside())
             {
-                /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
+                /* if both points are at one rectangle side then line do not cross the rectangle */
                 if (codeA.SameSide(codeB))
                     return false;
 
-                /* выбираем точку c с ненулевым кодом */
+                /* select point with zero code */
                 sides code;
-                Point c; /* одна из точек */
+                Point c; /* one of the points */
                 if (!codeA.IsInside())
                 {
                     code = codeA;
@@ -105,8 +100,8 @@ namespace GraphX.METRO.Controls
                     c = b;
                 }
 
-                /* если c левее r, то передвигаем c на прямую x = r->x_min
-                   если c правее r, то передвигаем c на прямую x = r->x_max */
+                /* if c is on the left of r then move c on the line x = r->x_min
+                   if c is on the right side of r then move c on the line x = r->x_max */
                 if (code.Left)
                 {
                     c.Y += (a.Y - b.Y) * (r.Left - c.X) / (a.X - b.X);
@@ -116,8 +111,8 @@ namespace GraphX.METRO.Controls
                 {
                     c.Y += (a.Y - b.Y) * (r.Right - c.X) / (a.X - b.X);
                     c.X = r.Right;
-                }/* если c ниже r, то передвигаем c на прямую y = r->y_min
-                    если c выше r, то передвигаем c на прямую y = r->y_max */
+                }/* if c is below r then move c on the line y = r->y_min
+                    if c above the r then move c on the line y = r->y_max */
                 else if (code.Bottom)
                 {
                     c.X += (a.X - b.X) * (r.Bottom - c.Y) / (a.Y - b.Y);
@@ -129,7 +124,7 @@ namespace GraphX.METRO.Controls
                     c.Y = r.Top;
                 }
 
-                /* обновляем код */
+                /* refresh code */
                 if (code == codeA)
                 {
                     a = c;
@@ -146,37 +141,32 @@ namespace GraphX.METRO.Controls
 
         public static int GetIntersectionPoint(Rect r, Point a, Point b, out Point pt)
         {
-            sides code; 
-            Point c; /* одна из точек */
             var start = new Point(a.X, a.Y);
-            /* код конечных точек отрезка */
-            var code_a = GetIntersectionData(r, a);
-            var code_b = GetIntersectionData(r, b);
 
-            /* пока одна из точек отрезка вне прямоугольника */
-            while (!code_a.IsInside() || !code_b.IsInside())
+            var codeA = GetIntersectionData(r, a);
+            var codeB = GetIntersectionData(r, b);
+
+            while (!codeA.IsInside() || !codeB.IsInside())
             {
-                /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
-                if (code_a.SameSide(code_b))
+                if (codeA.SameSide(codeB))
                 {
                     pt = new Point();
                     return -1;
                 }
 
-                /* выбираем точку c с ненулевым кодом */
-                if (!code_a.IsInside())
+                sides code;
+                Point c;
+                if (!codeA.IsInside())
                 {
-                    code = code_a;
+                    code = codeA;
                     c = a;
                 }
                 else
                 {
-                    code = code_b;
+                    code = codeB;
                     c = b;
                 }
 
-                /* если c левее r, то передвигаем c на прямую x = r->x_min
-                   если c правее r, то передвигаем c на прямую x = r->x_max */
                 if (code.Left)
                 {
                     c.Y += (a.Y - b.Y) * (r.Left - c.X) / (a.X - b.X);
@@ -186,8 +176,7 @@ namespace GraphX.METRO.Controls
                 {
                     c.Y += (a.Y - b.Y) * (r.Right - c.X) / (a.X - b.X);
                     c.X = r.Right;
-                }/* если c ниже r, то передвигаем c на прямую y = r->y_min
-                    если c выше r, то передвигаем c на прямую y = r->y_max */
+                }
                 else if (code.Bottom)
                 {
                     c.X += (a.X - b.X) * (r.Bottom - c.Y) / (a.Y - b.Y);
@@ -199,16 +188,15 @@ namespace GraphX.METRO.Controls
                     c.Y = r.Top;
                 }
 
-                /* обновляем код */
-                if (code == code_a)
+                if (code == codeA)
                 {
                     a = c;
-                    code_a = GetIntersectionData(r, a);
+                    codeA = GetIntersectionData(r, a);
                 }
                 else
                 {
                     b = c;
-                    code_b = GetIntersectionData(r, b);
+                    codeB = GetIntersectionData(r, b);
                 }
             }
             pt = GetCloserPoint(start, a, b);
@@ -229,14 +217,14 @@ namespace GraphX.METRO.Controls
 
             public bool SameSide(sides o)
             {
-                return (Left ==true && o.Left == true) || (Right == true && o.Right == true) || (Top == true && o.Top == true)
-                    || (Bottom == true && o.Bottom == true);
+                return (Left && o.Left) || (Right && o.Right) || (Top && o.Top)
+                    || (Bottom && o.Bottom);
             }
         }
 
         public static sides GetIntersectionData(Rect r, Point p)
         {
-            return new sides() { Left = p.X < r.Left, Right = p.X > r.Right, Bottom = p.Y > r.Bottom, Top = p.Y < r.Top };
+            return new sides { Left = p.X < r.Left, Right = p.X > r.Right, Bottom = p.Y > r.Bottom, Top = p.Y < r.Top };
         }
 
         public static double GetDistance(Point a, Point b)

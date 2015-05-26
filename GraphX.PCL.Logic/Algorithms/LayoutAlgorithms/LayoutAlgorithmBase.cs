@@ -17,6 +17,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
        // public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
 
+        /// <summary>
+        /// Gets if current algorithm supports vertex freeze feature (part of VAESPS)
+        /// </summary>
         public virtual bool SupportsObjectFreeze { get { return false; } }
 
 

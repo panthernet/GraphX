@@ -1,4 +1,4 @@
-﻿namespace GraphX.METRO.Controls.Models
+﻿namespace GraphX.Controls.Models
 {
     public class MouseButtonEventArgs
     {

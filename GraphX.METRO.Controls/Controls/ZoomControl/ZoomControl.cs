@@ -8,12 +8,12 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using GraphX.Measure;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.Models;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 using Thickness = Windows.UI.Xaml.Thickness;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZCP))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged

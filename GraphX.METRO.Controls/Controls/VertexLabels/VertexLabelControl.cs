@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     [Bindable]
     public class VertexLabelControl : ContentControl, IVertexLabelControl

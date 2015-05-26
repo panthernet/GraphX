@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public static class HighlightBehaviour
     {

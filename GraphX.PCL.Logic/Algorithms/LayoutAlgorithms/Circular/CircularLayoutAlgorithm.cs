@@ -5,7 +5,6 @@ using System.Threading;
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
@@ -22,6 +21,11 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         {
             _sizes = vertexSizes;
         }
+
+        /// <summary>
+        /// Gets if current algorithm supports vertex freeze feature (part of VAESPS)
+        /// </summary>
+        public override bool SupportsObjectFreeze { get { return false; } }
 
         public override void Compute(CancellationToken cancellationToken)
         {

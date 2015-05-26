@@ -8,7 +8,7 @@ using GraphX.Measure;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public class EdgePointerPath: ContentControl, IEdgePointer
     {

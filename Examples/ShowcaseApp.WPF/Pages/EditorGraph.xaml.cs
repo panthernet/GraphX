@@ -6,8 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
 using GraphX.PCL.Common.Enums;
-using GraphX.WPF.Controls;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls;
+using GraphX.Controls.Models;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages

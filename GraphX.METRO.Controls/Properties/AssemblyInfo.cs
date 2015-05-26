@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("GraphX.METRO.Controls")]
+[assembly: AssemblyTitle("GraphX.Controls")]
 [assembly: ComVisible(false)]

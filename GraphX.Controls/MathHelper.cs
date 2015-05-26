@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public static class DoubleExtensions
     {
@@ -16,11 +16,6 @@ namespace GraphX.WPF.Controls
 
     public static class MathHelper
     {
-        private const int LEFT  = 1;  /* двоичное 0001 */
-        private const int RIGHT = 2;  /* двоичное 0010 */
-        private const int BOT   = 4;  /* двоичное 0100 */
-        private const int TOP   = 8;  /* двоичное 1000 */
-
         const double D30_DEGREES_IN_RADIANS = Math.PI / 6.0;
 
         public static double Tangent30Degrees { get; private set; }
@@ -75,23 +70,23 @@ namespace GraphX.WPF.Controls
         public static bool IsIntersected(Rect r, Point a, Point b)
         {
            // var start = new Point(a.X, a.Y);
-            /* код конечных точек отрезка */
+            /* line endpoints */
             var codeA = GetIntersectionData(r, a);
             var codeB = GetIntersectionData(r, b);
 
             if (codeA.IsInside() && codeB.IsInside())
                 return true;
 
-            /* пока одна из точек отрезка вне прямоугольника */
+            /* while one of the endpoints are outside of rectangle */
             while (!codeA.IsInside() || !codeB.IsInside())
             {
-                /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
+                /* if both points are at one rectangle side then line do not cross the rectangle */
                 if (codeA.SameSide(codeB))
                     return false;
 
-                /* выбираем точку c с ненулевым кодом */
+                /* select point with zero code */
                 sides code;
-                Point c; /* одна из точек */
+                Point c; /* one of the points */
                 if (!codeA.IsInside())
                 {
                     code = codeA;
@@ -103,8 +98,8 @@ namespace GraphX.WPF.Controls
                     c = b;
                 }
 
-                /* если c левее r, то передвигаем c на прямую x = r->x_min
-                   если c правее r, то передвигаем c на прямую x = r->x_max */
+                /* if c is on the left of r then move c on the line x = r->x_min
+                   if c is on the right side of r then move c on the line x = r->x_max */
                 if (code.Left)
                 {
                     c.Y += (a.Y - b.Y) * (r.Left - c.X) / (a.X - b.X);
@@ -114,8 +109,8 @@ namespace GraphX.WPF.Controls
                 {
                     c.Y += (a.Y - b.Y) * (r.Right - c.X) / (a.X - b.X);
                     c.X = r.Right;
-                }/* если c ниже r, то передвигаем c на прямую y = r->y_min
-                    если c выше r, то передвигаем c на прямую y = r->y_max */
+                }/* if c is below r then move c on the line y = r->y_min
+                    if c above the r then move c on the line y = r->y_max */
                 else if (code.Bottom)
                 {
                     c.X += (a.X - b.X) * (r.Bottom - c.Y) / (a.Y - b.Y);
@@ -127,7 +122,7 @@ namespace GraphX.WPF.Controls
                     c.Y = r.Top;
                 }
 
-                /* обновляем код */
+                /* refresh code */
                 if (code == codeA)
                 {
                     a = c;
@@ -145,23 +140,20 @@ namespace GraphX.WPF.Controls
         public static int GetIntersectionPoint(Rect r, Point a, Point b, out Point pt)
         {
             var start = new Point(a.X, a.Y);
-            /* код конечных точек отрезка */
+
             var codeA = GetIntersectionData(r, a);
             var codeB = GetIntersectionData(r, b);
 
-            /* пока одна из точек отрезка вне прямоугольника */
             while (!codeA.IsInside() || !codeB.IsInside())
             {
-                /* если обе точки с одной стороны прямоугольника, то отрезок не пересекает прямоугольник */
                 if (codeA.SameSide(codeB))
                 {
                     pt = new Point();
                     return -1;
                 }
 
-                /* выбираем точку c с ненулевым кодом */
                 sides code;
-                Point c; /* одна из точек */
+                Point c; 
                 if (!codeA.IsInside())
                 {
                     code = codeA;
@@ -173,8 +165,6 @@ namespace GraphX.WPF.Controls
                     c = b;
                 }
 
-                /* если c левее r, то передвигаем c на прямую x = r->x_min
-                   если c правее r, то передвигаем c на прямую x = r->x_max */
                 if (code.Left)
                 {
                     c.Y += (a.Y - b.Y) * (r.Left - c.X) / (a.X - b.X);
@@ -184,8 +174,7 @@ namespace GraphX.WPF.Controls
                 {
                     c.Y += (a.Y - b.Y) * (r.Right - c.X) / (a.X - b.X);
                     c.X = r.Right;
-                }/* если c ниже r, то передвигаем c на прямую y = r->y_min
-                    если c выше r, то передвигаем c на прямую y = r->y_max */
+                }
                 else if (code.Bottom)
                 {
                     c.X += (a.X - b.X) * (r.Bottom - c.Y) / (a.Y - b.Y);
@@ -197,7 +186,6 @@ namespace GraphX.WPF.Controls
                     c.Y = r.Top;
                 }
 
-                /* обновляем код */
                 if (code == codeA)
                 {
                     a = c;

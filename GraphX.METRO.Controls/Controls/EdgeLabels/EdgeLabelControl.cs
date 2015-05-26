@@ -10,7 +10,7 @@ using GraphX.Measure;
 using GraphX.PCL.Common.Interfaces;
 using Point = Windows.Foundation.Point;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     [Bindable]
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl

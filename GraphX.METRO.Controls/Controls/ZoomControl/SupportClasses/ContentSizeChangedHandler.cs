@@ -1,6 +1,6 @@
 ﻿using Windows.Foundation;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public delegate void ContentSizeChangedHandler(object sender, Size newSize);
 }

@@ -17,7 +17,7 @@
 using System;
 using Windows.Foundation;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
   internal static class PointHelper
   {

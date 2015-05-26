@@ -19,7 +19,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
   public class RoundedValueConverter : IValueConverter
   {

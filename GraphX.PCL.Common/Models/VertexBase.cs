@@ -1,4 +1,5 @@
-﻿using GraphX.PCL.Common.Enums;
+﻿using System;
+using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.PCL.Common.Models

@@ -1,4 +1,4 @@
-﻿namespace GraphX.METRO.Controls.Animations
+﻿namespace GraphX.Controls.Animations
 {
     /// <summary>
     /// Controls mouse over animation types

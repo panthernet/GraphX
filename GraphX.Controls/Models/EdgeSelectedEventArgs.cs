@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     public sealed class EdgeSelectedEventArgs : System.EventArgs
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphX.Measure;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     
     public interface IEdgePointer: IDisposable

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Windows.UI.Core;
 
-namespace GraphX.METRO.Controls.Models
+namespace GraphX.Controls.Models
 {
     public static class DispatcherHelper
     {

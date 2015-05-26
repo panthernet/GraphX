@@ -1,4 +1,4 @@
-﻿namespace GraphX.WPF.Controls.Models
+﻿namespace GraphX.Controls.Models
 {
     public delegate void VertexPositionChangedEH(object sender, VertexPositionEventArgs args);
 }

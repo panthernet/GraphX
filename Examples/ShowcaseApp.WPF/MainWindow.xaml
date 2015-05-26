@@ -11,6 +11,7 @@
         <mui:Link DisplayName="Settings" Source="/Pages/Settings.xaml" />
         <mui:Link DisplayName="Web" Source="http://panthernet.ru/forum/index.php?/forum/5-discussions/" />
     </mui:ModernWindow.TitleLinks>
+    
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="Start">
             <mui:LinkGroup.Links>
@@ -35,10 +36,25 @@
                 <mui:Link DisplayName="General" Source="/Pages/EdgeRoutingGraph.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
+        <mui:LinkGroup DisplayName="Features">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Layouts" Source="/Pages/FeatureLists/FeaturesPageLayouts.xaml" />
+                <!--<mui:Link DisplayName="Data operations" Source="/Pages/FeatureLists/FeaturesPageData.xaml" />
+                <mui:Link DisplayName="Templates" Source="/Pages/FeatureLists/FeaturesPageTemplates.xaml" />-->
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
         <mui:LinkGroup DisplayName="Settings" GroupKey="settings">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Software" Source="/Pages/Settings.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
+
+
+        <mui:LinkGroup DisplayName="GraphX layout features and examples" GroupKey="miniFeaturesLayout">
+            <mui:LinkGroup.Links>
+                <mui:Link DisplayName="Vertex connection points (VCP)"  Source="/Pages/Mini/LayoutVCP.xaml" />
+            </mui:LinkGroup.Links>
+        </mui:LinkGroup>
+        
     </mui:ModernWindow.MenuLinkGroups>
 </mui:ModernWindow>

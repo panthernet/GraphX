@@ -1,4 +1,4 @@
-﻿namespace GraphX.WPF.Controls.Animations
+﻿namespace GraphX.Controls.Animations
 {
     /// <summary>
     /// Vertex move animation types

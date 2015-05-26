@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace GraphX.WPF.Controls.Animations
+namespace GraphX.Controls.Animations
 {
     public sealed class MoveSimpleAnimation : MoveAnimationBase
     {

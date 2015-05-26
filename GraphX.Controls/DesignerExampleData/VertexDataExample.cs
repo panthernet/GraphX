@@ -3,14 +3,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using GraphX.PCL.Common.Models;
 
-namespace GraphX.WPF.Controls.DesignerExampleData
+namespace GraphX.Controls.DesignerExampleData
 {
     internal sealed class VertexDataExample : VertexBase
     {
         public VertexDataExample(int id, string name)
         {
             ID = id; Name = name;
-            DataImage = new BitmapImage(new Uri(@"pack://application:,,,/GraphX.WPF.Controls;component/Images/help_black.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad };
+            DataImage = new BitmapImage(new Uri(@"pack://application:,,,/GraphX.Controls;component/Images/help_black.png", UriKind.Absolute)) { CacheOption = BitmapCacheOption.OnLoad };
         }
 
         public string Name { get; set; }

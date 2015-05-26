@@ -1,6 +1,5 @@
-﻿Imports GraphX
+﻿
 Imports GraphX.PCL.Common.Models
-Imports YAXLib
 
 Namespace Models
 
@@ -25,18 +24,10 @@ Namespace Models
         ''' <summary>
         ''' Custom string property for example
         ''' </summary>
-        Public Property Text() As String
-            Get
-                Return m_Text
-            End Get
-            Set(value As String)
-                m_Text = value
-            End Set
-        End Property
-        Private m_Text As String
+        Public Property Text As String
 
 #Region "GET members"
-        Public Function ToString() As String
+        Public Overloads Function ToString() As String
             Return Text
         End Function
 

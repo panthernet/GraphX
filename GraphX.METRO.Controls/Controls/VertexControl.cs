@@ -6,11 +6,11 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
 	/// <summary>
 	/// Visual vertex control

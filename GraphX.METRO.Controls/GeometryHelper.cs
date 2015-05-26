@@ -11,7 +11,7 @@ using GraphX.PCL.Common.Enums;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public static class GeometryHelper
     {

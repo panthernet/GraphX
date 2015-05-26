@@ -1,7 +1,7 @@
 using System;
 using Windows.Foundation;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public class AreaSelectedEventArgs : EventArgs
     {

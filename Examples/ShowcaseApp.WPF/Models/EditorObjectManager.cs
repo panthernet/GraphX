@@ -3,8 +3,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using GraphX;
-using GraphX.WPF.Controls;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls;
+using GraphX.Controls.Models;
 
 namespace ShowcaseApp.WPF.Models
 {

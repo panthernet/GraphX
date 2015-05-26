@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace GraphX.METRO.Controls.Models
+namespace GraphX.Controls.Models
 {
     public class DelegateCommand<T> : ICommand
     {

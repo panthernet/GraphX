@@ -9,7 +9,7 @@ using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using Brushes = System.Windows.Media.Brushes;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     internal static class PrintHelper
     {

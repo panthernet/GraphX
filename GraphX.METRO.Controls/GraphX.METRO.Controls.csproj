@@ -9,7 +9,7 @@
     <ProjectGuid>{66F33708-C1C7-4385-8235-7201784D184C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphX.METRO.Controls</RootNamespace>
+    <RootNamespace>GraphX.Controls</RootNamespace>
     <AssemblyName>GraphX.METRO.Controls</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>

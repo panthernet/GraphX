@@ -1,5 +1,5 @@
 using GraphX;
-using GraphX.WPF.Controls;
+using GraphX.Controls;
 using QuickGraph;
 
 namespace ShowcaseApp.WPF

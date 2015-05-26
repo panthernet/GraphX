@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
-using GraphX.WPF.Controls;
+using GraphX.Controls;
 
 /* Some notes about the main objects and types in this example:
  * 

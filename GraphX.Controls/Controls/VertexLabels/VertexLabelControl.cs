@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public class VertexLabelControl : ContentControl , IVertexLabelControl   
     {

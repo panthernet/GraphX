@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public interface IZoomControl
     {

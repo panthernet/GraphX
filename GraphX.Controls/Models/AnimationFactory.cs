@@ -1,7 +1,7 @@
 ﻿using System;
-using GraphX.WPF.Controls.Animations;
+using GraphX.Controls.Animations;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     public static class AnimationFactory
     {

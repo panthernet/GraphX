@@ -1,7 +1,7 @@
 ﻿using System;
-using GraphX.METRO.Controls.Animations;
+using GraphX.Controls.Animations;
 
-namespace GraphX.METRO.Controls.Models
+namespace GraphX.Controls.Models
 {
     public static class AnimationFactory
     {

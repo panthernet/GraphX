@@ -18,7 +18,7 @@ using System;
 using Windows.Foundation;
 using Windows.UI.Xaml.Data;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
   public class RoundedValueConverter : IValueConverter
   {

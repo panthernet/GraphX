@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public static class HighlightBehaviour
     {

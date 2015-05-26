@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 
-namespace GraphX.METRO.Controls.Models
+namespace GraphX.Controls.Models
 {
     /// <summary>
     /// WPF implementation of IFileServiceProvider

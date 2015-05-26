@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Data;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public sealed class DoubleToLog10Converter : IValueConverter
     {

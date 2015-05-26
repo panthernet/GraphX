@@ -5,12 +5,12 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using GraphX.METRO.Controls.Animations;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.Animations;
+using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {

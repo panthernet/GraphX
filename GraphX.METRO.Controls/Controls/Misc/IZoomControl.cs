@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     /// <summary>
     /// Common imterface for all possible zoomcontrol objects

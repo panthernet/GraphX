@@ -59,5 +59,46 @@ namespace ShowcaseApp.WPF.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;UserControl x:Class=&quot;ShowcaseApp.WPF.Pages.Mini.LayoutVCP&quot;
+        ///             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot; 
+        ///             xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
+        ///             xmlns:wpf=&quot;clr-namespace:ShowcaseApp.WPF&quot;
+        ///             xmlns:controls=&quot;clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Contro [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LayoutVCP {
+            get {
+                return ResourceManager.GetString("LayoutVCP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;ResourceDictionary xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///                    xmlns:controls=&quot;clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls&quot;
+        ///                    &gt;
+        ///
+        ///    &lt;Style x:Key=&quot;CirclePath&quot; TargetType=&quot;controls:StaticVertexConnectionPoint&quot; x:Shared=&quot;False&quot;&gt;
+        ///        &lt;Setter Property=&quot;Shape&quot; Value=&quot;Circle&quot;/&gt;
+        ///        &lt;Setter Property=&quot;Width&quot; Value=&quot;10&quot;/&gt;
+        ///        &lt;Setter Property=&quot;Heig [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string LayoutVCPTemplate {
+            get {
+                return ResourceManager.GetString("LayoutVCPTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In this example you can see how VCP (vertex connection points) works. Drag vertices to see VCP behavior in action and play with different settings on a settings panel to customize this behaviors..
+        /// </summary>
+        internal static string LayoutVCPText {
+            get {
+                return ResourceManager.GetString("LayoutVCPText", resourceCulture);
+            }
+        }
     }
 }

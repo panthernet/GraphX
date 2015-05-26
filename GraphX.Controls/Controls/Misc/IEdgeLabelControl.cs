@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public interface IEdgeLabelControl: IDisposable
     {

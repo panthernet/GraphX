@@ -7,9 +7,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls.Models;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZoomContentPresenter))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged
@@ -1089,7 +1089,7 @@ namespace GraphX.WPF.Controls
 
         void ZoomControl_Loaded(object sender, RoutedEventArgs e)
         {
-            FakeZoom();
+            //FakeZoom();
         }
 
         #region ContentChanged
@@ -1456,6 +1456,8 @@ namespace GraphX.WPF.Controls
             if (_presenter == null)
                 return;
             var c = IsContentTrackable ? TrackableContent.ContentSize.Size : ContentVisual.DesiredSize;
+            if (c.Width == 0 || double.IsNaN(c.Width) || double.IsInfinity(c.Width)) return;
+
             var deltaZoom = Math.Min(MaxZoom,Math.Min( ActualWidth / (c.Width), ActualHeight / (c.Height)));
             var initialTranslate = IsContentTrackable ? GetTrackableTranslate() : GetInitialTranslate(c.Width, c.Height);
             DoZoomAnimation(deltaZoom, initialTranslate.X * deltaZoom, initialTranslate.Y * deltaZoom);
@@ -1492,7 +1494,7 @@ namespace GraphX.WPF.Controls
             Mode = ZoomControlModes.Custom;
         }
 
-        private void FakeZoom()
+        /*private void FakeZoom()
         {
             var startZoom = Zoom;
             var currentZoom = startZoom;
@@ -1510,7 +1512,7 @@ namespace GraphX.WPF.Controls
             var transformX = GetCoercedTranslateX(TranslateX + endTranslate.X, currentZoom);
             var transformY = GetCoercedTranslateY(TranslateY + endTranslate.Y, currentZoom);
             DoZoomAnimation(currentZoom, transformX, transformY);
-        }
+        }*/
 
         public override void OnApplyTemplate()
         {

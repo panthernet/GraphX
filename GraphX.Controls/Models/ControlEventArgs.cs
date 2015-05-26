@@ -1,4 +1,4 @@
-﻿namespace GraphX.WPF.Controls.Models
+﻿namespace GraphX.Controls.Models
 {
     public sealed class ControlEventArgs : System.EventArgs
     {

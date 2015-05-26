@@ -2,7 +2,7 @@
 using Windows.Foundation;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public interface IVertexConnectionPoint : IDisposable
     {

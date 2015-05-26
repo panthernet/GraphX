@@ -2,11 +2,12 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
-    public class StaticVertexConnectionPoint: Image, IVertexConnectionPoint
+    public class StaticVertexConnectionPoint : ContentControl, IVertexConnectionPoint
     {
         #region Common part
 
@@ -17,7 +18,7 @@ namespace GraphX.WPF.Controls
 
 
         public static readonly DependencyProperty ShapeProperty =
-            DependencyProperty.Register("Shape", typeof(VertexShape), typeof(VertexControl), new UIPropertyMetadata(null));
+            DependencyProperty.Register("Shape", typeof(VertexShape), typeof(StaticVertexConnectionPoint), new UIPropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets shape form for connection point (affects math calculations for edge end placement)
@@ -63,6 +64,44 @@ namespace GraphX.WPF.Controls
 
         #endregion
 
+        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image",
+                                                                       typeof(Image),
+                                                                       typeof(StaticVertexConnectionPoint),
+                                                                       new PropertyMetadata(null, ImageChangedCallback));
+
+        private static void ImageChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var parent = dependencyObject as StaticVertexConnectionPoint;
+            if (parent == null)
+                throw new Exception("EdgePointerImage -> ImageChangedCallback: Parent not found!");
+            parent.Content = dependencyPropertyChangedEventArgs.NewValue;
+        }
+
+        public static readonly DependencyProperty PathProperty =
+            DependencyProperty.Register("Path", typeof(Path), typeof(StaticVertexConnectionPoint), new PropertyMetadata(null, PathChangedCallback));
+
+        private static void PathChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var parent = dependencyObject as StaticVertexConnectionPoint;
+            if (parent == null)
+                throw new Exception("StaticVertexConnectionPoint -> PathChangedCallback: Parent not found!");
+            parent.Content = dependencyPropertyChangedEventArgs.NewValue;
+        }
+
+
+        /// <summary>
+        /// Gets or sets geometry that specifies the path to be drawn
+        /// </summary>
+        public Path Path { get { return (Path)GetValue(PathProperty); } set { SetValue(PathProperty, value); } }
+
+        /// <summary>
+        /// Image for edge pointer
+        /// </summary>
+        public Image Image
+        {
+            get { return (Image)GetValue(ImageProperty); }
+            set { SetValue(ImageProperty, value); }
+        }
 
         private VertexControl _vertexControl;
         protected VertexControl VertexControl { get { return _vertexControl ?? (_vertexControl = GetVertexControl(VisualParent)); } }
@@ -75,7 +114,7 @@ namespace GraphX.WPF.Controls
 
         void StaticVertexConnector_LayoutUpdated(object sender, EventArgs e)
         {
-            var position = this.TranslatePoint(new Point(), VertexControl);
+            var position = TranslatePoint(new Point(), VertexControl);
             var vPos = VertexControl.GetPosition();
             position = new Point(position.X + vPos.X, position.Y + vPos.Y);
             RectangularSize = new Rect(position, DesiredSize);
@@ -84,6 +123,18 @@ namespace GraphX.WPF.Controls
         public void Update()
         {
             UpdateLayout();
+        }
+
+        /// <summary>
+        /// Scales path by provided value
+        /// </summary>
+        /// <param name="scale">Point scale value</param>
+        public void ScalePath(Point scale)
+        {
+            if (Path == null || Path.Data == null) return;
+            var pathGeometry = Path.Data.Clone();
+            pathGeometry.Transform = new ScaleTransform(scale.X, scale.Y);
+            Path.Data = pathGeometry.GetFlattenedPathGeometry();
         }
 
         public void Dispose()

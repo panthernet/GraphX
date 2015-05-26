@@ -1,8 +1,8 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.Models;
 
-namespace GraphX.METRO.Controls.Animations
+namespace GraphX.Controls.Animations
 {
     public sealed class MoveSimpleAnimation : MoveAnimationBase
     {

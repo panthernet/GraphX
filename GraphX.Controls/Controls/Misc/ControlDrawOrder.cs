@@ -1,11 +1,11 @@
-﻿namespace GraphX.WPF.Controls
+﻿namespace GraphX.Controls
 {
     /// <summary>
     /// Defines in which order GraphX controls are drawn
     /// </summary>
     public enum ControlDrawOrder
     {
-        VerticesOnTop = 1,
+        VerticesOnTop = 0,
         EdgesOnTop
     }
 }

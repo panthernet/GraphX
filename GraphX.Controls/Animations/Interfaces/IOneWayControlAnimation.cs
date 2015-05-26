@@ -1,6 +1,6 @@
-﻿using GraphX.WPF.Controls.Models;
+﻿using GraphX.Controls.Models;
 
-namespace GraphX.WPF.Controls.Animations
+namespace GraphX.Controls.Animations
 {
     public interface IOneWayControlAnimation
     {

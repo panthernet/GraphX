@@ -2,7 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public static class DependencyObjectExtensions
     {

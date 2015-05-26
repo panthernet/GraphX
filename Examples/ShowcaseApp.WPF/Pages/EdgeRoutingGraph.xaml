@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
              xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
-             xmlns:controls="clr-namespace:GraphX.WPF.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid>
@@ -38,7 +38,7 @@
             </controls:ZoomControl>
         </Border>
 
-        <DockPanel Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+        <DockPanel Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Center">
                 <Button Height="50" Margin="3" Name="erg_but_randomgraph"  DockPanel.Dock="Top" UseLayoutRounding="True"  BorderBrush="{DynamicResource ModernButtonBorder}">
                     <Image Width="44" Source="/Assets/dice.png" Stretch="Uniform"/>

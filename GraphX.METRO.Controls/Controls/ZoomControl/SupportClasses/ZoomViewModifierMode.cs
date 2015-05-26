@@ -1,4 +1,4 @@
-﻿namespace GraphX.METRO.Controls
+﻿namespace GraphX.Controls
 {
     public enum ZoomViewModifierMode
     {

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ctrls="using:GraphX.METRO.Controls"
+    xmlns:ctrls="using:GraphX.Controls"
 	xmlns:local="using:GraphX">
 
     <!-- REGION ZoomControl -->
@@ -78,10 +78,10 @@
                         <Border Background="Gray" BorderBrush="White" BorderThickness="4" CornerRadius="5" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5" Opacity=".8">
                             <StackPanel Orientation="Vertical">
                                 <Button x:Name="FillButton" IsTabStop="False" Margin="5" Height="64" Width="64" Style="{StaticResource TransparentButton}" Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ZoomToFillCommand}" >
-                                    <Image Stretch="Fill" Source="GraphX.METRO.Controls/Images/round2.png" ToolTipService.ToolTip="Zoom to fill" />
+                                    <Image Stretch="Fill" Source="GraphX.Controls/Images/round2.png" ToolTipService.ToolTip="Zoom to fill" />
                                 </Button>
                                 <Button x:Name="CenterButton" IsTabStop="False" Margin="5" Height="64" Width="64" Style="{StaticResource TransparentButton}"  Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CenterToContentCommand}" >
-                                    <Image Stretch="Fill" Source="GraphX.METRO.Controls/Images/round1.png" ToolTipService.ToolTip="Center content" />
+                                    <Image Stretch="Fill" Source="GraphX.Controls/Images/round1.png" ToolTipService.ToolTip="Center content" />
                                 </Button>
                             </StackPanel>
                         </Border>

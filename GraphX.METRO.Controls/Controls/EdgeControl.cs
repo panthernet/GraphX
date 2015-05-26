@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 using GraphX.Measure;
-using GraphX.METRO.Controls.Models;
+using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
@@ -17,7 +17,7 @@ using Rect = GraphX.Measure.Rect;
 using Size = Windows.Foundation.Size;
 using Thickness = Windows.UI.Xaml.Thickness;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     /// <summary>
     /// Visual edge control

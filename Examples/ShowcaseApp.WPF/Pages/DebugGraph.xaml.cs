@@ -1,14 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
-using GraphX.WPF.Controls.Animations;
-using GraphX.WPF.Controls.Models;
-using QuickGraph;
-using ShowcaseApp.WPF.ExampleModels;
+using GraphX.Controls;
+using GraphX.Controls.Animations;
+using GraphX.Controls.Models;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages
@@ -16,7 +17,7 @@ namespace ShowcaseApp.WPF.Pages
     /// <summary>
     /// Interaction logic for DebugGraph.xaml
     /// </summary>
-    public partial class DebugGraph : UserControl
+    public partial class DebugGraph : UserControl, INotifyPropertyChanged
     {
         public DebugGraph()
         {
@@ -40,6 +41,8 @@ namespace ShowcaseApp.WPF.Pages
 
         void butRun_Click(object sender, RoutedEventArgs e)
         {
+            LoadLogEntries();
+            return;
            /* var lc = new LogicCoreExample() {Graph = ShowcaseHelper.GenerateDataGraph(25)};
 
             //lc.Graph.AddVertex(new DataVertex("Test vertex"));
@@ -104,6 +107,38 @@ namespace ShowcaseApp.WPF.Pages
             //dg_Area.InvalidateVisual();
             //dg_Area.RelayoutGraph();
             dg_zoomctrl.ZoomToFill();
+        }
+
+        public LogicCoreExample LogicCore { get; set; }
+
+        private void LoadLogEntries()
+        {
+            dg_Area.LogicCoreChangeAction = LogicCoreChangedAction.GenerateGraphWithEdges;
+
+
+            var uiContext = TaskScheduler.Current;
+            Task.Factory.StartNew(
+                () => new LogicCoreExample
+                {
+                    Graph = ShowcaseHelper.GenerateDataGraph(5, true),
+                    ExternalLayoutAlgorithm = new ExampleExternalLayoutAlgorithm(null),
+                    DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None,
+                    DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None
+                }).ContinueWith(
+                    t =>
+                    {
+                        LogicCore = t.Result; // This is the property that is bound to the GraphArea.
+                        OnPropertyChanged("LogicCore");
+                    },
+                    uiContext); // Setting the LogicCore property executes on the UI thread.
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -108,3 +108,4 @@ Backup*/
 UpgradeLog*.XML
 /Nuget/*.nupkg
 *.suo
+*.DotSettings

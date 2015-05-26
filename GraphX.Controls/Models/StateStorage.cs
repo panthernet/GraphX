@@ -8,7 +8,7 @@ using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using QuickGraph;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     public class StateStorage<TVertex, TEdge, TGraph>: IDisposable
         where TEdge : class, IGraphXEdge<TVertex>

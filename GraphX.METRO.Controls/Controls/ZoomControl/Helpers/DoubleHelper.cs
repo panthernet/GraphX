@@ -21,7 +21,7 @@ using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
 using Size = Windows.Foundation.Size;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
   internal static class DoubleHelper
   {

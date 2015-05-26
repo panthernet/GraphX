@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GraphX.WPF.Controls.Models
+namespace GraphX.Controls.Models
 {
     /// <summary>
     /// Factory class responsible for VertexControl and EdgeControl objects creation

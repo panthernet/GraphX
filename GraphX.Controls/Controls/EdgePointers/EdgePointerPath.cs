@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public class EdgePointerPath: Shape, IEdgePointer
     {

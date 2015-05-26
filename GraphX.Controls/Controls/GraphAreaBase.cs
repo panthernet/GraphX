@@ -7,9 +7,9 @@ using System.ComponentModel;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
-using GraphX.WPF.Controls;
-using GraphX.WPF.Controls.Animations;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls;
+using GraphX.Controls.Animations;
+using GraphX.Controls.Models;
 
 namespace GraphX
 {

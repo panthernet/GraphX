@@ -2,7 +2,7 @@
 using System.Windows;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
 	public static class DragBehaviour
 	{

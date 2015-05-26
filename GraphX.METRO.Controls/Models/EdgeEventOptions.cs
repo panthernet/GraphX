@@ -1,6 +1,6 @@
 ﻿using GraphX.PCL.Common.Enums;
 
-namespace GraphX.METRO.Controls.Models
+namespace GraphX.Controls.Models
 {
     public sealed class EdgeEventOptions
     {

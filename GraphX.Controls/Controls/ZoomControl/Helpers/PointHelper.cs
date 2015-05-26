@@ -17,7 +17,7 @@
 using System;
 using System.Windows;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
   internal static class PointHelper
   {

@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public static class VisualTreeHelperEx
     {

@@ -1,6 +1,5 @@
-﻿Imports GraphX
+﻿
 Imports GraphX.PCL.Common.Models
-Imports YAXLib
 
 Namespace Models
 
@@ -9,15 +8,7 @@ Namespace Models
         ''' <summary>
         ''' Some string property for example purposes
         ''' </summary>
-        Public Property Text() As String
-            Get
-                Return _mText
-            End Get
-            Set(value As String)
-                _mText = value
-            End Set
-        End Property
-        Private _mText As String
+        Public Property Text As String
 
 #Region "Calculated or static props"
 

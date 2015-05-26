@@ -6,7 +6,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.METRO.Controls.Animations
+namespace GraphX.Controls.Animations
 {
     public sealed class MoveFadeAnimation : MoveAnimationBase
     {

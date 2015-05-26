@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     public class AreaSelectedEventArgs : System.EventArgs
     {

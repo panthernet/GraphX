@@ -10,10 +10,10 @@ using System.Windows.Shapes;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls.Models;
 using Rect = GraphX.Measure.Rect;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
     /// <summary>
     /// Visual edge control
@@ -804,6 +804,8 @@ namespace GraphX.WPF.Controls
                 if (gEdge != null && gEdge.SourceConnectionPointId.HasValue)
                 {
                     var sourceCp = Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
+                    if(sourceCp == null)
+                        throw new GX_ObjectNotFoundException(string.Format("Can't find source vertex VCP by edge source connection point Id({1}) : {0}",Source, gEdge.SourceConnectionPointId) );
                     if (sourceCp.Shape == VertexShape.None) p1 = sourceCp.RectangularSize.Center();
                     else
                     {
@@ -816,6 +818,8 @@ namespace GraphX.WPF.Controls
                 if (gEdge != null && gEdge.TargetConnectionPointId.HasValue)
                 {
                     var targetCp = Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
+                    if (targetCp == null)
+                        throw new GX_ObjectNotFoundException(string.Format("Can't find target vertex VCP by edge target connection point Id({1}) : {0}", Target, gEdge.TargetConnectionPointId));
                     if (targetCp.Shape == VertexShape.None) p2 = targetCp.RectangularSize.Center();
                     else
                     {

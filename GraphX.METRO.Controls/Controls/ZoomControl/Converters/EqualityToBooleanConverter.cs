@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Data;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public sealed class EqualityToBooleanConverter : IValueConverter
     {

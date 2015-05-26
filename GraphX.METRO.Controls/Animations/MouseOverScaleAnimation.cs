@@ -4,7 +4,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
-namespace GraphX.METRO.Controls.Animations
+namespace GraphX.Controls.Animations
 {
     public sealed class MouseOverScaleAnimation : IBidirectionalControlAnimation
     {

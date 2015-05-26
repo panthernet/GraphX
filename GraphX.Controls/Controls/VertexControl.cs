@@ -7,9 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
-using GraphX.WPF.Controls.Models;
+using GraphX.Controls.Models;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
 	/// <summary>
 	/// Visual vertex control

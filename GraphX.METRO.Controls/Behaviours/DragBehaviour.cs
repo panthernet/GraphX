@@ -4,7 +4,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using GraphX.PCL.Common.Exceptions;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
 	public static class DragBehaviour
 	{

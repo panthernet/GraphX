@@ -18,7 +18,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace GraphX.WPF.Controls
+namespace GraphX.Controls
 {
   internal static class DoubleHelper
   {

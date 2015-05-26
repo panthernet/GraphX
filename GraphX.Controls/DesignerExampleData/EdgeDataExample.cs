@@ -1,6 +1,6 @@
 ﻿using GraphX.PCL.Common.Models;
 
-namespace GraphX.WPF.Controls.DesignerExampleData
+namespace GraphX.Controls.DesignerExampleData
 {
     internal sealed class EdgeDataExample<TVertex> : EdgeBase<TVertex>
     {

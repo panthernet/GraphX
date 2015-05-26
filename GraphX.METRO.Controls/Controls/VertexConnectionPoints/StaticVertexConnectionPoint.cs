@@ -5,7 +5,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using GraphX.PCL.Common.Enums;
 
-namespace GraphX.METRO.Controls
+namespace GraphX.Controls
 {
     public class StaticVertexConnectionPoint: ContentControl, IVertexConnectionPoint
     {
@@ -18,7 +18,7 @@ namespace GraphX.METRO.Controls
 
 
         public static readonly DependencyProperty ShapeProperty =
-            DependencyProperty.Register("Shape", typeof(VertexShape), typeof(VertexControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Shape", typeof(VertexShape), typeof(StaticVertexConnectionPoint), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets shape form for connection point (affects math calculations for edge end placement)
@@ -66,14 +66,14 @@ namespace GraphX.METRO.Controls
 
         public static readonly DependencyProperty ImageProperty = DependencyProperty.Register("Image",
                                                                        typeof(Image),
-                                                                       typeof(EdgePointerImage),
+                                                                       typeof(StaticVertexConnectionPoint),
                                                                        new PropertyMetadata(null, ImageChangedCallback));
 
         private static void ImageChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            var parent = dependencyObject as EdgePointerImage;
+            var parent = dependencyObject as StaticVertexConnectionPoint;
             if (parent == null)
-                throw new Exception("EdgePointerImage -> ImageChangedCallback: Parent not found!");
+                throw new Exception("StaticVertexConnectionPoint -> ImageChangedCallback: Parent not found!");
             parent.Content = dependencyPropertyChangedEventArgs.NewValue;
         }
 
