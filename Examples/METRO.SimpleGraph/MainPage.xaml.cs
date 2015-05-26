@@ -42,7 +42,7 @@ namespace METRO.SimpleGraph
             graph.GenerateGraphFinished += OnFinishedLayout;
             graph.RelayoutFinished += OnFinishedLayout;
             graph.AlignAllEdgesLabels();
-            graph.ControlsDrawOrder = ControlDrawOrder.EdgesOnTop;
+            graph.ControlsDrawOrder = ControlDrawOrder.VerticesOnTop;
             Loaded += MainPage_Loaded;
         }
 

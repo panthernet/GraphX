@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
-             xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls"
+             xmlns:controls="http://schemas.panthernet.ru/graphx/"
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
              xmlns:models="clr-namespace:ShowcaseApp.WPF.Models"
              mc:Ignorable="d" 

@@ -78,7 +78,7 @@ namespace ShowcaseApp.WPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;ResourceDictionary xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-        ///                    xmlns:controls=&quot;clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Controls&quot;
+        ///                    xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
         ///                    &gt;
         ///
         ///    &lt;Style x:Key=&quot;CirclePath&quot; TargetType=&quot;controls:StaticVertexConnectionPoint&quot; x:Shared=&quot;False&quot;&gt;

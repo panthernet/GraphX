@@ -10,6 +10,8 @@ HIGHLIGHTS:
 	* Now you can easily customize edge pointers with the help of EdgePointerImage and EdgePointerPath classes. Changes include more precious edge endpoint calculations so the edge
 	   will overlap with the edge pointer no more. According to this changes the old logic that utilizes direct Path object in EdgeControl template will be removed in GraphX 2.2.0
 	* Now GraphX for WPF requires only .NET Framework 4.0 to build & run. Deprecated all code that required .NET 4.0.3.
+	* Now GraphX for WPF can use "http://schemas.panthernet.ru/graphx/" XAML namespace for all its visual content. Additionaly, output filenames for WPF/METRO dlls are both changed to 
+		GraphX.Controls.dll so Post-Build process copies output files to GraphX/Bin folder with distinct filenames reflecting the platform as before.
 
 DETAILED CHANGELOG:
 + Added support for custom VCP [WPF, METRO]

@@ -1,11 +1,20 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Markup;
 
 [assembly: AssemblyTitle("GraphX Controls Library")]
 
 [assembly: ComVisible(false)]
 [assembly: Guid("d8511b14-512b-46ec-ad4f-8f14f46a466c")]
+
+[assembly: XmlnsPrefix("http://schemas.panthernet.ru/graphx/", "graphx")]
+[assembly: XmlnsDefinition("http://schemas.panthernet.ru/graphx/",
+    "GraphX.Controls")]
+[assembly: XmlnsDefinition("http://schemas.panthernet.ru/graphx/",
+    "GraphX.Controls.Animations")]
+[assembly: XmlnsDefinition("http://schemas.panthernet.ru/graphx/",
+    "GraphX.Controls.Models")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None,

@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GraphX.Controls</RootNamespace>
-    <AssemblyName>GraphX.METRO.Controls</AssemblyName>
+    <AssemblyName>GraphX.Controls</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE;DEBUG;NETFX_CORE, USECANVAS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateLibraryLayout>false</GenerateLibraryLayout>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -195,6 +196,12 @@
     <Compile Include="Models\VertexPositionEventArgs.cs" />
     <Compile Include="Models\VertexSelectedEventArgs.cs" />
     <Compile Include="Models\VertexSelectedEventHandler.cs" />
+    <Compile Include="Models\XamlTypes\ViewModelBase.cs" />
+    <Compile Include="Models\XamlTypes\ViewModelXamlMember.cs" />
+    <Compile Include="Models\XamlTypes\ViewModelXamlMetadataProvider.cs" />
+    <Compile Include="Models\XamlTypes\ViewModelXamlType.cs" />
+    <Compile Include="Models\XamlTypes\XamlSystemType.cs" />
+    <Compile Include="Models\XamlTypes\XamlTypeProvider.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TypeExtensions.cs" />
@@ -230,6 +237,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(SolutionDir)bin\$(ConfigurationName)"
+copy  /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)bin\$(ConfigurationName)\GraphX.METRO.Controls.dll"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

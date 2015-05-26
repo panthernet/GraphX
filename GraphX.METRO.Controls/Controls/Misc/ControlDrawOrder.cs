@@ -6,6 +6,6 @@
     public enum ControlDrawOrder
     {
         VerticesOnTop = 0,
-        EdgesOnTop
+        EdgesOnTop = 1
     }
 }
