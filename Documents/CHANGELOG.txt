@@ -37,6 +37,7 @@ DETAILED CHANGELOG:
 + Fixed and enhanced automatic data object Id resolve logic [WPF,METRO] thanks to perturbare
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
++ Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
 + GraphArea::PreloadVertexes() now accepts graph param as optional (null by default) and uses LogicCore.Graph in that case [WPF, METRO]
 + Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare
 + Adjusted FR and BoundedFR default values for random initial positions [All]

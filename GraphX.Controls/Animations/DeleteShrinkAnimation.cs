@@ -1,7 +1,14 @@
 ﻿using System;
+#if WPF
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+#elif METRO
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
+#endif
 using GraphX.Controls.Models;
 
 namespace GraphX.Controls.Animations
@@ -25,17 +32,33 @@ namespace GraphX.Controls.Animations
             {
                 target.RenderTransform = new ScaleTransform();
                 transform = target.RenderTransform as ScaleTransform;
-                if (Centered)
-                    target.RenderTransformOrigin = new Point(.5, .5);
-                else
-                    target.RenderTransformOrigin = new Point(0, 0);
+                target.RenderTransformOrigin = Centered ? new Point(.5, .5) : new Point(0, 0);
             }
             //create and run animation
-            var scaleAnimation =
-                new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(Duration)));
-            scaleAnimation.Completed += (sender, e) => { OnCompleted(target as IGraphControl); };
+#if WPF
+            var scaleAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(Duration)));
+            scaleAnimation.Completed += (sender, e) =>  OnCompleted(target);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
-            transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+            transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);            
+#elif METRO
+            var sb = new Storyboard();
+            //create and run animation
+            var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0  };
+            //scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
+            sb.Children.Add(scaleAnimation);
+
+            scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0 };
+            scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
+            sb.Children.Add(scaleAnimation);
+            sb.Begin();
+
+#else
+            throw new NotImplementedException();
+#endif
         }
 
         public void AnimateEdge(EdgeControl target)

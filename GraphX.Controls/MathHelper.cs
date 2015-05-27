@@ -1,5 +1,11 @@
 ﻿using System;
+#if WPF
 using System.Windows;
+#elif METRO
+using GraphX.Measure;
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
+#endif
 
 namespace GraphX.Controls
 {
@@ -27,7 +33,7 @@ namespace GraphX.Controls
 
         public static Vector GetDirection(Point from, Point to)
         {
-            var dir = from - to;
+            var dir = new Vector(from.X - to.X, from.Y - to.Y);
             dir.Normalize();
             return dir;
         }

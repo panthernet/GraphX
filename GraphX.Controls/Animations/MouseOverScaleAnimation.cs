@@ -1,7 +1,14 @@
 ﻿using System;
+#if WPF
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+#elif METRO
+using Windows.Foundation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
+#endif
 
 namespace GraphX.Controls.Animations
 {
@@ -35,17 +42,28 @@ namespace GraphX.Controls.Animations
             {
                 target.RenderTransform = new ScaleTransform();
                 transform = target.RenderTransform as ScaleTransform;
-                if (CenterScale)
-                    target.RenderTransformOrigin = new Point(.5, .5);
-                else
-                    target.RenderTransformOrigin = new Point(0, 0);
+                target.RenderTransformOrigin = CenterScale ? new Point(.5, .5) : new Point(0, 0);
             }
 
-            DoubleAnimation scaleAnimation =
-                new DoubleAnimation(1, ScaleTo, new Duration(TimeSpan.FromSeconds(Duration)));
-
+#if WPF
+            var scaleAnimation =new DoubleAnimation(1, ScaleTo, new Duration(TimeSpan.FromSeconds(Duration)));
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+#elif METRO
+            var sb = new Storyboard();
+            var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
+            sb.Children.Add(scaleAnimation);
+            scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
+            sb.Children.Add(scaleAnimation);
+            sb.Begin();
+#else
+            throw new NotImplementedException();
+#endif
+
         }
 
         public void AnimateVertexBackward(VertexControl target)
@@ -54,21 +72,30 @@ namespace GraphX.Controls.Animations
             if (transform == null)
             {
                 target.RenderTransform = new ScaleTransform();
-                transform = target.RenderTransform as ScaleTransform;
-                if (CenterScale)
-                    target.RenderTransformOrigin = new Point(.5, .5);
-                else
-                    target.RenderTransformOrigin = new Point(0, 0);
+                target.RenderTransformOrigin = CenterScale ? new Point(.5, .5) : new Point(0, 0);
                 return; //no need to back cause default already
             }
 
             if (transform.ScaleX <= 1 || transform.ScaleY <= 1) return;
 
-            DoubleAnimation scaleAnimation =
-                new DoubleAnimation(transform.ScaleX, 1, new Duration(TimeSpan.FromSeconds(Duration)));
-
+#if WPF
+            var scaleAnimation = new DoubleAnimation(transform.ScaleX, 1, new Duration(TimeSpan.FromSeconds(Duration)));
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
+#elif METRO
+            var sb = new Storyboard();
+            var scaleAnimation = new DoubleAnimation{ Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
+            sb.Children.Add(scaleAnimation);
+            scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
+            Storyboard.SetTarget(scaleAnimation, target);
+            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
+            sb.Children.Add(scaleAnimation);
+            sb.Begin();
+#else
+            throw new NotImplementedException();
+#endif
         }
 
         public void AnimateEdgeForward(EdgeControl target)

@@ -58,9 +58,7 @@ namespace GraphX
 
         private static void x_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-#if USECANVAS
             d.SetValue(LeftProperty, e.NewValue);
-#endif
         }
 
         public static readonly DependencyProperty FinalXProperty =
@@ -85,14 +83,9 @@ namespace GraphX
 
         private static void y_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-#if USECANVAS
             d.SetValue(TopProperty, e.NewValue);
-#endif
         }
 
-
-
-        
         #endregion
 
         #region Child EVENTS

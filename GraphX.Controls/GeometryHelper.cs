@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
+using GraphX.PCL.Common.Enums;
+#if WPF
 using System.Windows;
 using System.Windows.Media;
-using GraphX.PCL.Common.Enums;
-
+#elif METRO
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
+using Windows.UI.Xaml.Media;
+using GraphX.Measure;
+#endif
 /* Code here is partially used from NodeXL (https://nodexl.codeplex.com/)
  * 
  * 
@@ -152,15 +158,19 @@ namespace GraphX.Controls
         {
             Debug.Assert(aoPathSegments != null);
 
-            var oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
+            var oPathFigure = new PathFigure { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
             var oSegments = oPathFigure.Segments;
 
             foreach (var oPathSegment in aoPathSegments)
             {
+#if WPF
                 if (freezeAll) TryFreeze(oPathSegment);
+#endif
                 oSegments.Add(oPathSegment);
             }
+#if WPF
             if (freezeAll) TryFreeze(oPathFigure);
+#endif
             return oPathFigure;
         }
 
@@ -168,22 +178,26 @@ namespace GraphX.Controls
         {
             Debug.Assert(aoPathSegments != null);
 
-            var oPathFigure = new PathFigure() { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
+            var oPathFigure = new PathFigure { StartPoint = oStartPoint, IsFilled = bPathFigureIsFilled };
             var oSegments = oPathFigure.Segments;
 
             foreach (var oPathSegment in aoPathSegments)
             {
+#if WPF
                 TryFreeze(oPathSegment);
+#endif
                 oSegments.Add(oPathSegment);
             }
+#if WPF
             TryFreeze(oPathFigure);
+#endif
             var oPathGeometry = new PathGeometry();
             oPathGeometry.Figures.Add(oPathFigure);
            // FreezeIfFreezable(oPathGeometry);
 
             return (oPathGeometry);
         }
-
+#if WPF
         /// <summary>
         /// Try to freeze object 
         /// </summary>
@@ -197,9 +211,10 @@ namespace GraphX.Controls
             {
                 freezable.Freeze();
                 return true;
-            }else return false;
+            }
+            return false;
         }
-
+#endif
         public static Point GetEdgeEndpoint(Point source, Rect sourceSize, Point target, VertexShape shape)
         {
             switch (shape)
@@ -402,13 +417,25 @@ namespace GraphX.Controls
             return pt;
         }
 
-        public static PathFigure GenerateOldArrow(Point p1, Point p2)
+        public static PathFigure GenerateOldArrow(Point ip1, Point ip2)
         {
+            var p1 = new Vector(ip1.X, ip1.Y); var p2 = new Vector(ip2.X, ip2.Y);
             var v = p1 - p2; v = v / v.Length * 5;
             var n = new Vector(-v.Y, v.X) * 0.7;
-            var fig = new PathFigure(p2, new PathSegment[] {	new LineSegment(p2 + v - n, true),
-			                                           	    new LineSegment(p2 + v + n, true)}, true);
+            var ov1 = p2 + v - n;
+            var ov2 = p2 + v + n;
+            var fig = new PathFigure
+            {
+                StartPoint = ip2, Segments = new PathSegmentCollection
+                {
+                    new LineSegment {Point = new Point(ov1.X, ov1.Y)},
+                    new LineSegment {Point = new Point(ov2.X, ov2.Y)}
+                },
+                IsClosed = true
+            };
+#if WPF
             TryFreeze(fig);
+#endif
             return fig;
         }
 
@@ -458,8 +485,12 @@ namespace GraphX.Controls
 
             var oMatrix = GetRotatedMatrix(oArrowTipLocation,
                 -MathHelper.RadiansToDegrees(dArrowAngle));
-
+#if WPF
             oMatrix.Transform(aoPoints);
+#elif METRO
+            foreach (var item in aoPoints)
+                oMatrix.Transform(item);
+#endif
 
             return GetPathFigureFromPoints(aoPoints[0], aoPoints[1], aoPoints[2]);
         }
@@ -476,16 +507,24 @@ namespace GraphX.Controls
 
         public static PathFigure GetPathFigureFromPoints(Point startPoint, params Point[] otherPoints)
         {
-            var iOtherPoints = otherPoints.Length;
             var oPathFigure = new PathFigure() { StartPoint = startPoint };
-            var oPathSegmentCollection = new PathSegmentCollection(iOtherPoints);
+            var oPathSegmentCollection = new PathSegmentCollection();
 
-            for (var i = 0; i < iOtherPoints; i++)
-                oPathSegmentCollection.Add(new LineSegment(otherPoints[i], true));
+            foreach (var item in otherPoints)
+                oPathSegmentCollection.Add(new LineSegment
+                {
+                    Point = item,
+#if WPF
+                    IsStroked = true
+#endif
+                });
+
 
             oPathFigure.Segments = oPathSegmentCollection;
             oPathFigure.IsClosed = true;
+#if WPF
             TryFreeze(oPathFigure);
+#endif
             return oPathFigure;
         }
 
@@ -499,23 +538,27 @@ namespace GraphX.Controls
 
             var oPathFigure = new PathFigure() { StartPoint = startPoint };
 
-            var oPathSegmentCollection =
-                new PathSegmentCollection(iOtherPoints);
-
-            for (var i = 0; i < iOtherPoints; i++)
-            {
-                oPathSegmentCollection.Add(
-                    new LineSegment(otherPoints[i], true));
-            }
+            var oPathSegmentCollection = new PathSegmentCollection();
+            foreach (var item in otherPoints)
+                oPathSegmentCollection.Add(new LineSegment()
+                {
+                    Point = item,
+#if WPF
+                    IsStroked = true
+#endif
+                });
 
             oPathFigure.Segments = oPathSegmentCollection;
             oPathFigure.IsClosed = true;
+#if WPF
             TryFreeze(oPathFigure);
-
+#endif
             var oPathGeometry = new PathGeometry();
 
             oPathGeometry.Figures.Add(oPathFigure);
+#if WPF
             TryFreeze(oPathGeometry);
+#endif
 
             return (oPathGeometry);
         }

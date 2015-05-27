@@ -25,7 +25,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE, USECANVAS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE, METRO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <GenerateLibraryLayout>false</GenerateLibraryLayout>
@@ -119,14 +119,54 @@
     <Compile Include="..\Documents\AIV.cs">
       <Link>Properties\AIV.cs</Link>
     </Compile>
-    <Compile Include="Animations\DeleteFadeAnimation.cs" />
-    <Compile Include="Animations\DeleteShrinkAnimation.cs" />
-    <Compile Include="Animations\MouseOverScaleAnimation.cs" />
-    <Compile Include="Animations\MoveAnimationBase.cs" />
-    <Compile Include="Animations\MoveFadeAnimation.cs" />
-    <Compile Include="Animations\MoveSimpleAnimation.cs" />
-    <Compile Include="Behaviours\DragBehaviour.cs" />
-    <Compile Include="Behaviours\HighlightBehaviour.cs" />
+    <Compile Include="..\GraphX.Controls\Animations\DeleteFadeAnimation.cs">
+      <Link>Animations\DeleteFadeAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\DeleteShrinkAnimation.cs">
+      <Link>Animations\DeleteShrinkAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\Enums\DeleteAnimation.cs">
+      <Link>Animations\Enum\DeleteAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\Enums\MouseOverAnimation.cs">
+      <Link>Animations\Enum\MouseOverAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\Enums\MoveAnimation.cs">
+      <Link>Animations\Enum\MoveAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\Interfaces\IBidirectionalControlAnimation.cs">
+      <Link>Animations\Interfaces\IBidirectionalControlAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\Interfaces\IOneWayControlAnimation.cs">
+      <Link>Animations\Interfaces\IOneWayControlAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\MouseOverScaleAnimation.cs">
+      <Link>Animations\MouseOverScaleAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\MoveAnimationBase.cs">
+      <Link>Animations\MoveAnimationBase.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\MoveFadeAnimation.cs">
+      <Link>Animations\MoveFadeAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Animations\MoveSimpleAnimation.cs">
+      <Link>Animations\MoveSimpleAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Behaviours\DragBehaviour.cs">
+      <Link>Behaviours\DragBehaviour.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Behaviours\HighlightBehaviour.cs">
+      <Link>Behaviours\HighlightBehaviour.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\CustomHelper.cs">
+      <Link>CustomHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\GeometryHelper.cs">
+      <Link>GeometryHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\MathHelper.cs">
+      <Link>MathHelper.cs</Link>
+    </Compile>
     <Compile Include="Controls\EdgeControl.cs" />
     <Compile Include="Controls\EdgeLabels\EdgeLabelControl.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
@@ -159,17 +199,11 @@
     <Compile Include="Controls\ZoomControl\SupportClasses\ZoomViewModifierMode.cs" />
     <Compile Include="Controls\ZoomControl\ZoomContentPresenter.cs" />
     <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
-    <Compile Include="CustomHelper.cs" />
     <Compile Include="DesignerExampleData\EdgeDataExample.cs" />
     <Compile Include="DesignerExampleData\VertexDataExample.cs" />
     <Compile Include="DpExtensions.cs" />
-    <Compile Include="Animations\Enum\DeleteAnimation.cs" />
     <Compile Include="Controls\Misc\EdgeDashStyle.cs" />
     <Compile Include="Controls\Misc\LogicCoreChangedAction.cs" />
-    <Compile Include="Animations\Enum\MouseOverAnimation.cs" />
-    <Compile Include="Animations\Enum\MoveAnimation.cs" />
-    <Compile Include="GeometryHelper.cs" />
-    <Compile Include="MathHelper.cs" />
     <Compile Include="Models\AnimationFactory.cs" />
     <Compile Include="Models\AnimationHelper.cs" />
     <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
@@ -181,11 +215,9 @@
     <Compile Include="Models\EdgeSelectedEventHandler.cs" />
     <Compile Include="Models\FileServiceProviderMETRO.cs" />
     <Compile Include="Models\GraphControlFactory.cs" />
-    <Compile Include="Controls\Misc\IBidirectionalControlAnimation.cs" />
     <Compile Include="Controls\Misc\IGraphArea.cs" />
     <Compile Include="Controls\Misc\IGraphControl.cs" />
     <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
-    <Compile Include="Controls\Misc\IOneWayControlAnimation.cs" />
     <Compile Include="Models\ModifierKeys.cs" />
     <Compile Include="Models\MouseButtonEventArgs.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />

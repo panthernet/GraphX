@@ -1,6 +1,12 @@
-﻿using System.Diagnostics;
+﻿#if WPF
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+#elif METRO
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+#endif
 using GraphX.PCL.Common.Enums;
 
 namespace GraphX.Controls
@@ -9,12 +15,12 @@ namespace GraphX.Controls
     {
         #region Attached props
         //trigger
-        public static readonly DependencyProperty HighlightedProperty = DependencyProperty.RegisterAttached("Highlighted", typeof(bool), typeof(HighlightBehaviour), new UIPropertyMetadata(false));
+        public static readonly DependencyProperty HighlightedProperty = DependencyProperty.RegisterAttached("Highlighted", typeof(bool), typeof(HighlightBehaviour), new PropertyMetadata(false));
         //settings
-        public static readonly DependencyProperty IsHighlightEnabledProperty = DependencyProperty.RegisterAttached("IsHighlightEnabled", typeof(bool), typeof(HighlightBehaviour), new UIPropertyMetadata(false, OnIsHighlightEnabledPropertyChanged));
-        public static readonly DependencyProperty HighlightControlProperty = DependencyProperty.RegisterAttached("HighlightControl", typeof(GraphControlType), typeof(HighlightBehaviour), new UIPropertyMetadata(GraphControlType.VertexAndEdge));
-        public static readonly DependencyProperty HighlightEdgesProperty = DependencyProperty.RegisterAttached("HighlightEdges", typeof(EdgesType), typeof(HighlightBehaviour), new UIPropertyMetadata(EdgesType.Out));
-        public static readonly DependencyProperty HighlightStrategyProperty = DependencyProperty.RegisterAttached("HighlightStrategy", typeof(HighlightStrategy), typeof(HighlightBehaviour), new UIPropertyMetadata(HighlightStrategy.UseExistingControls));
+        public static readonly DependencyProperty IsHighlightEnabledProperty = DependencyProperty.RegisterAttached("IsHighlightEnabled", typeof(bool), typeof(HighlightBehaviour), new PropertyMetadata(false, OnIsHighlightEnabledPropertyChanged));
+        public static readonly DependencyProperty HighlightControlProperty = DependencyProperty.RegisterAttached("HighlightControl", typeof(GraphControlType), typeof(HighlightBehaviour), new PropertyMetadata(GraphControlType.VertexAndEdge));
+        public static readonly DependencyProperty HighlightEdgesProperty = DependencyProperty.RegisterAttached("HighlightEdges", typeof(EdgesType), typeof(HighlightBehaviour), new PropertyMetadata(EdgesType.Out));
+        public static readonly DependencyProperty HighlightStrategyProperty = DependencyProperty.RegisterAttached("HighlightStrategy", typeof(HighlightStrategy), typeof(HighlightBehaviour), new PropertyMetadata(HighlightStrategy.UseExistingControls));
 
 
         public static bool GetIsHighlightEnabled(DependencyObject obj)
@@ -72,14 +78,13 @@ namespace GraphX.Controls
         #region PropertyChanged callbacks
         private static void OnIsHighlightEnabledPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
+#if WPF
+            var element = obj as IInputElement;
+#elif METRO
             var element = obj as FrameworkElement;
-            FrameworkContentElement contentElement = null;
+#endif
             if (element == null)
-            {
-                contentElement = obj as FrameworkContentElement;
-                if (contentElement == null)
                     return;
-            }
 
             if (e.NewValue is bool == false)
                 return;
@@ -87,40 +92,34 @@ namespace GraphX.Controls
             if ((bool)e.NewValue)
             {
                 //register the event handlers
-                if (element != null)
-                {
-                    //registering on the FrameworkElement
-                    element.MouseEnter += element_MouseEnter;
-                    element.MouseLeave += element_MouseLeave;
-                }
-                else
-                {
-                    //registering on the FrameworkContentElement
-                    contentElement.MouseEnter += element_MouseEnter;
-                    contentElement.MouseLeave += element_MouseLeave;
-                }
-                Debug.WriteLine("HighlightBehaviour registered.", "DEBUG");
+#if WPF
+                element.MouseEnter += element_MouseEnter;
+                element.MouseLeave += element_MouseLeave;
+#elif METRO
+                element.PointerEntered += element_MouseEnter;
+                element.PointerExited += element_MouseLeave;
+#endif
+
             }
             else
             {
                 //unregister the event handlers
-                if (element != null)
-                {
-                    //unregistering on the FrameworkElement
-                    element.MouseEnter -= element_MouseEnter;
-                    element.MouseLeave -= element_MouseLeave;
-                }
-                else
-                {
-                    //unregistering on the FrameworkContentElement
-                    contentElement.MouseEnter -= element_MouseEnter; ;
-                    contentElement.MouseLeave -= element_MouseLeave;
-                }
-                Debug.WriteLine("HighlightBehaviour unregistered.", "DEBUG");
+#if WPF
+                element.MouseEnter -= element_MouseEnter;
+                element.MouseLeave -= element_MouseLeave;
+#elif METRO
+                element.PointerEntered -= element_MouseEnter;
+                element.PointerExited -= element_MouseLeave;
+#endif
+
             }
         }
 
-        static void element_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+#if WPF
+        static void element_MouseLeave(object sender, MouseEventArgs e)
+#elif METRO
+        static void element_MouseLeave(object sender, PointerRoutedEventArgs e)
+#endif
         {
             if (sender is DependencyObject == false) return;
             var ctrl = sender as IGraphControl;
@@ -135,7 +134,11 @@ namespace GraphX.Controls
             }
         }
 
-        static void element_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+#if WPF
+        static void element_MouseEnter(object sender, MouseEventArgs e)
+#elif METRO
+        static void element_MouseEnter(object sender, PointerRoutedEventArgs e)
+#endif
         {
             if(sender is DependencyObject == false) return;
             var ctrl = sender as IGraphControl;
