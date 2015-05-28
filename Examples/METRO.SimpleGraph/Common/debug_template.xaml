@@ -147,11 +147,12 @@
                           StrokeThickness="2" MinWidth="1" MinHeight="1"
                             x:Name="PART_edgePath"/>
 
-                        <controls1:EdgePointerPath x:Name="PART_EdgePointerForTarget" Scale="8,8" Opacity="239">
-                            <controls1:EdgePointerPath.Path>
-                                <Path Data="M0,0.5 L1,1 1,0Z" Fill="Yellow"/>
-                            </controls1:EdgePointerPath.Path>
-                        </controls1:EdgePointerPath>
+                        <controls1:DefaultEdgePointer x:Name="PART_EdgePointerForTarget" Opacity="239">
+                            <Viewbox Stretch="Uniform" Width="15" Height="15">
+                                <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow"/>
+                            </Viewbox>
+                        </controls1:DefaultEdgePointer>
+                        
                         <controls1:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
