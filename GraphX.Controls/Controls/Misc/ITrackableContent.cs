@@ -1,10 +1,14 @@
-﻿using System.Windows;
+﻿#if WPF
+using System.Windows;
+#elif METRO
+using Windows.Foundation;
+#endif
 using GraphX.Controls.Models;
 
 namespace GraphX.Controls
 {
     /// <summary>
-    /// Interface that represents trackable content object
+    /// Interface that represents trackable content object (e.g. provides means to notify about it's content changes)
     /// </summary>
     public interface ITrackableContent
     {

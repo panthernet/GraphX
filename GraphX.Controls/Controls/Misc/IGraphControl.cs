@@ -1,8 +1,13 @@
-﻿using System.Windows;
+﻿#if WPF
+using System.Windows;
+#elif METRO
+using Windows.Foundation;
+#endif
+
 
 namespace GraphX.Controls
 {
-    public interface IGraphControl
+    public interface IGraphControl : IPositionChangeNotify
     {
         GraphAreaBase RootArea {get; }
         Point GetPosition(bool final = false, bool round = false);

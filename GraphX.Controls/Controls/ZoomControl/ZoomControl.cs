@@ -1025,7 +1025,7 @@ namespace GraphX.Controls
             }
         }
 
-        public Visual PresenterVisual
+        public UIElement PresenterVisual
         {
             get { return Presenter; }
         }

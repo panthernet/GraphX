@@ -1,8 +1,14 @@
 ﻿using System;
+#if WPF
 using System.Windows;
+#elif METRO
+using Windows.Foundation;
+using Vector = GraphX.Measure.Vector;
+#endif
+
 
 namespace GraphX.Controls
-{   
+{  
     public interface IEdgePointer: IDisposable
     {                                                                                             
         /// <summary>

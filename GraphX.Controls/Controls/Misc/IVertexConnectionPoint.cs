@@ -1,5 +1,9 @@
 ﻿using System;
+#if WPF
 using System.Windows;
+#elif METRO
+using Windows.Foundation;
+#endif
 using GraphX.PCL.Common.Enums;
 
 namespace GraphX.Controls

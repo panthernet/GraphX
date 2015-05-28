@@ -33,7 +33,7 @@ namespace GraphX.Controls
         public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
             //Create a render bitmap and push the surface to it
-            Visual vis = surface;
+            UIElement vis = surface;
             if (useZoomControlSurface)
             {
                 var zoomControl = surface.Parent as IZoomControl;
@@ -50,8 +50,8 @@ namespace GraphX.Controls
                     new RenderTargetBitmap(
                                     //(int)surface.ActualWidth,
                                     //(int)surface.ActualHeight,
-                    (int)((vis as UIElement).DesiredSize.Width * (imgdpi / DEFAULT_DPI) + 100),
-                    (int)((vis as UIElement).DesiredSize.Height * (imgdpi / DEFAULT_DPI) + 100),
+                    (int)(vis.DesiredSize.Width * (imgdpi / DEFAULT_DPI) + 100),
+                    (int)(vis.DesiredSize.Height * (imgdpi / DEFAULT_DPI) + 100),
                     imgdpi,
                     imgdpi,
                     PixelFormat);
@@ -122,7 +122,7 @@ namespace GraphX.Controls
 
         public static RenderTargetBitmap RenderTargetBitmap(GraphAreaBase surface, bool useZoomControlSurface, double imgdpi)
         {
-            Visual vis = surface;
+            UIElement vis = surface;
             if (useZoomControlSurface)
             {
                 var zoomControl = surface.Parent as IZoomControl;
@@ -139,8 +139,8 @@ namespace GraphX.Controls
                 new RenderTargetBitmap(
                 //(int)surface.ActualWidth,
                 //(int)surface.ActualHeight,
-                    (int)((vis as UIElement).DesiredSize.Width * (imgdpi / 96) + 100),
-                    (int)((vis as UIElement).DesiredSize.Height * (imgdpi / 96) + 100),
+                    (int)(vis.DesiredSize.Width * (imgdpi / 96) + 100),
+                    (int)(vis.DesiredSize.Height * (imgdpi / 96) + 100),
                     imgdpi,
                     imgdpi,
                     PixelFormat);

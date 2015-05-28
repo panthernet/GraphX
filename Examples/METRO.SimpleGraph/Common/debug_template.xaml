@@ -148,7 +148,7 @@
                             x:Name="PART_edgePath"/>
 
                         <controls1:DefaultEdgePointer x:Name="PART_EdgePointerForTarget" Opacity="239">
-                            <Viewbox Stretch="Uniform" Width="15" Height="15">
+                            <Viewbox Stretch="Uniform" Width="15" Height="15" >
                                 <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow"/>
                             </Viewbox>
                         </controls1:DefaultEdgePointer>
