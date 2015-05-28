@@ -109,3 +109,4 @@ UpgradeLog*.XML
 /Nuget/*.nupkg
 *.suo
 *.DotSettings
+*.bak

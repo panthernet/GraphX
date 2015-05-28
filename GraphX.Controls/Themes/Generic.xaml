@@ -526,13 +526,6 @@
         </Setter>
 
         <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
-        <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
-        <Setter Property="RenderTransform">
-            <Setter.Value>
-                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=local1:EdgeLabelControl} , Path=Angle}"/>
-            </Setter.Value>
-        </Setter>
-
     </Style>
     <!-- ENDREGION -->
     

@@ -34,7 +34,7 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE, METRO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -158,6 +158,9 @@
     <Compile Include="..\GraphX.Controls\Behaviours\HighlightBehaviour.cs">
       <Link>Behaviours\HighlightBehaviour.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\EdgeLabels\EdgeLabelControl.cs">
+      <Link>Controls\EdgeLabels\EdgeLabelControl.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\CustomHelper.cs">
       <Link>CustomHelper.cs</Link>
     </Compile>
@@ -167,8 +170,46 @@
     <Compile Include="..\GraphX.Controls\MathHelper.cs">
       <Link>MathHelper.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Models\AnimationFactory.cs">
+      <Link>Models\AnimationFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\ContentSizeChangedEventArgs.cs">
+      <Link>Models\ContentSizeChangedEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\ControlEventArgs.cs">
+      <Link>Models\ControlEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\EdgeEventOptions.cs">
+      <Link>Models\EdgeEventOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\EdgeSelectedEventHandler.cs">
+      <Link>Models\EdgeSelectedEventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\GraphControlFactory.cs">
+      <Link>Models\GraphControlFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\Interfaces\IGraphControlFactory.cs">
+      <Link>Models\Interfaces\IGraphControlFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\RemoveControlEventHandler.cs">
+      <Link>Models\RemoveControlEventHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\StateStorage.cs">
+      <Link>Models\StateStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\VertexEventOptions.cs">
+      <Link>Models\VertexEventOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\VertexPositionChangedEH.cs">
+      <Link>Models\VertexPositionChangedEH.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\VertexPositionEventArgs.cs">
+      <Link>Models\VertexPositionEventArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\VertexSelectedEventHandler.cs">
+      <Link>Models\VertexSelectedEventHandler.cs</Link>
+    </Compile>
     <Compile Include="Controls\EdgeControl.cs" />
-    <Compile Include="Controls\EdgeLabels\EdgeLabelControl.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
     <Compile Include="Controls\EdgePointers\EdgePointerPath.cs" />
     <Compile Include="Controls\GraphArea.cs" />
@@ -204,30 +245,17 @@
     <Compile Include="DpExtensions.cs" />
     <Compile Include="Controls\Misc\EdgeDashStyle.cs" />
     <Compile Include="Controls\Misc\LogicCoreChangedAction.cs" />
-    <Compile Include="Models\AnimationFactory.cs" />
     <Compile Include="Models\AnimationHelper.cs" />
-    <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
-    <Compile Include="Models\ControlEventArgs.cs" />
     <Compile Include="Models\DelegateCommand.cs" />
     <Compile Include="Models\DispatcherHelper.cs" />
-    <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />
-    <Compile Include="Models\EdgeSelectedEventHandler.cs" />
     <Compile Include="Models\FileServiceProviderMETRO.cs" />
-    <Compile Include="Models\GraphControlFactory.cs" />
     <Compile Include="Controls\Misc\IGraphArea.cs" />
     <Compile Include="Controls\Misc\IGraphControl.cs" />
-    <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
     <Compile Include="Models\ModifierKeys.cs" />
     <Compile Include="Models\MouseButtonEventArgs.cs" />
-    <Compile Include="Models\RemoveControlEventHandler.cs" />
-    <Compile Include="Models\StateStorage.cs" />
-    <Compile Include="Models\VertexEventOptions.cs" />
     <Compile Include="Models\VertexMovedEventArgs.cs" />
-    <Compile Include="Models\VertexPositionChangedEH.cs" />
-    <Compile Include="Models\VertexPositionEventArgs.cs" />
     <Compile Include="Models\VertexSelectedEventArgs.cs" />
-    <Compile Include="Models\VertexSelectedEventHandler.cs" />
     <Compile Include="Models\XamlTypes\ViewModelBase.cs" />
     <Compile Include="Models\XamlTypes\ViewModelXamlMember.cs" />
     <Compile Include="Models\XamlTypes\ViewModelXamlMetadataProvider.cs" />

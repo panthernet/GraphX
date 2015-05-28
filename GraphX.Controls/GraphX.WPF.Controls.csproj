@@ -140,8 +140,8 @@
     <Compile Include="Controls\Misc\IEdgePointer.cs" />
     <Compile Include="Controls\Misc\IGraphArea.cs" />
     <Compile Include="Controls\Misc\IGraphControl.cs" />
-    <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
     <Compile Include="Animations\Interfaces\IOneWayControlAnimation.cs" />
+    <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
     <Compile Include="Models\PropertyChangeNotifier.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />

@@ -100,11 +100,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-       <Setter Property="RenderTransform">
-            <Setter.Value>
-                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=controls:EdgeLabelControl} , Path=Angle}"/>
-            </Setter.Value>
-        </Setter>
-        
     </Style>
 </ResourceDictionary>

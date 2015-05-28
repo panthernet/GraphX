@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using QuickGraph;
+#if WPF
+using System.Windows;
+#elif METRO
+using Windows.UI.Xaml;
+#endif
 
 namespace GraphX.Controls.Models
 {

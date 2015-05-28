@@ -1,24 +1,34 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using GraphX.PCL.Common.Interfaces;
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
+using System.ComponentModel;
+#elif METRO
+using Windows.ApplicationModel;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Media;
+using GraphX.Measure;
+using Point = Windows.Foundation.Point;
+#endif
 
 namespace GraphX.Controls
 {
+#if METRO
+    [Bindable]
+#endif
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl
     {
-        internal Rect LastKnownRectSize;
-
-        #region Common part
 
         public static readonly DependencyProperty DisplayForSelfLoopedEdgesProperty = DependencyProperty.Register("DisplayForSelfLoopedEdges",
-                                                                               typeof(bool),
-                                                                               typeof(EdgeLabelControl),
-                                                                               new UIPropertyMetadata(false));
+                                                                       typeof(bool),
+                                                                       typeof(EdgeLabelControl),
+                                                                       new PropertyMetadata(false));
         /// <summary>
         /// Gets or sets if label should be visible for self looped edge
         /// </summary>
@@ -37,7 +47,23 @@ namespace GraphX.Controls
         public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(EdgeLabelControl),
-                                                                                       new UIPropertyMetadata(0.0));
+                                                                                       new PropertyMetadata(0.0, AngleChanged));
+        private static void AngleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var ctrl = d as UIElement;
+            if (ctrl == null) return;
+            var tg = ctrl.RenderTransform as TransformGroup;
+            if (tg == null) 
+                ctrl.RenderTransform = new RotateTransform {Angle = (double) e.NewValue, CenterX = .5, CenterY = .5};
+            else
+            {
+                var rt = (RotateTransform)tg.Children.FirstOrDefault(a => a is RotateTransform);
+                if (rt == null)
+                    tg.Children.Add(new RotateTransform {Angle = (double) e.NewValue, CenterX = .5, CenterY = .5});
+                else rt.Angle = (double) e.NewValue;
+            }
+        }
+
         /// <summary>
         /// Gets or sets label drawing angle in degrees
         /// </summary>
@@ -54,7 +80,6 @@ namespace GraphX.Controls
         }
 
         private EdgeControl _edgeControl;
-        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(VisualParent)); } }
 
         private static EdgeControl GetEdgeControl(DependencyObject parent)
         {
@@ -77,41 +102,13 @@ namespace GraphX.Controls
         {
             Visibility = Visibility.Collapsed;
         }
-        #endregion
 
-        public EdgeLabelControl()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this)) return;
-
-            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
-            HorizontalAlignment = HorizontalAlignment.Left;
-            VerticalAlignment = VerticalAlignment.Top;
-            this.Initialized += EdgeLabelControl_Initialized;
-        }
-
-        void EdgeLabelControl_Initialized(object sender, EventArgs e)
-        {
-            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
-            else Show();
-        }
-
-        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
-        {
-            if (EdgeControl == null || !EdgeControl.ShowLabel) return;
-            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
-            {
-                UpdateLayout();
-                UpdatePosition();
-            } 
-            else Arrange(LastKnownRectSize);
-        }
 
 
         private static double GetLabelDistance(double edgeLength)
         {
-            return edgeLength / 2;  // set the label halfway the length of the edge
+            return edgeLength * .5;  // set the label halfway the length of the edge
         }
-
 
         /// <summary>
         /// Automaticaly update edge label position
@@ -130,12 +127,11 @@ namespace GraphX.Controls
             //if hidden
             if (Visibility != Visibility.Visible) return;
 
-            if(EdgeControl.IsSelfLooped)
+            if (EdgeControl.IsSelfLooped)
             {
                 var idesiredSize = DesiredSize;
                 var pt = EdgeControl.Source.GetCenterPosition();
-                pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
-                LastKnownRectSize = new Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+                SetSelfLoopedSize(pt, idesiredSize);
                 Arrange(LastKnownRectSize);
                 return;
             }
@@ -145,9 +141,9 @@ namespace GraphX.Controls
 
             double edgeLength = 0;
             var routingInfo = EdgeControl.Edge as IRoutingInfo;
-            if (routingInfo != null) 
+            if (routingInfo != null)
             {
-                var routePoints =  routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToWindows();
+                var routePoints = routingInfo.RoutingPoints == null ? null : routingInfo.RoutingPoints.ToWindows();
 
                 if (routePoints == null || routePoints.Length == 0)
                 {
@@ -156,7 +152,6 @@ namespace GraphX.Controls
                 }
                 else
                 {
-
                     // the edge has one or more segments
                     // compute the total length of all the segments
                     edgeLength = 0;
@@ -190,7 +185,6 @@ namespace GraphX.Controls
                     p2 = newp2;
                 }
             }
-
             // The label control should be laid out on a rectangle, in the middle of the edge
             var angleBetweenPoints = MathHelper.GetAngleBetweenPoints(p1, p2);
             var desiredSize = DesiredSize;
@@ -216,9 +210,24 @@ namespace GraphX.Controls
                     Angle += 180; // Reorient the label so that it's always "pointing north"
             }
 
-            LastKnownRectSize = new Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
-            
+            UpdateFinalPosition(centerPoint, desiredSize);
+
             Arrange(LastKnownRectSize);
+        }
+
+#if WPF
+        internal Rect LastKnownRectSize;
+        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(VisualParent)); } }
+
+        private void SetSelfLoopedSize(Point pt, Size idesiredSize)
+        {
+            pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
+            LastKnownRectSize = new Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+        }
+
+        private void UpdateFinalPosition(Point centerPoint, Size desiredSize)
+        {
+            LastKnownRectSize = new Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
         }
 
         /// <summary>
@@ -236,6 +245,93 @@ namespace GraphX.Controls
             LastKnownRectSize = size;
             Arrange(LastKnownRectSize);
         }
+
+        public EdgeLabelControl()
+        {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+            RenderTransformOrigin = new Point(.5,.5);
+            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
+            HorizontalAlignment = HorizontalAlignment.Left;
+            VerticalAlignment = VerticalAlignment.Top;
+            Initialized += EdgeLabelControl_Loaded;
+        }
+
+        void EdgeLabelControl_Loaded(object sender, EventArgs e)
+        {
+            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
+            else Show();
+        }
+
+        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
+        {
+            if (EdgeControl == null || !EdgeControl.ShowLabel) return;
+            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            {
+                UpdateLayout();
+                UpdatePosition();
+            }
+            else Arrange(LastKnownRectSize);
+        }
+#elif METRO
+        internal Windows.Foundation.Rect LastKnownRectSize;
+        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(Parent)); } }
+
+        private void SetSelfLoopedSize(Point pt, Windows.Foundation.Size idesiredSize)
+        {
+            pt = pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
+            LastKnownRectSize = new Windows.Foundation.Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+        }
+
+        private void UpdateFinalPosition(Point centerPoint, Windows.Foundation.Size desiredSize)
+        {
+            if (double.IsNaN(centerPoint.X)) centerPoint.X = 0;
+            if (double.IsNaN(centerPoint.Y)) centerPoint.Y = 0;
+            LastKnownRectSize = new Windows.Foundation.Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
+        }
+
+        /// <summary>
+        /// Get label rectangular size
+        /// </summary>
+        public Rect GetSize()
+        {
+            return LastKnownRectSize.ToGraphX();
+        }
+        /// <summary>
+        /// Set label rectangular size
+        /// </summary>
+        public void SetSize(Windows.Foundation.Rect size)
+        {
+            LastKnownRectSize = size;
+        }
+
+        public EdgeLabelControl()
+        {
+            DefaultStyleKey = typeof(EdgeLabelControl);
+            if (DesignMode.DesignModeEnabled) return;
+
+            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
+            HorizontalAlignment = HorizontalAlignment.Left;
+            VerticalAlignment = VerticalAlignment.Top;
+            Loaded += EdgeLabelControl_Loaded;
+        }
+
+        void EdgeLabelControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
+            else Show();
+        }
+
+        void EdgeLabelControl_LayoutUpdated(object sender, object e)
+        {
+            if (EdgeControl == null || !EdgeControl.ShowLabel) return;
+            if (LastKnownRectSize == Windows.Foundation.Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            {
+                UpdateLayout();
+                UpdatePosition();
+            }
+            else Arrange(LastKnownRectSize);
+        }
+#endif
 
         public void Dispose()
         {

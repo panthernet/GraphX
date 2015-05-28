@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿#if WPF
+using System.Windows;
+#elif METRO
+using Windows.UI.Xaml;
+#endif
 
 namespace GraphX.Controls.Models
 {

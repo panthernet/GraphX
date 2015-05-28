@@ -38,6 +38,7 @@ DETAILED CHANGELOG:
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
 + Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
++ Enhanced edge labels logic so now it don't require additional template bindings and modifications (Angle or RenderTransform) [WPF]
 + GraphArea::PreloadVertexes() now accepts graph param as optional (null by default) and uses LogicCore.Graph in that case [WPF, METRO]
 + Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare
 + Adjusted FR and BoundedFR default values for random initial positions [All]
@@ -61,6 +62,7 @@ BREAKING CHANGES:
 
 * Now GraphX for WPF requires only .NET Framework 4.0 to build & run
 
+* EdgeLabelControl no longer needs default Angle binding and RenderTransformOrigin setup. They are processed internally [WPF]
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]

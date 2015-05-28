@@ -8,7 +8,6 @@ namespace GraphX.Controls.Models
         public PointerRoutedEventArgs Args { get; private set; }
 
         public VertexSelectedEventArgs(VertexControl vc, PointerRoutedEventArgs e)
-            : base()
         {
             VertexControl = vc;
             Args = e;

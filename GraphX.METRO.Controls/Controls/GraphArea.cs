@@ -189,13 +189,13 @@ namespace GraphX.Controls
 
         public GraphArea()
         {
-            ControlFactory = new GraphControlFactory { FactoryRootArea = this };
+            ControlFactory = new GraphControlFactory(this);
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
             //CacheMode = new BitmapCache(2) { EnableClearType = false, SnapsToDevicePixels = true };
-            Transitions = new TransitionCollection();
-            Transitions.Add(new ContentThemeTransition());
+            Transitions = new TransitionCollection {new ContentThemeTransition()};
+
             #region Designer Data
             if (DesignMode.DesignModeEnabled)
             {
