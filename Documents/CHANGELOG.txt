@@ -1,4 +1,4 @@
-﻿RELEASE 2.1.9 WIP
+﻿RELEASE 2.2.0 WIP
 NEW TERMS: 
 	VAESPS - vertex and edge skip processing support
 	VCP - vertex connection point
@@ -7,8 +7,9 @@ HIGHLIGHTS:
 	* VCPs has been added into GraphX making edge endpoint fixation(binding) possible. By default GraphX automaticaly calculates edge endpoint position relative to vertex dimensions 
 	   and approximate math shape, but with this feature on you'll be able to bind edge endpoint to a separate customizable object. This will allow you to create static edge fixation
 	   endpoints on the vertex and give you full control over edge endpoints positioning.
-	* Now you can easily customize edge pointers with the help of EdgePointerImage and EdgePointerPath classes. Changes include more precious edge endpoint calculations so the edge
-	   will overlap with the edge pointer no more. According to this changes the old logic that utilizes direct Path object in EdgeControl template will be removed in GraphX 2.2.0
+	* Now you can easily customize edge pointers with the help of DefaultEdgePointer class which can host any content including Image/Path and supports rotation. Changes include more 
+	   precious edge endpoint calculations so the edge will overlap with the edge pointer no more. Because of these changes the old logic that utilizes direct Path object in EdgeControl 
+	   template will be removed completely in favor of notable performance improvements.
 	* Now GraphX for WPF requires only .NET Framework 4.0 to build & run. Deprecated all code that required .NET 4.0.3.
 	* Now GraphX for WPF can use "http://schemas.panthernet.ru/graphx/" XAML namespace for all its visual content. Additionaly, output filenames for WPF/METRO dlls are both changed to 
 		GraphX.Controls.dll so Post-Build process copies output files to GraphX/Bin folder with distinct filenames reflecting the platform as before.
@@ -22,7 +23,7 @@ DETAILED CHANGELOG:
 + Added VertexShape::None enum option, currently affecting only VCP logic [ALL]
 + Added different layout options to EfficientSugiyama algorithm using new Direction param [ALL]
 + Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
-+ Added new property GrphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
++ Added new property GraphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
 + Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
 	w/o any algorithms and also sets vertices positions if needed [WPF, METRO]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
@@ -38,6 +39,8 @@ DETAILED CHANGELOG:
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
 + Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
++ Merged EdgePointerImage and EdgePointerPath into one universal DefaultEdgePointer class [WPF, METRO]
++ Improved edge and its template parts rendering/calc performance [WPF, METRO]
 + Enhanced edge labels logic so now it don't require additional template bindings and modifications (Angle or RenderTransform) [WPF]
 + GraphArea::PreloadVertexes() now accepts graph param as optional (null by default) and uses LogicCore.Graph in that case [WPF, METRO]
 + Decoupled serialization logic from GraphX completely [ALL]  thanks to perturbare

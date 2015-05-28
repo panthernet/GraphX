@@ -114,23 +114,21 @@ namespace ShowcaseApp.WPF.Pages
         private void LoadLogEntries()
         {
             dg_Area.LogicCoreChangeAction = LogicCoreChangedAction.GenerateGraphWithEdges;
+            dg_Area.SetVerticesDrag(true, true);
 
-
-            var uiContext = TaskScheduler.Current;
-            Task.Factory.StartNew(
-                () => new LogicCoreExample
-                {
-                    Graph = ShowcaseHelper.GenerateDataGraph(5, true),
-                    ExternalLayoutAlgorithm = new ExampleExternalLayoutAlgorithm(null),
-                    DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None,
-                    DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None
-                }).ContinueWith(
-                    t =>
-                    {
-                        LogicCore = t.Result; // This is the property that is bound to the GraphArea.
-                        OnPropertyChanged("LogicCore");
-                    },
-                    uiContext); // Setting the LogicCore property executes on the UI thread.
+            var core = new LogicCoreExample
+            {
+                Graph = ShowcaseHelper.GenerateDataGraph(2, false),
+                DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER,
+                DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK,
+                DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA
+            };
+            var vlist = core.Graph.Vertices.ToList();
+            var edge = new DataEdge(vlist[0], vlist[1]);
+            core.Graph.AddEdge(edge);
+            LogicCore = core;
+            // This is the property that is bound to the GraphArea.
+            OnPropertyChanged("LogicCore");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

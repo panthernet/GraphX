@@ -161,6 +161,9 @@
     <Compile Include="..\GraphX.Controls\Controls\EdgeLabels\EdgeLabelControl.cs">
       <Link>Controls\EdgeLabels\EdgeLabelControl.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\EdgePointers\DefaultEdgePointer.cs">
+      <Link>Controls\EdgePointers\DefaultEdgePointer.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\CustomHelper.cs">
       <Link>CustomHelper.cs</Link>
     </Compile>
@@ -210,8 +213,6 @@
       <Link>Models\VertexSelectedEventHandler.cs</Link>
     </Compile>
     <Compile Include="Controls\EdgeControl.cs" />
-    <Compile Include="Controls\EdgePointers\EdgePointerImage.cs" />
-    <Compile Include="Controls\EdgePointers\EdgePointerPath.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
     <Compile Include="Controls\Misc\ControlDrawOrder.cs" />

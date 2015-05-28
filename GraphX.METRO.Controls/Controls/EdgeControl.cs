@@ -559,8 +559,6 @@ namespace GraphX.Controls
 
             if (Template != null)
             {
-                //!!! use GetTemplateChild() -???
-                //check findname
                 _linePathObject = this.FindDescendantByName("PART_edgePath") as Path;
                 if (_linePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
                 _linePathObject.Data = _linegeometry;
@@ -572,11 +570,21 @@ namespace GraphX.Controls
 
                 _edgePointerForSource = this.FindDescendantByName("PART_EdgePointerForSource") as IEdgePointer;
                 _edgePointerForTarget = this.FindDescendantByName("PART_EdgePointerForTarget") as IEdgePointer;
+                //TODO measure label?
 
-                //if (EdgeLabelControl == null) Debug.WriteLine("EdgeControl Template -> Edge template have no 'PART_edgeLabel' object to draw!");
                 UpdateEdge();
             }
 
+        }
+
+        /// <summary>
+        /// Measure child objects such as template parts which are not updated automaticaly on first pass.
+        /// </summary>
+        /// <param name="child">Child UIElement</param>
+        private void MeasureChild(UIElement child)
+        {
+            if (child == null) return;
+            child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
         }
 
         #region public PrepareEdgePath()

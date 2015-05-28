@@ -57,15 +57,11 @@
                           StrokeThickness="3" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <!--<Path Stroke="{TemplateBinding Foreground}"
-                          StrokeThickness="2" MinWidth="1" MinHeight="1" 
-                            x:Name="PART_edgeArrowPath"
-                              >
-                        </Path>-->
-                        <controls:EdgePointerPath x:Name="PART_EdgePointerForTarget" Data="M0,0.5 L1,1 1,0Z" Scale="12,12" Fill="Black" Opacity="239" Stroke="Gray" StrokeThickness="1"/>
-
-                        <!--<controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" Source="/Assets/tr_red.png" Width="15" Height="15" />
-                        <controls:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" Source="/Assets/tr_grren.png" Width="15" Height="15" />-->
+                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <Viewbox Stretch="Uniform" Width="15" Height="15">
+                                <Path Data="M0,0.5 L1,1 1,0" Fill="Black"/>
+                            </Viewbox>
+                        </controls:DefaultEdgePointer>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -81,7 +77,6 @@
                 Value="1" />
 
         <Setter Property="controls:HighlightBehaviour.IsHighlightEnabled" Value="False"/>
-
         
         <Style.Triggers>
             <Trigger Property="controls:HighlightBehaviour.Highlighted" Value="True">

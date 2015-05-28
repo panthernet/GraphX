@@ -484,7 +484,12 @@
                           StrokeThickness="2" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <local1:EdgePointerPath x:Name="PART_EdgePointerForTarget" Data="M0,0.5 L1,1 1,0Z" Scale="6,6" Fill="Black"/>
+                        <local1:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <Viewbox Stretch="Uniform" Width="15" Height="15">
+                                <Path Data="M0,0.5 L1,1 1,0" Fill="Black"/>
+                            </Viewbox>
+                        </local1:DefaultEdgePointer>
+                        
                         <local1:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>

@@ -112,22 +112,11 @@
                             </Path.Stroke>
                         </Path>
 
-                       <controls1:EdgePointerPath x:Name="PART_EdgePointerForTarget" Opacity="239" Scale="8,8">
-                            <controls1:EdgePointerPath.Path>
-                                <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow" />
-                            </controls1:EdgePointerPath.Path>
-                        </controls1:EdgePointerPath>
-
-                        <!-- <controls1:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForSource" >
-                            <controls1:EdgePointerImage.Image>
-                                <Image Source="/Assets/tr_red.png" Width="15" Height="15"/>
-                            </controls1:EdgePointerImage.Image>
-                        </controls1:EdgePointerImage>
-                        <controls1:EdgePointerImage NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <controls1:EdgePointerImage.Image>
-                                <Image Source="/Assets/tr_grren.png" Width="15" Height="15"/>
-                            </controls1:EdgePointerImage.Image>
-                        </controls1:EdgePointerImage>-->
+                        <controls1:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <Viewbox Stretch="Uniform" Width="15" Height="15">
+                                <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow"/>
+                            </Viewbox>
+                        </controls1:DefaultEdgePointer>
 
                         <controls1:EdgeLabelControl x:Name="PART_edgeLabel" 
                           Content="{Binding Text}"
