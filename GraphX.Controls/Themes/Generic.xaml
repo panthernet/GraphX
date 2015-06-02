@@ -2,19 +2,19 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
-    xmlns:local1="clr-namespace:GraphX.Controls">
+    xmlns:graphx="clr-namespace:GraphX.Controls">
 
-    <local1:DoubleToLog10Converter x:Key="Log10Converter" />
-    <local1:EqualityToBooleanConverter x:Key="EqualityConverter" />
+    <graphx:DoubleToLog10Converter x:Key="Log10Converter" />
+    <graphx:EqualityToBooleanConverter x:Key="EqualityConverter" />
 
-    <local1:RoundedValueConverter x:Key="RoundedValueConverter" Precision="2" />
-    <local1:VisibilityToBoolConverter x:Key="TrueIfVisibleConverter"
+    <graphx:RoundedValueConverter x:Key="RoundedValueConverter" Precision="2" />
+    <graphx:VisibilityToBoolConverter x:Key="TrueIfVisibleConverter"
       Inverted="False" Not="False" />
-    <local1:VisibilityToBoolConverter x:Key="TrueIfNotVisibleConverter"
+    <graphx:VisibilityToBoolConverter x:Key="TrueIfNotVisibleConverter"
       Inverted="False" Not="True" />
-    <local1:VisibilityToBoolConverter x:Key="VisibleIfTrueConverter"
+    <graphx:VisibilityToBoolConverter x:Key="VisibleIfTrueConverter"
       Inverted="True" Not="False" />
-    <local1:VisibilityToBoolConverter x:Key="VisibleIfNotTrueConverter"
+    <graphx:VisibilityToBoolConverter x:Key="VisibleIfNotTrueConverter"
       Inverted="True" Not="True" />
 
     <!-- REGION ZOOM CONTROL -->
@@ -56,7 +56,7 @@
     <Style x:Key="ViewFinderToggleButtonStyle" BasedOn="{StaticResource TransparentButton}" TargetType="{x:Type ToggleButton}">
         <Setter Property="Visibility" Value="Visible" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local1:ZoomControl}}, Path=ViewFinderVisibility}" Value="Hidden">
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type graphx:ZoomControl}}, Path=ViewFinderVisibility}" Value="Hidden">
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </Style.Triggers>
@@ -253,10 +253,10 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <Style TargetType="{x:Type local1:ZoomControl}">
+    <Style TargetType="{x:Type graphx:ZoomControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local1:ZoomControl}">
+                <ControlTemplate TargetType="{x:Type graphx:ZoomControl}">
                     <ControlTemplate.Resources>
                         <SolidColorBrush x:Key="SelectionBrush" Color="LightBlue" Opacity="0.5" po:Freeze="True"/>
                         <SolidColorBrush x:Key="AreaSelectionBrush" Color="LightGreen" Opacity="0.5" po:Freeze="True"/>
@@ -279,7 +279,7 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}"
                                 ClipToBounds="{TemplateBinding ClipToBounds}">
-                            <local1:ZoomContentPresenter x:Name="PART_Presenter"
+                            <graphx:ZoomContentPresenter x:Name="PART_Presenter"
                                                            ClipToBounds="False" />
                         </Border>
 
@@ -312,13 +312,13 @@
                                             Orientation="Horizontal"
                                             IsEnabled="True"
                                             />
-                                    <Button IsEnabled="False" x:Name="FitButton" Command="local1:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button IsEnabled="False" x:Name="FitButton" Command="graphx:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FitContentGlyph}" Margin="2"  po:Freeze ="true"/>
                                     </Button>
-                                    <Button x:Name="FillButton" Command="local1:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button x:Name="FillButton" Command="graphx:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FillToBoundsGlyph}" Margin="2" po:Freeze ="true"/>
                                     </Button>
-                                    <Button x:Name="CenterButton" Command="local1:ZoomControl.Center" ToolTip="Center Content" Width="20px" Height="20px" Margin="2,0" Style="{StaticResource TransparentButton}">
+                                    <Button x:Name="CenterButton" Command="graphx:ZoomControl.Center" ToolTip="Center Content" Width="20px" Height="20px" Margin="2,0" Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource CenterGlyph}" Margin="2" po:Freeze ="true"/>
                                     </Button>
                                 </StackPanel>
@@ -327,7 +327,7 @@
                                     <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"  po:Freeze ="true"/>
                                 </ToggleButton>
                                 <Border Grid.Row="1" BorderBrush="{StaticResource GlyphBrush}" BorderThickness="2" Background="#80FFFFFF" />
-                                <local1:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
+                                <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
                             </Grid>
                         </Border>
                         <ToggleButton Name="ShowViewFinder" IsTabStop="False" ToolTip="Show View Finder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Height="22" Width="22"
@@ -450,7 +450,7 @@
     <!-- ENDREGION -->
     
     <!-- REGION VERTEX CONTROL -->
-    <Style TargetType="{x:Type local1:VertexControl}">
+    <Style TargetType="{x:Type graphx:VertexControl}">
         <Setter Property="Background" Value="#FFE3E3E3"/>
         <Setter Property="BorderThickness" Value="5,3,5,3"/>
         <Setter Property="Padding" Value="10,5,10,5"/>
@@ -458,14 +458,14 @@
         
         <Setter Property="Template">
 			<Setter.Value>
-                <ControlTemplate TargetType="{x:Type local1:VertexControl}">
+                <ControlTemplate TargetType="{x:Type graphx:VertexControl}">
 					<Border Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
 							CornerRadius="10,10,10,10"
 						Padding="{TemplateBinding Padding}">
                         <Grid>
                             <ContentPresenter Content="{TemplateBinding Vertex}" />
-                            <local1:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <graphx:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -475,22 +475,20 @@
     <!-- ENDREGION -->
 
     <!-- REGION EDGE CONTROL -->
-	<Style TargetType="{x:Type local1:EdgeControl}">
+	<Style TargetType="{x:Type graphx:EdgeControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local1:EdgeControl}">
+                <ControlTemplate TargetType="{x:Type graphx:EdgeControl}">
                     <Grid>
                         <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2" MinWidth="1" MinHeight="1"
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
-                        <local1:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Viewbox Stretch="Uniform" Width="15" Height="15">
-                                <Path Data="M0,0.5 L1,1 1,0" Fill="Black"/>
-                            </Viewbox>
-                        </local1:DefaultEdgePointer>
+                        <graphx:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="10" Height="10"/>
+                        </graphx:DefaultEdgePointer>
                         
-                        <local1:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <graphx:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -517,10 +515,10 @@
     <!-- ENDREGION -->
     
     <!-- REGION EDGE LABLE CONTROL -->
-    <Style TargetType="{x:Type local1:EdgeLabelControl}">
+    <Style TargetType="{x:Type graphx:EdgeLabelControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local1:EdgeLabelControl}">
+                <ControlTemplate TargetType="{x:Type graphx:EdgeLabelControl}">
                     <Grid>
                         <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
                             <ContentPresenter Margin="3"/>
@@ -535,7 +533,7 @@
     <!-- ENDREGION -->
     
     <!-- REGION VERTEX LABEL CONTROL -->
-    <Style TargetType="local1:VertexLabelControl">
+    <Style TargetType="graphx:VertexLabelControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="LabelPositionMode" Value="Sides"/>
@@ -544,7 +542,7 @@
         <!-- Custom label template body -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="local1:VertexLabelControl">
+                <ControlTemplate TargetType="graphx:VertexLabelControl">
                     <Grid>
                         <ContentPresenter Margin="3"/>
                     </Grid>
@@ -553,7 +551,7 @@
         </Setter>
         <Setter Property="RenderTransform">
             <Setter.Value>
-                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=local1:EdgeLabelControl} , Path=Angle}"/>
+                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="{Binding RelativeSource={RelativeSource AncestorType=graphx:EdgeLabelControl} , Path=Angle}"/>
             </Setter.Value>
         </Setter>
     </Style>

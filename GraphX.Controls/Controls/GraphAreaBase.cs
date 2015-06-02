@@ -6,7 +6,6 @@ using System.Windows.Input;
 using System.ComponentModel;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
 using GraphX.Controls;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
@@ -15,36 +14,36 @@ namespace GraphX
 {
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
+        /// <summary>
+        /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
+        /// </summary>
+        public bool AutoAssignMissingDataId { get; set; }
 
         /// <summary>
         /// Action that will take place when LogicCore property is changed. Default: None.
         /// </summary>
-        public LogicCoreChangedAction LogicCoreChangeAction 
+        public LogicCoreChangedAction LogicCoreChangeAction
         {
-            get { return (LogicCoreChangedAction) GetValue(LogicCoreChangeActionProperty); }
+            get { return (LogicCoreChangedAction)GetValue(LogicCoreChangeActionProperty); }
             set { SetValue(LogicCoreChangeActionProperty, value); }
         }
 
         public static readonly DependencyProperty LogicCoreChangeActionProperty =
             DependencyProperty.Register("LogicCoreChangeAction", typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
 
-
+#if WPF
         /// <summary>
         /// Gets or sets special mode for WinForms interoperability
         /// </summary>
         public bool EnableWinFormsHostingMode { get; set; }
+#endif
 
-        /// <summary>
-        /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
-        /// </summary>
-        public bool AutoAssignMissingDataId { get; set; }
-
-        public GraphAreaBase()
+        protected GraphAreaBase()
         {
             AutoAssignMissingDataId = true;
             LogicCoreChangeAction = LogicCoreChangedAction.None;
         }
-    
+
         #region Attached Dependency Property registrations
         public static readonly DependencyProperty XProperty =
             DependencyProperty.RegisterAttached("X", typeof(double), typeof(GraphAreaBase),
@@ -63,23 +62,24 @@ namespace GraphX
 
         public static readonly DependencyProperty FinalXProperty =
             DependencyProperty.RegisterAttached("FinalX", typeof(double), typeof(GraphAreaBase),
-                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                                                 new PropertyMetadata(double.NaN));
         public static readonly DependencyProperty FinalYProperty =
             DependencyProperty.RegisterAttached("FinalY", typeof(double), typeof(GraphAreaBase),
-                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                                                 new PropertyMetadata(double.NaN));
 
 
 
         public static readonly DependencyProperty YProperty =
             DependencyProperty.RegisterAttached("Y", typeof(double), typeof(GraphAreaBase),
                                                  new FrameworkPropertyMetadata(double.NaN,
-                                                                                FrameworkPropertyMetadataOptions.AffectsMeasure |
-                                                                                FrameworkPropertyMetadataOptions.AffectsArrange |
-                                                                                FrameworkPropertyMetadataOptions.AffectsRender |
-                                                                                FrameworkPropertyMetadataOptions.AffectsParentMeasure |
-                                                                                FrameworkPropertyMetadataOptions.AffectsParentArrange |
-                                                                                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
-                                                                                , y_changed));
+                                                   FrameworkPropertyMetadataOptions.AffectsMeasure |
+                                                   FrameworkPropertyMetadataOptions.AffectsArrange |
+                                                   FrameworkPropertyMetadataOptions.AffectsRender |
+                                                   FrameworkPropertyMetadataOptions.AffectsParentMeasure |
+                                                   FrameworkPropertyMetadataOptions.AffectsParentArrange |
+                                                   FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
+                                                   , y_changed));
+
 
         private static void y_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -464,6 +464,7 @@ namespace GraphX
                         x = 0;
                         y = 0;
                     }
+                    else continue;
 
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {
@@ -609,9 +610,7 @@ namespace GraphX
         {
             obj.SetValue(FinalYProperty, value);
         }
-
         #endregion
-
 
     }
 }

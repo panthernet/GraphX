@@ -5,10 +5,8 @@
 
     <Style x:Key="CirclePath" TargetType="controls:StaticVertexConnectionPoint" x:Shared="False">
         <Setter Property="Shape" Value="Circle"/>
-        <Setter Property="Width" Value="10"/>
-        <Setter Property="Height" Value="10"/>
 
-        <Setter Property="Path">
+        <Setter Property="Content">
             <Setter.Value>
                 <Path Stroke="Black" Data="M 38,0.791664C 58.5496,0.791664 75.2083,17.4504 75.2083,38C 75.2083,58.5496 58.5496,75.2083 38,75.2083C 17.4504,75.2083 0.791662,58.5496 0.791662,38C 0.791662,17.4504 17.4504,0.791664 38,0.791664 Z M 38,5.54166C 20.0738,5.54166 5.54167,20.0738 5.54167,38C 5.54167,55.9262 20.0738,70.4583 38,70.4583C 55.9262,70.4583 70.4583,55.9262 70.4583,38C 70.4583,20.0738 55.9262,5.54166 38,5.54166 Z "
                       Width="10" Height="10" Stretch="Uniform" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -61,9 +59,7 @@
                               StrokeThickness="2"
                               x:Name="PART_edgePath"/>
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Viewbox Stretch="Uniform" Width="15" Height="15">
-                                <Path Data="M0,0.5 L1,1 1,0" Fill="Black"/>
-                            </Viewbox>
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="10" Height="10"/>
                         </controls:DefaultEdgePointer>
                     </Grid>
                 </ControlTemplate>

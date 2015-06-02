@@ -1,5 +1,5 @@
-﻿using System;
-#if WPF
+﻿#if WPF
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,7 +10,6 @@ using Windows.UI.Xaml.Media;
 using GraphX.Measure;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
-using Windows.UI.Xaml.Media.Imaging;
 #endif
 
 namespace GraphX.Controls
@@ -80,6 +79,8 @@ namespace GraphX.Controls
         public DefaultEdgePointer()
         {
             RenderTransformOrigin = new Point(.5, .5);
+            VerticalAlignment = VerticalAlignment.Center;
+            HorizontalAlignment = HorizontalAlignment.Center;
             LayoutUpdated += EdgePointerImage_LayoutUpdated;
         }
 

@@ -58,9 +58,7 @@
                           ToolTip="{TemplateBinding ToolTip}" 
                             x:Name="PART_edgePath"/>
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Viewbox Stretch="Uniform" Width="15" Height="15">
-                                <Path Data="M0,0.5 L1,1 1,0" Fill="Black"/>
-                            </Viewbox>
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="15" Height="15"/>
                         </controls:DefaultEdgePointer>
                     </Grid>
                 </ControlTemplate>

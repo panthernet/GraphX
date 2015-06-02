@@ -12,7 +12,7 @@ namespace GraphX.Controls.Models
         /// <summary>
         /// Vertex control
         /// </summary>
-        public VertexControl VertexControl { get; private set; }
+        public VertexControlBase VertexControl { get; private set; }
         /// <summary>
         /// Attached coordinates X and Y 
         /// </summary>
@@ -22,7 +22,7 @@ namespace GraphX.Controls.Models
         /// </summary>
         public Point OffsetPosition { get; private set; }
 
-        public VertexPositionEventArgs(Point offset, Point pos, VertexControl vc)
+        public VertexPositionEventArgs(Point offset, Point pos, VertexControlBase vc)
         {
             OffsetPosition = offset;
             VertexControl = vc;

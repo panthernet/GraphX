@@ -200,6 +200,12 @@
     <Compile Include="..\GraphX.Controls\Controls\Misc\LogicCoreChangedAction.cs">
       <Link>Controls\Misc\LogicCoreChangedAction.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs">
+      <Link>Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\VertexControlBase.cs">
+      <Link>Controls\VertexControlBase.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\VertexLabels\VertexLabelControl.cs">
       <Link>Controls\VertexLabels\VertexLabelControl.cs</Link>
     </Compile>
@@ -254,7 +260,6 @@
     <Compile Include="Controls\EdgeControl.cs" />
     <Compile Include="Controls\GraphArea.cs" />
     <Compile Include="Controls\GraphAreaBase.cs" />
-    <Compile Include="Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs" />
     <Compile Include="Controls\VertexControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />

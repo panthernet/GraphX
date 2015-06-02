@@ -99,6 +99,7 @@
     <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />
     <Compile Include="Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs" />
     <Compile Include="Controls\EdgePointers\DefaultEdgePointer.cs" />
+    <Compile Include="Controls\VertexControlBase.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Controls\Misc\IEdgeLabelControl.cs" />

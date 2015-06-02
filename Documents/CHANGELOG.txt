@@ -16,8 +16,8 @@ HIGHLIGHTS:
 
 DETAILED CHANGELOG:
 + Added support for custom VCP [WPF, METRO]
-	* New control class added: StaticVertexConnectionPoint
-	* VCP support the same math shapes as VertexShape property or can use VertexShape::None value to disable roundtrip calculations
+	** New control class added: StaticVertexConnectionPoint. It represents ContentControl which can host virtualy any valid object
+	* VCP support the same math shapes as VertexShape property or can use VertexShape::None value to disable roundtrip calculations	
 + Added vertex and edge skip processing support to METRO version (VAESPS) [METRO]
 + Added VAESPS for following algorithms: Circular [ALL]
 + Added VertexShape::None enum option, currently affecting only VCP logic [ALL]
@@ -39,6 +39,7 @@ DETAILED CHANGELOG:
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
 + Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
+++ Reorganized Example apps namespaces and code for greater good :)
 + Merged EdgePointerImage and EdgePointerPath into one universal DefaultEdgePointer class [WPF, METRO]
 + Improved edge and its template parts rendering/calc performance [WPF, METRO]
 + Enhanced edge labels logic so now it don't require additional template bindings and modifications (Angle or RenderTransform) [WPF]

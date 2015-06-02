@@ -32,7 +32,7 @@ namespace GraphX.Controls
             DependencyProperty.Register("LogicCoreChangeAction", typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
 
 
-        public GraphAreaBase()
+        protected GraphAreaBase()
         {
             AutoAssignMissingDataId = true;
             LogicCoreChangeAction = LogicCoreChangedAction.None;
@@ -46,9 +46,6 @@ namespace GraphX.Controls
         private static void x_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             d.SetValue(LeftProperty, e.NewValue);
-            /*var vc = d as IPositionChangeNotify;
-            if(vc != null)
-                vc.OnPositionChanged();*/
         }
 
         public static readonly DependencyProperty FinalXProperty =
@@ -67,10 +64,6 @@ namespace GraphX.Controls
         private static void y_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             d.SetValue(TopProperty, e.NewValue);
-            /*var vc = d as IPositionChangeNotify;
-            if (vc != null)
-                vc.OnPositionChanged();*/
-            
         }
 
         public static double GetX(DependencyObject obj)
@@ -481,7 +474,8 @@ namespace GraphX.Controls
                     {
                         x = 0;
                         y = 0;
-                    }else continue;
+                    }
+                    else continue;
 
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {

@@ -113,9 +113,7 @@
                         </Path>
 
                         <controls1:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Viewbox Stretch="Uniform" Width="15" Height="15">
-                                <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow"/>
-                            </Viewbox>
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow" Stretch="Uniform" Width="15" Height="15"/>
                         </controls1:DefaultEdgePointer>
 
                         <controls1:EdgeLabelControl x:Name="PART_edgeLabel" 

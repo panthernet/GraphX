@@ -41,8 +41,8 @@ namespace ShowcaseApp.WPF.Pages
 
         void butRun_Click(object sender, RoutedEventArgs e)
         {
-            LoadLogEntries();
-            return;
+           // LoadLogEntries();
+            //return;
            /* var lc = new LogicCoreExample() {Graph = ShowcaseHelper.GenerateDataGraph(25)};
 
             //lc.Graph.AddVertex(new DataVertex("Test vertex"));
@@ -56,14 +56,14 @@ namespace ShowcaseApp.WPF.Pages
             var logicCore = new LogicCoreExample { Graph = ShowcaseHelper.GenerateDataGraph(5, false) };
 
             var vlist = logicCore.Graph.Vertices.ToList();
-            var edge = new DataEdge(vlist[0], vlist[1]);//{ SourceConnectionPointId = 2, TargetConnectionPointId = 1 };
+            var edge = new DataEdge(vlist[0], vlist[1]) { SourceConnectionPointId = 1, TargetConnectionPointId = 1 };
             logicCore.Graph.AddEdge(edge);
-            edge = new DataEdge(vlist[0], vlist[2]);//{ SourceConnectionPointId = 3, TargetConnectionPointId = 1 };
+            /*edge = new DataEdge(vlist[0], vlist[2]);//{ SourceConnectionPointId = 3, TargetConnectionPointId = 1 };
             logicCore.Graph.AddEdge(edge);
             edge = new DataEdge(vlist[2], vlist[3]);
             logicCore.Graph.AddEdge(edge);
             edge = new DataEdge(vlist[2], vlist[4]);
-            logicCore.Graph.AddEdge(edge);
+            logicCore.Graph.AddEdge(edge);*/
 
             
             //edge = new DataEdge(vlist[1], vlist[2]) { SourceConnectionPointId = 3, TargetConnectionPointId = 2 };

@@ -110,3 +110,4 @@ UpgradeLog*.XML
 *.suo
 *.DotSettings
 *.bak
+/NeuralNetWorkbench/ExampleModels/IMathFunction.cs

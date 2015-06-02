@@ -14,7 +14,6 @@ using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
-using GraphX.Controls.DesignerExampleData;
 using GraphX.Controls.Models;
 using Microsoft.Win32;
 using QuickGraph;
