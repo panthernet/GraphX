@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:GraphX.Controls;assembly=GraphX.Controls"
+                    xmlns:controls="http://schemas.panthernet.ru/graphx/"
                     >
 
     <Style x:Key="CirclePath" TargetType="controls:StaticVertexConnectionPoint" x:Shared="False">

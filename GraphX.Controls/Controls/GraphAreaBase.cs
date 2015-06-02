@@ -62,10 +62,10 @@ namespace GraphX
 
         public static readonly DependencyProperty FinalXProperty =
             DependencyProperty.RegisterAttached("FinalX", typeof(double), typeof(GraphAreaBase),
-                                                 new PropertyMetadata(double.NaN));
+                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty FinalYProperty =
             DependencyProperty.RegisterAttached("FinalY", typeof(double), typeof(GraphAreaBase),
-                                                 new PropertyMetadata(double.NaN));
+                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 
 
@@ -464,7 +464,7 @@ namespace GraphX
                         x = 0;
                         y = 0;
                     }
-                    else continue;
+                    
 
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {
