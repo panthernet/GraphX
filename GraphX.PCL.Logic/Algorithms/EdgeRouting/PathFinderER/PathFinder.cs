@@ -83,7 +83,7 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         private bool                            mTieBreaker             = false;
         private bool                            mHeavyDiagonals         = false;
         private int                             mSearchLimit            = 2000;
-        private double                          mCompletedTime          = 0;
+        //private double                          mCompletedTime          = 0; //not used
         private bool                            mDebugProgress          = false;
         private bool                            mDebugFoundPath         = false;
         #endregion

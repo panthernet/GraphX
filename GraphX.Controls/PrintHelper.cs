@@ -98,9 +98,9 @@ namespace GraphX.Controls
                     printDialog.PrintVisual(surface, description);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Unexpected exception occured while trying to acces default printer. Please ensure that default printer is installed in your OS!");
+                MessageBox.Show("Unexpected exception occured while trying to access default printer. Please ensure that default printer is installed in your OS!");
             }
         }
 
