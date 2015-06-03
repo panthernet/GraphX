@@ -111,3 +111,6 @@ UpgradeLog*.XML
 *.DotSettings
 *.bak
 /NeuralNetWorkbench/ExampleModels/IMathFunction.cs
+
+#LocalHistory VS plugin
+.localhistory/
