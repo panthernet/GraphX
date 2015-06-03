@@ -97,7 +97,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 						Debug.Assert(
 							( edge1.Source.LayerIndex == edge2.Source.LayerIndex &&
 							  edge1.Target.LayerIndex == edge2.Target.LayerIndex ),
-							"Bad edge at crossing computing", edge1 + "\n" + edge2 );
+							"Bad edge at crossing computing: " + edge1 + "\n" + edge2 );
 
 						//get the position of the sources
 						double source2Pos;
