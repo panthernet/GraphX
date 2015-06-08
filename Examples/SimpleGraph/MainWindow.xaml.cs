@@ -28,8 +28,6 @@ namespace SimpleGraph
     /// </summary>
     public partial class MainWindow : Window, IDisposable
     {
-        private GraphExample _dataGraph;
-
         public MainWindow()
         {
             InitializeComponent();

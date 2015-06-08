@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="2c81b400-35e9-4947-b413-ba38af6a935c" Publisher="CN=panth_000" Version="1.1.0.0" />
+  <Identity Name="2c81b400-35e9-4947-b413-ba38af6a935c" Publisher="CN=panthernet" Version="1.1.0.0" />
   <Properties>
     <DisplayName>METRO.SimpleGraph</DisplayName>
     <PublisherDisplayName>panth_000</PublisherDisplayName>

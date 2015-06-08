@@ -49,7 +49,7 @@ namespace METRO.SimpleGraph
         {
             zc.ZoomToFill();
 
-            var count = 0;
+            //var count = 0;
 
         }
 

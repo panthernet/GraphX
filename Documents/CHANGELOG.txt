@@ -29,6 +29,7 @@ DETAILED CHANGELOG:
 + Added new property GraphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
 + Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
 	w/o any algorithms and also sets custom vertices positions if needed [WPF, METRO]
++ Fixed first time solution rebuild problems by referencing new QuickGraphPCL nuget [ALL] 
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Fixed edge pointer positioning bug [METRO]

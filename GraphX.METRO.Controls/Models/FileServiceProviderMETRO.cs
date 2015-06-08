@@ -15,7 +15,7 @@ namespace GraphX.Controls.Models
         /// </summary>
         /// <param name="filename">File name</param>
         /// <param name="modelsList">Data classes list</param>
-        public static async void SerializeDataToFile(string filename, List<GraphSerializationData> modelsList)
+        public static void SerializeDataToFile(string filename, List<GraphSerializationData> modelsList)
         {
 
         }
@@ -29,7 +29,9 @@ namespace GraphX.Controls.Models
             return Deserialize(filename).Result;
         }
 
+#pragma warning disable 1998
         private static async Task<List<GraphSerializationData>> Deserialize(string filename)
+#pragma warning restore 1998
         {
             return new List<GraphSerializationData>();
         }

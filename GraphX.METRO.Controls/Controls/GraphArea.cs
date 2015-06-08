@@ -1070,11 +1070,11 @@ namespace GraphX.Controls
            // UpdateAllEdges();
         }
 
-        private class LabelOverlapData
+       /* private class LabelOverlapData
         {
             public bool IsVertex;
             public int Id;
-        }
+        }*/
 
         /// <summary>
         /// Generates all possible valid edges for Graph vertexes
@@ -1420,7 +1420,7 @@ namespace GraphX.Controls
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
         public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DefaultDPI, int quality = 100)
         {
-            string fileExt;
+            /*string fileExt;
             string fileType = itype.ToString();
             switch (itype)
             {
@@ -1437,7 +1437,7 @@ namespace GraphX.Controls
                 default: throw new GX_InvalidDataException("ExportAsImage() -> Unknown output image format specified!");
             }
             //TODO dialog
-            /*var dlg = new SaveFileDialog { Filter = String.Format("{0} Image File ({1})|{1}", fileType, fileExt), Title = String.Format("Exporting graph as {0} image...", fileType) };
+            var dlg = new SaveFileDialog { Filter = String.Format("{0} Image File ({1})|{1}", fileType, fileExt), Title = String.Format("Exporting graph as {0} image...", fileType) };
             if (dlg.ShowDialog() == true)
             {
                 PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, true, dpi, quality);

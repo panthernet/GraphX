@@ -1141,11 +1141,11 @@ namespace GraphX.Controls
            // UpdateAllEdges();
         }
 
-        private class LabelOverlapData
+       /* private class LabelOverlapData
         {
             public bool IsVertex;
             public int Id;
-        }
+        }*/
 
         /// <summary>
         /// Generates all possible valid edges for Graph vertexes
