@@ -110,9 +110,7 @@ UpgradeLog*.XML
 *.suo
 *.DotSettings
 *.bak
-/NeuralNetWorkbench/ExampleModels/IMathFunction.cs
 
 #LocalHistory VS plugin
 .localhistory/
-/NeuralNetWorkbench/Helpers/VizHelper.cs
-/NeuralNetWorkbench/packages.config
+.settings/launch.json
