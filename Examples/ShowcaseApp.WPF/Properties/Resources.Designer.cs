@@ -67,7 +67,8 @@ namespace ShowcaseApp.WPF.Properties {
         ///             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot; 
         ///             xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
         ///             xmlns:wpf=&quot;clr-namespace:ShowcaseApp.WPF&quot;
-        ///             xmlns:controls=&quot;clr-namespace:GraphX.Controls;assembly=GraphX.WPF.Contro [rest of string was truncated]&quot;;.
+        ///             xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
+        ///             xmln [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LayoutVCP {
             get {
@@ -83,8 +84,10 @@ namespace ShowcaseApp.WPF.Properties {
         ///
         ///    &lt;Style x:Key=&quot;CirclePath&quot; TargetType=&quot;controls:StaticVertexConnectionPoint&quot; x:Shared=&quot;False&quot;&gt;
         ///        &lt;Setter Property=&quot;Shape&quot; Value=&quot;Circle&quot;/&gt;
-        ///        &lt;Setter Property=&quot;Width&quot; Value=&quot;10&quot;/&gt;
-        ///        &lt;Setter Property=&quot;Heig [rest of string was truncated]&quot;;.
+        ///
+        ///        &lt;Setter Property=&quot;Content&quot;&gt;
+        ///            &lt;Setter.Value&gt;
+        ///                &lt;Path Stroke=&quot;Bl [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LayoutVCPTemplate {
             get {
@@ -93,7 +96,9 @@ namespace ShowcaseApp.WPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In this example you can see how VCP (vertex connection points) works. Drag vertices to see VCP behavior in action and play with different settings on a settings panel to customize this behaviors..
+        ///   Looks up a localized string similar to In this example you can see how VCP (vertex connection points) works. Drag vertices to see VCP behavior in action and play with different settings on a settings panel to customize these behaviors.
+        ///
+        ///Point mouse over the different settings to see tooltips..
         /// </summary>
         internal static string LayoutVCPText {
             get {

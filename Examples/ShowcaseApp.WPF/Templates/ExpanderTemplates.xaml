@@ -1,0 +1,189 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Animated Expander Button's Template-->
+    <ControlTemplate x:Key="AnimatedExpanderButtonTemp" TargetType="{x:Type ToggleButton}">
+        <Border x:Name="ExpanderButtonBorder"
+                Opacity="{TemplateBinding Opacity}"
+                Background="{DynamicResource ButtonBackground}"
+                BorderBrush="{DynamicResource ButtonBorder}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="5,5,0,0"
+                Padding="{TemplateBinding Padding}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Fill="Transparent"
+                               Grid.ColumnSpan="2"/>
+                <Ellipse Name="Circle"
+                         Grid.Column="0"
+                         Stroke="DarkGray"
+                         Width="20"
+                         Height="20"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         />
+                <Path x:Name="Arrow"
+                      Grid.Column="0"
+                      Data="M 1,1.5 L 4.5,5 8,1.5"
+                      Stroke="#FF666666"
+                      StrokeThickness="2"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      RenderTransformOrigin="0.5,0.5"
+                      >
+                    <Path.RenderTransform>
+                        <RotateTransform Angle="0"/>
+                    </Path.RenderTransform>
+                </Path>
+                <ContentPresenter x:Name="HeaderContent"
+                                      Grid.Column="1"
+                                      Margin="4,0,0,0"
+                                      ContentSource="Content"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <!-- Animate arrow when toggled-->
+            <Trigger Property="IsChecked"
+                         Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="180"
+                                                 Duration="0:0:0.4"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="Arrow"
+                                                 Storyboard.TargetProperty="(Path.RenderTransform).(RotateTransform.Angle)"
+                                                 To="0"
+                                                 Duration="0:0:0.4"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+            <!-- MouseOver, Pressed behaviours-->
+            <Trigger Property="IsMouseOver"
+                                 Value="true">
+                <Setter Property="Stroke"
+                                    Value="{DynamicResource ButtonBorderHover}"
+                                    TargetName="Circle"/>
+                <Setter Property="Stroke"
+                                    Value="{DynamicResource ButtonBorderHover}"
+                                    TargetName="Arrow"/>
+            </Trigger>
+            <Trigger Property="IsPressed"
+                                 Value="true">
+                <Setter Property="Stroke"
+                                    Value="{DynamicResource ButtonBorderPressed}"
+                                    TargetName="Circle"/>
+                <Setter Property="StrokeThickness"
+                                    Value="1.5"
+                                    TargetName="Circle"/>
+                <Setter Property="Stroke"
+                                    Value="{DynamicResource ButtonBorderPressed}"
+                                    TargetName="Arrow"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Stretch Out Content Expander's Template,
+        Uses: AnimatedExpanderButtonTemp from above-->
+    <ControlTemplate x:Key="MiniExpander" TargetType="{x:Type Expander}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ToggleButton x:Name="ExpanderButton" 
+                          HorizontalAlignment="Center"
+                          Grid.Row="0"
+                          DockPanel.Dock="Top"
+                          Template="{StaticResource AnimatedExpanderButtonTemp}"
+                          Content="{TemplateBinding Header}"
+                          IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                          OverridesDefaultStyle="True"
+                          Padding="10,3"
+                          Opacity="130"
+                          FontWeight="Bold"
+                          FontSize="16">
+            </ToggleButton>
+            <Border BorderThickness="2" Margin="0,-1,0,0"
+                    BorderBrush="{DynamicResource ButtonBorder}"
+                    Background="{DynamicResource WindowBackground}"
+                    CornerRadius="5,5,0,0" 
+                    Grid.Row="1">
+                <Border.Resources>
+                    <Style TargetType="{x:Type CheckBox}">
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"/>
+                    </Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"/>
+                    </Style>
+                    <Style TargetType="{x:Type ComboBox}">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Setter Property="Margin" Value="3"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ButtonText}"/>
+                    </Style>
+                </Border.Resources>
+                <ContentPresenter x:Name="ExpanderContent"
+                              ContentSource="Content">
+                    <ContentPresenter.LayoutTransform>
+                        <ScaleTransform ScaleY="0"/>
+                    </ContentPresenter.LayoutTransform>
+                </ContentPresenter>
+            </Border>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger SourceName="ExpanderButton" Property="IsMouseOver" Value="True">
+                <Setter TargetName="ExpanderButton" Property="Opacity" Value="255"/>
+            </Trigger>
+            <Trigger Property="IsExpanded" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"                                                 
+                                                 To="1"
+                                                 Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetName="ExpanderContent"
+                                                 Storyboard.TargetProperty="(ContentPresenter.LayoutTransform).(ScaleTransform.ScaleY)"
+                                                 To="0"
+                                                 Duration="0:0:0.2"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+</ResourceDictionary>

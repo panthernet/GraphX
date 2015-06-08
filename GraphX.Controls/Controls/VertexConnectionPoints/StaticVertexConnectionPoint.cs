@@ -24,7 +24,10 @@ namespace GraphX.Controls
 
 
         public static readonly DependencyProperty ShapeProperty =
-            DependencyProperty.Register("Shape", typeof(VertexShape), typeof(StaticVertexConnectionPoint), new PropertyMetadata(null));
+            DependencyProperty.Register("Shape", 
+                          typeof(VertexShape), 
+                          typeof(StaticVertexConnectionPoint), 
+                          new PropertyMetadata(VertexShape.Circle));
 
         /// <summary>
         /// Gets or sets shape form for connection point (affects math calculations for edge end placement)

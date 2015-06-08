@@ -7,6 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.ComponentModel;
+using SysRect = System.Windows.Rect;
+using SysSize = System.Windows.Size;
+using RoutedOrCommonArgs = System.EventArgs;
+using DefaultEventArgs = System.EventArgs;
 #elif METRO
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
@@ -15,11 +19,16 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using GraphX.Measure;
 using Point = Windows.Foundation.Point;
+using SysRect = Windows.Foundation.Rect;
+using SysSize = Windows.Foundation.Size;
+using RoutedOrCommonArgs = Windows.UI.Xaml.RoutedEventArgs;
+using DefaultEventArgs = System.Object;
 #endif
 
 namespace GraphX.Controls
 {
 #if METRO
+    //hack to fix weird METRO error when it can't find this class
     [Bindable]
 #endif
     public class EdgeLabelControl : ContentControl, IEdgeLabelControl
@@ -215,123 +224,90 @@ namespace GraphX.Controls
             Arrange(LastKnownRectSize);
         }
 
-#if WPF
-        internal Rect LastKnownRectSize;
-        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(VisualParent)); } }
+        internal SysRect LastKnownRectSize;
 
-        private void SetSelfLoopedSize(Point pt, Size idesiredSize)
+        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent())); } }
+
+        private void SetSelfLoopedSize(Point pt, SysSize idesiredSize)
         {
+#if METRO
+            //assign pt back due to different offset logic
+            pt =
+#endif
             pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
-            LastKnownRectSize = new Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
+            LastKnownRectSize = new SysRect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
         }
 
-        private void UpdateFinalPosition(Point centerPoint, Size desiredSize)
+        private void UpdateFinalPosition(Point centerPoint, SysSize desiredSize)
         {
-            LastKnownRectSize = new Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
+#if METRO
+            if (double.IsNaN(centerPoint.X)) centerPoint.X = 0;
+            if (double.IsNaN(centerPoint.Y)) centerPoint.Y = 0;
+#endif
+            LastKnownRectSize = new SysRect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
         }
 
         /// <summary>
         /// Get label rectangular size
         /// </summary>
-        public Rect GetSize()
+        public SysRect GetSize()
         {
             return LastKnownRectSize;
         }
+
         /// <summary>
         /// Set label rectangular size
         /// </summary>
-        public void SetSize(Rect size)
+        public void SetSize(SysRect size)
         {
             LastKnownRectSize = size;
+#if WPF
+            //TODO check if we can remove this in WPF
             Arrange(LastKnownRectSize);
+#endif
         }
 
-        public EdgeLabelControl()
-        {
-            if (DesignerProperties.GetIsInDesignMode(this)) return;
-            RenderTransformOrigin = new Point(.5,.5);
-            LayoutUpdated += EdgeLabelControl_LayoutUpdated;
-            HorizontalAlignment = HorizontalAlignment.Left;
-            VerticalAlignment = VerticalAlignment.Top;
-            Initialized += EdgeLabelControl_Loaded;
-        }
-
-        void EdgeLabelControl_Loaded(object sender, EventArgs e)
+        void EdgeLabelControl_Loaded(object sender, RoutedOrCommonArgs e)
         {
             if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
             else Show();
         }
 
-        void EdgeLabelControl_LayoutUpdated(object sender, EventArgs e)
+        void EdgeLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
         {
             if (EdgeControl == null || !EdgeControl.ShowLabel) return;
-            if (LastKnownRectSize == Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
+            if (LastKnownRectSize == SysRect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
             {
                 UpdateLayout();
                 UpdatePosition();
             }
             else Arrange(LastKnownRectSize);
         }
-#elif METRO
-        internal Windows.Foundation.Rect LastKnownRectSize;
-        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(Parent)); } }
-
-        private void SetSelfLoopedSize(Point pt, Windows.Foundation.Size idesiredSize)
-        {
-            pt = pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
-            LastKnownRectSize = new Windows.Foundation.Rect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
-        }
-
-        private void UpdateFinalPosition(Point centerPoint, Windows.Foundation.Size desiredSize)
-        {
-            if (double.IsNaN(centerPoint.X)) centerPoint.X = 0;
-            if (double.IsNaN(centerPoint.Y)) centerPoint.Y = 0;
-            LastKnownRectSize = new Windows.Foundation.Rect(centerPoint.X - desiredSize.Width / 2, centerPoint.Y - desiredSize.Height / 2, desiredSize.Width, desiredSize.Height);
-        }
-
-        /// <summary>
-        /// Get label rectangular size
-        /// </summary>
-        public Rect GetSize()
-        {
-            return LastKnownRectSize.ToGraphX();
-        }
-        /// <summary>
-        /// Set label rectangular size
-        /// </summary>
-        public void SetSize(Windows.Foundation.Rect size)
-        {
-            LastKnownRectSize = size;
-        }
 
         public EdgeLabelControl()
         {
+#if WPF
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+            Initialized += EdgeLabelControl_Loaded;
+#elif METRO
             DefaultStyleKey = typeof(EdgeLabelControl);
             if (DesignMode.DesignModeEnabled) return;
-
+            Loaded += EdgeLabelControl_Loaded;
+#endif
+            RenderTransformOrigin = new Point(.5, .5);
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
             VerticalAlignment = VerticalAlignment.Top;
-            Loaded += EdgeLabelControl_Loaded;
         }
 
-        void EdgeLabelControl_Loaded(object sender, RoutedEventArgs e)
+        DependencyObject GetParent()
         {
-            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
-            else Show();
-        }
-
-        void EdgeLabelControl_LayoutUpdated(object sender, object e)
-        {
-            if (EdgeControl == null || !EdgeControl.ShowLabel) return;
-            if (LastKnownRectSize == Windows.Foundation.Rect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)
-            {
-                UpdateLayout();
-                UpdatePosition();
-            }
-            else Arrange(LastKnownRectSize);
-        }
+#if WPF
+            return VisualParent;
+#elif METRO
+            return Parent;
 #endif
+        }
 
         public void Dispose()
         {

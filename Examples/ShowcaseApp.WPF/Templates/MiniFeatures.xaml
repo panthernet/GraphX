@@ -2,12 +2,23 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mui="http://firstfloorsoftware.com/ModernUI">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ExpanderTemplates.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="DockPanel.Dock" Value="Top" />
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="FontWeight" Value="Bold" />
     </Style>
+    
+    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1" x:Key="PanelGradient" SpreadMethod="Pad" MappingMode="RelativeToBoundingBox">
+        <LinearGradientBrush.GradientStops>
+            <GradientStop Color="Transparent" Offset="0.1"/>
+            <GradientStop Color="AliceBlue" Offset="0.3"/>
+        </LinearGradientBrush.GradientStops>
+    </LinearGradientBrush>
     
     <Style TargetType="{x:Type Label}">
         <Setter Property="Margin" Value="5"/>

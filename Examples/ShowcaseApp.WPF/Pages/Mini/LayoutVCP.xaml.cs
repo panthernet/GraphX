@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using GraphX.PCL.Common.Enums;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages.Mini
@@ -16,18 +17,15 @@ namespace ShowcaseApp.WPF.Pages.Mini
             InitializeComponent();
             DataContext = this;
             Loaded += ControlLoaded;
-            graphArea.GenerateGraphFinished += graphArea_GenerateGraphFinished;
-            graphArea.RelayoutFinished += graphArea_RelayoutFinished;
+            cbMathShape.Checked += CbMathShapeOnChecked;
+            cbMathShape.Unchecked += CbMathShapeOnChecked;
         }
 
-        void graphArea_RelayoutFinished(object sender, System.EventArgs e)
+        private void CbMathShapeOnChecked(object sender, RoutedEventArgs routedEventArgs)
         {
-            
-        }
-
-        void graphArea_GenerateGraphFinished(object sender, System.EventArgs e)
-        {
-            
+            foreach(var item in graphArea.VertexList.Values)
+                item.VertexConnectionPointsList.ForEach(a => a.Shape = cbMathShape.IsChecked == true ? VertexShape.Circle : VertexShape.None);   
+            graphArea.UpdateAllEdges(true);
         }
 
         void ControlLoaded(object sender, RoutedEventArgs e)
@@ -74,7 +72,5 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
             zoomControl.ZoomToFill();
         }
-
-
     }
 }

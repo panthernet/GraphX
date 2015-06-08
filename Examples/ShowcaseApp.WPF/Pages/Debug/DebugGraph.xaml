@@ -19,21 +19,24 @@
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.MergedDictionaries>
-                    <ResourceDictionary Source="/Templates/TestTemplates.xaml"/>
+                    <ResourceDictionary Source="/Templates/Debug/TestTemplates.xaml"/>
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
         </Grid.Resources>
         
         <Border  Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1"  Margin="2" >
             <controls1:ZoomControl x:Name="dg_zoomctrl" Background="Transparent" VerticalContentAlignment="Center" VerticalAlignment="Center">
-                <wpf:GraphAreaExample x:Name="dg_Area" LogicCore="{Binding LogicCore, UpdateSourceTrigger=PropertyChanged}"/>
+                <wpf:GraphAreaExample x:Name="dg_Area"/>
             </controls1:ZoomControl>
         </Border>
         
-        <DockPanel Grid.Row="1" Grid.Column="1">
-            <Button DockPanel.Dock="Top" Name="butRun">Run</Button>
-            <Button DockPanel.Dock="Top" Name="butRelay">Relay</Button>
-            <Button DockPanel.Dock="Top" Name="butTest">Test</Button>
+        <DockPanel Grid.Row="1" Grid.Column="1" LastChildFill="False">
+            <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butGeneral">General</Button>
+            <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butVCP">VCP</Button>
+            <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butEdgePointer">EdgePointer</Button>
+            <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butEdgeLabels">EdgeLabels</Button>
+            <Button DockPanel.Dock="Bottom" Margin="3" Width="80" Name="butRelayout">Relayout</Button>
+            <ComboBox DockPanel.Dock="Bottom" Margin="3" Width="80" Name="cbDebugMode" SelectedItem="{Binding DebugMode, UpdateSourceTrigger=PropertyChanged}"/>
         </DockPanel>
         
     </Grid>

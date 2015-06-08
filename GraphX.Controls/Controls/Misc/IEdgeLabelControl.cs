@@ -2,7 +2,7 @@
 #if WPF
 using System.Windows;
 #elif METRO
-using GraphX.Measure;
+using Windows.Foundation;
 #endif
 
 namespace GraphX.Controls
@@ -31,10 +31,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Set label rectangular size
         /// </summary>
-#if WPF
+
         void SetSize(Rect size);
-#elif METRO
-        void SetSize(Windows.Foundation.Rect size);
-#endif
     }
 }

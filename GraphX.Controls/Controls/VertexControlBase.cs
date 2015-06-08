@@ -29,12 +29,17 @@ namespace GraphX.Controls
                 PositionChanged.Invoke(this, new VertexPositionEventArgs(offset, pos, this));
         }
 
+        protected VertexControlBase()
+        {
+            VertexConnectionPointsList = new List<IVertexConnectionPoint>();
+        }
+
         #region Properties
 
         /// <summary>
         /// List of found vertex connection points
         /// </summary>
-        internal List<IVertexConnectionPoint> VertexConnectionPointsList = new List<IVertexConnectionPoint>();
+        public List<IVertexConnectionPoint> VertexConnectionPointsList { get; protected set; }
 
         /// <summary>
         /// Provides settings for event calls within single vertex control
@@ -54,7 +59,8 @@ namespace GraphX.Controls
             set
             {
                 _labelAngle = value;
-                if (VertexLabelControl != null) VertexLabelControl.Angle = _labelAngle;
+                if (VertexLabelControl != null) 
+                    VertexLabelControl.Angle = _labelAngle;
             }
         }
 
@@ -166,12 +172,24 @@ namespace GraphX.Controls
         /// Returns first connection point found with specified Id
         /// </summary>
         /// <param name="id">Connection point identifier</param>
-        /// <param name="runUpdate">Update connection point size data if found</param>
+        /// <param name="runUpdate">Update connection point if found</param>
         public IVertexConnectionPoint GetConnectionPointById(int id, bool runUpdate = false)
         {
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
             if (result != null) result.Update();
             return result;
+        }
+
+        /// <summary>
+        /// Sets visibility of all connection points
+        /// </summary>
+        /// <param name="isVisible"></param>
+        public void SetConnectionPointsVisibility(bool isVisible)
+        {
+            foreach (var item in VertexConnectionPointsList)
+            {
+                if (isVisible) item.Show(); else item.Hide();
+            }
         }
 
 #if METRO

@@ -66,13 +66,13 @@
                                 </DockPanel>
                                 <CheckBox Name="gg_async" Margin="3" Content="Use async computation" DockPanel.Dock="Top"/>
                                 <TextBlock Text="Layout" DockPanel.Dock="Top" HorizontalAlignment="Center"  FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_layalgo" SelectionChanged="gg_layalgo_SelectionChanged" Margin="3" DockPanel.Dock="Top"/>
+                                <ComboBox IsReadOnly="True" Name="gg_layalgo" Margin="3" DockPanel.Dock="Top"/>
                                 <CheckBox DockPanel.Dock="Top" Name="gg_useExternalLayAlgo" Checked="gg_useExternalLayAlgo_Checked" Unchecked="gg_useExternalLayAlgo_Checked" Margin="3" Content="Use external algorithm"/>
                                 <TextBlock Text="Overlap removal" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_oralgo" SelectionChanged="gg_oralgo_SelectionChanged" Margin="3" DockPanel.Dock="Top"/>
+                                <ComboBox IsReadOnly="True" Name="gg_oralgo" Margin="3" DockPanel.Dock="Top"/>
                                 <CheckBox DockPanel.Dock="Top" Name="gg_useExternalORAlgo" Checked="gg_useExternalORAlgo_Checked" Unchecked="gg_useExternalORAlgo_Checked" Margin="3" Content="Use external algorithm"/>
                                 <TextBlock Text="Edge routing" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_eralgo" SelectionChanged="gg_eralgo_SelectionChanged" Margin="3" DockPanel.Dock="Top"/>
+                                <ComboBox IsReadOnly="True" Name="gg_eralgo" Margin="3" DockPanel.Dock="Top"/>
                                 <CheckBox  DockPanel.Dock="Top" Name="gg_useExternalERAlgo" Checked="gg_useExternalERAlgo_Checked" Unchecked="gg_useExternalERAlgo_Checked" Margin="3" Content="Use external algorithm"/>
                             </DockPanel>
                         </acc:AccordionItem>

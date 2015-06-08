@@ -1,8 +1,8 @@
 ﻿#if WPF
-using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DefaultEventArgs = System.EventArgs;
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Media;
 using GraphX.Measure;
 using Point = Windows.Foundation.Point;
 using Rect = Windows.Foundation.Rect;
+using DefaultEventArgs = System.Object;
 #endif
 
 namespace GraphX.Controls
@@ -81,7 +82,7 @@ namespace GraphX.Controls
             RenderTransformOrigin = new Point(.5, .5);
             VerticalAlignment = VerticalAlignment.Center;
             HorizontalAlignment = HorizontalAlignment.Center;
-            LayoutUpdated += EdgePointerImage_LayoutUpdated;
+            LayoutUpdated += EdgePointer_LayoutUpdated;
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace GraphX.Controls
         public virtual Point Update(Point? position, Vector direction, double angle = 0d)
         {
             //var vecOffset = new Vector(direction.X * Offset.X, direction.Y * Offset.Y);
-            if (DesiredSize.Width == 0 || DesiredSize.Height == 0) return new Point();
+            if (DesiredSize.Width == 0 || DesiredSize.Height == 0 || !position.HasValue) return new Point();
             var vecMove = new Vector(direction.X * DesiredSize.Width * .5, direction.Y * DesiredSize.Height * .5);
             position = new Point(position.Value.X - vecMove.X, position.Value.Y - vecMove.Y);// + vecOffset;
             if (!double.IsNaN(DesiredSize.Width) && DesiredSize.Width != 0  && !double.IsNaN(position.Value.X))
@@ -104,36 +105,32 @@ namespace GraphX.Controls
             return new Point(direction.X * ActualWidth, direction.Y * ActualHeight);
         }
 
+        public void SetManualPosition(Point position)
+        {
+            LastKnownRectSize = new Rect(new Point(position.X - DesiredSize.Width * .5, position.Y - DesiredSize.Height * .5), DesiredSize);
+            Arrange(LastKnownRectSize);
+            
+        }
+
         public void Dispose()
         {
             _edgeControl = null;
         }
 
-#if WPF
-        DependencyObject GetParent()
-        {
-            return VisualParent;
-        }
-
-        void EdgePointerImage_LayoutUpdated(object sender, EventArgs e)
+        void EdgePointer_LayoutUpdated(object sender, DefaultEventArgs e)
         {
             if (LastKnownRectSize != Rect.Empty && !double.IsNaN(LastKnownRectSize.Width) && LastKnownRectSize.Width != 0
-                && EdgeControl != null && !EdgeControl.IsSelfLooped)
+                && EdgeControl != null)
                 Arrange(LastKnownRectSize);
         }
-#elif METRO
 
         DependencyObject GetParent()
         {
+#if WPF
+            return VisualParent;
+#elif METRO
             return Parent;
-        }
-
-
-        void EdgePointerImage_LayoutUpdated(object sender, object e)
-        {
-            if (LastKnownRectSize != Rect.Empty && !double.IsNaN(LastKnownRectSize.Width) && LastKnownRectSize.Width != 0)
-                Arrange(LastKnownRectSize);
-        }
 #endif
+        }
     }
 }

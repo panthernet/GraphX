@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using DefaultEventArgs = System.EventArgs;
 #elif METRO
 using Windows.ApplicationModel;
 using Windows.Foundation;
@@ -11,6 +12,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
+using DefaultEventArgs = System.Object;
 #endif
 using System.Linq;
 using GraphX.PCL.Common.Exceptions;
@@ -178,31 +180,21 @@ namespace GraphX.Controls
             Visibility = Visibility.Visible;
         }
 
-#if WPF
-        DependencyObject GetParent()
-        {
-            return VisualParent;
-        }
-
-        void VertexLabelControl_LayoutUpdated(object sender, EventArgs e)
+        void VertexLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
         {
             var vc = GetVertexControl(GetParent());
             if (vc == null || !vc.ShowLabel) return;
             UpdatePosition();
         }
-#elif METRO
+
         DependencyObject GetParent()
         {
+#if WPF
+            return VisualParent;
+#elif METRO
             return Parent;
-        }
-
-        void VertexLabelControl_LayoutUpdated(object sender, object e)
-        {
-            var vc = GetVertexControl(GetParent());
-            if(vc == null || !vc.ShowLabel) return;
-            UpdatePosition();
-        }
 #endif
+        }
     }
 
     /// <summary>

@@ -64,6 +64,7 @@
     <Compile Include="Enums\OverlapRemovalAlgorithmTypeEnum.cs" />
     <Compile Include="Enums\ProcessingOptionEnum.cs" />
     <Compile Include="Enums\VertexShape.cs" />
+    <Compile Include="Exceptions\GX_ObsoleteException.cs" />
     <Compile Include="Exceptions\GX_GeneralException.cs" />
     <Compile Include="Exceptions\GX_InvalidDataException.cs" />
     <Compile Include="Exceptions\GX_ObjectNotFoundException.cs" />

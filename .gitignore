@@ -114,3 +114,4 @@ UpgradeLog*.XML
 
 #LocalHistory VS plugin
 .localhistory/
+/NeuralNetWorkbench/Helpers/VizHelper.cs

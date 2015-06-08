@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Markup;
 using FirstFloor.ModernUI;
 using FirstFloor.ModernUI.Windows;
 using ShowcaseApp.WPF.Models;

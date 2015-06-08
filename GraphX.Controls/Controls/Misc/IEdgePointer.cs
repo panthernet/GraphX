@@ -21,6 +21,8 @@ namespace GraphX.Controls
         /// </summary>
         Point Update(Point? position, Vector direction, double angle = 0d);
 
+        void SetManualPosition(Point position);
+
         void Hide();
         void Show();
     }

@@ -158,6 +158,9 @@
     <Compile Include="..\GraphX.Controls\Behaviours\HighlightBehaviour.cs">
       <Link>Behaviours\HighlightBehaviour.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\EdgeControlBase.cs">
+      <Link>Controls\EdgeControlBase.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\EdgeLabels\EdgeLabelControl.cs">
       <Link>Controls\EdgeLabels\EdgeLabelControl.cs</Link>
     </Compile>

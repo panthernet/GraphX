@@ -576,21 +576,16 @@ namespace GraphX.Controls
             return Task.Run(async () =>
             {
                 Dictionary<TVertex, Size> vertexSizes = null;
-                IExternalLayout<TVertex> alg = null; //layout algorithm
-                Dictionary<TVertex, Rect> rectangles = null; //rectangled size data
-                IExternalOverlapRemoval<TVertex> overlap = null; //overlap removal algorithm
-                IExternalEdgeRouting<TVertex, TEdge> eralg = null;
+               // IExternalLayout<TVertex> alg = null; //layout algorithm
+                //Dictionary<TVertex, Rect> rectangles = null; //rectangled size data
+                //IExternalOverlapRemoval<TVertex> overlap = null; //overlap removal algorithm
+                //IExternalEdgeRouting<TVertex, TEdge> eralg = null;
                 IDictionary<TVertex, Measure.Point> vertexPositions = null;
+                IGXLogicCore<TVertex, TEdge, TGraph> localLogicCore = null;
 
-                var result = false;
                 await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                 {
-                    if (LogicCore == null)
-                        throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-                    if (LogicCore.Graph == null)
-                        throw new GX_InvalidDataException("LogicCore -> Graph property is not set!");
-                    if (_vertexlist.Count == 0)
-                        return; // no vertexes == no edges
+                    if (LogicCore == null) return;
 
                     UpdateLayout(); //update layout so we can get actual control sizes
 
@@ -603,61 +598,21 @@ namespace GraphX.Controls
                     if(vertexPositions.All(a=> a.Value == GraphX.Measure.Point.Zero))
                         vertexPositions.Clear();
 
-                    alg = LogicCore.GenerateLayoutAlgorithm(vertexSizes, vertexPositions);
-                    if (alg == null && !LogicCore.IsCustomLayout)
-                    {
-                        //await new MessageDialog("Layout type not supported yet!").ShowAsync();
-                        Debug.Assert(false, "Layout type is not yet supported!");
-                        return;
-                    }
-
-                    //setup overlap removal algorythm
-                    if (LogicCore.AreOverlapNeeded())
-                        overlap = LogicCore.GenerateOverlapRemovalAlgorithm(rectangles);
-
-                    //setup Edge Routing algorithm
-                    eralg = LogicCore.GenerateEdgeRoutingAlgorithm(DesiredSize.ToGraphX());
-                    result = true;
+                    localLogicCore = LogicCore;
                 });
-                if (!result) return;
 
-                IDictionary<TVertex, Measure.Point> resultCoords;
-                if (alg != null)
-                {
-                    alg.Compute(cancellationToken);
-                    OnLayoutCalculationFinished();
-                    //if (Worker != null) Worker.ReportProgress(33, 0);
-                    //result data storage
-                    resultCoords = alg.VertexPositions;
-                } //get default coordinates if using Custom layout
-                else
-                {
-                    //UpdateLayout();
-                    resultCoords = vertexPositions;
-                }
+                if (localLogicCore == null)
+                    throw new GX_InvalidDataException("LogicCore -> Not initialized!");
 
-                //overlap removal
-                if (overlap != null)
-                {
-                    //generate rectangle data from sizes
-                    var coords = resultCoords;
-                    await DispatcherHelper.CheckBeginInvokeOnUi(() =>
-                    {
-                        UpdateLayout();
-                        rectangles = GetVertexSizeRectangles(coords, vertexSizes, true);
-                    });
-                    overlap.Rectangles = rectangles;
-                    overlap.Compute(cancellationToken);
-                    OnOverlapRemovalCalculationFinished();
-                    resultCoords = new Dictionary<TVertex, Measure.Point>();
-                    foreach (var res in overlap.Rectangles)
-                        resultCoords.Add(res.Key, new Measure.Point(res.Value.Left, res.Value.Top));
-                }
+
+                if (!localLogicCore.GenerateAlgorithmStorage(vertexSizes, vertexPositions))
+                    return;
+
+                var resultCoords = localLogicCore.Compute(cancellationToken);
 
 
                 await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                 {
-                    LogicCore.CreateNewAlgorithmStorage(alg, overlap, eralg);
 
                     if (MoveAnimation != null)
                     {
@@ -691,34 +646,7 @@ namespace GraphX.Controls
 
                     }
                         
-                    UpdateLayout(); //need to update before edge routing
-                });
-
-                //Edge Routing
-                if (eralg != null)
-                {
-                    await DispatcherHelper.CheckBeginInvokeOnUi(() =>
-                    {
-                        //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
-                        eralg.AreaRectangle = ContentSize.ToGraphX();
-                        // new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
-                        rectangles = GetVertexSizeRectangles(resultCoords, vertexSizes);
-                    });
-                    eralg.VertexPositions = resultCoords;
-                    eralg.VertexSizes = rectangles;
-                    eralg.Compute(cancellationToken);
-                    OnEdgeRoutingCalculationFinished();
-                    if (eralg.EdgeRoutes != null)
-                        foreach (var item in eralg.EdgeRoutes)
-                            item.Key.RoutingPoints = item.Value;
-                    //if (Worker != null) Worker.ReportProgress(99, 1);
-
-                }
-                await DispatcherHelper.CheckBeginInvokeOnUi(() =>
-                {
-                    //UpdateLayout();
                     MeasureOverride(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
-                    LogicCore.CreateNewAlgorithmStorage(alg, overlap, eralg);
 
                     if (generateAllEdges)
                     {
@@ -1097,13 +1025,13 @@ namespace GraphX.Controls
 
         private void RemoveEdgeLabelsOverlap()
         {
-            var sz = GetVertexSizeRectangles();
+           /* var sz = GetVertexSizeRectangles();
 
             var sizes = sz.ToDictionary(item => new LabelOverlapData() {Id = item.Key.ID, IsVertex = true}, item => item.Value);
             foreach (var item in EdgesList)
             {
                 item.Value.UpdateLabelLayout();
-                sizes.Add(new LabelOverlapData() { Id = item.Key.ID, IsVertex = false }, item.Value.GetLabelSize());
+                sizes.Add(new LabelOverlapData() { Id = item.Key.ID, IsVertex = false }, item.Value.GetLabelSize().ToGraphX());
             }
   
             var orAlgo = LogicCore.AlgorithmFactory.CreateFSAA(sizes, 15f, 15f);
@@ -1137,7 +1065,7 @@ namespace GraphX.Controls
             foreach (var item in EdgesList)
             {
                 item.Value.PrepareEdgePath(false, null, false);
-            }
+            }*/
             //update edges
            // UpdateAllEdges();
         }
@@ -1289,15 +1217,15 @@ namespace GraphX.Controls
         /// <summary>
         /// Update visual appearance for all possible visual edges
         /// </summary>
-        public void UpdateAllEdges()
+        /// <param name="performFullUpdate">If True - perform full edge update including all children checks such as pointers & labels. If False - update only edge routing and edge visual</param>
+        public void UpdateAllEdges(bool performFullUpdate = false)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             foreach (var ec in _edgeslist.Values)
             {
-                ec.PrepareEdgePath();
-                //ec.InvalidateVisual();
-                ec.InvalidateChildren();
+                if (!performFullUpdate) ec.UpdateEdgeRendering();
+                else ec.UpdateEdge();
             }
             if (LogicCore.EnableParallelEdges)
                 ParallelizeEdges();

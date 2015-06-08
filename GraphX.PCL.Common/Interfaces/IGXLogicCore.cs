@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Models;
@@ -43,11 +44,21 @@ namespace GraphX.PCL.Common.Interfaces
         void CreateNewAlgorithmFactory();
         void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er);
 
+        IDictionary<TVertex, Point> Compute(CancellationToken cancellationToken);
+
         bool AreVertexSizesNeeded();
         bool AreOverlapNeeded();
         IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size> vertexSizes, IDictionary<TVertex, Point> vertexPositions);
         IExternalOverlapRemoval<TVertex> GenerateOverlapRemovalAlgorithm(Dictionary<TVertex, Rect> rectangles = null);
         IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size desiredSize, IDictionary<TVertex, Point> positions = null, IDictionary<TVertex, Rect> rectangles = null);
 
+        /// <summary>
+        /// Creates algorithms by values in LogicCore properties and generates new AlgorithmStorage object
+        /// </summary>
+        /// <param name="vertexSizes">Vertex sizes</param>
+        /// <param name="vertexPositions">Vertex positions</param>
+        /// <param name="areaSize">Available size of the host area</param>
+        bool GenerateAlgorithmStorage(Dictionary<TVertex, Size> vertexSizes,
+            IDictionary<TVertex, Point> vertexPositions);
     }
 }

@@ -3,9 +3,12 @@ using System.Text.RegularExpressions;
 #if WPF
 using System.Windows;
 using System.Windows.Media;
+using System.ComponentModel;
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using Windows.ApplicationModel;
+using Windows.Foundation;
 #endif
 
 namespace GraphX.Controls
@@ -54,5 +57,15 @@ namespace GraphX.Controls
             }
             return null;
         }
+
+        public static bool IsInDesignMode(DependencyObject ctrl = null)
+        {
+#if WPF
+            return ctrl != null && DesignerProperties.GetIsInDesignMode(ctrl);
+#elif METRO
+            return DesignMode.DesignModeEnabled;
+#endif
+        }
+
     }
 }

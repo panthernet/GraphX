@@ -7,11 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
     <Grid Style="{StaticResource ContentRoot}">
-        <mui:ModernTab x:Name="tabControl" SelectedSource="/Pages/Mini/MiniContentPage.xaml" Layout="Tab">
+        <mui:ModernTab x:Name="tabControl" SelectedSource="/Controls/MiniContentPage.xaml" Layout="Tab">
             <mui:ModernTab.Links>
-                <mui:Link DisplayName="Description" Source="/Pages/Mini/MiniContentPage.xaml" />
-                <mui:Link DisplayName="Source XAML" Source="/Pages/Mini/MiniXamlPage.xaml" />
-                <mui:Link DisplayName="Template XAML" Source="/Pages/Mini/MiniXamlTemplatePage.xaml" />
+                <mui:Link DisplayName="Description" Source="/Controls/MiniContentPage.xaml" />
+                <mui:Link DisplayName="Source XAML" Source="/Controls/MiniXamlPage.xaml" />
+                <mui:Link DisplayName="Template XAML" Source="/Controls/MiniXamlTemplatePage.xaml" />
             </mui:ModernTab.Links>
         </mui:ModernTab>
     </Grid>

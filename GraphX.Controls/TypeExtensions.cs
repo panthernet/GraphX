@@ -60,6 +60,11 @@ namespace GraphX.Controls
             return new Point(rect.X + rect.Width * .5, rect.Y + rect.Height * .5);
         }
 
+        public static Point Subtract(this Point pt, Point pt2)
+        {
+            return new Point(pt.X - pt2.X, pt.Y - pt2.Y);
+        }
+
         /// <summary>
         /// Not for METRO
         /// </summary>

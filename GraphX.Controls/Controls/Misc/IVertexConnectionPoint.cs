@@ -18,7 +18,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets or sets shape form for connection point (affects math calculations for edge end placement)
         /// </summary>
-        VertexShape Shape { get; }
+        VertexShape Shape { get; set; }
 
         void Hide();
         void Show();

@@ -134,7 +134,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\DebugGraph.xaml">
+    <Page Include="Pages\Debug\DebugGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -142,15 +142,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Mini\MiniXamlTemplatePage.xaml">
+    <Page Include="Controls\MiniXamlTemplatePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Mini\MiniXamlPage.xaml">
+    <Page Include="Controls\MiniXamlPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Mini\MiniContentPage.xaml">
+    <Page Include="Controls\MiniContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -203,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Templates\ExpanderTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Templates\GeneralTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -215,7 +219,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Templates\TestTemplates.xaml">
+    <Page Include="Templates\Debug\TestTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -258,19 +262,19 @@
     <Compile Include="Pages\FeatureLists\FeaturesPageTemplates.xaml.cs">
       <DependentUpon>FeaturesPageTemplates.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\DebugGraph.xaml.cs">
+    <Compile Include="Pages\Debug\DebugGraph.xaml.cs">
       <DependentUpon>DebugGraph.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\GeneralGraph.xaml.cs">
       <DependentUpon>GeneralGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Mini\MiniXamlTemplatePage.xaml.cs">
+    <Compile Include="Controls\MiniXamlTemplatePage.xaml.cs">
       <DependentUpon>MiniXamlTemplatePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Mini\MiniXamlPage.xaml.cs">
+    <Compile Include="Controls\MiniXamlPage.xaml.cs">
       <DependentUpon>MiniXamlPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Mini\MiniContentPage.xaml.cs">
+    <Compile Include="Controls\MiniContentPage.xaml.cs">
       <DependentUpon>MiniContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\NNGraph.xaml.cs">

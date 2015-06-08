@@ -23,17 +23,24 @@ namespace ShowcaseApp.WPF.Pages
             InitializeComponent();
             DataContext = this;
 
+            gg_vertexCount.Text = "30";
             var ggLogic = new LogicCoreExample();
             gg_Area.LogicCore = ggLogic;
 
+            gg_layalgo.SelectionChanged += gg_layalgo_SelectionChanged;
+            gg_oralgo.SelectionChanged += gg_oralgo_SelectionChanged;
+            gg_eralgo.SelectionChanged += gg_eralgo_SelectionChanged;
+
             gg_layalgo.ItemsSource = Enum.GetValues(typeof(LayoutAlgorithmTypeEnum)).Cast<LayoutAlgorithmTypeEnum>();
             gg_layalgo.SelectedItem = LayoutAlgorithmTypeEnum.KK;
+
             gg_oralgo.ItemsSource = Enum.GetValues(typeof(OverlapRemovalAlgorithmTypeEnum)).Cast<OverlapRemovalAlgorithmTypeEnum>();
             gg_oralgo.SelectedIndex = 0;
+
             gg_eralgo.ItemsSource = Enum.GetValues(typeof(EdgeRoutingAlgorithmTypeEnum)).Cast<EdgeRoutingAlgorithmTypeEnum>();
-            gg_eralgo.SelectedItem = EdgeRoutingAlgorithmTypeEnum.SimpleER;            
+            gg_eralgo.SelectedItem = EdgeRoutingAlgorithmTypeEnum.SimpleER;
+
             gg_but_randomgraph.Click += gg_but_randomgraph_Click;
-            gg_vertexCount.Text = "30";
             gg_async.Checked += gg_async_Checked;
             gg_async.Unchecked += gg_async_Checked;
             gg_Area.RelayoutFinished += gg_Area_RelayoutFinished;
@@ -195,9 +202,10 @@ namespace ShowcaseApp.WPF.Pages
                 gg_Area.LogicCore.DefaultLayoutAlgorithmParams
                     = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.FR);
 
-            if (gg_Area.LogicCore.Graph == null) gg_but_randomgraph_Click(null, null);
-            else gg_Area.RelayoutGraph();
-            gg_Area.GenerateAllEdges();
+            //if (gg_Area.LogicCore.Graph == null) 
+               // gg_but_randomgraph_Click(null, null);
+            //else gg_Area.RelayoutGraph();
+            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalLayAlgo_Checked(object sender, RoutedEventArgs e)
@@ -208,39 +216,41 @@ namespace ShowcaseApp.WPF.Pages
                 gg_Area.LogicCore.Graph = graph;
                 AssignExternalLayoutAlgorithm(graph);
             }
-            else gg_Area.GetLogicCore<LogicCoreExample>().ExternalLayoutAlgorithm = null;
+            else gg_Area.LogicCore.ExternalLayoutAlgorithm = null;
         }
 
         private void AssignExternalLayoutAlgorithm(BidirectionalGraph<DataVertex, DataEdge> graph)
         {
-            gg_Area.GetLogicCore<LogicCoreExample>().ExternalLayoutAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutAlgorithm(LayoutAlgorithmTypeEnum.ISOM, graph);
+            gg_Area.LogicCore.ExternalLayoutAlgorithm = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutAlgorithm(LayoutAlgorithmTypeEnum.ISOM, graph);
         }
 
         private void gg_oralgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var core = gg_Area.GetLogicCore<LogicCoreExample>();
+            var core = gg_Area.LogicCore;
             core.DefaultOverlapRemovalAlgorithm = (OverlapRemovalAlgorithmTypeEnum)gg_oralgo.SelectedItem;
             if (core.DefaultOverlapRemovalAlgorithm == OverlapRemovalAlgorithmTypeEnum.FSA || core.DefaultOverlapRemovalAlgorithm == OverlapRemovalAlgorithmTypeEnum.OneWayFSA)
             {
                 core.DefaultOverlapRemovalAlgorithmParams.HorizontalGap = 30;
                 core.DefaultOverlapRemovalAlgorithmParams.VerticalGap = 30;
             }
-            if (core.Graph == null) gg_but_randomgraph_Click(null, null);
-            else gg_Area.RelayoutGraph();
-            gg_Area.GenerateAllEdges();
+            //if (core.Graph == null) 
+                //gg_but_randomgraph_Click(null, null);
+            //else gg_Area.RelayoutGraph();
+            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalORAlgo_Checked(object sender, RoutedEventArgs e)
         {
-            gg_Area.GetLogicCore<LogicCoreExample>().ExternalOverlapRemovalAlgorithm = gg_useExternalORAlgo.IsChecked == true ? gg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum.FSA, null) : null;
+            gg_Area.LogicCore.ExternalOverlapRemovalAlgorithm = gg_useExternalORAlgo.IsChecked == true ? gg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum.FSA, null) : null;
         }
 
         private void gg_eralgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            gg_Area.GetLogicCore<LogicCoreExample>().DefaultEdgeRoutingAlgorithm = (EdgeRoutingAlgorithmTypeEnum)gg_eralgo.SelectedItem;
-            if (gg_Area.LogicCore.Graph == null) gg_but_randomgraph_Click(null, null);
-            else gg_Area.RelayoutGraph();
-            gg_Area.GenerateAllEdges();
+            gg_Area.LogicCore.DefaultEdgeRoutingAlgorithm = (EdgeRoutingAlgorithmTypeEnum)gg_eralgo.SelectedItem;
+            //if (gg_Area.LogicCore.Graph == null) 
+                //gg_but_randomgraph_Click(null, null);
+            //else gg_Area.RelayoutGraph();
+            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalERAlgo_Checked(object sender, RoutedEventArgs e)
@@ -281,7 +291,7 @@ namespace ShowcaseApp.WPF.Pages
             gg_Area.ClearLayout();
             var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
             //assign graph again as we need to update Graph param inside and i have no independent examples
-            if (gg_Area.GetLogicCore<LogicCoreExample>().ExternalLayoutAlgorithm != null)
+            if (gg_Area.LogicCore.ExternalLayoutAlgorithm != null)
                 AssignExternalLayoutAlgorithm(graph);
 
             //supplied graph will be automaticaly be assigned to GraphArea::LogicCore.Graph property

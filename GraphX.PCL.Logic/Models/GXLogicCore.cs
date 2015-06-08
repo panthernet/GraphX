@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
@@ -29,6 +30,16 @@ namespace GraphX.PCL.Logic.Models
         /// </summary>
         public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; private set; }
         #endregion
+
+        /// <summary>
+        /// Source vertex positions internal storage
+        /// </summary>
+        private IDictionary<TVertex, Point> _vertexPosSource;
+
+        /// <summary>
+        /// Source vertex sizes
+        /// </summary>
+        private Dictionary<TVertex, Size> _vertexSizes;
 
         /// <summary>
         /// Gets or sets if if edge label overlap removal enabled
@@ -172,6 +183,8 @@ namespace GraphX.PCL.Logic.Models
             ExternalOverlapRemovalAlgorithm = null;
             AlgorithmFactory = null;
             AlgorithmStorage = null;
+            if(_vertexPosSource != null)
+                _vertexPosSource.Clear();
         }
 
 
@@ -185,30 +198,55 @@ namespace GraphX.PCL.Logic.Models
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);
         }
 
-        public void ComputeEdgeRoutesByVertex(TVertex dataVertex, Point? vertexPosition = null, Size? vertexSize = null)
+        /// <summary>
+        /// Creates algorithms by values in LogicCore properties and generates new AlgorithmStorage object
+        /// </summary>
+        /// <param name="vertexSizes">Vertex sizes</param>
+        /// <param name="vertexPositions">Vertex positions</param>
+        public bool GenerateAlgorithmStorage(Dictionary<TVertex, Size> vertexSizes,
+            IDictionary<TVertex, Point> vertexPositions)
         {
-            if (AlgorithmStorage == null || AlgorithmStorage.EdgeRouting == null)
-                throw new GX_InvalidDataException("GXC: Algorithm storage is not initialized!");
-            if (dataVertex == null) return;
-            var list = new List<TEdge>();
-            IEnumerable<TEdge> edges;
-            Graph.TryGetInEdges(dataVertex, out edges);
-            list.AddRange(edges);
-            Graph.TryGetOutEdges(dataVertex, out edges);
-            list.AddRange(edges);
+            var algLay = GenerateLayoutAlgorithm(vertexSizes, vertexPositions);
+            IExternalOverlapRemoval<TVertex> algOverlap = null;
 
-            if (vertexPosition.HasValue && vertexSize.HasValue)
-            {
-                UpdateVertexDataForEr(dataVertex, vertexPosition.Value, vertexSize.Value);
-            }
+            //TODO maybe rewise due to extensive memory consumption
+            _vertexPosSource = vertexPositions;
+            _vertexSizes = vertexSizes;
+            
+            //setup overlap removal algorythm
+            if (AreOverlapNeeded())
+                algOverlap = GenerateOverlapRemovalAlgorithm();
+            var algEr = GenerateEdgeRoutingAlgorithm(CalculateContentRectangle().Size);
 
-            foreach (var item in list)
-                item.RoutingPoints = AlgorithmStorage.EdgeRouting.ComputeSingle(item);
+            CreateNewAlgorithmStorage(algLay, algOverlap, algEr);
+            return (AlgorithmStorage.Layout != null && (vertexSizes == null || vertexSizes.Count != 0)) || IsCustomLayout;
         }
 
         private void UpdateVertexDataForEr(TVertex vertexData, Point position, Size size)
         {
             AlgorithmStorage.EdgeRouting.UpdateVertexData(vertexData, position, new Rect(position, size));
+        }
+
+        /// <summary>
+        /// Get visual vertex size rectangles (can be used by some algorithms)
+        /// </summary>
+        /// <param name="positions">Vertex positions collection (auto filled if null)</param>
+        /// <param name="vertexSizes">Vertex sizes collection (auto filled if null)</param>
+        /// <param name="getCenterPoints">True if you want center points returned instead of top-left (needed by overlap removal algo)</param>
+        public Dictionary<TVertex, Rect> GetVertexSizeRectangles(IDictionary<TVertex, Point> positions = null, Dictionary<TVertex, Size> vertexSizes = null, bool getCenterPoints = false)
+        {
+
+            if (vertexSizes == null || positions == null)
+                throw new GX_InvalidDataException("GetVertexSizeRectangles() -> Vertex sizes or positions not set!");
+            var rectangles = new Dictionary<TVertex, Rect>();
+            foreach (var vertex in Graph.Vertices.Where(a => a.SkipProcessing != ProcessingOptionEnum.Exclude))
+            {
+                Point position; Size size;
+                if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;
+                if (!getCenterPoints) rectangles[vertex] = new Rect(position.X, position.Y, size.Width, size.Height);
+                else rectangles[vertex] = new Rect(position.X - size.Width * (float)0.5, position.Y - size.Height * (float)0.5, size.Width, size.Height);
+            }
+            return rectangles;
         }
     }
 }

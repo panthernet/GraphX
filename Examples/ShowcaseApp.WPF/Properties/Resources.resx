@@ -125,6 +125,8 @@
     <value>..\Templates\Mini\LayoutVCPTemplate.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="LayoutVCPText" xml:space="preserve">
-    <value>In this example you can see how VCP (vertex connection points) works. Drag vertices to see VCP behavior in action and play with different settings on a settings panel to customize this behaviors.</value>
+    <value>In this example you can see how VCP (vertex connection points) works. Drag vertices to see VCP behavior in action and play with different settings on a settings panel to customize these behaviors.
+
+Point mouse over the different settings to see tooltips.</value>
   </data>
 </root>

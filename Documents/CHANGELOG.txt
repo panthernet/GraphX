@@ -13,6 +13,9 @@ HIGHLIGHTS:
 	* Now GraphX for WPF requires only .NET Framework 4.0 to build & run. Deprecated all code that required .NET 4.0.3.
 	* Now you can use "http://schemas.panthernet.ru/graphx/" XAML namespace in GraphX for WPF for all its visual content. Additionaly, output filenames for WPF/METRO dlls are both changed to 
 		GraphX.Controls.dll so Post-Build process copies output files to GraphX/Bin folder with distinct filenames reflecting the platform as before.
+	* Performance improvements are always welcome. In this release the whole layout calculation logic has been revisited in terms of both performance and code quality gains. We've also eliminated
+		some redundant layout updates, moved all math & algorithms handling from GraphArea directly to LogicCore under better async implementation, cleaned up ZoomControl logic,
+		revisited edges & edge labels code to remove redundant calculation passes.
 
 DETAILED CHANGELOG:
 + Added support for custom VCP [WPF, METRO]
@@ -25,12 +28,12 @@ DETAILED CHANGELOG:
 + Added true orthogonal edge routing for EfficientSugiyama algorithm using EdgeRouting param [ALL]
 + Added new property GraphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
 + Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
-	w/o any algorithms and also sets vertices positions if needed [WPF, METRO]
+	w/o any algorithms and also sets custom vertices positions if needed [WPF, METRO]
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
 + Fixed edge pointer positioning bug [METRO]
-+ Fixed outdated edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
-+ Fixed edge overlapping edge pointers (image, path) [WPF, METRO]
++ Fixed redundant edge rendering in some cases when vertex coordinates are changed manualy [WPF, METRO]
++ Fixed edge overlapping edge pointers [WPF, METRO]
 + Fixed use of ControlFactory for edge deserialization [WPF, METRO] thanks to perturbare
 + Fixed some algorithm calculation problems, especial FR [ALL]
 + Fixed EdgeControl.ShowArrows to implement DependencyProperty [WPF, METRO]  thanks to perturbare
@@ -39,6 +42,7 @@ DETAILED CHANGELOG:
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
 + Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
++ Improved main layout calculation logic to gain performance improvements [WPF, METRO]
 + Reorganized Example apps namespaces and code for greater good :)
 + Merged EdgePointerImage and EdgePointerPath into one universal DefaultEdgePointer class [WPF, METRO]
 + Improved edge and its template parts rendering/calc performance [WPF, METRO]
@@ -67,6 +71,8 @@ BREAKING CHANGES:
 * Now GraphX for WPF requires only .NET Framework 4.0 to build & run
 
 * EdgeLabelControl no longer needs default Angle binding and RenderTransformOrigin setup. They are processed internally [WPF]
+
+* GraphArea::GenerateGraph() method now has generateAllEdges param True by default.
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]
