@@ -5,7 +5,6 @@ using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Models
@@ -116,12 +115,12 @@ namespace GraphX.PCL.Logic.Models
         /// <summary>
         /// Radius of a self-loop edge, which is drawn as a circle. Default is 20.
         /// </summary>
-        public double EdgeSelfLoopCircleRadius { get; set; }
+        public double EdgeSelfLoopElementRadius { get; set; }
 
         /// <summary>
         /// Offset from the corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
         /// </summary>
-        public Point EdgeSelfLoopCircleOffset { get; set; }
+        public Point EdgeSelfLoopElementOffset { get; set; }
 
         /// <summary>
         /// Show self looped edges on vertices. Default value is true.
@@ -163,9 +162,9 @@ namespace GraphX.PCL.Logic.Models
             CreateNewAlgorithmFactory();
             CreateNewAlgorithmStorage(null, null, null);
             Graph = graph;
-            EdgeSelfLoopCircleOffset = new Point(10, 10);
+            EdgeSelfLoopElementOffset = new Point();
             EdgeCurvingTolerance = 8;
-            EdgeSelfLoopCircleRadius = 10;
+            EdgeSelfLoopElementRadius = 5;
             EdgeShowSelfLooped = true;
             ParallelEdgeDistance = 5;
         }

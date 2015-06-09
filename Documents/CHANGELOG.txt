@@ -29,6 +29,8 @@ DETAILED CHANGELOG:
 + Added new property GraphArea::ControlsDrawOrder which defines vertex or edges should be drawn topmost [WPF, METRO]
 + Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
 	w/o any algorithms and also sets custom vertices positions if needed [WPF, METRO]
++ Added new EdgeControl template PART (PART_SelfLoopedEdge) for custom self looped edge indicator visualization. It represents FrameworkElement and if specified in the template
+	will be positioned in the top left vertex corner [WPF, METRO]
 + Fixed first time solution rebuild problems by referencing new QuickGraphPCL nuget [ALL] 
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]
@@ -68,12 +70,16 @@ BREAKING CHANGES:
 	- All GraphX primitives (Point, Rect, etc.) are left in GraphX.Measure for better code readability in cases when they are intersected with System.Windows namespace twins
 
 * IGXLogicCore now include ExternalLayoutAlgorithm, ExternalOverlapRemovalAlgorithm, ExternalEdgeRoutingAlgorithm for simplier external algo assignment
-
 * Now GraphX for WPF requires only .NET Framework 4.0 to build & run
-
 * EdgeLabelControl no longer needs default Angle binding and RenderTransformOrigin setup. They are processed internally [WPF]
-
 * GraphArea::GenerateGraph() method now has generateAllEdges param True by default.
+** Renamed following peoperties:
+	* EdgeControl & LogicCore::EdgeSelfLoopCircleOffset -> EdgeSelfLoopElementOffset
+	* EdgeControl & LogicCore::EdgeSelfLoopCircleRadius -> EdgeSelfLoopElementRadius
+** Completely deprecated EdgeControl::PART_edgeArrowPath template PART in favor of the new DefaultEdgePointer (PART_EdgePointerForSource & PART_EdgePointerForTarget). 
+	Please renew your custom templates. You can find an example in Generic.XAML template.
+** Self looped edges display logic has been slightly changed with the introduction of custom template PART (PART_SelfLoopedEdge). Now LogicCore::EdgeSelfLoopElementOffset
+is (0,0) by default and indicator is shown in the top left vertex corner minus indicator size. You can change this behavior by overriding EdgeControl::PrepareEdgePath() method.
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]

@@ -9,3 +9,7 @@ http://www.codeproject.com/Articles/30090/Text-On-A-Path-in-WPF
 Use DrawVisual for edges at least... performance
 
 http://en.wikipedia.org/wiki/Automatic_label_placement
+
+
+NOTES
+1. If custom object 1st time position is incorrect - CHECK if it has Arrange() specified in LayoutUpdated event!

@@ -24,6 +24,7 @@ using Size = Windows.Foundation.Size;
 namespace GraphX.Controls
 {
     [TemplatePart(Name = "PART_edgePath", Type = typeof(Path))]
+    [TemplatePart(Name = "PART_SelfLoopedEdge", Type = typeof(FrameworkElement))]
     [TemplatePart(Name = "PART_edgeArrowPath", Type = typeof(Path))]//obsolete, present for exception
     [TemplatePart(Name = "PART_edgeLabel", Type = typeof(IEdgeLabelControl))]
     [TemplatePart(Name = "PART_EdgePointerForSource", Type = typeof(IEdgePointer))]
@@ -54,6 +55,16 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(EdgeControlBase), new PropertyMetadata(null));
+
+        /// <summary>
+        /// Element presenting self looped edge
+        /// </summary>
+        protected FrameworkElement SelfLoopedEdgeElement;
+
+        /// <summary>
+        /// Used to store last known SLE rect size for proper updates on layout passes
+        /// </summary>
+        private SysRect _selfLoopedEdgeLastKnownRect;
 
         #region Properties
 
@@ -400,9 +411,16 @@ namespace GraphX.Controls
             _edgePointerForSource = GetTemplatePart("PART_EdgePointerForSource") as IEdgePointer;
             _edgePointerForTarget = GetTemplatePart("PART_EdgePointerForTarget") as IEdgePointer;
 
+            SelfLoopedEdgeElement = GetTemplatePart("PART_SelfLoopedEdge") as FrameworkElement;
+            if(SelfLoopedEdgeElement != null)
+                SelfLoopedEdgeElement.LayoutUpdated += (sender, args) => Arrange(_selfLoopedEdgeLastKnownRect);
+
             MeasureChild(_edgePointerForSource as UIElement);
             MeasureChild(_edgePointerForTarget as UIElement);
+            MeasureChild(SelfLoopedEdgeElement);
             //TODO measure label?
+
+            UpdateSelfLoopedEdgeData();
 
             UpdateEdge();
         }
@@ -431,13 +449,13 @@ namespace GraphX.Controls
 
                 if (_edgePointerForSource != null)
                 {
-                    if (ShowArrows) _edgePointerForSource.Show();
+                    if (ShowArrows && !IsSelfLooped) _edgePointerForSource.Show();
                     else _edgePointerForSource.Hide();
                 }
 
                 if (_edgePointerForTarget != null)
                 {
-                    if (ShowArrows) _edgePointerForTarget.Show();
+                    if (ShowArrows && !IsSelfLooped) _edgePointerForTarget.Show();
                     else _edgePointerForTarget.Hide();
                 }
 
@@ -457,7 +475,7 @@ namespace GraphX.Controls
             PrepareEdgePath(true, null, updateLabel);
             if (_linePathObject == null) return;
             _linePathObject.Data = _linegeometry;
-            _linePathObject.StrokeDashArray = StrokeDashArray;            
+            _linePathObject.StrokeDashArray = StrokeDashArray;
         }
 
 
@@ -490,6 +508,41 @@ namespace GraphX.Controls
         /// Internal value to store last calculated Target vertex connection point
         /// </summary>
         internal Point? TargetConnectionPoint;
+
+        /// <summary>
+        ///Gets is looped edge indicator template available. Used to pass some heavy cycle checks.
+        /// </summary>
+        protected bool HasSelfLoopedEdgeTemplate { get { return SelfLoopedEdgeElement != null; } }
+
+        /// <summary>
+        /// Update SLE data such as template, edge pointers visibility
+        /// </summary>
+        protected virtual void UpdateSelfLoopedEdgeData()
+        {
+            //generate object if template is present
+            if (IsSelfLooped)
+            {
+                //hide edge pointers
+                if (_edgePointerForSource != null) _edgePointerForSource.Hide();
+                if (_edgePointerForTarget != null) _edgePointerForTarget.Hide();
+
+                //return if we don't need to show edge loops
+                if (!RootArea.EdgeShowSelfLooped) return;
+
+                //pregenerate built-in indicator geometry if template PART is absent
+                if (!HasSelfLoopedEdgeTemplate)
+                    _linegeometry = new EllipseGeometry();
+                else SelfLoopedEdgeElement.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                if (_edgePointerForSource != null && ShowArrows) _edgePointerForSource.Show();
+                if (_edgePointerForTarget != null && ShowArrows) _edgePointerForTarget.Show();
+
+                if (HasSelfLoopedEdgeTemplate)
+                    SelfLoopedEdgeElement.Visibility = Visibility.Collapsed;
+            }
+        }
 
         /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
@@ -540,7 +593,6 @@ namespace GraphX.Controls
 
             //get the route informations
             var routeInformation = externalRoutingPoints ?? routedEdge.RoutingPoints;
-            #endregion
 
             // Get the TopLeft position of the Source Vertex.
             var sourcePos1 = new Point
@@ -557,44 +609,41 @@ namespace GraphX.Controls
 
             var hasEpSource = _edgePointerForSource != null;
             var hasEpTarget = _edgePointerForTarget != null;
+            #endregion
 
             //if self looped edge
             if (IsSelfLooped)
             {
-                if (!RootArea.EdgeShowSelfLooped) return;
+                #region Process self looped edges
 
+                if (!RootArea.EdgeShowSelfLooped)
+                    return;
+
+                var hasNoTemplate = !HasSelfLoopedEdgeTemplate;
                 var pt =
                     new Point(
-                        sourcePos1.X + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius,
-                        sourcePos1.Y + RootArea.EdgeSelfLoopCircleOffset.X - RootArea.EdgeSelfLoopCircleRadius);
+                        sourcePos1.X + RootArea.EdgeSelfLoopElementOffset.X - (hasNoTemplate ? RootArea.EdgeSelfLoopElementRadius : SelfLoopedEdgeElement.DesiredSize.Width),
+                        sourcePos1.Y + RootArea.EdgeSelfLoopElementOffset.X - (hasNoTemplate ? RootArea.EdgeSelfLoopElementRadius : SelfLoopedEdgeElement.DesiredSize.Height));
 
-                if (hasEpSource || hasEpTarget)
+                //if we has no self looped edge template defined we'll use default built-in indicator
+                if (hasNoTemplate)
                 {
-                    if (hasEpSource)
-                    {
-                        _edgePointerForSource.SetManualPosition(pt);
-                        if(hasEpTarget) _edgePointerForTarget.Hide();
-                    }
-                    else _edgePointerForTarget.SetManualPosition(pt);
+                    var geometry = _linegeometry as EllipseGeometry;
+                    geometry.Center = pt;
+                    geometry.RadiusX = RootArea.EdgeSelfLoopElementRadius;
+                    geometry.RadiusY = RootArea.EdgeSelfLoopElementRadius;
                 }
                 else
                 {
-                    var geo = new EllipseGeometry
-                    {
-                        Center = pt,
-                        RadiusX = RootArea.EdgeSelfLoopCircleRadius,
-                        RadiusY = RootArea.EdgeSelfLoopCircleRadius
-                    };
-
-                    _linegeometry = geo;
-#if WPF
-                    GeometryHelper.TryFreeze(_linegeometry);
-#endif
+                    _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopedEdgeElement.DesiredSize);
+                    //SelfLoopedEdgeElement.Arrange(_selfLoopedEdgeLastKnownRect);
                 }
+
                 return;
+                #endregion
             }
 
-
+            //check if we have some edge route data
             var hasRouteInfo = routeInformation != null && routeInformation.Length > 1;
 
             //calculate source and target edge attach points
@@ -610,6 +659,7 @@ namespace GraphX.Controls
             Point p1;
             Point p2;
 
+            //calculate edge source (p1) and target (p2) endpoints based on different settings
             if (gEdge != null && gEdge.SourceConnectionPointId.HasValue)
             {
                 var sourceCp = Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);

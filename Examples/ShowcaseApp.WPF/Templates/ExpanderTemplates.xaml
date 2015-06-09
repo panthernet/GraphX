@@ -73,10 +73,10 @@
             <Trigger Property="IsMouseOver"
                                  Value="true">
                 <Setter Property="Stroke"
-                                    Value="{DynamicResource ButtonBorderHover}"
+                                    Value="{DynamicResource ModernButtonBorderHover}"
                                     TargetName="Circle"/>
                 <Setter Property="Stroke"
-                                    Value="{DynamicResource ButtonBorderHover}"
+                                    Value="{DynamicResource ModernButtonBorderHover}"
                                     TargetName="Arrow"/>
             </Trigger>
             <Trigger Property="IsPressed"
@@ -110,8 +110,8 @@
                           Content="{TemplateBinding Header}"
                           IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                           OverridesDefaultStyle="True"
+                          Opacity=".7"
                           Padding="10,3"
-                          Opacity="130"
                           FontWeight="Bold"
                           FontSize="16">
             </ToggleButton>
@@ -158,7 +158,7 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger SourceName="ExpanderButton" Property="IsMouseOver" Value="True">
-                <Setter TargetName="ExpanderButton" Property="Opacity" Value="255"/>
+                <Setter TargetName="ExpanderButton" Property="Opacity" Value="1"/>
             </Trigger>
             <Trigger Property="IsExpanded" Value="True">
                 <Trigger.EnterActions>

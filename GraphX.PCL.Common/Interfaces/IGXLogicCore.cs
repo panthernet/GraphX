@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Models;
 using QuickGraph;
 
 namespace GraphX.PCL.Common.Interfaces
@@ -20,8 +19,17 @@ namespace GraphX.PCL.Common.Interfaces
 
         bool EdgeCurvingEnabled { get; set; }
         double EdgeCurvingTolerance { get; set; }
-        double EdgeSelfLoopCircleRadius { get; set; }
-        Point EdgeSelfLoopCircleOffset { get; set; }
+        /// <summary>
+        /// Gets or sets looped edge default indicator (path circle) radius
+        /// </summary>
+        double EdgeSelfLoopElementRadius { get; set; }
+        /// <summary>
+        /// Gets or sets looped edge offset form top-left vertex corner
+        /// </summary>
+        Point EdgeSelfLoopElementOffset { get; set; }
+        /// <summary>
+        /// Gets or sets if self looped edge indicators are visible
+        /// </summary>
         bool EdgeShowSelfLooped { get; set; }
         bool EnableParallelEdges { get; set; }
         int ParallelEdgeDistance { get; set; }
@@ -57,7 +65,6 @@ namespace GraphX.PCL.Common.Interfaces
         /// </summary>
         /// <param name="vertexSizes">Vertex sizes</param>
         /// <param name="vertexPositions">Vertex positions</param>
-        /// <param name="areaSize">Available size of the host area</param>
         bool GenerateAlgorithmStorage(Dictionary<TVertex, Size> vertexSizes,
             IDictionary<TVertex, Point> vertexPositions);
     }

@@ -301,10 +301,10 @@ namespace GraphX
 
         /* INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY */
         internal abstract bool IsEdgeRoutingEnabled { get; }
-        internal abstract double EdgeSelfLoopCircleRadius { get; }
+        internal abstract double EdgeSelfLoopElementRadius { get; }
         internal abstract bool EdgeShowSelfLooped { get; }
         internal abstract bool EnableParallelEdges { get; }
-        internal abstract Point EdgeSelfLoopCircleOffset { get; }
+        internal abstract Point EdgeSelfLoopElementOffset { get; }
         internal abstract bool EdgeCurvingEnabled { get; }
         internal abstract double EdgeCurvingTolerance { get; }
 

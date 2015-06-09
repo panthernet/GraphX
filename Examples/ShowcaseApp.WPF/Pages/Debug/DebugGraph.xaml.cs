@@ -108,6 +108,7 @@ namespace ShowcaseApp.WPF.Pages
             //dg_Area.PreloadGraph(new Dictionary<DataVertex, Point>() { {vlist[0], new Point()} });
             dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
             dg_Area.GenerateGraph(true);
+            
             dg_Area.VertexList.Values.ToList().ForEach(a => a.SetConnectionPointsVisibility(false));
         }
 

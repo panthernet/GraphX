@@ -65,6 +65,7 @@ namespace GraphX.Controls
             DragBehaviour.SetIsDragEnabled(this, false);
             _linegeometry = null;
             _linePathObject = null;
+            SelfLoopedEdgeElement = null;
             if (_edgeLabelControl != null)
             {
                 _edgeLabelControl.Dispose();
@@ -121,6 +122,7 @@ namespace GraphX.Controls
             if (Target != null)
                 Target.PositionChanged += source_PositionChanged;
             IsSelfLooped = IsSelfLoopedInternal;
+            UpdateSelfLoopedEdgeData();
         }
 
         private void SourceChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
@@ -132,6 +134,7 @@ namespace GraphX.Controls
             if (Source != null)
                 Source.PositionChanged += source_PositionChanged;
             IsSelfLooped = IsSelfLoopedInternal;
+            UpdateSelfLoopedEdgeData();
         }
 
 

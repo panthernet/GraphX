@@ -110,7 +110,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Link to LogicCore. Gets self looped edge radius.
         /// </summary>
-        internal override double EdgeSelfLoopCircleRadius { get { return LogicCore == null ? 0 : LogicCore.EdgeSelfLoopCircleRadius; } }
+        internal override double EdgeSelfLoopElementRadius { get { return LogicCore == null ? 0 : LogicCore.EdgeSelfLoopElementRadius; } }
         /// <summary>
         /// Link to LogicCore. Gets if self looped edges are enabled.
         /// </summary>
@@ -122,7 +122,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Link to LogicCore. Gets looped edge offset.
         /// </summary>
-        internal override Point EdgeSelfLoopCircleOffset { get { return LogicCore == null ? new Point() : LogicCore.EdgeSelfLoopCircleOffset.ToWindows(); } }
+        internal override Point EdgeSelfLoopElementOffset { get { return LogicCore == null ? new Point() : LogicCore.EdgeSelfLoopElementOffset.ToWindows(); } }
         /// <summary>
         /// Link to LogicCore. Gets if edge curving is used.
         /// </summary>
