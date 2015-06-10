@@ -45,9 +45,9 @@ namespace ShowcaseApp.WPF.Pages
             gg_async.Unchecked += gg_async_Checked;
             gg_Area.RelayoutFinished += gg_Area_RelayoutFinished;
             gg_Area.GenerateGraphFinished += gg_Area_GenerateGraphFinished;
+
             ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
-            ggLogic.EdgeCurvingEnabled = true;            
-            
+            ggLogic.EdgeCurvingEnabled = true;                  
             gg_Area.ShowAllEdgesArrows(true);
 
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
@@ -62,8 +62,6 @@ namespace ShowcaseApp.WPF.Pages
         {
             GG_RegisterCommands();
         }
-
-
 
         #region Commands
 
@@ -201,11 +199,6 @@ namespace ShowcaseApp.WPF.Pages
             if (late == LayoutAlgorithmTypeEnum.FR)
                 gg_Area.LogicCore.DefaultLayoutAlgorithmParams
                     = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.FR);
-
-            //if (gg_Area.LogicCore.Graph == null) 
-               // gg_but_randomgraph_Click(null, null);
-            //else gg_Area.RelayoutGraph();
-            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalLayAlgo_Checked(object sender, RoutedEventArgs e)
@@ -233,10 +226,6 @@ namespace ShowcaseApp.WPF.Pages
                 core.DefaultOverlapRemovalAlgorithmParams.HorizontalGap = 30;
                 core.DefaultOverlapRemovalAlgorithmParams.VerticalGap = 30;
             }
-            //if (core.Graph == null) 
-                //gg_but_randomgraph_Click(null, null);
-            //else gg_Area.RelayoutGraph();
-            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalORAlgo_Checked(object sender, RoutedEventArgs e)
@@ -247,10 +236,6 @@ namespace ShowcaseApp.WPF.Pages
         private void gg_eralgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             gg_Area.LogicCore.DefaultEdgeRoutingAlgorithm = (EdgeRoutingAlgorithmTypeEnum)gg_eralgo.SelectedItem;
-            //if (gg_Area.LogicCore.Graph == null) 
-                //gg_but_randomgraph_Click(null, null);
-            //else gg_Area.RelayoutGraph();
-            //gg_Area.GenerateAllEdges();
         }
 
         private void gg_useExternalERAlgo_Checked(object sender, RoutedEventArgs e)
@@ -277,8 +262,8 @@ namespace ShowcaseApp.WPF.Pages
         /// </summary>
         void gg_Area_GenerateGraphFinished(object sender, EventArgs e)
         {
-
-            gg_Area.GenerateAllEdges();
+            if(!gg_Area.EdgesList.Any())
+                gg_Area.GenerateAllEdges();
             if (gg_Area.LogicCore.AsyncAlgorithmCompute)
                 gg_loader.Visibility = Visibility.Collapsed;
 
@@ -294,13 +279,11 @@ namespace ShowcaseApp.WPF.Pages
             if (gg_Area.LogicCore.ExternalLayoutAlgorithm != null)
                 AssignExternalLayoutAlgorithm(graph);
 
-            //supplied graph will be automaticaly be assigned to GraphArea::LogicCore.Graph property
-            gg_Area.GenerateGraph(graph);
-            gg_Area.SetVerticesDrag(true, true);
-            
-
             if (gg_Area.LogicCore.AsyncAlgorithmCompute)
                 gg_loader.Visibility = Visibility.Visible;
+
+            //supplied graph will be automaticaly be assigned to GraphArea::LogicCore.Graph property
+            gg_Area.GenerateGraph(graph);
         }
     }
 }

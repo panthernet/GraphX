@@ -66,10 +66,10 @@ namespace SimpleGraph
         void gg_but_randomgraph_Click(object sender, RoutedEventArgs e)
         {
             //Lets generate configured graph using pre-created data graph assigned to LogicCore object.
-            //Optionaly we set first method param to True (False by default) so this method will automatically generate edges
-            //  By default edges are not generated. That allows to increase performance in cases where edges don't need to be drawn at first.
+            //Optionaly we set first method param to True (True by default) so this method will automatically generate edges
+            //  If you want to increase performance in cases where edges don't need to be drawn at first you can set it to False.
             //  You can also handle edge generation by calling manually Area.GenerateAllEdges() method.
-            //Optionaly we set seconf param to True (True by default) so this method will automaticaly checks and assigns missing unique data ids
+            //Optionaly we set second param to True (True by default) so this method will automaticaly checks and assigns missing unique data ids
             //for edges and vertices in _dataGraph.
             //Note! Area.Graph property will be replaced by supplied _dataGraph object (if any).
             Area.GenerateGraph(true, true);
@@ -157,7 +157,7 @@ namespace SimpleGraph
             logicCore.AsyncAlgorithmCompute = false;
 
             //Finally assign logic core to GraphArea object
-            Area.LogicCore = logicCore;// as IGXLogicCore<DataVertex, DataEdge, BidirectionalGraph<DataVertex, DataEdge>>;
+            Area.LogicCore = logicCore;
         }
 
         public void Dispose()

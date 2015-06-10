@@ -1,7 +1,8 @@
 ﻿TODO
 1. CUT source ep edge also
-
-
+2. Move SLE settings from LogicCore to an edge? Its visual not math!
+3. Detect bidirectional edge and correctly display it w/o parallelization
+4. CHek printing
 
 Add edge labels - labels on path
 http://www.codeproject.com/Articles/30090/Text-On-A-Path-in-WPF

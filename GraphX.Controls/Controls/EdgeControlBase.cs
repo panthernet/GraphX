@@ -413,7 +413,10 @@ namespace GraphX.Controls
 
             SelfLoopedEdgeElement = GetTemplatePart("PART_SelfLoopedEdge") as FrameworkElement;
             if(SelfLoopedEdgeElement != null)
-                SelfLoopedEdgeElement.LayoutUpdated += (sender, args) => Arrange(_selfLoopedEdgeLastKnownRect);
+                SelfLoopedEdgeElement.LayoutUpdated += (sender, args) =>
+                {
+                    if (SelfLoopedEdgeElement != null) SelfLoopedEdgeElement.Arrange(_selfLoopedEdgeLastKnownRect);
+                };
 
             MeasureChild(_edgePointerForSource as UIElement);
             MeasureChild(_edgePointerForTarget as UIElement);
@@ -447,7 +450,7 @@ namespace GraphX.Controls
             {
                 UpdateEdgeRendering(updateLabel);
 
-                if (_edgePointerForSource != null)
+               /* if (_edgePointerForSource != null)
                 {
                     if (ShowArrows && !IsSelfLooped) _edgePointerForSource.Show();
                     else _edgePointerForSource.Hide();
@@ -457,7 +460,7 @@ namespace GraphX.Controls
                 {
                     if (ShowArrows && !IsSelfLooped) _edgePointerForTarget.Show();
                     else _edgePointerForTarget.Hide();
-                }
+                }*/
 
                 if (_edgeLabelControl != null)
                     if (ShowLabel) _edgeLabelControl.Show(); else _edgeLabelControl.Hide();

@@ -39,20 +39,35 @@ namespace GraphX.Controls.Models
         }
 
         /// <summary>
-        /// Save current graph state into memory, including visual and data controls
+        /// Save current graph state into memory (including visual and data controls)
         /// </summary>
         /// <param name="id">New unique state id</param>
         /// <param name="description">Optional state description</param>
         public void SaveState(string id, string description = "")
+        {
+            _states.Add(id, GenerateGraphState(id, description));
+        }
+
+        /// <summary>
+        /// Save current graph state into memory (including visual and data controls) or update existing state
+        /// </summary>
+        /// <param name="id">State id</param>
+        /// <param name="description">Optional state description</param>
+        public void SaveOrUpdateState(string id, string description = "")
+        {
+            if (ContainsState(id))
+                _states[id] = GenerateGraphState(id, description);
+            else SaveState(id, description);
+        }
+
+        private GraphState<TVertex, TEdge, TGraph> GenerateGraphState(string id, string description = "")
         {
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             var vposlist = _area.VertexList.ToDictionary(item => item.Key, item => item.Value.GetPositionGraphX());
             var vedgelist = (from item in _area.EdgesList where item.Value.Visibility == Visibility.Visible select item.Key).ToList();
 
-
-            var state = new GraphState<TVertex, TEdge, TGraph>(id, _area.LogicCore.Graph, vposlist, vedgelist, description);
-            _states.Add(id, state);
+            return new GraphState<TVertex, TEdge, TGraph>(id, _area.LogicCore.Graph, vposlist, vedgelist, description);
         }
 
         /// <summary>

@@ -731,12 +731,12 @@ namespace GraphX.Controls
         /// <param name="graph">Data graph</param>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = false, bool dataContextToDataItem = true)
+        public Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             return GenerateGraphAsync(graph, CancellationToken.None, generateAllEdges, dataContextToDataItem);
         }
 
-        public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = false, bool dataContextToDataItem = true)
+        public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
                 AutoresolveIds(graph);
@@ -750,7 +750,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public Task GenerateGraphAsync(bool generateAllEdges = false, bool dataContextToDataItem = true)
+        public Task GenerateGraphAsync(bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
