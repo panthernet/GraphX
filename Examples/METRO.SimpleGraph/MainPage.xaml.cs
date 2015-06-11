@@ -174,6 +174,8 @@ namespace METRO.SimpleGraph
                     }
                     vlist = dataGraph.Vertices.ToList();
                     AddEdge(dataGraph, 0, 1, vlist);
+                    AddEdge(dataGraph, 0, 0, vlist);
+
                     AddEdge(dataGraph, 0, 2, vlist);
                     AddEdge(dataGraph, 1, 3, vlist);
                     AddEdge(dataGraph, 1, 4, vlist);

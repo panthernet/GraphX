@@ -275,6 +275,7 @@ namespace ShowcaseApp.WPF.Pages
         {
             gg_Area.ClearLayout();
             var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
+            graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
             //assign graph again as we need to update Graph param inside and i have no independent examples
             if (gg_Area.LogicCore.ExternalLayoutAlgorithm != null)
                 AssignExternalLayoutAlgorithm(graph);

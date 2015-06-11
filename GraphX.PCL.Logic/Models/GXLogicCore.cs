@@ -46,7 +46,7 @@ namespace GraphX.PCL.Logic.Models
         public bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
         /// <summary>
-        /// Gets is custom layout selected and used
+        /// Gets is custom (NOT external) layout selected and used
         /// </summary>
         public bool IsCustomLayout { get { return DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Custom && ExternalLayoutAlgorithm == null; } }
 
@@ -113,21 +113,6 @@ namespace GraphX.PCL.Logic.Models
         public double EdgeCurvingTolerance { get; set; }
 
         /// <summary>
-        /// Radius of a self-loop edge, which is drawn as a circle. Default is 20.
-        /// </summary>
-        public double EdgeSelfLoopElementRadius { get; set; }
-
-        /// <summary>
-        /// Offset from the corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
-        /// </summary>
-        public Point EdgeSelfLoopElementOffset { get; set; }
-
-        /// <summary>
-        /// Show self looped edges on vertices. Default value is true.
-        /// </summary>
-        public bool EdgeShowSelfLooped { get; set; }
-
-        /// <summary>
         /// Main graph object
         /// </summary>
         public virtual TGraph Graph { get; set; }
@@ -162,10 +147,7 @@ namespace GraphX.PCL.Logic.Models
             CreateNewAlgorithmFactory();
             CreateNewAlgorithmStorage(null, null, null);
             Graph = graph;
-            EdgeSelfLoopElementOffset = new Point();
             EdgeCurvingTolerance = 8;
-            EdgeSelfLoopElementRadius = 5;
-            EdgeShowSelfLooped = true;
             ParallelEdgeDistance = 5;
         }
 

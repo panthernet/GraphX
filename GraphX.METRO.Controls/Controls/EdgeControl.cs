@@ -65,7 +65,7 @@ namespace GraphX.Controls
             DragBehaviour.SetIsDragEnabled(this, false);
             _linegeometry = null;
             _linePathObject = null;
-            SelfLoopedEdgeElement = null;
+            SelfLoopIndicator = null;
             if (_edgeLabelControl != null)
             {
                 _edgeLabelControl.Dispose();

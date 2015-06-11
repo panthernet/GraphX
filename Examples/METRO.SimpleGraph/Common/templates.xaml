@@ -116,6 +116,13 @@
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow" Stretch="Uniform" Width="15" Height="15"/>
                         </controls1:DefaultEdgePointer>
 
+                        <Path x:Name="PART_SelfLoopedEdge" 
+                              Width="10" 
+                              Height="10" 
+                              Stretch="Uniform" 
+                              Fill="{TemplateBinding Foreground}" 
+                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>
+
                         <controls1:EdgeLabelControl x:Name="PART_edgeLabel" 
                           Content="{Binding Text}"
                           Opacity="{Binding VisualEdgeTransparency}"

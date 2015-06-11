@@ -30,7 +30,7 @@ DETAILED CHANGELOG:
 + Added GraphArea::PreloadGraph() method for manual graph rendering which generate vertices and edges from GraphArea::LogicCore.Graph property 
 	w/o any algorithms and also sets custom vertices positions if needed [WPF, METRO]
 + Added new EdgeControl template PART (PART_SelfLoopedEdge) for custom self looped edge indicator visualization. It represents FrameworkElement and if specified in the template
-	will be positioned in the top left vertex corner [WPF, METRO]
+	will be positioned in the top left vertex corner. Also made indicator settings more flexible by implementing some dependency props [WPF, METRO]
 + Added StateStorage::SaveOrUpdateState() method for easier use [WPF,METRO]
 + Fixed first time solution rebuild problems by referencing new QuickGraphPCL nuget [ALL] 
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
@@ -74,9 +74,10 @@ BREAKING CHANGES:
 * Now GraphX for WPF requires only .NET Framework 4.0 to build & run
 * EdgeLabelControl no longer needs default Angle binding and RenderTransformOrigin setup. They are processed internally [WPF]
 * GraphArea::GenerateGraph() method now has generateAllEdges param True by default.
-* Renamed following peoperties:
-	* EdgeControl & LogicCore::EdgeSelfLoopCircleOffset -> EdgeSelfLoopElementOffset
-	* EdgeControl & LogicCore::EdgeSelfLoopCircleRadius -> EdgeSelfLoopElementRadius
+* Renamed following peoperties, moved them to EdgeControlBase and implemented them as DependencyProperty:
+	* LogicCore::EdgeSelfLoopCircleOffset -> SelfLoopIndicatorOffset
+	* LogicCore::EdgeSelfLoopCircleRadius -> SelfLoopIndicatorRadius
+	* LogicCore::EdgeShowSelfLooped -> ShowSelfLoopIndicator
 * Completely deprecated EdgeControl::PART_edgeArrowPath template PART in favor of the new DefaultEdgePointer (PART_EdgePointerForSource & PART_EdgePointerForTarget). 
 	Please renew your custom templates. You can find an example in Generic.XAML template.
 * Self looped edges display logic has been slightly changed with the introduction of custom template PART (PART_SelfLoopedEdge). Now LogicCore::EdgeSelfLoopElementOffset

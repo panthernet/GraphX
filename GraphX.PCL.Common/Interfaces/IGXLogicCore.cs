@@ -19,18 +19,7 @@ namespace GraphX.PCL.Common.Interfaces
 
         bool EdgeCurvingEnabled { get; set; }
         double EdgeCurvingTolerance { get; set; }
-        /// <summary>
-        /// Gets or sets looped edge default indicator (path circle) radius
-        /// </summary>
-        double EdgeSelfLoopElementRadius { get; set; }
-        /// <summary>
-        /// Gets or sets looped edge offset form top-left vertex corner
-        /// </summary>
-        Point EdgeSelfLoopElementOffset { get; set; }
-        /// <summary>
-        /// Gets or sets if self looped edge indicators are visible
-        /// </summary>
-        bool EdgeShowSelfLooped { get; set; }
+
         bool EnableParallelEdges { get; set; }
         int ParallelEdgeDistance { get; set; }
         bool IsEdgeRoutingEnabled { get; }

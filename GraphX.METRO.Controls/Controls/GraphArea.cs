@@ -102,21 +102,9 @@ namespace GraphX.Controls
         /// </summary>
         internal override bool IsEdgeRoutingEnabled { get { return LogicCore != null && LogicCore.IsEdgeRoutingEnabled; } }
         /// <summary>
-        /// Link to LogicCore. Gets self looped edge radius.
-        /// </summary>
-        internal override double EdgeSelfLoopElementRadius { get { return LogicCore == null ? 0 : LogicCore.EdgeSelfLoopElementRadius; } }
-        /// <summary>
-        /// Link to LogicCore. Gets if self looped edges are enabled.
-        /// </summary>
-        internal override bool EdgeShowSelfLooped { get { return LogicCore != null && LogicCore.EdgeShowSelfLooped; } }
-        /// <summary>
         /// Link to LogicCore. Gets if parallel edges are enabled.
         /// </summary>
         internal override bool EnableParallelEdges { get { return LogicCore != null && LogicCore.EnableParallelEdges; } }
-        /// <summary>
-        /// Link to LogicCore. Gets looped edge offset.
-        /// </summary>
-        internal override Point EdgeSelfLoopElementOffset { get { return LogicCore == null ? new Point() : LogicCore.EdgeSelfLoopElementOffset.ToWindows(); } }
         /// <summary>
         /// Link to LogicCore. Gets if edge curving is used.
         /// </summary>

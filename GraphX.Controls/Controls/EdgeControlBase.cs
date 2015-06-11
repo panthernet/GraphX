@@ -31,19 +31,33 @@ namespace GraphX.Controls
     [TemplatePart(Name = "PART_EdgePointerForTarget", Type = typeof(IEdgePointer))]
     public abstract class EdgeControlBase : Control, IGraphControl, IDisposable
     {
-        public abstract bool IsSelfLooped { get; protected set; }
-        public abstract void Dispose();
-        public abstract void Clean();
-
-        protected virtual void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-        protected virtual void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-
 #if METRO
         void IPositionChangeNotify.OnPositionChanged()
         {
             //skip any actions on own position change
         }
 #endif
+
+        #region Properties & Fields
+
+        public abstract bool IsSelfLooped { get; protected set; }
+        public abstract void Dispose();
+        public abstract void Clean();
+        protected DoubleCollection StrokeDashArray { get; set; }
+
+        /// <summary>
+        /// Element presenting self looped edge
+        /// </summary>
+        protected FrameworkElement SelfLoopIndicator;
+
+        /// <summary>
+        /// Used to store last known SLE rect size for proper updates on layout passes
+        /// </summary>
+        private SysRect _selfLoopedEdgeLastKnownRect;
+
+        protected virtual void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        protected virtual void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+
         /// <summary>
         /// Gets or sets parent GraphArea visual
         /// </summary>
@@ -56,17 +70,45 @@ namespace GraphX.Controls
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(EdgeControlBase), new PropertyMetadata(null));
 
-        /// <summary>
-        /// Element presenting self looped edge
-        /// </summary>
-        protected FrameworkElement SelfLoopedEdgeElement;
 
+        public static readonly DependencyProperty SelfLoopIndicatorRadiusProperty = DependencyProperty.Register("SelfLoopIndicatorRadius",
+                                                                                       typeof(double),
+                                                                                       typeof(EdgeControlBase),
+                                                                                       new PropertyMetadata(5d));
         /// <summary>
-        /// Used to store last known SLE rect size for proper updates on layout passes
+        /// Radius of a self-loop edge, which is drawn as a circle. Default is 20.
         /// </summary>
-        private SysRect _selfLoopedEdgeLastKnownRect;
+        public double SelfLoopIndicatorRadius {
+            get { return (double)GetValue(SelfLoopIndicatorRadiusProperty); }
+            set { SetValue(SelfLoopIndicatorRadiusProperty, value); }
+        }
 
-        #region Properties
+        public static readonly DependencyProperty SelfLoopIndicatorOffsetProperty = DependencyProperty.Register("SelfLoopIndicatorOffset",
+                                                                               typeof(Point),
+                                                                               typeof(EdgeControlBase),
+                                                                               new PropertyMetadata(new Point()));
+        /// <summary>
+        /// Offset from the corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
+        /// </summary>
+        public Point SelfLoopIndicatorOffset
+        {
+            get { return (Point)GetValue(SelfLoopIndicatorOffsetProperty); }
+            set { SetValue(SelfLoopIndicatorOffsetProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowSelfLoopIndicatorProperty = DependencyProperty.Register("ShowSelfLoopIndicator",
+                                                                       typeof(bool),
+                                                                       typeof(EdgeControlBase),
+                                                                       new PropertyMetadata(true));
+        /// <summary>
+        /// Show self looped edges on vertices. Default value is true.
+        /// </summary>
+        public bool ShowSelfLoopIndicator
+        {
+            get { return (bool)GetValue(ShowSelfLoopIndicatorProperty); }
+            set { SetValue(ShowSelfLoopIndicatorProperty, value); }
+        }
+
 
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source",
                                                                                                typeof(VertexControl),
@@ -153,7 +195,6 @@ namespace GraphX.Controls
             ec.UpdateEdge(false);
         }
 
-        protected DoubleCollection StrokeDashArray { get; set; }
 
         /// <summary>
         /// Gets or sets edge dash style
@@ -411,16 +452,16 @@ namespace GraphX.Controls
             _edgePointerForSource = GetTemplatePart("PART_EdgePointerForSource") as IEdgePointer;
             _edgePointerForTarget = GetTemplatePart("PART_EdgePointerForTarget") as IEdgePointer;
 
-            SelfLoopedEdgeElement = GetTemplatePart("PART_SelfLoopedEdge") as FrameworkElement;
-            if(SelfLoopedEdgeElement != null)
-                SelfLoopedEdgeElement.LayoutUpdated += (sender, args) =>
+            SelfLoopIndicator = GetTemplatePart("PART_SelfLoopedEdge") as FrameworkElement;
+            if(SelfLoopIndicator != null)
+                SelfLoopIndicator.LayoutUpdated += (sender, args) =>
                 {
-                    if (SelfLoopedEdgeElement != null) SelfLoopedEdgeElement.Arrange(_selfLoopedEdgeLastKnownRect);
+                    if (SelfLoopIndicator != null) SelfLoopIndicator.Arrange(_selfLoopedEdgeLastKnownRect);
                 };
 
             MeasureChild(_edgePointerForSource as UIElement);
             MeasureChild(_edgePointerForTarget as UIElement);
-            MeasureChild(SelfLoopedEdgeElement);
+            MeasureChild(SelfLoopIndicator);
             //TODO measure label?
 
             UpdateSelfLoopedEdgeData();
@@ -515,7 +556,7 @@ namespace GraphX.Controls
         /// <summary>
         ///Gets is looped edge indicator template available. Used to pass some heavy cycle checks.
         /// </summary>
-        protected bool HasSelfLoopedEdgeTemplate { get { return SelfLoopedEdgeElement != null; } }
+        protected bool HasSelfLoopedEdgeTemplate { get { return SelfLoopIndicator != null; } }
 
         /// <summary>
         /// Update SLE data such as template, edge pointers visibility
@@ -530,12 +571,12 @@ namespace GraphX.Controls
                 if (_edgePointerForTarget != null) _edgePointerForTarget.Hide();
 
                 //return if we don't need to show edge loops
-                if (!RootArea.EdgeShowSelfLooped) return;
+                if (!ShowSelfLoopIndicator) return;
 
                 //pregenerate built-in indicator geometry if template PART is absent
                 if (!HasSelfLoopedEdgeTemplate)
                     _linegeometry = new EllipseGeometry();
-                else SelfLoopedEdgeElement.Visibility = Visibility.Visible;
+                else SelfLoopIndicator.Visibility = Visibility.Visible;
             }
             else
             {
@@ -543,7 +584,7 @@ namespace GraphX.Controls
                 if (_edgePointerForTarget != null && ShowArrows) _edgePointerForTarget.Show();
 
                 if (HasSelfLoopedEdgeTemplate)
-                    SelfLoopedEdgeElement.Visibility = Visibility.Collapsed;
+                    SelfLoopIndicator.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -619,27 +660,27 @@ namespace GraphX.Controls
             {
                 #region Process self looped edges
 
-                if (!RootArea.EdgeShowSelfLooped)
+                if (!ShowSelfLoopIndicator)
                     return;
 
                 var hasNoTemplate = !HasSelfLoopedEdgeTemplate;
                 var pt =
                     new Point(
-                        sourcePos1.X + RootArea.EdgeSelfLoopElementOffset.X - (hasNoTemplate ? RootArea.EdgeSelfLoopElementRadius : SelfLoopedEdgeElement.DesiredSize.Width),
-                        sourcePos1.Y + RootArea.EdgeSelfLoopElementOffset.X - (hasNoTemplate ? RootArea.EdgeSelfLoopElementRadius : SelfLoopedEdgeElement.DesiredSize.Height));
+                        sourcePos1.X + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Width),
+                        sourcePos1.Y + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Height));
 
                 //if we has no self looped edge template defined we'll use default built-in indicator
                 if (hasNoTemplate)
                 {
                     var geometry = _linegeometry as EllipseGeometry;
                     geometry.Center = pt;
-                    geometry.RadiusX = RootArea.EdgeSelfLoopElementRadius;
-                    geometry.RadiusY = RootArea.EdgeSelfLoopElementRadius;
+                    geometry.RadiusX = SelfLoopIndicatorRadius;
+                    geometry.RadiusY = SelfLoopIndicatorRadius;
                 }
                 else
                 {
-                    _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopedEdgeElement.DesiredSize);
-                    //SelfLoopedEdgeElement.Arrange(_selfLoopedEdgeLastKnownRect);
+                    _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
+                    //SelfLoopIndicator.Arrange(_selfLoopedEdgeLastKnownRect);
                 }
 
                 return;
