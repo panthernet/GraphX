@@ -76,7 +76,7 @@ namespace GraphX.Controls
                                                                                        typeof(EdgeControlBase),
                                                                                        new PropertyMetadata(5d));
         /// <summary>
-        /// Radius of a self-loop edge, which is drawn as a circle. Default is 20.
+        /// Radius of the default self-loop indicator, which is drawn as a circle (when custom template isn't provided). Default is 20.
         /// </summary>
         public double SelfLoopIndicatorRadius {
             get { return (double)GetValue(SelfLoopIndicatorRadiusProperty); }
@@ -88,7 +88,7 @@ namespace GraphX.Controls
                                                                                typeof(EdgeControlBase),
                                                                                new PropertyMetadata(new Point()));
         /// <summary>
-        /// Offset from the corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
+        /// Offset from the left-top corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
         /// </summary>
         public Point SelfLoopIndicatorOffset
         {
@@ -101,7 +101,7 @@ namespace GraphX.Controls
                                                                        typeof(EdgeControlBase),
                                                                        new PropertyMetadata(true));
         /// <summary>
-        /// Show self looped edges on vertices. Default value is true.
+        /// Show self looped edge indicator on the vertex top-left corner. Default value is true.
         /// </summary>
         public bool ShowSelfLoopIndicator
         {
@@ -482,26 +482,14 @@ namespace GraphX.Controls
         #region public PrepareEdgePath()
 
         /// <summary>
-        /// Internal. Complete edge update pass
+        /// Complete edge update pass. Don't needed to be run manualy until some edge related modifications are done requiring full edge update.
         /// </summary>
         /// <param name="updateLabel">Update label data</param>
-        internal virtual void UpdateEdge(bool updateLabel = true)
+        public virtual void UpdateEdge(bool updateLabel = true)
         {
             if (Visibility == Visibility.Visible || IsHiddenEdgesUpdated)
             {
                 UpdateEdgeRendering(updateLabel);
-
-               /* if (_edgePointerForSource != null)
-                {
-                    if (ShowArrows && !IsSelfLooped) _edgePointerForSource.Show();
-                    else _edgePointerForSource.Hide();
-                }
-
-                if (_edgePointerForTarget != null)
-                {
-                    if (ShowArrows && !IsSelfLooped) _edgePointerForTarget.Show();
-                    else _edgePointerForTarget.Hide();
-                }*/
 
                 if (_edgeLabelControl != null)
                     if (ShowLabel) _edgeLabelControl.Show(); else _edgeLabelControl.Hide();

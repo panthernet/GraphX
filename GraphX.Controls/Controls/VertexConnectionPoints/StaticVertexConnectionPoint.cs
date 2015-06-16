@@ -94,7 +94,7 @@ namespace GraphX.Controls
             _vertexControl = null;
         }
 #if WPF
-        DependencyObject GetParent()
+        public DependencyObject GetParent()
         {
             return VisualParent;
         }
@@ -107,7 +107,7 @@ namespace GraphX.Controls
             RectangularSize = new Rect(position, DesiredSize);
         }
 #elif METRO
-        DependencyObject GetParent()
+        public DependencyObject GetParent()
         {
             return Parent;
         }

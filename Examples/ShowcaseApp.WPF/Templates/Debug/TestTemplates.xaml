@@ -7,7 +7,7 @@
         <Setter Property="Background" Value="LightGray"/>
     </Style>-->
 
-    <Style x:Key="CirclePath" TargetType="controls:StaticVertexConnectionPoint" x:Shared="False">
+    <Style TargetType="controls:StaticVertexConnectionPoint" x:Shared="False">
         <Setter Property="Shape" Value="Circle"/>
 
         <Setter Property="Content">
@@ -32,18 +32,18 @@
                         <ContentPresenter Content="{TemplateBinding Vertex}" Grid.Column="1"/>
                         <StackPanel Orientation="Vertical" Grid.Column="0">
                             <Border Padding="0" Margin="2,2,0,2">
-                                <controls:StaticVertexConnectionPoint Id="1" Style="{StaticResource CirclePath}"/>
+                                <controls:StaticVertexConnectionPoint Id="1" />
                             </Border>
                             <Border Padding="0" Margin="2,2,0,2">
-                                <controls:StaticVertexConnectionPoint Id="2" Style="{StaticResource CirclePath}"/>
+                                <controls:StaticVertexConnectionPoint Id="2" />
                             </Border>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Grid.Column="2">
                             <Border Padding="0" Margin="0,2,2,2">
-                                <controls:StaticVertexConnectionPoint Id="3" Style="{StaticResource CirclePath}"/>
+                                <controls:StaticVertexConnectionPoint Id="3" />
                             </Border>
                             <Border Padding="0" Margin="0,2,2,2">
-                                <controls:StaticVertexConnectionPoint Id="4" Style="{StaticResource CirclePath}"/>
+                                <controls:StaticVertexConnectionPoint Id="4" />
                             </Border>
                         </StackPanel>
                     </Grid>

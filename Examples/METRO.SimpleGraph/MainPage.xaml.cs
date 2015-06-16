@@ -12,6 +12,9 @@ using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using METRO.SimpleGraph.Models;
+using QuickGraph.Graphviz.Dot;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace METRO.SimpleGraph
@@ -54,15 +57,6 @@ namespace METRO.SimpleGraph
         private async void butGenerate_Click(object sender, RoutedEventArgs e)
         {
             GraphAreaExample_Setup();
-
-            try
-            {
-                await graph.GenerateGraphAsync(true);
-            }
-            catch (OperationCanceledException)
-            {
-                // User may have canceled
-            }
         }
 
         async void butRelayout_Click(object sender, RoutedEventArgs e)

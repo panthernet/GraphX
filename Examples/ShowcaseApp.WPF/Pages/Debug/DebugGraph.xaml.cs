@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using GraphX.Controls;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
@@ -91,6 +92,15 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.LogicCore.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
 
             dg_Area.GenerateGraph(true);
+
+            var vertex = dg_Area.VertexList[edge.Target];
+            var vcp = vertex.VertexConnectionPointsList.First();
+            var newVcp = new StaticVertexConnectionPoint() {Id = 5};
+            ((StackPanel)((Border) vcp.GetParent()).Parent).Children.Add(newVcp);
+            edge.TargetConnectionPointId = 5;
+            vertex.VertexConnectionPointsList.Add(newVcp);
+            dg_Area.EdgesList[edge].UpdateEdge();
+            //dg_Area.UpdateAllEdges(true);
         }
 
         void butRelayout_Click(object sender, RoutedEventArgs e)

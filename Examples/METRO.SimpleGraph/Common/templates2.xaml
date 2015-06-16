@@ -3,6 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls1="using:GraphX.Controls">
 
+
+    <Style x:Key="CirclePath" TargetType="controls1:StaticVertexConnectionPoint">
+        <Setter Property="Shape" Value="Circle"/>
+
+        <Setter Property="Content">
+            <Setter.Value>
+                <Path Stroke="White" Data="M 38,0.791664C 58.5496,0.791664 75.2083,17.4504 75.2083,38C 75.2083,58.5496 58.5496,75.2083 38,75.2083C 17.4504,75.2083 0.791662,58.5496 0.791662,38C 0.791662,17.4504 17.4504,0.791664 38,0.791664 Z M 38,5.54166C 20.0738,5.54166 5.54167,20.0738 5.54167,38C 5.54167,55.9262 20.0738,70.4583 38,70.4583C 55.9262,70.4583 70.4583,55.9262 70.4583,38C 70.4583,20.0738 55.9262,5.54166 38,5.54166 Z "
+                      Width="10" Height="10" Stretch="Uniform" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <!-- REGION ZoomControl -->
 
     <SolidColorBrush x:Key="SelectionBrush" Color="LightBlue" Opacity="0.5"/>
@@ -119,18 +131,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls1:VertexControl">
-                    <Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}"
-							CornerRadius="10,10,10,10"
-						Padding="{TemplateBinding Padding}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <ContentPresenter Content="{TemplateBinding Vertex}" />
-                        </Grid>
-                    </Border>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="40"/>
+                        </Grid.RowDefinitions>
+                        <ContentPresenter Content="{TemplateBinding Vertex}" />
+                        <Border BorderBrush="Blue" BorderThickness="1" Grid.Row="1">
+                            <controls1:StaticVertexConnectionPoint Id="1" Visibility="Visible">
+                                <Path Stroke="White" Data="M 38,0.791664C 58.5496,0.791664 75.2083,17.4504 75.2083,38C 75.2083,58.5496 58.5496,75.2083 38,75.2083C 17.4504,75.2083 0.791662,58.5496 0.791662,38C 0.791662,17.4504 17.4504,0.791664 38,0.791664 Z M 38,5.54166C 20.0738,5.54166 5.54167,20.0738 5.54167,38C 5.54167,55.9262 20.0738,70.4583 38,70.4583C 55.9262,70.4583 70.4583,55.9262 70.4583,38C 70.4583,20.0738 55.9262,5.54166 38,5.54166 Z "
+                                    Width="10" Height="10" Stretch="Uniform" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </controls1:StaticVertexConnectionPoint>
+                        </Border>
+                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

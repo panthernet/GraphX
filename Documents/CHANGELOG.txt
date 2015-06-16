@@ -46,6 +46,7 @@ DETAILED CHANGELOG:
 + Fixed ZoomControl zoom sometimes not firing from code call after control is loaded [WPF]
 + Fixed VB sample project dependencies and refactored code a bit
 + Fixed Fade Move animation logic to report OnCompleted event correctly [WPF]
++ Made EdgeControlBase::UpdateEdge() method public. It can be used now to fully update edge visual on custom edge-related modifications [WPF, METRO]
 + Improved main layout calculation logic to gain performance improvements [WPF, METRO]
 + Reorganized Example apps namespaces and code for greater good :)
 + Merged EdgePointerImage and EdgePointerPath into one universal DefaultEdgePointer class [WPF, METRO]

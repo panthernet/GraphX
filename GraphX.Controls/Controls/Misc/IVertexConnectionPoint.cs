@@ -26,5 +26,6 @@ namespace GraphX.Controls
         Rect RectangularSize { get; }
 
         void Update();
+        DependencyObject GetParent();
     }
 }

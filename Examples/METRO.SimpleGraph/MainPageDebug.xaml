@@ -45,17 +45,10 @@
                     <Image Stretch="Uniform" Source="Assets/refresh.png" />
                 </Button>
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Layout algorithm:" />
-                    <ComboBox x:Name="cboxLayout" />
+                    <TextBlock Text="Debug mode:" />
+                    <ComboBox x:Name="cboxDebug" Width="350" />
                 </StackPanel>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Overlap algorithm:" />
-                    <ComboBox x:Name="cboxOverlap" />
-                </StackPanel>
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Edge routing algorithm:" />
-                    <ComboBox x:Name="cboxEdgeRouting" />
-                </StackPanel>
+                
             </StackPanel>
         </Grid>
 

@@ -119,5 +119,11 @@ namespace GraphX.Controls
         {
             return new Point(rect.X + rect.Width * .5, rect.Y + rect.Height * .5);
         }
+
+        public static void ForEach<T>(this IEnumerable<T> list, Action<T> func)
+        {
+            foreach (var item in list)
+                func(item);
+        }
     }
 }
