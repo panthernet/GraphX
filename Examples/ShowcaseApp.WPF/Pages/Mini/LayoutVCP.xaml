@@ -28,13 +28,14 @@
         
         <Expander VerticalAlignment="Bottom"
                   Margin="2"
-                  IsExpanded="False" 
+                  IsExpanded="false" 
                   ExpandDirection="Down"
                   Header="SETTINGS" 
                   Template="{DynamicResource MiniExpander}" 
                   Padding="5">
 
-            <StackPanel Orientation="Vertical" MinHeight="50" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical" MinHeight="50" VerticalAlignment="Center"
+                        Margin="10">
                 <CheckBox Height="25" 
                               Name="cbMathShape"
                               IsChecked="True"

@@ -46,6 +46,10 @@
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\..\ExternalDlls\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Windows.Shell">
       <HintPath>..\..\ExternalDlls\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>

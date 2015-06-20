@@ -413,7 +413,7 @@ namespace GraphX.Controls
         }
         #endregion
 
-        internal void InvalidateChildren()
+        internal virtual void InvalidateChildren()
         {
             if (_edgeLabelControl != null)
                 _edgeLabelControl.UpdateLayout();
@@ -577,6 +577,32 @@ namespace GraphX.Controls
         }
 
         /// <summary>
+        /// Process self looped edge positioning
+        /// </summary>
+        /// <param name="sourcePos">Left-top vertex position</param>
+        protected virtual void PrepareSelfLoopedEdge(Point sourcePos)
+        {
+            if (!ShowSelfLoopIndicator)
+                return;
+
+            var hasNoTemplate = !HasSelfLoopedEdgeTemplate;
+            var pt =
+                new Point(
+                    sourcePos.X + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Width),
+                    sourcePos.Y + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Height));
+
+            //if we has no self looped edge template defined we'll use default built-in indicator
+            if (hasNoTemplate)
+            {
+                var geometry = _linegeometry as EllipseGeometry;
+                geometry.Center = pt;
+                geometry.RadiusX = SelfLoopIndicatorRadius;
+                geometry.RadiusY = SelfLoopIndicatorRadius;
+            }
+            else _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
+        }
+
+        /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
         /// </summary>
         /// <param name="useCurrentCoords">Use current vertices coordinates or final coorfinates (for.ex if move animation is active final coords will be its destination)</param>
@@ -646,33 +672,8 @@ namespace GraphX.Controls
             //if self looped edge
             if (IsSelfLooped)
             {
-                #region Process self looped edges
-
-                if (!ShowSelfLoopIndicator)
-                    return;
-
-                var hasNoTemplate = !HasSelfLoopedEdgeTemplate;
-                var pt =
-                    new Point(
-                        sourcePos1.X + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Width),
-                        sourcePos1.Y + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Height));
-
-                //if we has no self looped edge template defined we'll use default built-in indicator
-                if (hasNoTemplate)
-                {
-                    var geometry = _linegeometry as EllipseGeometry;
-                    geometry.Center = pt;
-                    geometry.RadiusX = SelfLoopIndicatorRadius;
-                    geometry.RadiusY = SelfLoopIndicatorRadius;
-                }
-                else
-                {
-                    _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
-                    //SelfLoopIndicator.Arrange(_selfLoopedEdgeLastKnownRect);
-                }
-
+                PrepareSelfLoopedEdge(sourcePos1);
                 return;
-                #endregion
             }
 
             //check if we have some edge route data
@@ -804,7 +805,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="name">Template PART name</param>
         /// <returns></returns>
-        protected object GetTemplatePart(string name)
+        protected virtual object GetTemplatePart(string name)
         {
 #if WPF
             return Template.FindName(name, this);
@@ -813,7 +814,7 @@ namespace GraphX.Controls
 #endif
         }
 
-        public SysRect GetLabelSize()
+        public virtual SysRect GetLabelSize()
         {
             return _edgeLabelControl.GetSize();
         }
@@ -823,7 +824,7 @@ namespace GraphX.Controls
             _edgeLabelControl.SetSize(rect);
         }
 
-        internal void UpdateLabelLayout()
+        internal virtual void UpdateLabelLayout()
         {
             _edgeLabelControl.Show();
             if (_edgeLabelControl.GetSize() == SysRect.Empty)
