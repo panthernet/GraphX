@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
@@ -26,8 +27,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
         public override void UpdateVertexData(TVertex vertex, Point position, Rect size)
         {
-            VertexPositions[vertex] = position;
-            VertexSizes[vertex] = size;
+            VertexPositions.AddOrUpdate(vertex, position);
+            VertexSizes.AddOrUpdate(vertex, size);
         }
 
         public override Point[] ComputeSingle(TEdge edge)

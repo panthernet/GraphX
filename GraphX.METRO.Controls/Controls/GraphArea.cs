@@ -502,13 +502,17 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="positions">Optional vertex positions</param>
         /// <param name="showObjectsIfPosSpecified">If True, all objects will be made visible when positions are specified</param>
-        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true)
+        /// <param name="autoresolveIds">Automaticaly assign unique Ids to data objects. Can be vital for different GraphX logic parts such as parallel edges.</param>
+        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true, bool autoresolveIds = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (LogicCore.Graph == null)
                 throw new GX_InvalidDataException("LogicCore.Graph -> Not initialized!");
             PreloadVertexes();
+
+            if(autoresolveIds) 
+                AutoresolveIds();
 
             if (positions != null)
             {
@@ -522,6 +526,7 @@ namespace GraphX.Controls
             }
 
             GenerateAllEdges(positions != null ? Visibility.Visible : Visibility.Collapsed);
+            RestoreAlgorithmStorage();
         }
 
         /// <summary>
@@ -1210,13 +1215,13 @@ namespace GraphX.Controls
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (LogicCore.EnableParallelEdges)
+                ParallelizeEdges();
             foreach (var ec in _edgeslist.Values)
             {
                 if (!performFullUpdate) ec.UpdateEdgeRendering();
                 else ec.UpdateEdge();
             }
-            if (LogicCore.EnableParallelEdges)
-                ParallelizeEdges();
         }
 
         

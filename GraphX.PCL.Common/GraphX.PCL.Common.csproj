@@ -70,6 +70,7 @@
     <Compile Include="Exceptions\GX_InvalidDataException.cs" />
     <Compile Include="Exceptions\GX_ObjectNotFoundException.cs" />
     <Compile Include="Exceptions\GX_SerializationException.cs" />
+    <Compile Include="Helpers\CommonExtensions.cs" />
     <Compile Include="Interfaces\IAlgorithmParameters.cs" />
     <Compile Include="Interfaces\IAlgorithmStorage.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />
@@ -108,9 +109,7 @@
     <Compile Include="Measure\Thickness.cs" />
     <Compile Include="Measure\Vector.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>

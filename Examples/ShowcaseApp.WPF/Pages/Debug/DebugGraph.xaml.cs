@@ -32,8 +32,17 @@ namespace ShowcaseApp.WPF.Pages
             butEdgeLabels.Click += butEdgeLabels_Click;
             cbDebugMode.ItemsSource = Enum.GetValues(typeof(DebugModeEnum)).Cast<DebugModeEnum>();
             cbDebugMode.SelectionChanged += cbDebugMode_SelectionChanged;
+            dg_zoomctrl.PropertyChanged += dg_zoomctrl_PropertyChanged;
 
             CreateNewArea();
+        }
+
+        void dg_zoomctrl_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Zoom")
+            {
+                
+            }
         }
 
         void CreateNewArea()
@@ -45,7 +54,6 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.GenerateGraphFinished += dg_Area_GenerateGraphFinished;
             dg_Area.RelayoutFinished += dg_Area_GenerateGraphFinished;
             dg_zoomctrl.Content = dg_Area;
-
             dg_Area.ShowAllEdgesLabels(false);
 
         }

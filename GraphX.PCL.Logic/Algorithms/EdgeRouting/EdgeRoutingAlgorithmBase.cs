@@ -30,8 +30,8 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 		{
             Graph = graph;
             Parameters = parameters;
-            VertexSizes = vertexSizes;
-            VertexPositions = vertexPositions;
+            VertexSizes = vertexSizes ?? new Dictionary<TVertex, Rect>();
+            VertexPositions = vertexPositions ?? new Dictionary<TVertex, Point>();
             EdgeRoutes = new Dictionary<TEdge, Point[]>();
 		}
 

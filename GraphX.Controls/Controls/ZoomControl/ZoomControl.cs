@@ -821,7 +821,7 @@ namespace GraphX.Controls
             }
             zc.OnPropertyChanged("Presenter");
             zc.Presenter.OnPropertyChanged("RenderTransform");
-
+            zc.OnPropertyChanged("Zoom");
             zc.UpdateViewport();
         }
         #endregion
@@ -1557,4 +1557,6 @@ namespace GraphX.Controls
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
+
+    public delegate void ValueChangedEventArgs(object sender, DependencyPropertyChangedEventArgs args);
 }

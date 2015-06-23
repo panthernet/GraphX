@@ -32,6 +32,8 @@ DETAILED CHANGELOG:
 + Added new EdgeControl template PART (PART_SelfLoopedEdge) for custom self looped edge indicator visualization. It represents FrameworkElement and if specified in the template
 	will be positioned in the top left vertex corner. Also made indicator settings more flexible by implementing some dependency props [WPF, METRO]
 + Added StateStorage::SaveOrUpdateState() method for easier use [WPF,METRO]
++ Fixed ZoomControl::Zoom cproperty change not firing [WPF, METRO]
++ Fixed manual graph composition routines in case of ER algorithm is set [ALL]
 + Fixed first time solution rebuild problems by referencing new QuickGraphPCL nuget [ALL] 
 + Fixed layout algorithm calculations to always receive actual vertex positions as input parameter
 	This will fix VAESPS for default algorithms. [WPF, METRO]

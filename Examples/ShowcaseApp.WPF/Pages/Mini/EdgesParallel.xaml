@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="ShowcaseApp.WPF.Pages.Mini.EdgesParallel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
+             xmlns:controls="http://schemas.panthernet.ru/graphx/"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:models="clr-namespace:ShowcaseApp.WPF.Models"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <Grid.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Templates/MiniFeatures.xaml"/>
+                    <ResourceDictionary Source="/Templates/Mini/CommonMiniTemplate.xaml"/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </Grid.Resources>
+        
+        <Border BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1"  Margin="2" >
+            <controls:ZoomControl x:Name="zoomControl" Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource ButtonText}" HorizontalContentAlignment="Center" VerticalAlignment="Center">
+                <wpf:GraphAreaExample x:Name="graphArea"/>
+            </controls:ZoomControl>
+        </Border>
+        
+        <Expander VerticalAlignment="Bottom"
+                  Margin="2"
+                  IsExpanded="false" 
+                  ExpandDirection="Down"
+                  Header="SETTINGS" 
+                  Template="{DynamicResource MiniExpander}" 
+                  Padding="5">
+
+            <StackPanel Orientation="Vertical" MinHeight="50" VerticalAlignment="Center"
+                        Margin="10">
+                <CheckBox Height="25"
+                              Name="cbEnablePE"
+                              IsChecked="True"
+                              Content ="Enable parallel edges"
+                              ToolTip="Enable / disable parallel edges to see the difference"
+                              />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Text="Distance between the edges:"/>
+                    <TextBox Width="60" Height="25" Text="{Binding EdgeDistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+
+        <Border HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Background="{DynamicResource WindowBackground}"
+                BorderBrush="{DynamicResource ButtonBorder}" 
+                BorderThickness="1" 
+                CornerRadius="0,0,0,15" 
+                Margin="0,2,2,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <mui:ModernButton Style="{DynamicResource MainControlButtonHelp}"
+                                  Command="models:LinkCommands.ShowMiniSpecialDialog"
+                                  CommandParameter="{x:Static models:MiniSpecialType.EdgesParallel}"
+                                  />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

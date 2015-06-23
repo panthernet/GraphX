@@ -40,6 +40,7 @@
         <mui:LinkGroup DisplayName="Features">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Layouts" Source="/Pages/FeatureLists/FeaturesPageLayouts.xaml" />
+                <mui:Link DisplayName="edges" Source="/Pages/FeatureLists/FeaturesPageEdges.xaml" />
                 <!--<mui:Link DisplayName="Data operations" Source="/Pages/FeatureLists/FeaturesPageData.xaml" />
                 <mui:Link DisplayName="Templates" Source="/Pages/FeatureLists/FeaturesPageTemplates.xaml" />-->
             </mui:LinkGroup.Links>

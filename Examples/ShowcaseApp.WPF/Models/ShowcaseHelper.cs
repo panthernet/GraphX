@@ -31,7 +31,7 @@ namespace ShowcaseApp.WPF.Models
             DataSource = list;
         }
 
-        public static void AddEdge(BidirectionalGraph<DataVertex, DataEdge> graph, DataVertex source, DataVertex target, int sourcePoint = 0, int targetPoint = 0, int weight = 0)
+        public static void AddEdge(BidirectionalGraph<DataVertex, DataEdge> graph, DataVertex source, DataVertex target, int? sourcePoint = null, int? targetPoint = null, int weight = 0)
         {
             var edge = new DataEdge(source, target, weight)
             {

@@ -205,6 +205,7 @@ namespace GraphX.Controls
             }*/
             zc.OnPropertyChanged("Presenter");
             zc.Presenter.OnPropertyChanged("RenderTransform");
+            zc.OnPropertyChanged("Zoom");
 
             //VF zc.UpdateViewport();
         }

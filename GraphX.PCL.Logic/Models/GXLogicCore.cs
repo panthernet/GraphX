@@ -197,7 +197,7 @@ namespace GraphX.PCL.Logic.Models
             //setup overlap removal algorythm
             if (AreOverlapNeeded())
                 algOverlap = GenerateOverlapRemovalAlgorithm();
-            var algEr = GenerateEdgeRoutingAlgorithm(CalculateContentRectangle().Size);
+            var algEr = GenerateEdgeRoutingAlgorithm(CalculateContentRectangle().Size, vertexPositions);
 
             CreateNewAlgorithmStorage(algLay, algOverlap, algEr);
             return (AlgorithmStorage.Layout != null && (vertexSizes == null || vertexSizes.Count != 0)) || IsCustomLayout;

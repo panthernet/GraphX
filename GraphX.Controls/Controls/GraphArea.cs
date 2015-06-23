@@ -490,15 +490,21 @@ namespace GraphX.Controls
         /// <summary>
         /// For manual graph generation only!
         /// Generates visual objects for all vertices and edges w/o any algorithms. Objects are hidden by default. Optionaly, sets vertex coordinates.
+        /// If there is any edge routing algorithm needed then it should be set before the call to this method.
         /// </summary>
         /// <param name="positions">Optional vertex positions</param>
         /// <param name="showObjectsIfPosSpecified">If True, all objects will be made visible when positions are specified</param>
-        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true)
+        /// <param name="autoresolveIds">Automaticaly assign unique Ids to data objects. Can be vital for different GraphX logic parts such as parallel edges.</param>
+        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true, bool autoresolveIds = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (LogicCore.Graph == null)
                 throw new GX_InvalidDataException("LogicCore.Graph -> Not initialized!");
+
+            if(autoresolveIds)
+                AutoresolveIds();
+
             PreloadVertexes();
 
             if(positions != null)
@@ -511,7 +517,8 @@ namespace GraphX.Controls
                         VertexList[item.Key].Visibility = Visibility.Visible;
                 }
             }
-
+            UpdateLayout();
+            RestoreAlgorithmStorage();
             GenerateAllEdges(positions != null ? Visibility.Visible : Visibility.Collapsed);
         }
 
@@ -1281,13 +1288,15 @@ namespace GraphX.Controls
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            
+            if (LogicCore.EnableParallelEdges)
+                ParallelizeEdges();
+
             foreach (var ec in _edgeslist.Values)
             {
                 if (!performFullUpdate) ec.UpdateEdgeRendering();
                 else ec.UpdateEdge();
             }
-            if (LogicCore.EnableParallelEdges)
-                ParallelizeEdges();
         }
 
         

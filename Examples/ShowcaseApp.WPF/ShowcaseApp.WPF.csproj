@@ -139,6 +139,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\FeatureLists\FeaturesPageEdges.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\FeatureLists\FeaturesPageLayouts.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -170,6 +174,11 @@
     <Page Include="Controls\MiniContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Mini\EdgesParallel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Page Include="Pages\NNGraph.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -233,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Templates\Mini\LayoutVCPTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Templates\Mini\CommonMiniTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,6 +283,9 @@
     <Compile Include="Models\ThemedDataStorage.cs" />
     <Compile Include="Models\ValueToImageConverter.cs" />
     <Compile Include="Models\VCTemplateBehaviour.cs" />
+    <Compile Include="Pages\FeatureLists\FeaturesPageEdges.xaml.cs">
+      <DependentUpon>FeaturesPageEdges.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\FeatureLists\FeaturesPageLayouts.xaml.cs">
       <DependentUpon>FeaturesPageLayouts.xaml</DependentUpon>
     </Compile>
@@ -293,6 +309,10 @@
     </Compile>
     <Compile Include="Controls\MiniContentPage.xaml.cs">
       <DependentUpon>MiniContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Mini\EdgesParallel.xaml.cs">
+      <DependentUpon>EdgesParallel.xaml</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\NNGraph.xaml.cs">
       <DependentUpon>NNGraph.xaml</DependentUpon>
@@ -319,6 +339,7 @@
     <Compile Include="Pages\ThemedGraph.xaml.cs">
       <DependentUpon>ThemedGraph.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
