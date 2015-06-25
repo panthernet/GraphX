@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,15 +34,15 @@ namespace ShowcaseApp.WPF.Pages
             cbDebugMode.ItemsSource = Enum.GetValues(typeof(DebugModeEnum)).Cast<DebugModeEnum>();
             cbDebugMode.SelectionChanged += cbDebugMode_SelectionChanged;
             dg_zoomctrl.PropertyChanged += dg_zoomctrl_PropertyChanged;
-
             CreateNewArea();
+            dg_zoomctrl.MaximumZoomStep = 100;
         }
 
         void dg_zoomctrl_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Zoom")
             {
-                
+                Debug.WriteLine("Zoom: "+ dg_zoomctrl.Zoom);
             }
         }
 

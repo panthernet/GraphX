@@ -79,8 +79,8 @@ namespace GraphX.Controls
             DependencyProperty.Register("AnimationLength", typeof(TimeSpan), typeof(ZoomControl),
                                         new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
-        public static readonly DependencyProperty MaxZoomDeltaProperty =
-            DependencyProperty.Register("MaxZoomDelta", typeof(double), typeof(ZoomControl),
+        public static readonly DependencyProperty MaximumZoomStepProperty =
+            DependencyProperty.Register("MaximumZoomStep", typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(5.0));
 
         public static readonly DependencyProperty MaxZoomProperty =
@@ -177,8 +177,8 @@ namespace GraphX.Controls
             DependencyProperty.Register("ZoomBox", typeof(Rect), typeof(ZoomControl),
                                         new PropertyMetadata(new Rect()));
 
-        public static readonly DependencyProperty ZoomDeltaMultiplierProperty =
-            DependencyProperty.Register("ZoomDeltaMultiplier", typeof(double), typeof(ZoomControl),
+        public static readonly DependencyProperty ZoomSensitivityProperty =
+            DependencyProperty.Register("ZoomSensitivity", typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(100.0));
 
         #region Zoom
@@ -329,16 +329,16 @@ namespace GraphX.Controls
             set { SetValue(MaxZoomProperty, value); }
         }
 
-        public double MaxZoomDelta
+        public double MaximumZoomStep
         {
-            get { return (double)GetValue(MaxZoomDeltaProperty); }
-            set { SetValue(MaxZoomDeltaProperty, value); }
+            get { return (double)GetValue(MaximumZoomStepProperty); }
+            set { SetValue(MaximumZoomStepProperty, value); }
         }
 
-        public double ZoomDeltaMultiplier
+        public double ZoomSensitivity
         {
-            get { return (double)GetValue(ZoomDeltaMultiplierProperty); }
-            set { SetValue(ZoomDeltaMultiplierProperty, value); }
+            get { return (double)GetValue(ZoomSensitivityProperty); }
+            set { SetValue(ZoomSensitivityProperty, value); }
         }
 
         public double Zoom
@@ -511,15 +511,28 @@ namespace GraphX.Controls
             if (!handle) return;
 
             e.Handled = true;
-            var origoPosition = new Point(ActualWidth / 2, ActualHeight / 2);
-            var mousePosition = e.GetCurrentPoint(this).Position;
+            //var origoPosition = new Point(ActualWidth / 2, ActualHeight / 2);
+            //var mousePosition = e.GetCurrentPoint(this).Position;
+            MouseWheelAction(e.GetCurrentPoint(this).Properties.MouseWheelDelta, e.GetCurrentPoint(this).Position);
+        }
+
+        /// <summary>
+        /// Defines action on mousewheel
+        /// </summary>
+        /// <param name="delta"></param>
+        /// <param name="mousePosition"></param>
+        protected virtual void MouseWheelAction(int delta, Point mousePosition)
+        {
+            var origoPosition = OrigoPosition;
 
             DoZoom(
-                Math.Max(1 / MaxZoomDelta, Math.Min(MaxZoomDelta, e.GetCurrentPoint(this).Properties.MouseWheelDelta / 10000.0 * ZoomDeltaMultiplier + 1)),
-                origoPosition,
-                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
-                MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition);
+                 Math.Max(1 / MaximumZoomStep, Math.Min(MaximumZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
+                 delta < 0 ? -1 : 1,
+                 origoPosition,
+                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? OrigoPosition : mousePosition,
+                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? OrigoPosition : mousePosition);
         }
+
 
         private void ZoomControl_MouseUp(object sender, PointerRoutedEventArgs e)
         {
@@ -780,7 +793,7 @@ namespace GraphX.Controls
         {
             var deltaZoom = Math.Min(ActualWidth / rect.Width, ActualHeight / rect.Height);
             var startHandlePosition = new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
-            DoZoom(deltaZoom, OrigoPosition, startHandlePosition, OrigoPosition, setDelta);
+            DoZoom(deltaZoom, 1, OrigoPosition, startHandlePosition, OrigoPosition, setDelta);
             ZoomBox = new Rect();
         }
 
@@ -829,10 +842,10 @@ namespace GraphX.Controls
             return _presenter == null ? 0.0 : baseValue;
         }
 
-        private void DoZoom(double deltaZoom, Point origoPosition, Point startHandlePosition, Point targetHandlePosition, bool setDelta = false)
+        private void DoZoom(double deltaZoom, int mod, Point origoPosition, Point startHandlePosition, Point targetHandlePosition, bool setDelta = false)
         {
             var startZoom = Zoom;
-            var currentZoom =  setDelta ? deltaZoom : (startZoom * deltaZoom);
+            var currentZoom = setDelta ? deltaZoom : (mod == -1 ? (startZoom / deltaZoom) : (startZoom * deltaZoom));
             currentZoom = Math.Max(MinZoom, Math.Min(MaxZoom, currentZoom));
 
             var startTranslate = new Point(TranslateX, TranslateY);

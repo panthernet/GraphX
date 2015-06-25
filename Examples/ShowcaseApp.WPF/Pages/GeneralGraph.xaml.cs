@@ -53,7 +53,7 @@ namespace ShowcaseApp.WPF.Pages
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
 
             gg_zoomctrl.IsAnimationDisabled = false;
-            gg_zoomctrl.MaxZoomDelta = 2;
+            gg_zoomctrl.MaximumZoomStep = 2;
 
             Loaded += GG_Loaded;
         }

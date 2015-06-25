@@ -313,28 +313,28 @@
                                             IsEnabled="True"
                                             />
                                     <Button IsEnabled="False" x:Name="FitButton" Command="graphx:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
-                                        <Image Source="{StaticResource FitContentGlyph}" Margin="2"  po:Freeze ="true"/>
+                                        <Image Source="{StaticResource FitContentGlyph}" Margin="2"/>
                                     </Button>
                                     <Button x:Name="FillButton" Command="graphx:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
-                                        <Image Source="{StaticResource FillToBoundsGlyph}" Margin="2" po:Freeze ="true"/>
+                                        <Image Source="{StaticResource FillToBoundsGlyph}" Margin="2"/>
                                     </Button>
                                     <Button x:Name="CenterButton" Command="graphx:ZoomControl.Center" ToolTip="Center Content" Width="20px" Height="20px" Margin="2,0" Style="{StaticResource TransparentButton}">
-                                        <Image Source="{StaticResource CenterGlyph}" Margin="2" po:Freeze ="true"/>
+                                        <Image Source="{StaticResource CenterGlyph}" Margin="2"/>
                                     </Button>
                                 </StackPanel>
                                 <ToggleButton Grid.Row="0" x:Name="ToggleViewFinderButton" ToolTip="Hide View Finder" Height="13" Width="13" Margin="0,2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top"
                                     Style="{StaticResource TransparentButton}" Foreground="White" IsChecked="{Binding ElementName=ShowViewFinder, Path=IsChecked}" >
-                                    <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"  po:Freeze ="true"/>
+                                    <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"/>
                                 </ToggleButton>
                                 <Border Grid.Row="1" BorderBrush="{StaticResource GlyphBrush}" BorderThickness="2" Background="#80FFFFFF" />
                                 <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
                             </Grid>
                         </Border>
                         <ToggleButton Name="ShowViewFinder" IsTabStop="False" ToolTip="Show View Finder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Height="22" Width="22"
-                            FocusVisualStyle="{x:Null}" Style="{StaticResource ViewFinderToggleButtonStyle}" Foreground="Transparent" Background="Transparent" IsChecked="{Binding Path=ViewFinderVisibility, 
+                            Style="{StaticResource ViewFinderToggleButtonStyle}" Foreground="Transparent" Background="Transparent" IsChecked="{Binding Path=ViewFinderVisibility, 
                             Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource TrueIfVisibleConverter}}">
                             <Grid Name="ShowViewFinderGlyph" Opacity="0">
-                                <Image x:Name="ShowViewFinderGlyphImage" Source="{StaticResource ShowViewFinderGlyph}"  po:Freeze ="true"/>
+                                <Image x:Name="ShowViewFinderGlyphImage" Source="{StaticResource ShowViewFinderGlyph}"/>
                             </Grid>
                         </ToggleButton>
                         <Canvas>

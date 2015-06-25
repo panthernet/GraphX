@@ -32,6 +32,7 @@ DETAILED CHANGELOG:
 + Added new EdgeControl template PART (PART_SelfLoopedEdge) for custom self looped edge indicator visualization. It represents FrameworkElement and if specified in the template
 	will be positioned in the top left vertex corner. Also made indicator settings more flexible by implementing some dependency props [WPF, METRO]
 + Added StateStorage::SaveOrUpdateState() method for easier use [WPF,METRO]
++ Fixed ZoomControl zoom out to the value equal to zoom in resulting in similar smooth zoom [WPF, METRO]
 + Fixed ZoomControl::Zoom cproperty change not firing [WPF, METRO]
 + Fixed manual graph composition routines in case of ER algorithm is set [ALL]
 + Fixed first time solution rebuild problems by referencing new QuickGraphPCL nuget [ALL] 
@@ -81,6 +82,9 @@ BREAKING CHANGES:
 	* LogicCore::EdgeSelfLoopCircleOffset -> SelfLoopIndicatorOffset
 	* LogicCore::EdgeSelfLoopCircleRadius -> SelfLoopIndicatorRadius
 	* LogicCore::EdgeShowSelfLooped -> ShowSelfLoopIndicator
+* Renamed following ZoomControl properties:
+	* ZoomDeltaMultiplier -> ZoomSensitivity
+	* MaxZoomDelta -> MaximumZoomStep
 * Completely deprecated EdgeControl::PART_edgeArrowPath template PART in favor of the new DefaultEdgePointer (PART_EdgePointerForSource & PART_EdgePointerForTarget). 
 	Please renew your custom templates. You can find an example in Generic.XAML template.
 * Self looped edges display logic has been slightly changed with the introduction of custom template PART (PART_SelfLoopedEdge). Now LogicCore::SelfLoopIndicatorOffset

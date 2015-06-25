@@ -15,7 +15,6 @@ using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using GraphX.Controls.Models;
-using GraphX.PCL.Logic.Models;
 using Microsoft.Win32;
 using QuickGraph;
 using Point = System.Windows.Point;
@@ -1465,6 +1464,7 @@ namespace GraphX.Controls
 
             IDictionary<TVertex, Measure.Point> vPositions;
             var vSizes = GetVertexSizesAndPositions(out vPositions);
+            
             LogicCore.GenerateAlgorithmStorage(vSizes, vPositions);
             // }
         }

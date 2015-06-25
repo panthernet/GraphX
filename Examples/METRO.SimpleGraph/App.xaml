@@ -13,7 +13,7 @@
                     Required by Visual Studio project and item templates
                  -->
                 <ResourceDictionary Source="Common/StandardStyles.xaml"/>
-                <ResourceDictionary Source="Common/templates2.xaml"/>
+                <ResourceDictionary Source="Common/templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

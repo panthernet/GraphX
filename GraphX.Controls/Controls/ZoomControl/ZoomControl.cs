@@ -66,6 +66,11 @@ namespace GraphX.Controls
             
         }
 
+        private void CanExecuteTrue(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
         #endregion
 
         #region ResizeEdge Nested Type
@@ -668,25 +673,25 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty HideZoomProperty =
             DependencyProperty.Register("HideZoom", typeof(Visibility), typeof(ZoomControl),
-                                        new UIPropertyMetadata(Visibility.Visible));
+                                        new PropertyMetadata(Visibility.Visible));
 
         public static readonly DependencyProperty AnimationLengthProperty =
             DependencyProperty.Register("AnimationLength", typeof(TimeSpan), typeof(ZoomControl),
-                                        new UIPropertyMetadata(TimeSpan.FromMilliseconds(500)));
+                                        new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
-        public static readonly DependencyProperty MaxZoomDeltaProperty =
-            DependencyProperty.Register("MaxZoomDelta", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(5.0));
+        public static readonly DependencyProperty MaximumZoomStepProperty =
+            DependencyProperty.Register("MaximumZoomValueValue", typeof(double), typeof(ZoomControl),
+                                        new PropertyMetadata(5.0));
 
         public static readonly DependencyProperty MaxZoomProperty =
-            DependencyProperty.Register("MaxZoom", typeof(double), typeof(ZoomControl), new UIPropertyMetadata(100.0));
+            DependencyProperty.Register("MaxZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(100.0));
 
         public static readonly DependencyProperty MinZoomProperty =
-            DependencyProperty.Register("MinZoom", typeof(double), typeof(ZoomControl), new UIPropertyMetadata(0.01));
+            DependencyProperty.Register("MinZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(0.01));
 
         public static readonly DependencyProperty ModeProperty =
             DependencyProperty.Register("Mode", typeof(ZoomControlModes), typeof(ZoomControl),
-                                        new UIPropertyMetadata(ZoomControlModes.Custom, Mode_PropertyChanged));
+                                        new PropertyMetadata(ZoomControlModes.Custom, Mode_PropertyChanged));
 
         private static void Mode_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -709,16 +714,16 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty ModifierModeProperty =
             DependencyProperty.Register("ModifierMode", typeof(ZoomViewModifierMode), typeof(ZoomControl),
-                                        new UIPropertyMetadata(ZoomViewModifierMode.None));
+                                        new PropertyMetadata(ZoomViewModifierMode.None));
 
         #region TranslateX TranslateY
         public static readonly DependencyProperty TranslateXProperty =
             DependencyProperty.Register("TranslateX", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(0.0, TranslateX_PropertyChanged, TranslateX_Coerce));
+                                        new PropertyMetadata(0.0, TranslateX_PropertyChanged, TranslateX_Coerce));
 
         public static readonly DependencyProperty TranslateYProperty =
             DependencyProperty.Register("TranslateY", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(0.0, TranslateY_PropertyChanged, TranslateY_Coerce));
+                                        new PropertyMetadata(0.0, TranslateY_PropertyChanged, TranslateY_Coerce));
 
         private static object TranslateX_Coerce(DependencyObject d, object basevalue)
         {
@@ -771,36 +776,36 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty ZoomBoxBackgroundProperty =
             DependencyProperty.Register("ZoomBoxBackground", typeof(Brush), typeof(ZoomControl),
-                                        new UIPropertyMetadata(null));
+                                        new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderBrushProperty =
             DependencyProperty.Register("ZoomBoxBorderBrush", typeof(Brush), typeof(ZoomControl),
-                                        new UIPropertyMetadata(null));
+                                        new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderThicknessProperty =
             DependencyProperty.Register("ZoomBoxBorderThickness", typeof(Thickness), typeof(ZoomControl),
-                                        new UIPropertyMetadata(null));
+                                        new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxOpacityProperty =
             DependencyProperty.Register("ZoomBoxOpacity", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(0.5));
+                                        new PropertyMetadata(0.5));
 
 
         public static readonly DependencyProperty ZoomBoxProperty =
             DependencyProperty.Register("ZoomBox", typeof(Rect), typeof(ZoomControl),
-                                        new UIPropertyMetadata(new Rect()));
+                                        new PropertyMetadata(new Rect()));
 
-        public static readonly DependencyProperty ZoomDeltaMultiplierProperty =
-            DependencyProperty.Register("ZoomDeltaMultiplier", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(100.0));
+        public static readonly DependencyProperty ZoomSensitivityProperty =
+            DependencyProperty.Register("ZoomSensitivity", typeof(double), typeof(ZoomControl),
+                                        new PropertyMetadata(100.0));
 
         #region Zoom
         public static readonly DependencyProperty ZoomProperty =
             DependencyProperty.Register("Zoom", typeof(double), typeof(ZoomControl),
-                                        new UIPropertyMetadata(1.0, Zoom_PropertyChanged));
+                                        new PropertyMetadata(1.0, Zoom_PropertyChanged));
 
         private static void Zoom_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -942,21 +947,21 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Maximum value for zoom sensivity (how fast the zoom can do)
+        /// Maximum value for zoom step (how fast the zoom can do)
         /// </summary>
-        public double MaxZoomDelta
+        public double MaximumZoomStep
         {
-            get { return (double)GetValue(MaxZoomDeltaProperty); }
-            set { SetValue(MaxZoomDeltaProperty, value); }
+            get { return (double)GetValue(MaximumZoomStepProperty); }
+            set { SetValue(MaximumZoomStepProperty, value); }
         }
 
         /// <summary>
-        /// Gets or sets zooming sensivity. Lower the value - smoother the zoom.
+        /// Gets or sets zoom sensitivity. Lower the value - smoother the zoom.
         /// </summary>
-        public double ZoomDeltaMultiplier
+        public double ZoomSensitivity
         {
-            get { return (double)GetValue(ZoomDeltaMultiplierProperty); }
-            set { SetValue(ZoomDeltaMultiplierProperty, value); }
+            get { return (double)GetValue(ZoomSensitivityProperty); }
+            set { SetValue(ZoomSensitivityProperty, value); }
         }
 
         /// <summary>
@@ -1048,6 +1053,9 @@ namespace GraphX.Controls
             set { SetValue(ModeProperty, value); }
         }
 
+        protected RoutedUICommand CommandZoomIn = new RoutedUICommand("Zoom In", "ZoomIn", typeof(ZoomControl));
+        protected RoutedUICommand CommandZoomOut = new RoutedUICommand("Zoom Out", "ZoomOut", typeof(ZoomControl));
+
         #endregion
 
         static ZoomControl()
@@ -1070,22 +1078,42 @@ namespace GraphX.Controls
                 MouseUp += ZoomControl_MouseUp;
                 UseCtrlForMouseWheel = true;
 
-                var binding = new CommandBinding(Refocus, RefocusView, CanRefocusView);
-                CommandBindings.Add(binding);
-                binding = new CommandBinding(Center, CenterContent);
-                CommandBindings.Add(binding);
-
-                binding = new CommandBinding(Fill, FillToBounds);
-                CommandBindings.Add(binding);
-
-                binding = new CommandBinding(Fit, FitToBounds);
-                CommandBindings.Add(binding);
-
                 AddHandler(SizeChangedEvent, new SizeChangedEventHandler(OnSizeChanged), true);
+
+                BindCommand(Refocus, RefocusView, CanRefocusView);
+                BindCommand(Center, CenterContent);
+                BindCommand(Fill, FillToBounds);
+                BindCommand(Fit, FitToBounds);
+
+                BindKey(CommandZoomIn, Key.Up, ModifierKeys.Control, 
+                    (sender, args) => MouseWheelAction(120, OrigoPosition));
+                BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control, 
+                    (sender, args) => MouseWheelAction(-120, OrigoPosition));
+
+                this.PreviewKeyDown += ZoomControl_PreviewKeyDown;
 
                 Loaded += ZoomControl_Loaded;
             }
         }
+
+        void ZoomControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            
+        }
+
+        protected void BindCommand(RoutedUICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute = null)
+        {
+            var binding = new CommandBinding(command, execute, canExecute);
+            CommandBindings.Add(binding);
+        }
+
+        protected void BindKey(RoutedUICommand command, Key key, ModifierKeys modifier, ExecutedRoutedEventHandler execute)
+        {
+            var binding = new CommandBinding(command, execute);
+            CommandBindings.Add(binding);
+            InputBindings.Add(new KeyBinding(command, key, modifier));
+        }
+
 
         void ZoomControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -1151,11 +1179,21 @@ namespace GraphX.Controls
 
         private void MouseWheelAction(MouseWheelEventArgs e)
         {
+            MouseWheelAction(e.Delta, e.GetPosition(this));
+        }
+
+        /// <summary>
+        /// Defines action on mousewheel
+        /// </summary>
+        /// <param name="delta"></param>
+        /// <param name="mousePosition"></param>
+        protected virtual void MouseWheelAction(int delta, Point mousePosition)
+        {
             var origoPosition = OrigoPosition;
-            var mousePosition = e.GetPosition(this);
 
             DoZoom(
-                Math.Max(1 / MaxZoomDelta, Math.Min(MaxZoomDelta, e.Delta / 10000.0 * ZoomDeltaMultiplier + 1)),
+                Math.Max(1 / MaximumZoomStep, Math.Min(MaximumZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
+                delta < 0 ? -1 : 1,
                 origoPosition,
                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition);
@@ -1417,7 +1455,7 @@ namespace GraphX.Controls
         {
             var deltaZoom = Math.Min(ActualWidth / rect.Width, ActualHeight / rect.Height);
             var startHandlePosition = new Point(rect.X + rect.Width / 2, rect.Y + rect.Height / 2);
-            DoZoom(deltaZoom, OrigoPosition, startHandlePosition, OrigoPosition, setDelta);
+            DoZoom(deltaZoom, 1, OrigoPosition, startHandlePosition, OrigoPosition, setDelta);
             ZoomBox = new Rect();
         }
 
@@ -1463,10 +1501,10 @@ namespace GraphX.Controls
             DoZoomAnimation(deltaZoom, initialTranslate.X * deltaZoom, initialTranslate.Y * deltaZoom);
         }
 
-        private void DoZoom(double deltaZoom, Point origoPosition, Point startHandlePosition, Point targetHandlePosition, bool setDelta = false)
+        private void DoZoom(double deltaZoom, int mod, Point origoPosition, Point startHandlePosition, Point targetHandlePosition, bool setDelta = false)
         {
             var startZoom = Zoom;
-            var currentZoom =  setDelta ? deltaZoom : (startZoom * deltaZoom);
+            var currentZoom = setDelta ? deltaZoom : (mod == -1 ? (startZoom / deltaZoom) : (startZoom * deltaZoom));
             currentZoom = Math.Max(MinZoom, Math.Min(MaxZoom, currentZoom));
 
             var startTranslate = new Vector(TranslateX, TranslateY);

@@ -55,7 +55,7 @@ namespace ShowcaseApp.WPF.Pages
             zoomCtrl.Zoom = 2;
             zoomCtrl.MinZoom = .5;
             zoomCtrl.MaxZoom = 50;
-            zoomCtrl.ZoomDeltaMultiplier = 25;
+            zoomCtrl.ZoomSensitivity = 25;
             zoomCtrl.MouseDown += zoomCtrl_MouseDown;
             var tb = new TextBlock() {Text = "AAAA"};
 

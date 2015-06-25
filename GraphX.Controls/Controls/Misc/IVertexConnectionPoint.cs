@@ -3,6 +3,7 @@
 using System.Windows;
 #elif METRO
 using Windows.Foundation;
+using Windows.UI.Xaml;
 #endif
 using GraphX.PCL.Common.Enums;
 

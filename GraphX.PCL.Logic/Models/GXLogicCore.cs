@@ -193,11 +193,12 @@ namespace GraphX.PCL.Logic.Models
             //TODO maybe rewise due to extensive memory consumption
             _vertexPosSource = vertexPositions;
             _vertexSizes = vertexSizes;
-            
+            var vertexRectangles = GetVertexSizeRectangles(vertexPositions, vertexSizes);
+
             //setup overlap removal algorythm
             if (AreOverlapNeeded())
-                algOverlap = GenerateOverlapRemovalAlgorithm();
-            var algEr = GenerateEdgeRoutingAlgorithm(CalculateContentRectangle().Size, vertexPositions);
+                algOverlap = GenerateOverlapRemovalAlgorithm(vertexRectangles);
+            var algEr = GenerateEdgeRoutingAlgorithm(CalculateContentRectangle().Size, vertexPositions, vertexRectangles);
 
             CreateNewAlgorithmStorage(algLay, algOverlap, algEr);
             return (AlgorithmStorage.Layout != null && (vertexSizes == null || vertexSizes.Count != 0)) || IsCustomLayout;

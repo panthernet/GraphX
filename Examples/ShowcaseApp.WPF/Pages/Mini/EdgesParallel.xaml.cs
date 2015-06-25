@@ -79,6 +79,8 @@ namespace ShowcaseApp.WPF.Pages.Mini
             graphArea.PreloadGraph(posList);
             //behaviors
             graphArea.SetVerticesDrag(true, true);
+            graphArea.ShowAllEdgesLabels();
+            graphArea.AlignAllEdgesLabels();
 
 
             zoomControl.ZoomToFill();
