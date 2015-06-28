@@ -34,6 +34,7 @@ DETAILED CHANGELOG:
 + Added StateStorage::SaveOrUpdateState() method for easier use [WPF,METRO]
 + Added new readonly property EdgeControl::IsParallel that identifies edge as currently parallel to other edge. Made GraphArea::ParalellizeEdges() method public to be able to refresh IsParallel property on manual graph operations [METRO, WPF]
 + Added EdgeLabelControl::FlipOnRotation dependency property which controls if label should be flipped when axis is changed while rotating [WPF, METRO]
++ Fixed parallel edges labels handling. Now edge labels are more readable when there are two of them [WPF, METRO]
 + Fixed edge routing when graph state has been loaded. Graph state now stores AlgorithmStorage too [ALL]
 + Fixed ZoomControl zoom out to the value equal to zoom in resulting in similar smooth zoom [WPF, METRO]
 + Fixed ZoomControl::Zoom cproperty change not firing [WPF, METRO]
@@ -93,6 +94,9 @@ BREAKING CHANGES:
 * Self looped edges display logic has been slightly changed with the introduction of custom template PART (PART_SelfLoopedEdge). Now LogicCore::SelfLoopIndicatorOffset
 is (0,0) by default and indicator is shown in the top left vertex corner minus indicator size. You can change this behavior by overriding EdgeControl::PrepareSelfLoopedEdge() method.
 * GetVertexSizeRectangles() method moved from GraphArea to LogicCore.
+* Edge labels placement logic has been slightly changed when they are applied to parallel edges. Labels offset now translates them into different directions, for ex. one up, one down, one up.. etc. 
+	This behavior helps to better place labels for double parallels. Also parallel edge labels now are not flipped when axis changes during label rotation. If you're uncomfortable with these changes, 
+	please let me know!
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]
