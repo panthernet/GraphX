@@ -1,4 +1,4 @@
-﻿RELEASE 2.2.0 WIP
+﻿RELEASE 2.2.0
 NEW TERMS: 
 	VAESPS - vertex and edge skip processing support
 	VCP - vertex connection point
