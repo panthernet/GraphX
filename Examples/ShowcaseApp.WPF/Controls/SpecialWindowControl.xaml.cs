@@ -54,7 +54,12 @@ namespace ShowcaseApp.WPF.Controls
                 spContent2.XamlText = Properties.Resources.ResourceManager.GetString(OpType.ToString());
             var spContent3 = result as ISpecialWindowContentXamlTemplate;
             if (spContent3 != null)
-                spContent3.XamlText = Properties.Resources.ResourceManager.GetString(OpType+"Template");
+            {
+                var xamlTemplate = Properties.Resources.ResourceManager.GetString(OpType + "Template");
+                if(string.IsNullOrEmpty(xamlTemplate))
+                    xamlTemplate = Properties.Resources.ResourceManager.GetString("CommonMiniTemplate");
+                spContent3.XamlText = xamlTemplate;
+            }
 
             return result;
         }

@@ -55,11 +55,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:EdgeLabelControl}">
-                    <Grid>
-                        <Border BorderBrush="Black" BorderThickness="1" Background="ForestGreen" CornerRadius="8">
-                            <ContentPresenter Margin="1"/>
-                        </Border>
-                    </Grid>
+                    <TextBlock Text="{TemplateBinding Content}" FontSize="8" FontStyle="Italic" Margin="1" VerticalAlignment="Center"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

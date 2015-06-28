@@ -118,6 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="CommonMiniTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Templates\Mini\CommonMiniTemplate.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="EdgesParallel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Pages\Mini\EdgesParallel.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="EdgesParallelText" xml:space="preserve">
+    <value>In this example you can see how parallel edges can be handled and customized by GraphX. Edge labels also has special logic for parallel edges to be easily readable.
+
+Point mouse over the different settings to see tooltips.</value>
+  </data>
   <data name="LayoutVCP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Pages\Mini\LayoutVCP.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

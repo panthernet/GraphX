@@ -61,6 +61,51 @@ namespace ShowcaseApp.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;ResourceDictionary xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///                    xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
+        ///                    &gt;
+        ///    
+        ///    &lt;Style TargetType=&quot;{x:Type controls:VertexControl}&quot;&gt;
+        ///        &lt;Setter Property=&quot;Foreground&quot; Value=&quot;{DynamicResource ButtonText}&quot;/&gt;
+        ///        &lt;Setter Property=&quot;Template&quot;&gt;
+        ///            &lt;Setter.Value&gt;
+        ///                &lt;ControlTemplate TargetType [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string CommonMiniTemplate {
+            get {
+                return ResourceManager.GetString("CommonMiniTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;UserControl x:Class=&quot;ShowcaseApp.WPF.Pages.Mini.EdgesParallel&quot;
+        ///             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot; 
+        ///             xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
+        ///             xmlns:wpf=&quot;clr-namespace:ShowcaseApp.WPF&quot;
+        ///             xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
+        ///              [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string EdgesParallel {
+            get {
+                return ResourceManager.GetString("EdgesParallel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In this example you can see how parallel edges can be handled and customized by GraphX. Edge labels also has special logic for parallel edges to be easily readable.
+        ///
+        ///Point mouse over the different settings to see tooltips..
+        /// </summary>
+        internal static string EdgesParallelText {
+            get {
+                return ResourceManager.GetString("EdgesParallelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;UserControl x:Class=&quot;ShowcaseApp.WPF.Pages.Mini.LayoutVCP&quot;
         ///             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
@@ -87,7 +132,7 @@ namespace ShowcaseApp.WPF.Properties {
         ///
         ///        &lt;Setter Property=&quot;Content&quot;&gt;
         ///            &lt;Setter.Value&gt;
-        ///                &lt;Path Stroke=&quot;Bl [rest of string was truncated]&quot;;.
+        ///                &lt;Path Stroke=&quot;{D [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LayoutVCPTemplate {
             get {

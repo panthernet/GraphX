@@ -38,7 +38,7 @@ namespace ShowcaseApp.WPF.Models
                 Text = string.Empty,
                 SourceConnectionPointId = sourcePoint,
                 TargetConnectionPointId = targetPoint,
-                ToolTipText = "Default label "+ source.ID
+                ToolTipText = "Label "+ source.ID
             };
 
             graph.AddEdge(edge);
