@@ -1152,19 +1152,16 @@ namespace GraphX.Controls
                     //leave first edge intact if we have not even edges count
                     for (int i = even ? 0 : 1; i < list.Count; i++)
                     {
-                        //var dist = ParallelEdgeDistance;
-                        //if (chet && i < 2) dist = distance;
-                        //if (cList[i] && ((!chet && !prevc) || list.Count == 2)) viceversa = !viceversa;
                         //if source to target edge
                         if (!cList[i])
                         {
-                            list[i].SourceOffset = (viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2));
-                            list[i].TargetOffset = -list[i].SourceOffset;
+                            list[i].ParallelEdgeOffset = (viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2));
+                            //list[i].TargetOffset = -list[i].ParallelEdgeOffset;
                         }
                         else //if target to source edge - just switch offsets
                         {
-                            list[i].TargetOffset = (viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2));
-                            list[i].SourceOffset = -list[i].TargetOffset;
+                            list[i].ParallelEdgeOffset = -((viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2)));
+                            //list[i].ParallelEdgeOffset = -list[i].TargetOffset;
                         }
                         //change trigger to opposite
                         viceversa = !viceversa;

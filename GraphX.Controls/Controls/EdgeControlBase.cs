@@ -516,8 +516,8 @@ namespace GraphX.Controls
         }
 
 
-        internal int SourceOffset;
-        internal int TargetOffset;
+        internal int ParallelEdgeOffset;
+        //internal int TargetOffset;
 
         /// <summary>
         /// Gets the offset point for edge parallelization
@@ -685,10 +685,10 @@ namespace GraphX.Controls
             var hasRouteInfo = routeInformation != null && routeInformation.Length > 1;
 
             //calculate source and target edge attach points
-            if (RootArea != null && !hasRouteInfo && RootArea.EnableParallelEdges)
+            if (RootArea != null && !hasRouteInfo && RootArea.EnableParallelEdges && ParallelEdgeOffset != 0)
             {
-                if (SourceOffset != 0) sourcePos = GetParallelOffset(Source, Target, SourceOffset);
-                if (TargetOffset != 0) targetPos = GetParallelOffset(Target, Source, TargetOffset);
+                sourcePos = GetParallelOffset(Source, Target, ParallelEdgeOffset);
+                targetPos = GetParallelOffset(Target, Source, -ParallelEdgeOffset);
             }
 
             /* Rectangular shapes implementation by bleibold */

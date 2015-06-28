@@ -1061,13 +1061,13 @@ namespace GraphX.Controls
                         //if source to target edge
                         if (!cList[i])
                         {
-                            list[i].SourceOffset = (viceversa ? distance : -distance) * (1 + ((even ? i : i - 1) / 2));
-                            list[i].TargetOffset = -list[i].SourceOffset;
+                            list[i].ParallelEdgeOffset = (viceversa ? distance : -distance) * (1 + ((even ? i : i - 1) / 2));
+                           // list[i].TargetOffset = -list[i].SourceOffset;
                         }
                         else //if target to source edge - just switch offsets
                         {
-                            list[i].TargetOffset = (viceversa ? distance : -distance) * (1 + ((even ? i : i - 1) / 2));
-                            list[i].SourceOffset = -list[i].TargetOffset;
+                            list[i].ParallelEdgeOffset = -((viceversa ? distance : -distance) * (1 + ((even ? i : i - 1) / 2)));
+                            //list[i].SourceOffset = -list[i].TargetOffset;
                         }
                         //change trigger to opposite
                         viceversa = !viceversa;
