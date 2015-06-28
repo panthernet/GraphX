@@ -46,6 +46,11 @@ namespace GraphX.Controls
         protected DoubleCollection StrokeDashArray { get; set; }
 
         /// <summary>
+        /// Gets if this edge is parallel (has another edge with the same source and target vertices)
+        /// </summary>
+        public bool IsParallel { get; internal set; }
+
+        /// <summary>
         /// Element presenting self looped edge
         /// </summary>
         protected FrameworkElement SelfLoopIndicator;

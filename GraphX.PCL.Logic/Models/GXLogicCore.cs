@@ -17,7 +17,7 @@ namespace GraphX.PCL.Logic.Models
         #region Properties
         #region AlgoithmFactory
         /// <summary>
-        /// Provides different algorithm creation methods
+        /// Get an algorithm factory that provides different algorithm creation methods
         /// </summary>
         public IAlgorithmFactory<TVertex, TEdge, TGraph> AlgorithmFactory { get; private set; }
 
@@ -25,9 +25,10 @@ namespace GraphX.PCL.Logic.Models
 
         #region AlgorithmStorage
         /// <summary>
-        /// Get algorithm storage that contain all currently defined algorithms by type (default or external)
+        /// Gets or sets algorithm storage that contain all currently defined algorithm objects by type (default or external)
+        /// Actual storage data is vital for correct edge routing operation after graph was regenerated.
         /// </summary>
-        public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; private set; }
+        public IAlgorithmStorage<TVertex, TEdge> AlgorithmStorage { get; set; }
         #endregion
 
         /// <summary>
@@ -43,35 +44,73 @@ namespace GraphX.PCL.Logic.Models
         /// <summary>
         /// Gets or sets if if edge label overlap removal enabled
         /// </summary>
-        public bool EnableEdgeLabelsOverlapRemoval { get; set; }
+        private bool EnableEdgeLabelsOverlapRemoval { get; set; }
 
         /// <summary>
-        /// Gets is custom (NOT external) layout selected and used
+        /// Gets is LayoutAlgorithmTypeEnum.Custom (NOT external) layout selected and used. Custom layout used to manualy generate graph.
         /// </summary>
         public bool IsCustomLayout { get { return DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Custom && ExternalLayoutAlgorithm == null; } }
-
+        
+        /// <summary>
+        /// Gets or sets external layout algorithm that will be used instead of the default one.
+        /// Negates DefaultLayoutAlgorithm property value if set.
+        /// </summary>
         public IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
+        
+        /// <summary>
+        /// Gets or sets external overlap removal algorithm that will be used instead of the default one.
+        /// Negates DefaultOverlapRemovalAlgorithm property value if set.
+        /// </summary>
         public IExternalOverlapRemoval<TVertex> ExternalOverlapRemovalAlgorithm { get; set; }
+
+        /// <summary>
+        /// Gets or sets external edge routing algorithm that will be used instead of the default one.
+        /// Negates DefaultEdgeRoutingAlgorithm property value if set.
+        /// </summary>
         public IExternalEdgeRouting<TVertex, TEdge> ExternalEdgeRoutingAlgorithm { get; set; }
 
         private LayoutAlgorithmTypeEnum _defaultLayoutAlgorithm;
+        /// <summary>
+        /// Gets or sets default layout algorithm that will be used on graph generation/relayouting
+        /// </summary>
         public LayoutAlgorithmTypeEnum DefaultLayoutAlgorithm { 
             get { return _defaultLayoutAlgorithm; } set { _defaultLayoutAlgorithm = value; SetDefaultParams(0); } 
         }
 
         private OverlapRemovalAlgorithmTypeEnum _defaultOverlapRemovalAlgorithm;
+        /// <summary>
+        /// Gets or sets default overlap removal algorithm that will be used on graph generation/relayouting
+        /// </summary>
         public OverlapRemovalAlgorithmTypeEnum DefaultOverlapRemovalAlgorithm {
             get { return _defaultOverlapRemovalAlgorithm; }
             set { _defaultOverlapRemovalAlgorithm = value; SetDefaultParams(1);}
         }
 
         private EdgeRoutingAlgorithmTypeEnum _defaultEdgeRoutingAlgorithm;
+        /// <summary>
+        /// Gets or sets default edge routing algorithm that will be used on graph generation/relayouting
+        /// </summary>
         public EdgeRoutingAlgorithmTypeEnum DefaultEdgeRoutingAlgorithm { 
             get { return _defaultEdgeRoutingAlgorithm; } set { _defaultEdgeRoutingAlgorithm = value; SetDefaultParams(2); } }
 
+        /// <summary>
+        /// Gets or sets default layout algorithm parameters that will be used on graph generation/relayouting
+        /// </summary>
         public ILayoutParameters DefaultLayoutAlgorithmParams { get; set; }
+
+        /// <summary>
+        /// Gets or sets default overlap removal algorithm parameters that will be used on graph generation/relayouting
+        /// </summary>
         public IOverlapRemovalParameters DefaultOverlapRemovalAlgorithmParams { get; set; }
+
+        /// <summary>
+        /// Gets or sets default edge routing algorithm parameters that will be used on graph generation/relayouting
+        /// </summary>
         public IEdgeRoutingParameters DefaultEdgeRoutingAlgorithmParams { get; set; }
+
+        /// <summary>
+        /// Gets or sets if async algorithm computations are enabled
+        /// </summary>
         public bool AsyncAlgorithmCompute { get; set; }
 
         /// <summary>
@@ -101,36 +140,36 @@ namespace GraphX.PCL.Logic.Models
         }
 
         /// <summary>
-        /// Use edge curving technique for smoother edges. Default value is false.
+        /// Gets or sets if edge curving technique enabled for smoother edges. Default value is True.
         /// </summary>
         public bool EdgeCurvingEnabled { get; set; }
 
         /// <summary>
-        /// This is roughly the length of each line segment in the polyline
+        /// Gets or sets roughly the length of each line segment in the polyline
         /// approximation to a continuous curve in WPF units.  The smaller the
         /// number the smoother the curve, but slower the performance. Default is 8.
         /// </summary>
         public double EdgeCurvingTolerance { get; set; }
 
         /// <summary>
-        /// Main graph object
+        /// Gets or sets main graph object
         /// </summary>
         public virtual TGraph Graph { get; set; }
 
         /// <summary>
-        /// Enables parallel edges. All edges between the same nodes will be separated by ParallelEdgeDistance value.
+        /// Gets or sets if parallel edges are enabled. All edges between the same nodes will be separated by ParallelEdgeDistance value.
         /// This is post-process procedure and it may be performance-costly.
         /// </summary>
         public bool EnableParallelEdges { get; set; }
 
         /// <summary>
-        /// Distance by which edges are parallelized if EnableParallelEdges is true. Default value is 5.
+        /// Gets or sets distance by which edges are parallelized if EnableParallelEdges is true. Default value is 5.
         /// </summary>
         public int ParallelEdgeDistance { get; set; }
 
         #region IsEdgeRoutingEnabled
         /// <summary>
-        /// Value overloaded for extensibility purposes. Indicates if ER will be performed on Compute().
+        /// Gets if edge routing will be performed on Compute() method execution
         /// </summary>
         public bool IsEdgeRoutingEnabled
         {
@@ -147,6 +186,7 @@ namespace GraphX.PCL.Logic.Models
             CreateNewAlgorithmFactory();
             CreateNewAlgorithmStorage(null, null, null);
             Graph = graph;
+            EdgeCurvingEnabled = true;
             EdgeCurvingTolerance = 8;
             ParallelEdgeDistance = 5;
         }
@@ -169,11 +209,20 @@ namespace GraphX.PCL.Logic.Models
         }
 
 
+        /// <summary>
+        /// Creates new algorithm factory
+        /// </summary>
         public void CreateNewAlgorithmFactory()
         {
             AlgorithmFactory = new AlgorithmFactory<TVertex, TEdge, TGraph>();
         }
 
+        /// <summary>
+        /// Creates new algorithm storage
+        /// </summary>
+        /// <param name="layout">Layout algorithm</param>
+        /// <param name="or">Overlap removal algorithm</param>
+        /// <param name="er">Edge routing algorithm</param>
         public void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er)
         {
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);

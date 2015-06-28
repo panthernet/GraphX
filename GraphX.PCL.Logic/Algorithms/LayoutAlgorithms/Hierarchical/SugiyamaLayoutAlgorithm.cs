@@ -8,7 +8,7 @@ using QuickGraph.Algorithms.Search;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
-    public partial class SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, SugiyamaLayoutParameters>/*, IEdgeRoutingAlgorithm<TVertex, TEdge>*/
+    public partial class SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, SugiyamaLayoutParameters>
         where TVertex : class
         where TEdge : IEdge<TVertex>
         where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>

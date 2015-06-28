@@ -7,11 +7,11 @@
     public interface IGraphXEdge<TVertex> : IGraphXCommonEdge, IWeightedEdge<TVertex>
     {
         /// <summary>
-        /// Source vertex
+        /// Gets or sets source vertex
         /// </summary>
         new TVertex Source { get; set; }
         /// <summary>
-        /// Target vertex
+        /// Gets or sets target vertex
         /// </summary>
         new TVertex Target { get; set; }
 
@@ -23,7 +23,7 @@
     public interface IGraphXCommonEdge: IIdentifiableGraphDataObject, IRoutingInfo
     {
         /// <summary>
-        /// If edge is self-looped
+        /// Gets if edge is self-looped
         /// </summary>
         bool IsSelfLoop { get; }
         /// <summary>

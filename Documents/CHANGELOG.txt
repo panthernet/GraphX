@@ -32,6 +32,9 @@ DETAILED CHANGELOG:
 + Added new EdgeControl template PART (PART_SelfLoopedEdge) for custom self looped edge indicator visualization. It represents FrameworkElement and if specified in the template
 	will be positioned in the top left vertex corner. Also made indicator settings more flexible by implementing some dependency props [WPF, METRO]
 + Added StateStorage::SaveOrUpdateState() method for easier use [WPF,METRO]
++ Added new readonly property EdgeControl::IsParallel that identifies edge as currently parallel to other edge. Made GraphArea::ParalellizeEdges() method public to be able to refresh IsParallel property on manual graph operations [METRO, WPF]
++ Added EdgeLabelControl::FlipOnRotation dependency property which controls if label should be flipped when axis is changed while rotating [WPF, METRO]
++ Fixed edge routing when graph state has been loaded. Graph state now stores AlgorithmStorage too [ALL]
 + Fixed ZoomControl zoom out to the value equal to zoom in resulting in similar smooth zoom [WPF, METRO]
 + Fixed ZoomControl::Zoom cproperty change not firing [WPF, METRO]
 + Fixed manual graph composition routines in case of ER algorithm is set [ALL]
@@ -89,6 +92,7 @@ BREAKING CHANGES:
 	Please renew your custom templates. You can find an example in Generic.XAML template.
 * Self looped edges display logic has been slightly changed with the introduction of custom template PART (PART_SelfLoopedEdge). Now LogicCore::SelfLoopIndicatorOffset
 is (0,0) by default and indicator is shown in the top left vertex corner minus indicator size. You can change this behavior by overriding EdgeControl::PrepareSelfLoopedEdge() method.
+* GetVertexSizeRectangles() method moved from GraphArea to LogicCore.
 
 RELEASE 2.1.8
 + Added basic support for Image based edge pointers. Introduced new object for EdgeControl template: [WPF, METRO(bugged)]

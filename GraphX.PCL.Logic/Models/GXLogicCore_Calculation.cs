@@ -15,6 +15,9 @@ namespace GraphX.PCL.Logic.Models
         where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
+        /// <summary>
+        /// Gets if current algorithms set needs vertices sizes
+        /// </summary>
         public bool AreVertexSizesNeeded()
         {
             return (ExternalLayoutAlgorithm == null && AlgorithmFactory.NeedSizes(DefaultLayoutAlgorithm))
@@ -24,12 +27,19 @@ namespace GraphX.PCL.Logic.Models
                     AreOverlapNeeded();
         }
 
+        /// <summary>
+        /// Gets if current algorithms set actualy needs overlap removal algorithm
+        /// </summary>
         public bool AreOverlapNeeded()
         {
             return (ExternalOverlapRemovalAlgorithm == null && AlgorithmFactory.NeedOverlapRemoval(DefaultLayoutAlgorithm) && DefaultOverlapRemovalAlgorithm != OverlapRemovalAlgorithmTypeEnum.None) ||
                     (ExternalOverlapRemovalAlgorithm != null);
         }
 
+        /// <summary>
+        /// Generate overlap removal algorithm according to LogicCore overlap removal algorithm default/external properties set
+        /// </summary>
+        /// <param name="rectangles">Vertices rectangular sizes</param>
         public IExternalOverlapRemoval<TVertex> GenerateOverlapRemovalAlgorithm(Dictionary<TVertex, Rect> rectangles = null)
         {
             if (ExternalOverlapRemovalAlgorithm == null)
@@ -42,6 +52,11 @@ namespace GraphX.PCL.Logic.Models
             return overlap;
         }
 
+        /// <summary>
+        /// Generate layout algorithm according to LogicCore layout algorithm default/external properties set
+        /// </summary>
+        /// <param name="vertexSizes">Vertices sizes</param>
+        /// <param name="vertexPositions">Vertices positions</param>
         public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes, IDictionary<TVertex, Point> vertexPositions)
         {
             if (ExternalLayoutAlgorithm == null) return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
@@ -50,15 +65,28 @@ namespace GraphX.PCL.Logic.Models
             return alg;
         }
 
-        public IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size desiredSize, IDictionary<TVertex, Point> positions = null, IDictionary<TVertex, Rect> rectangles = null)
+        /// <summary>
+        /// Generate layout algorithm according to LogicCore layout algorithm default/external properties set
+        /// </summary>
+        /// <param name="desiredSize">Desired rectangular area size that will be taken into account</param>
+        /// <param name="vertexPositions">Vertices positions</param>
+        /// <param name="rectangles">Vertices rectangular sizes</param>
+        public IExternalEdgeRouting<TVertex, TEdge> GenerateEdgeRoutingAlgorithm(Size desiredSize, IDictionary<TVertex, Point> vertexPositions = null, IDictionary<TVertex, Rect> rectangles = null)
         {
             if (ExternalEdgeRoutingAlgorithm == null && DefaultEdgeRoutingAlgorithm != EdgeRoutingAlgorithmTypeEnum.None)
             {
-                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(desiredSize), Graph, positions, rectangles, DefaultEdgeRoutingAlgorithmParams);
+                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(desiredSize), Graph, vertexPositions, rectangles, DefaultEdgeRoutingAlgorithmParams);
             }
             return ExternalEdgeRoutingAlgorithm;
         }
 
+
+        /// <summary>
+        /// Computes all edge routes related to specified vertex
+        /// </summary>
+        /// <param name="dataVertex">Vertex data</param>
+        /// <param name="vertexPosition">Vertex position</param>
+        /// <param name="vertexSize">Vertex size</param>
         public void ComputeEdgeRoutesByVertex(TVertex dataVertex, Point? vertexPosition = null, Size? vertexSize = null)
         {
             if (AlgorithmStorage == null || AlgorithmStorage.EdgeRouting == null)
@@ -67,14 +95,14 @@ namespace GraphX.PCL.Logic.Models
             var list = new List<TEdge>();
             IEnumerable<TEdge> edges;
             Graph.TryGetInEdges(dataVertex, out edges);
-            list.AddRange(edges);
+            if(edges != null)
+                list.AddRange(edges);
             Graph.TryGetOutEdges(dataVertex, out edges);
-            list.AddRange(edges);
+            if(edges != null)
+                list.AddRange(edges);
 
             if (vertexPosition.HasValue && vertexSize.HasValue)
-            {
                 UpdateVertexDataForEr(dataVertex, vertexPosition.Value, vertexSize.Value);
-            }
 
             foreach (var item in list)
                 item.RoutingPoints = AlgorithmStorage.EdgeRouting.ComputeSingle(item);

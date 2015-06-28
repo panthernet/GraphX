@@ -65,9 +65,9 @@ namespace GraphX.Controls.Models
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             var vposlist = _area.VertexList.ToDictionary(item => item.Key, item => item.Value.GetPositionGraphX());
-            var vedgelist = (from item in _area.EdgesList where item.Value.Visibility == Visibility.Visible select item.Key).ToList();
+            var vedgelist = (from item in _area.EdgesList where item.Value.Visibility == Visibility.Visible select item.Key).ToList();            
 
-            return new GraphState<TVertex, TEdge, TGraph>(id, _area.LogicCore.Graph, vposlist, vedgelist, description);
+            return new GraphState<TVertex, TEdge, TGraph>(id, _area.LogicCore.Graph, _area.LogicCore.AlgorithmStorage, vposlist, vedgelist, description);
         }
 
         /// <summary>
@@ -90,6 +90,8 @@ namespace GraphX.Controls.Models
             //One action: clear all, preload vertices, assign Graph property
             _area.PreloadVertexes(_states[id].Graph, true, true);
             _area.LogicCore.Graph = _states[id].Graph;
+            _area.LogicCore.AlgorithmStorage = _states[id].AlgorithmStorage;
+
             //setup vertex positions
             foreach (var item in _states[id].VertexPositions)
             {

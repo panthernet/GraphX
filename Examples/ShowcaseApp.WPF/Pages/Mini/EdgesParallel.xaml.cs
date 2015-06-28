@@ -53,13 +53,14 @@ namespace ShowcaseApp.WPF.Pages.Mini
         {
             var logicCore = new LogicCoreExample()
             {
-                Graph = ShowcaseHelper.GenerateDataGraph(3, false)
+                Graph = ShowcaseHelper.GenerateDataGraph(4, false)
             };
             var vList = logicCore.Graph.Vertices.ToList();
 
             //add edges
             ShowcaseHelper.AddEdge(logicCore.Graph, vList[0], vList[1]);
             ShowcaseHelper.AddEdge(logicCore.Graph, vList[1], vList[0]);
+            ShowcaseHelper.AddEdge(logicCore.Graph, vList[2], vList[3]);
 
             graphArea.LogicCore = logicCore;
             //set positions 
@@ -67,7 +68,8 @@ namespace ShowcaseApp.WPF.Pages.Mini
             {
                 {vList[0], new Point(0, 0)},
                 {vList[1], new Point(300, 0)},
-                {vList[2], new Point(150, 100)},
+                {vList[2], new Point(0, 300)},
+                {vList[3], new Point(300, 300)},
             };
 
             //settings
@@ -78,6 +80,11 @@ namespace ShowcaseApp.WPF.Pages.Mini
             //preload graph
             graphArea.PreloadGraph(posList);
             //behaviors
+            var eList = graphArea.EdgesList.Values.ToList();
+            eList[0].LabelVerticalOffset = 22;
+            eList[1].LabelVerticalOffset = 22;
+            eList[2].LabelVerticalOffset = 22;
+
             graphArea.SetVerticesDrag(true, true);
             graphArea.ShowAllEdgesLabels();
             graphArea.AlignAllEdgesLabels();

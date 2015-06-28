@@ -4,6 +4,11 @@ using GraphX.Measure;
 
 namespace GraphX.PCL.Common.Interfaces
 {
+    /// <summary>
+    /// Base interface for an edge routing algorithm
+    /// </summary>
+    /// <typeparam name="TVertex">Vertex data class</typeparam>
+    /// <typeparam name="TEdge">Edge data class</typeparam>
     public interface IExternalEdgeRouting<TVertex, TEdge>
     {
         /// <summary>
@@ -25,22 +30,22 @@ namespace GraphX.PCL.Common.Interfaces
         void UpdateVertexData(TVertex vertex, Point position, Rect size);
 
         /// <summary>
-        /// Get visual vertex sizes (autofilled before Compute() call)
+        /// Gets or sets visual vertices sizes (autofilled before Compute() call)
         /// </summary>
         IDictionary<TVertex, Rect> VertexSizes { get; set; }
 
         /// <summary>
-        /// Get visual vertex positions (autofilled before Compute() call)
+        /// Gets or sets visual vertices positions (autofilled before Compute() call)
         /// </summary>
         IDictionary<TVertex, Point> VertexPositions { get; set; }
 
         /// <summary>
-        /// Get resulting edge routes collection 
+        /// Gets resulting edge routes collection 
         /// </summary>
         IDictionary<TEdge, Point[]> EdgeRoutes { get; }
 
         /// <summary>
-        /// GraphArea rendering size
+        /// Gets or sets GraphArea allowed rendering size
         /// </summary>
         Rect AreaRectangle { get; set; }
 

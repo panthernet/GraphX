@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -82,6 +83,12 @@ namespace GraphX.Controls
                                                .OfType<DependencyObject>()
                                                .SelectMany(FindLogicalChildren<T>))
                 yield return c;
+        }
+
+        public static void ForEach<T>(this IEnumerable<T> list, Action<T> func)
+        {
+            foreach (var item in list)
+                func(item);
         }
     }
 }

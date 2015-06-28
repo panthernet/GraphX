@@ -4,6 +4,10 @@ using GraphX.Measure;
 
 namespace GraphX.PCL.Common.Interfaces
 {
+    /// <summary>
+    /// Base interface for layout algorithm
+    /// </summary>
+    /// <typeparam name="TVertex">Vertex data class</typeparam>
     public interface IExternalLayout<TVertex>
     {
         /// <summary>
@@ -12,17 +16,17 @@ namespace GraphX.PCL.Common.Interfaces
         void Compute(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Vertex positions: initial and resulting (after Compute)
+        /// Gets vertices positions: initial and resulting (after Compute)
         /// </summary>
         IDictionary<TVertex, Point> VertexPositions { get; }
 
         /// <summary>
-        /// Stores visual vertex sizes (autofilled if NeedVertexSizes property is set to true)
+        /// Gets or sets visual vertices sizes (autofilled if NeedVertexSizes property is set to true)
         /// </summary>
         IDictionary<TVertex, Size> VertexSizes { get; set; }
 
         /// <summary>
-        /// If algorithm needs to know visual vertex control sizes they will be set into VertexSizes property before calculation
+        /// Gets if algorithm needs to know visual VertexControl size (if True VertexSizes property will be filled before calculation)
         /// </summary>
         bool NeedVertexSizes { get; }
 

@@ -53,6 +53,27 @@ namespace GraphX.Controls
             }
         }
 
+        public static readonly DependencyProperty FlipOnRotationProperty = DependencyProperty.Register("FlipOnRotation",
+                                                               typeof(bool),
+                                                               typeof(EdgeLabelControl),
+                                                               new PropertyMetadata(true));
+        /// <summary>
+        /// Gets or sets if label should flip on rotation when axis changes
+        /// </summary>
+        public bool FlipOnRotation
+        {
+            get
+            {
+                return (bool)GetValue(FlipOnRotationProperty);
+            }
+            set
+            {
+                SetValue(FlipOnRotationProperty, value);
+            }
+        }
+
+
+
         public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
                                                                                        typeof(double),
                                                                                        typeof(EdgeLabelControl),
@@ -205,7 +226,7 @@ namespace GraphX.Controls
             {
                 // If we're aligning labels to the edges make sure add the label vertical offset
                 var yEdgeOffset = EdgeControl.LabelVerticalOffset;
-                if (flipAxis) // If we've flipped axis, move the offset to the other side of the edge
+                if (FlipOnRotation && flipAxis && !EdgeControl.IsParallel) // If we've flipped axis, move the offset to the other side of the edge
                     yEdgeOffset = -yEdgeOffset;
 
                 // Adjust offset for rotation. Remember, the offset is perpendicular from the edge tangent.

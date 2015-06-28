@@ -57,15 +57,21 @@ namespace METRO.SimpleGraph
         private async void butGenerate_Click(object sender, RoutedEventArgs e)
         {
             GraphAreaExample_Setup();
+            try
+            {
+                await graph.GenerateGraphAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // User may have canceled
+            }
         }
 
         async void butRelayout_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                var t0 = DateTime.Now;
                 await graph.RelayoutGraphAsync();
-                Debug.WriteLine("Time elapsed: {0}", DateTime.Now - t0);
             }
             catch (OperationCanceledException)
             {
@@ -105,7 +111,7 @@ namespace METRO.SimpleGraph
 
             try
             {
-                await graph.GenerateGraphAsync(true);
+                await graph.GenerateGraphAsync();
             }
             catch (OperationCanceledException)
             {
@@ -270,23 +276,7 @@ namespace METRO.SimpleGraph
         {
 
             var logicCore = graph.GetLogicCore<GXLogicCoreExample>();
-            var dataGraph = GraphExample_Setup();
-            logicCore.Graph = dataGraph;
-
-
-            /*LogicCore.DefaultLayoutAlgorithmParams = LogicCore.AlgorithmFactory.CreateLayoutParameters(GraphX.LayoutAlgorithmTypeEnum.KK);
-            ((KKLayoutParameters)LogicCore.DefaultLayoutAlgorithmParams).MaxIterations = 100;
-            cboxOverlap.SelectedItem = OverlapRemovalAlgorithmTypeEnum.FSA;
-
-            cboxEdgeRouting.SelectedItem = EdgeRoutingAlgorithmTypeEnum.SimpleER;
-            LogicCore.AsyncAlgorithmCompute = false;
-
-            graph.SetVerticesHighlight(true, GraphControlType.VertexAndEdge, EdgesType.All);
-            graph.SetEdgesHighlight(true, GraphControlType.VertexAndEdge);
-
-
-
-            */
+            logicCore.Graph = GraphExample_Setup();
 
             switch ((LayoutAlgorithmTypeEnum) cboxLayout.SelectedItem)
             {
@@ -318,13 +308,6 @@ namespace METRO.SimpleGraph
             graph.SetVerticesMathShape(VertexShape.Circle);
             graph.ShowAllVerticesLabels();
             graph.ShowAllEdgesLabels();
-
-
-            //graph.MouseOverAnimation = AnimationFactory.CreateMouseOverAnimation(MouseOverAnimation.Scale);
-
-            /*cboxLayout_SelectionChanged(null, null);
-            cboxOverlap_SelectionChanged(null, null);
-            cboxEdgeRouting_SelectionChanged(null, null);*/
         }
 
         void MoveAnimation_Completed(object sender, EventArgs e)
