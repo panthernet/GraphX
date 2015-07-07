@@ -35,6 +35,7 @@
             <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butVCP">VCP</Button>
             <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butEdgePointer">EdgePointer</Button>
             <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butEdgeLabels">EdgeLabels</Button>
+            <Button DockPanel.Dock="Top" Margin="3" Width="80" Name="butGroupedGraph">GroupedGraph</Button>
             <Button DockPanel.Dock="Bottom" Margin="3" Width="80" Name="butRelayout">Relayout</Button>
             <ComboBox DockPanel.Dock="Bottom" Margin="3" Width="80" Name="cbDebugMode" SelectedItem="{Binding DebugMode, UpdateSourceTrigger=PropertyChanged}"/>
         </DockPanel>

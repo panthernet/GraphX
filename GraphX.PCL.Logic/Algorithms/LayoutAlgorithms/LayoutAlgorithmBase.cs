@@ -10,12 +10,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 	public abstract class LayoutAlgorithmBase<TVertex, TEdge, TGraph> : AlgorithmBase, ILayoutAlgorithm<TVertex, TEdge, TGraph>
 		where TVertex : class
 		where TEdge : IEdge<TVertex>
-		where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
 	{
-		private readonly Dictionary<TVertex, Point> _vertexPositions;
-		private readonly TGraph _visitedGraph;
-
-       // public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
+	    // public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
 
         /// <summary>
         /// Gets if current algorithm supports vertex freeze feature (part of VAESPS)
@@ -23,23 +20,16 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         public virtual bool SupportsObjectFreeze { get { return false; } }
 
 
-		public IDictionary<TVertex, Point> VertexPositions
-		{
-			get { return _vertexPositions; }
-		}
+		public IDictionary<TVertex, Point> VertexPositions { get; set; }
 
-		public TGraph VisitedGraph
-		{
-			get { return _visitedGraph; }
-		}
+	    public TGraph VisitedGraph { get; set; }
 
 	    protected LayoutAlgorithmBase( TGraph visitedGraph, IDictionary<TVertex, Point> vertexPositions = null)
 	    {
-	        _visitedGraph = visitedGraph;
-	        _vertexPositions = vertexPositions != null ? 
+	        VisitedGraph = visitedGraph;
+	        VertexPositions = vertexPositions != null ? 
                 new Dictionary<TVertex, Point>( vertexPositions.Where(a=> !double.IsNaN(a.Value.X)).ToDictionary(a=> a.Key, b=> b.Value) ) 
                 : new Dictionary<TVertex, Point>( visitedGraph.VertexCount );
-            /////FreezedVertices = new Dictionary<TVertex, Point>();
 	    }
 
 	    public IDictionary<TVertex, Size> VertexSizes { get; set; }

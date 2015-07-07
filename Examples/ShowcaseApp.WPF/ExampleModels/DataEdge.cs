@@ -26,6 +26,7 @@ namespace ShowcaseApp.WPF
             Angle = 90;
         }
 
+
         public double Angle { get; set; }
 
         /// <summary>

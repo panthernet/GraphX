@@ -137,6 +137,7 @@
     <Compile Include="Algorithms\LayoutAlgorithms\LayoutUtil.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\ParameterizedLayoutAlgorithmBase.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Random\RandomLayoutAlgorithm.cs" />
+    <Compile Include="Algorithms\LayoutAlgorithms\Random\RandomLayoutAlgorithmParams.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\BalloonTreeLayoutAlgorithm.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\BalloonTreeLayoutParameters.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.cs" />

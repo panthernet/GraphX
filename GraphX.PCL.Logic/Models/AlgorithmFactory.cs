@@ -2,7 +2,6 @@
 using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
 using GraphX.PCL.Logic.Algorithms;
 using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
@@ -35,7 +34,7 @@ namespace GraphX.PCL.Logic.Models
                 case LayoutAlgorithmTypeEnum.Tree:
                     return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as SimpleTreeLayoutParameters);
                 case LayoutAlgorithmTypeEnum.SimpleRandom:
-                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions);
+                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as RandomLayoutAlgorithmParams);
                 case LayoutAlgorithmTypeEnum.Circular:
                     return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as CircularLayoutParameters);
                 case LayoutAlgorithmTypeEnum.FR:
@@ -90,6 +89,8 @@ namespace GraphX.PCL.Logic.Models
                     return new SugiyamaLayoutParameters();
                 case LayoutAlgorithmTypeEnum.CompoundFDP:
                     return new CompoundFDPLayoutParameters();
+                case LayoutAlgorithmTypeEnum.SimpleRandom:
+                    return new RandomLayoutAlgorithmParams();
                // case LayoutAlgorithmTypeEnum.BalloonTree:
                //     return new BalloonTreeLayoutParameters();
                 default:

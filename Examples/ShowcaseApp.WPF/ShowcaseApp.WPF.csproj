@@ -127,6 +127,7 @@
     <Compile Include="ExampleModels\ExampleMoveAnimation.cs" />
     <Compile Include="ExampleModels\GraphAreaExample.cs" />
     <Compile Include="ExampleModels\GraphExample.cs" />
+    <Compile Include="ExampleModels\GroupingLayoutAlgorithm.cs" />
     <Compile Include="ExampleModels\LogicCoreExample.cs" />
     <Compile Include="ExampleModels\OrthEr.cs" />
     <Compile Include="External\WindowGlow\GlowManager.cs" />

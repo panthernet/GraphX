@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using GraphX;
 using GraphX.Controls;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
+using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using QuickGraph;
 using ShowcaseApp.WPF.Models;
+using Point = System.Windows.Point;
+using Size = GraphX.Measure.Size;
 
 namespace ShowcaseApp.WPF.Pages
 {
@@ -31,11 +41,66 @@ namespace ShowcaseApp.WPF.Pages
             butRelayout.Click += butRelayout_Click;
             butVCP.Click += butVCP_Click;
             butEdgeLabels.Click += butEdgeLabels_Click;
+            butGroupedGraph.Click += butGroupedGraph_Click;
             cbDebugMode.ItemsSource = Enum.GetValues(typeof(DebugModeEnum)).Cast<DebugModeEnum>();
             cbDebugMode.SelectionChanged += cbDebugMode_SelectionChanged;
             dg_zoomctrl.PropertyChanged += dg_zoomctrl_PropertyChanged;
             CreateNewArea();
             dg_zoomctrl.MaximumZoomStep = 100;
+        }
+
+        void butGroupedGraph_Click(object sender, RoutedEventArgs e)
+        {
+            CreateNewArea();
+            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(10, true);
+            dg_Area.LogicCore.Graph.Vertices.Take(5).ForEach(a => a.GroupId = 1);
+            dg_Area.LogicCore.Graph.Vertices.Where(a=> a.GroupId == 0).ForEach(a => a.GroupId = 2);
+            dg_Area.LogicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
+            //generate group params
+            var prms = new List<AlgorithmGroupParameters<DataVertex>>()
+            {
+                new AlgorithmGroupParameters<DataVertex>()
+                {
+                    GroupId = 1,
+                    LayoutAlgorithm =
+                        new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
+                            dg_Area.LogicCore.Graph, null,
+                            new RandomLayoutAlgorithmParams {Bounds = new GraphX.Measure.Rect(0, 0, 500, 500)}),
+                    ZoneRectangle = new GraphX.Measure.Rect(0, 0, 500, 500)
+                },
+                new AlgorithmGroupParameters<DataVertex>()
+                {
+                    GroupId = 2,
+                    LayoutAlgorithm =
+                        new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
+                            dg_Area.LogicCore.Graph, null,
+                            new RandomLayoutAlgorithmParams {Bounds = new GraphX.Measure.Rect(1000, 0, 500, 500)}),
+                    ZoneRectangle = new GraphX.Measure.Rect(1000, 0, 500, 500)
+                }
+            };
+            //generate grouping algo
+            dg_Area.LogicCore.ExternalLayoutAlgorithm =
+                new GroupingLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
+                    dg_Area.LogicCore.Graph, null, prms);
+
+            //generate graphs
+            dg_Area.GenerateGraph();
+
+            //generate group visuals
+            foreach (var item in prms)
+            {
+                var rect = new Rectangle()
+                {
+                    Width = item.ZoneRectangle.Width,
+                    Height = item.ZoneRectangle.Height,
+                    Fill = item.GroupId == 1 ? Brushes.Blue : Brushes.Black,
+                    Opacity = .5
+                };
+                dg_Area.InsertCustomChildControl(0, rect);
+                GraphAreaBase.SetX(rect, item.ZoneRectangle.X);
+                GraphAreaBase.SetY(rect, item.ZoneRectangle.Y);
+            }
+            dg_zoomctrl.ZoomToFill();
         }
 
         void dg_zoomctrl_PropertyChanged(object sender, PropertyChangedEventArgs e)

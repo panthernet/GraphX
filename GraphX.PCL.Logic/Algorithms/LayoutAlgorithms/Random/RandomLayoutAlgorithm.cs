@@ -9,57 +9,53 @@ using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
-    public class RandomLayoutAlgorithm<TVertex, TEdge, TGraph> : ILayoutAlgorithm<TVertex, TEdge, TGraph>
+    public class RandomLayoutAlgorithm<TVertex, TEdge, TGraph> : LayoutAlgorithmBase<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : IGraphXEdge<TVertex>
-        where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
     {
-        //public Dictionary<TVertex, Point> FreezedVertices { get; set; } 
+        private readonly Random _rnd = new Random((int)DateTime.Now.Ticks);
+        private readonly RandomLayoutAlgorithmParams _parameters;
 
-        private readonly TGraph _graph;
-        private readonly System.Random _rnd = new System.Random((int)DateTime.Now.Ticks);
-        private readonly IDictionary<TVertex, Point> _positions;
-
-        public RandomLayoutAlgorithm(TGraph graph, IDictionary<TVertex, Point> positions)
+        public RandomLayoutAlgorithm(TGraph graph, IDictionary<TVertex, Point> positions, RandomLayoutAlgorithmParams prms)
+            : base(graph, positions)
         {
-            _graph = graph;
-            _positions = positions;
+            _parameters = prms;
         }
 
-        public void Compute(CancellationToken cancellationToken)
+        public override void Compute(CancellationToken cancellationToken)
         {
-            _vertexPositions.Clear();
-            foreach (var item in _graph.Vertices)
+            VertexPositions.Clear();
+            var bounds = _parameters == null ? new RandomLayoutAlgorithmParams().Bounds : _parameters.Bounds;
+            int boundsWidth = (int)bounds.Width;
+            int boundsHeight = (int)bounds.Height;
+            foreach (var item in VisitedGraph.Vertices)
             {
-                if (item.SkipProcessing != ProcessingOptionEnum.Freeze || _positions == null)
-                    _vertexPositions.Add(item, new Point(_rnd.Next(0, 2000), _rnd.Next(0, 2000)));
-                else if (_positions != null)
+                if (item.SkipProcessing != ProcessingOptionEnum.Freeze || VertexPositions.Count == 0)
                 {
-                    var res = _positions.FirstOrDefault(a => a.Key == item);
-                    if(res.Key != null)
-                        _vertexPositions.Add(res.Key, res.Value);
-                }            
+                    var x = (int) bounds.X;
+                    var y = (int) bounds.Y;
+                    var size = VertexSizes.FirstOrDefault(a => a.Key == item).Value;
+                    VertexPositions.Add(item,
+                        new Point(_rnd.Next(x, x + boundsWidth - (int) size.Width),
+                            _rnd.Next(y, y + boundsHeight - (int) size.Height)));
+                }
+                /*else if (VertexPositions != null)
+                {
+                    var res = VertexPositions.FirstOrDefault(a => a.Key == item);
+                    if (res.Key != null)
+                        VertexPositions.Add(res.Key, res.Value);
+                }*/
             }
            
         }
 
-        readonly IDictionary<TVertex, Point> _vertexPositions = new Dictionary<TVertex, Point>();
-
-        public IDictionary<TVertex, Point> VertexPositions { get { return _vertexPositions; } }
-
-        public IDictionary<TVertex, Size> VertexSizes { get; set; }
-
-        public bool NeedVertexSizes
+        public override bool NeedVertexSizes
         {
-            get { return false; }
+            get { return true; }
         }
 
-        public TGraph VisitedGraph
-        {
-            get { return _graph; }
-        }
-
-        public bool SupportsObjectFreeze
+        public override bool SupportsObjectFreeze
         {
             get { return true; }
         }
