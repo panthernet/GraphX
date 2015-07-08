@@ -4,6 +4,7 @@ using System.Windows;
 #elif METRO
 using Windows.Foundation;
 using Vector = GraphX.Measure.Vector;
+using Windows.UI.Xaml;
 #endif
 
 
@@ -25,5 +26,10 @@ namespace GraphX.Controls
 
         void Hide();
         void Show();
+
+        /// <summary>
+        /// Gets is control visible
+        /// </summary>
+        Visibility Visibility { get; }
     }
 }

@@ -8,6 +8,12 @@ namespace GraphX.Controls
 {
     public static class TypeExtensions
     {
+        public static void Offset(this Point point, Point value)
+        {
+            point.X = point.X + value.X;
+            point.Y = point.Y + value.Y;
+        }
+
         public static Point ToWindows(this Measure.Point point)
         {
             return new Point(point.X, point.Y);

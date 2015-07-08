@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,15 +11,12 @@ using GraphX;
 using GraphX.Controls;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
-using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
 using QuickGraph;
 using ShowcaseApp.WPF.Models;
-using Point = System.Windows.Point;
-using Size = GraphX.Measure.Size;
+using Rect = GraphX.Measure.Rect;
 
 namespace ShowcaseApp.WPF.Pages
 {
@@ -65,8 +61,8 @@ namespace ShowcaseApp.WPF.Pages
                     LayoutAlgorithm =
                         new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
                             dg_Area.LogicCore.Graph, null,
-                            new RandomLayoutAlgorithmParams {Bounds = new GraphX.Measure.Rect(0, 0, 500, 500)}),
-                    ZoneRectangle = new GraphX.Measure.Rect(0, 0, 500, 500)
+                            new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
+                    ZoneRectangle = new Rect(0, 0, 500, 500)
                 },
                 new AlgorithmGroupParameters<DataVertex>()
                 {
@@ -74,8 +70,8 @@ namespace ShowcaseApp.WPF.Pages
                     LayoutAlgorithm =
                         new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
                             dg_Area.LogicCore.Graph, null,
-                            new RandomLayoutAlgorithmParams {Bounds = new GraphX.Measure.Rect(1000, 0, 500, 500)}),
-                    ZoneRectangle = new GraphX.Measure.Rect(1000, 0, 500, 500)
+                            new RandomLayoutAlgorithmParams {Bounds = new Rect(1000, 0, 500, 500)}),
+                    ZoneRectangle = new Rect(1000, 0, 500, 500)
                 }
             };
             //generate grouping algo
@@ -185,10 +181,11 @@ namespace ShowcaseApp.WPF.Pages
         void butGeneral_Click(object sender, RoutedEventArgs e)
         {
             CreateNewArea();
-            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(1, false);
+            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(2, false);
             var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
-            dg_Area.LogicCore.Graph.AddEdge( new DataEdge(vlist[0], vlist[0]));
-
+            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[1]) { ArrowTarget = true});
+           // dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[1], vlist[2]) { ArrowTarget = false});
+            dg_Area.LogicCore.EdgeCurvingEnabled = true;
             //dg_Area.PreloadGraph(new Dictionary<DataVertex, Point>() { {vlist[0], new Point()} });
             dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
             dg_Area.GenerateGraph(true);

@@ -64,23 +64,23 @@ namespace GraphX.Controls
             HighlightBehaviour.SetIsHighlightEnabled(this, false);
             DragBehaviour.SetIsDragEnabled(this, false);
             _linegeometry = null;
-            _linePathObject = null;
+            LinePathObject = null;
             SelfLoopIndicator = null;
-            if (_edgeLabelControl != null)
+            if (EdgeLabelControl != null)
             {
-                _edgeLabelControl.Dispose();
-                _edgeLabelControl = null;
+                EdgeLabelControl.Dispose();
+                EdgeLabelControl = null;
             }
 
-            if (_edgePointerForSource != null)
+            if (EdgePointerForSource != null)
             {
-                _edgePointerForSource.Dispose();
-                _edgePointerForSource = null;
+                EdgePointerForSource.Dispose();
+                EdgePointerForSource = null;
             }
-            if (_edgePointerForTarget != null)
+            if (EdgePointerForTarget != null)
             {
-                _edgePointerForTarget.Dispose();
-                _edgePointerForTarget = null;
+                EdgePointerForTarget.Dispose();
+                EdgePointerForTarget = null;
             }
             if (EventOptions != null)
                 EventOptions.Clean();

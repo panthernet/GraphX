@@ -52,6 +52,9 @@
         </Setter>
     </Style>
 
+    <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverter" Inverted="True" />
+    <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverterNot" Inverted="True" Not="True"/>
+    
     <Style TargetType="{x:Type controls:EdgeControl}">
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Template">
@@ -61,8 +64,8 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                               StrokeThickness="1"
                               x:Name="PART_edgePath"/>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForSource" >
-                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7"/>
+                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForSource"  >
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7" />
                         </controls:DefaultEdgePointer>
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7"/>

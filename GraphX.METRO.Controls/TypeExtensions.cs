@@ -7,6 +7,11 @@ namespace GraphX.Controls
 {
     public static class TypeExtensions
     {
+        public static void Offset(this Point point, Point value)
+        {
+            point.X = point.X + value.X;
+            point.Y = point.Y + value.Y;
+        }
 
         public static void RotateAt(this Matrix imatrix, double angle, double centerX, double centerY)
         {

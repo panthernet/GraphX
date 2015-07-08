@@ -26,6 +26,7 @@ namespace ShowcaseApp.WPF
             Angle = 90;
         }
 
+        public bool ArrowTarget { get; set; }
 
         public double Angle { get; set; }
 

@@ -3,6 +3,9 @@
 DETAILED CHANGELOG:
 + Added GroupId property to IGraphXVertex interface
 + Added parameters class RandomLayoutAlgorithmParams for corresponding algorithm. It contains Bounds property which can restrict vertex coordinates to respect provided bounds.
++ Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
++ Fixed bindings to DefaultEdgePointer::Visibility property
++ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 + Implemented many changed in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 + Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
 
