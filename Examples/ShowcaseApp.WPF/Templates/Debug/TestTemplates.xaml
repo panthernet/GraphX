@@ -64,10 +64,10 @@
                         <Path Stroke="{TemplateBinding Foreground}"
                               StrokeThickness="1"
                               x:Name="PART_edgePath"/>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForSource"  >
+                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForSource"  Visibility="{Binding ArrowTarget, Converter={StaticResource VisibilityToBoolConverterNot}}">
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7" />
                         </controls:DefaultEdgePointer>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
+                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" Visibility="{Binding ArrowTarget, Converter={StaticResource VisibilityToBoolConverter}}">
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7"/>
                         </controls:DefaultEdgePointer>
                         <Path x:Name="PART_SelfLoopedEdge" 
