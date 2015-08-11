@@ -578,7 +578,7 @@ namespace GraphX.Controls
                 //pregenerate built-in indicator geometry if template PART is absent
                 if (!HasSelfLoopedEdgeTemplate)
                     _linegeometry = new EllipseGeometry();
-                else SelfLoopIndicator.Visibility = Visibility.Visible;
+                else SelfLoopIndicator.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
             }
             else
             {
@@ -586,7 +586,7 @@ namespace GraphX.Controls
                 //if (_edgePointerForTarget != null && ShowArrows) _edgePointerForTarget.Show();
 
                 if (HasSelfLoopedEdgeTemplate)
-                    SelfLoopIndicator.Visibility = Visibility.Collapsed;
+                    SelfLoopIndicator.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
             }
         }
 

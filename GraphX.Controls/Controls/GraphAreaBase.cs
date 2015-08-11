@@ -86,6 +86,9 @@ namespace GraphX
             d.SetValue(TopProperty, e.NewValue);
         }
 
+        public static readonly DependencyProperty PositioningCompleteProperty =
+            DependencyProperty.RegisterAttached("PositioningComplete", typeof(bool), typeof(GraphAreaBase), new FrameworkPropertyMetadata(true));
+
         #endregion
 
         #region Child EVENTS
@@ -606,6 +609,17 @@ namespace GraphX
         public static void SetFinalY(DependencyObject obj, double value)
         {
             obj.SetValue(FinalYProperty, value);
+        }
+
+        [AttachedPropertyBrowsableForChildren]
+        public static bool GetPositioningComplete(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(PositioningCompleteProperty);
+        }
+
+        public static void SetPositioningComplete(DependencyObject obj, bool value)
+        {
+            obj.SetValue(PositioningCompleteProperty, value);
         }
         #endregion
 

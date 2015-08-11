@@ -53,12 +53,12 @@ namespace GraphX.Controls
 
         public void Show()
         {
-            Visibility = Visibility.Visible;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
         }
 
         public void Hide()
         {
-            Visibility = Visibility.Collapsed;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
         }
 
         private static EdgeControl GetEdgeControl(DependencyObject parent)

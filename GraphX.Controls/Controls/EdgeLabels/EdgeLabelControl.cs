@@ -125,12 +125,12 @@ namespace GraphX.Controls
         public void Show()
         {
             if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
-            Visibility = Visibility.Visible;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
         }
 
         public void Hide()
         {
-            Visibility = Visibility.Collapsed;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
         }
 
 

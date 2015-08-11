@@ -1561,7 +1561,7 @@ namespace GraphX.Controls
             if (DesignerProperties.GetIsInDesignMode(this))
             {
                 if (ViewFinder != null)
-                    ViewFinder.Visibility = Visibility.Collapsed;
+                    ViewFinder.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
                 return;
             }
 
