@@ -59,8 +59,7 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="vertexPositions">Vertices positions</param>
         public IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes, IDictionary<TVertex, Point> vertexPositions)
         {
-            if (ExternalLayoutAlgorithm == null) return AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
-            var alg = ExternalLayoutAlgorithm;
+            var alg = ExternalLayoutAlgorithm ?? AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
             if (alg.NeedVertexSizes) alg.VertexSizes = vertexSizes;
             return alg;
         }
