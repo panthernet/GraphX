@@ -24,7 +24,7 @@ namespace GraphX.PCL.Logic.Models
                 ||
                     (ExternalLayoutAlgorithm != null && ExternalLayoutAlgorithm.NeedVertexSizes)
                 || 
-                    AreOverlapNeeded();
+                    AreOverlapNeeded() || ExternalEdgeRoutingAlgorithm != null || DefaultEdgeRoutingAlgorithm != EdgeRoutingAlgorithmTypeEnum.None;
         }
 
         /// <summary>
@@ -141,6 +141,8 @@ namespace GraphX.PCL.Logic.Models
             {
                     //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
                 AlgorithmStorage.EdgeRouting.AreaRectangle = CalculateContentRectangle(resultCoords);// new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
+               // if(_vertexSizes == null)
+               //     _vertexSizes = 
                 rectangles = GetVertexSizeRectangles(resultCoords, _vertexSizes);
 
                 AlgorithmStorage.EdgeRouting.VertexPositions = resultCoords;

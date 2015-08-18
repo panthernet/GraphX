@@ -242,7 +242,9 @@ namespace GraphX.PCL.Logic.Models
             //TODO maybe rewise due to extensive memory consumption
             _vertexPosSource = vertexPositions;
             _vertexSizes = vertexSizes;
-            var vertexRectangles = GetVertexSizeRectangles(vertexPositions, vertexSizes);
+            Dictionary<TVertex, Rect> vertexRectangles = null;
+            if(_vertexSizes != null)
+                vertexRectangles = GetVertexSizeRectangles(vertexPositions, vertexSizes);
 
             //setup overlap removal algorythm
             if (AreOverlapNeeded())

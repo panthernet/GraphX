@@ -112,7 +112,7 @@ namespace GraphX.Controls
             return Parent;
         }
 
-        protected virtual OnLayoutUpdated(object sender, object o)
+        protected virtual void OnLayoutUpdated(object sender, object o)
         {
             var position = TransformToVisual(VertexControl).TransformPoint(new Point());
             var vPos = VertexControl.GetPosition();

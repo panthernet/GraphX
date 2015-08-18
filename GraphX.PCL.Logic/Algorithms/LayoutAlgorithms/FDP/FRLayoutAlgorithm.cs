@@ -54,7 +54,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             }
             else
             {
-                InitializeWithRandomPositions(1000.0, 1000.0);
+                InitializeWithRandomPositions(10.0, 10.0);
             }
             Parameters.VertexCount = VisitedGraph.VertexCount;
 
