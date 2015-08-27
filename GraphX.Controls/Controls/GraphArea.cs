@@ -1506,22 +1506,25 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Clear graph visual layout (all edges, vertices and their states storage if any)
+        /// Clear graph visual layout (all edges, vertices and their states storage if any) and (optionally) LogicCore
         /// </summary>
         /// <param name="removeCustomObjects">Also remove any possible custom objects</param>
+        /// <param name="clearStates">Also clear states storage (if you select clearLogicCore it will be cleaned anyway)</param>
         /// <param name="clearLogicCore">Also clear LogiCore data</param>
-        public void ClearLayout(bool removeCustomObjects = true, bool clearLogicCore = false)
+        public void ClearLayout(bool removeCustomObjects = true, bool clearStates = false, bool clearLogicCore = false)
         {
             RemoveAllEdges();
             RemoveAllVertices();
             if(removeCustomObjects)
                 base.Children.Clear();
-            if (StateStorage != null)
-                StateStorage.Dispose();
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
 
             if (clearLogicCore && LogicCore != null)
                 LogicCore.Clear();
+
+            if(clearLogicCore || clearStates)
+                if (StateStorage != null)
+                    StateStorage.Dispose();
         }
         #endregion
     }
