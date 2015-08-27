@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using GraphX.Measure;
 using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.PCL.Common.Models
 {
-    public sealed class GraphState<TVertex, TEdge, TGraph>
+    public sealed class GraphState<TVertex, TEdge, TGraph>: IDisposable
     {
         /// <summary>
         /// Graph state unique identificator
@@ -44,6 +45,14 @@ namespace GraphX.PCL.Common.Models
             VertexPositions = vPos;
             VisibleEdges = vEdges;
             AlgorithmStorage = storage;
+        }
+
+        public void Dispose()
+        {
+            Graph = default(TGraph);
+            VertexPositions.Clear();
+            VisibleEdges.Clear();
+            AlgorithmStorage = null;
         }
     }
 }

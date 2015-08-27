@@ -109,6 +109,7 @@ namespace ShowcaseApp.WPF.Pages
 
         void CreateNewArea()
         {
+            dg_Area.ClearLayout();
             dg_Area.Dispose();
             dg_Area = new GraphAreaExample() {Name = "dg_Area", LogicCore = new LogicCoreExample()};
             dg_Area.Resources = new ResourceDictionary() { Source = new Uri("/Templates/Debug/TestTemplates.xaml", UriKind.RelativeOrAbsolute) };

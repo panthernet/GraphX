@@ -6,6 +6,7 @@ DETAILED CHANGELOG:
 + Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
 + Added VertexShape.Ellipse math shape
 + Fixed bindings to DefaultEdgePointer::Visibility property
++ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
 + Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 + Implemented many changed in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 + Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class

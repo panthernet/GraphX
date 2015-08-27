@@ -114,6 +114,18 @@ namespace GraphX.PCL.Logic.Models
         public bool AsyncAlgorithmCompute { get; set; }
 
         /// <summary>
+        /// Clear LogicCore data
+        /// </summary>
+        /// <param name="clearStorages">Also clear storages data</param>
+        public void Clear(bool clearStorages = true)
+        {
+            if(Graph != null)
+                Graph.Clear();
+            if (clearStorages)
+                CreateNewAlgorithmStorage(null, null, null);
+        }
+
+        /// <summary>
         /// Create default params if algorithm was changed and default params property is null
         /// </summary>
         /// <param name="type">Algorithm type (inner)</param>

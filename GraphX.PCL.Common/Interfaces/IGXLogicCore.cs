@@ -171,5 +171,11 @@ namespace GraphX.PCL.Common.Interfaces
         /// <param name="vertexPositions">Vertex positions</param>
         bool GenerateAlgorithmStorage(Dictionary<TVertex, Size> vertexSizes,
             IDictionary<TVertex, Point> vertexPositions);
+
+        /// <summary>
+        /// Clear LogicCore data
+        /// </summary>
+        /// <param name="clearStorages">Also clear storages data</param>
+        void Clear(bool clearStorages = true);
     }
 }

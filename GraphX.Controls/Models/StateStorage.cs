@@ -142,6 +142,8 @@ namespace GraphX.Controls.Models
     
         public void Dispose()
         {
+            _states.ForEach(a=> a.Value.Dispose());
+            _states.Clear();
             _area = null;
         }
     }
