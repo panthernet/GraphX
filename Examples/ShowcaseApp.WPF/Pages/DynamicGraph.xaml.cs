@@ -34,7 +34,7 @@ namespace ShowcaseApp.WPF.Pages
             dg_remvertex.Click += dg_remvertex_Click;
             dg_addedge.Click += dg_addedge_Click;
             dg_remedge.Click += dg_remedge_Click;
-            dgLogic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Custom;
+            dgLogic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
             dgLogic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
             dgLogic.DefaultOverlapRemovalAlgorithmParams.HorizontalGap = 50;
             dgLogic.DefaultOverlapRemovalAlgorithmParams.VerticalGap = 50;
