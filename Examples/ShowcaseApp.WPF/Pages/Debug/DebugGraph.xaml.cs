@@ -181,13 +181,17 @@ namespace ShowcaseApp.WPF.Pages
         void butGeneral_Click(object sender, RoutedEventArgs e)
         {
             CreateNewArea();
-            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(2, false);
+            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(5, false);
             var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
             dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[1]) { ArrowTarget = true});
-           // dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[1], vlist[2]) { ArrowTarget = false});
+            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[2]) { ArrowTarget = true });
+            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[3]) { ArrowTarget = true });
+            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[4]) { ArrowTarget = true });
+            
+            
             dg_Area.LogicCore.EdgeCurvingEnabled = true;
-            //dg_Area.PreloadGraph(new Dictionary<DataVertex, Point>() { {vlist[0], new Point()} });
-            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
+            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
+            dg_Area.SetVerticesMathShape(VertexShape.Ellipse);
             dg_Area.GenerateGraph(true);
             
             dg_Area.VertexList.Values.ToList().ForEach(a => a.SetConnectionPointsVisibility(false));

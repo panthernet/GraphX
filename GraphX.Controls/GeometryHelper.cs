@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows.Data;
 using GraphX.PCL.Common.Enums;
 #if WPF
 using System.Windows;
@@ -62,7 +63,7 @@ namespace GraphX.Controls
         /// <param name="tension"></param>
         /// <param name="tolerance"></param>
         /// <returns></returns>
-        public static PolyLineSegment GetCurveThroughPoints(Point[] points, Double tension, Double tolerance)
+        public static PolyLineSegment GetCurveThroughPoints(Point[] points, double tension, double tolerance)
         {
             Debug.Assert(points != null);
             Debug.Assert(points.Length >= 2);
@@ -106,12 +107,12 @@ namespace GraphX.Controls
             return oPolyLineSegment;
         }
 
-        private static void AddPointsToPolyLineSegment(PolyLineSegment oPolyLineSegment, Point oPoint0, Point oPoint1, Point oPoint2, Point oPoint3, Double dTension, Double dTolerance)
+        private static void AddPointsToPolyLineSegment(PolyLineSegment oPolyLineSegment, Point oPoint0, Point oPoint1, Point oPoint2, Point oPoint3, double dTension, double dTolerance)
         {
             Debug.Assert(oPolyLineSegment != null);
             Debug.Assert(dTolerance > 0);
 
-            var iPoints = (Int32)((Math.Abs(oPoint1.X - oPoint2.X) +
+            var iPoints = (int)((Math.Abs(oPoint1.X - oPoint2.X) +
                 Math.Abs(oPoint1.Y - oPoint2.Y)) / dTolerance);
 
             var oPolyLineSegmentPoints = oPolyLineSegment.Points;
@@ -141,7 +142,7 @@ namespace GraphX.Controls
 
                 for (var i = 1; i < iPoints; i++)
                 {
-                    var t = (Double)i / (iPoints - 1);
+                    var t = (double)i / (iPoints - 1);
 
                     var oPoint = new Point(
                         dAx * t * t * t + dBx * t * t + dCx * t + dDx,
@@ -154,7 +155,7 @@ namespace GraphX.Controls
             }
         }
 
-        public static PathFigure GetPathFigureFromPathSegments(Point oStartPoint, Boolean bPathFigureIsFilled, bool freezeAll, params PathSegment[] aoPathSegments)
+        public static PathFigure GetPathFigureFromPathSegments(Point oStartPoint, bool bPathFigureIsFilled, bool freezeAll, params PathSegment[] aoPathSegments)
         {
             Debug.Assert(aoPathSegments != null);
 
@@ -174,7 +175,7 @@ namespace GraphX.Controls
             return oPathFigure;
         }
 
-        public static PathGeometry GetPathGeometryFromPathSegments(Point oStartPoint, Boolean bPathFigureIsFilled, params PathSegment[] aoPathSegments)
+        public static PathGeometry GetPathGeometryFromPathSegments(Point oStartPoint, bool bPathFigureIsFilled, params PathSegment[] aoPathSegments)
         {
             Debug.Assert(aoPathSegments != null);
 
@@ -203,7 +204,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="freezable">Freezable object</param>
         /// <returns></returns>
-        public static Boolean TryFreeze(Freezable freezable)
+        public static bool TryFreeze(Freezable freezable)
         {
             Debug.Assert(freezable != null);
 
@@ -221,6 +222,8 @@ namespace GraphX.Controls
             {
                 case VertexShape.Circle:
                     return GetEdgeEndpointOnCircle(source, Math.Max(sourceSize.Height, sourceSize.Width) * .5, target);
+                case VertexShape.Ellipse:
+                    return GetEdgeEndpointOnEllipse(source, sourceSize.Width*.5, sourceSize.Height*.5, target);
                 case VertexShape.Diamond:
                     return GetEdgeEndpointOnDiamond(source, sourceSize.Width * .5, target);
                 case VertexShape.Triangle:
@@ -230,7 +233,7 @@ namespace GraphX.Controls
             }
         }
 
-        public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, Double dVertexARadius, Point oVertexBLocation)
+        public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, double dVertexARadius, Point oVertexBLocation)
         {
             Debug.Assert(dVertexARadius >= 0);
 
@@ -242,7 +245,21 @@ namespace GraphX.Controls
                 );
         }
 
-        public static Point GetEdgeEndpointOnTriangle(Point oVertexLocation, Double mDHalfWidth, Point otherEndpoint)
+        public static Point GetEdgeEndpointOnEllipse(Point oVertexALocation, double dVertexARadiusWidth, double dVertexARadiusHeight, Point oVertexBLocation)
+        {
+            Debug.Assert(dVertexARadiusWidth >= 0);
+            Debug.Assert(dVertexARadiusHeight >= 0);
+
+            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
+
+            return new Point(
+                oVertexALocation.X + (dVertexARadiusWidth * Math.Cos(dEdgeAngle)),
+                oVertexALocation.Y - (dVertexARadiusHeight * Math.Sin(dEdgeAngle))
+                );
+        }
+
+
+        public static Point GetEdgeEndpointOnTriangle(Point oVertexLocation, double mDHalfWidth, Point otherEndpoint)
         {
             // Instead of doing geometry calculations similar to what is done in 
             // VertexDrawingHistory.GetEdgePointOnRectangle(), make use of that
@@ -256,7 +273,7 @@ namespace GraphX.Controls
 
             var dEdgeAngleDegrees = MathHelper.RadiansToDegrees(dEdgeAngle);
 
-            Double dAngleToRotateDegrees;
+            double dAngleToRotateDegrees;
 
             if (dEdgeAngleDegrees >= -30.0 && dEdgeAngleDegrees < 90.0)
             {
@@ -302,7 +319,7 @@ namespace GraphX.Controls
             return oMatrix.Transform(oRotatedEdgeEndpoint);
         }
 
-        public static Point GetEdgeEndpointOnDiamond(Point oVertexLocation, Double mDHalfWidth, Point otherEndpoint)
+        public static Point GetEdgeEndpointOnDiamond(Point oVertexLocation, double mDHalfWidth, Point otherEndpoint)
         {
             // A diamond is just a rotated square, so the
             // GetEdgePointOnRectangle() can be used if the
@@ -495,7 +512,7 @@ namespace GraphX.Controls
             return GetPathFigureFromPoints(aoPoints[0], aoPoints[1], aoPoints[2]);
         }
 
-        public static Matrix GetRotatedMatrix(Point centerOfRotation, Double angleToRotateDegrees)
+        public static Matrix GetRotatedMatrix(Point centerOfRotation, double angleToRotateDegrees)
         {
             var oMatrix = Matrix.Identity;
 

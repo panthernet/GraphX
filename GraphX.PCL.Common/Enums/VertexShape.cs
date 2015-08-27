@@ -6,6 +6,7 @@
         Diamond,
         Triangle,
         Circle,
-        None
+        None,
+        Ellipse
     }
 }

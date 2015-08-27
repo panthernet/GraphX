@@ -23,30 +23,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ContentPresenter Content="{TemplateBinding Vertex}" Grid.Column="1"/>
-                        <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <Border Padding="0" Margin="2,2,0,2">
-                                <controls:StaticVertexConnectionPoint Id="1" />
-                            </Border>
-                            <Border Padding="0" Margin="2,2,0,2">
-                                <controls:StaticVertexConnectionPoint Id="2" />
-                            </Border>
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <Border Padding="0" Margin="0,2,2,2">
-                                <controls:StaticVertexConnectionPoint Id="3" />
-                            </Border>
-                            <Border Padding="0" Margin="0,2,2,2">
-                                <controls:StaticVertexConnectionPoint Id="4" />
-                            </Border>
-                        </StackPanel>
-                    </Grid>
+                    <Ellipse Fill="{TemplateBinding Background}"
+                             Stroke="{TemplateBinding BorderBrush}" Width="150" Height="80">
+                    </Ellipse>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
