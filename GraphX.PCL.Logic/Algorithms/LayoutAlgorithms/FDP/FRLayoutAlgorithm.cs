@@ -113,6 +113,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     double length = Math.Max(delta.Length, double.Epsilon);
                     delta = delta / length * Parameters.ConstantOfRepulsion / length;
 
+					// Check for NaN
+					if (double.IsNaN(delta.X) || double.IsNaN(delta.Y))
+						delta = new Vector(0, 0);
+
                     force += delta;
                 }
                 forces[v] = force;
@@ -125,10 +129,14 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 TVertex source = e.Source;
                 TVertex target = e.Target;
 
-                //vonzÛerı sz·mÌt·sa a kÈt pont kˆzt
+                //vonz√≥er√µ sz√°m√≠t√°sa a k√©t pont k√∂zt
                 Vector delta = VertexPositions[source] - VertexPositions[target];
                 double length = Math.Max(delta.Length, double.Epsilon);
                 delta = delta / length * Math.Pow(length, 2) / Parameters.ConstantOfAttraction;
+
+				// Check for NaN
+				if (double.IsNaN(delta.X) || double.IsNaN(delta.Y))
+					delta = new Vector(0, 0);
 
                 forces[source] -= delta;
                 forces[target] += delta;
@@ -140,15 +148,19 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             {
                 Point pos = VertexPositions[v];
 
-                //erı limit·l·sa a temperature-el
+                //er√µ limit√°l√°sa a temperature-el
                 Vector delta = forces[v];
                 double length = Math.Max(delta.Length, double.Epsilon);
                 delta = delta / length * Math.Min(delta.Length, _temperature);
 
-                //erıhat·s a pontra
+				// Check for NaN
+				if (double.IsNaN(delta.X) || double.IsNaN(delta.Y))
+					delta = new Vector(0, 0);
+
+                //er√µhat√°s a pontra
                 pos += delta;
 
-                //falon ne menj¸nk ki
+                //falon ne menj√ºnk ki
                 pos.X = Math.Min(_maxWidth, Math.Max(0, pos.X));
                 pos.Y = Math.Min(_maxHeight, Math.Max(0, pos.Y));
                 VertexPositions[v] = pos;
