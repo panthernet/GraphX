@@ -724,6 +724,9 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
                 var r = new Point(0, 0);
                 foreach (var epd in ed.CompatibleGroups.Values)
                 {
+	                if (!epd.Ed1.ControlPoints.Any() || !epd.Ed2.ControlPoints.Any())
+		                continue;
+
                     Point q;
                     var j = 1f;
                     EdgeGroupData ed2;
