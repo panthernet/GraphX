@@ -67,5 +67,9 @@ namespace GraphX.PCL.Common.Models
         /// </summary>
         public double Weight { get; set; }
 
+		/// <summary>
+		/// Reverse the calculated routing path points.
+		/// </summary>
+		public bool ReversePath { get; set; }
     }
 }
