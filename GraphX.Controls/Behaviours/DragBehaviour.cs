@@ -151,6 +151,7 @@ namespace GraphX.Controls
             if (element != null)
             {
                 element.CaptureMouse();
+                element.MouseMove -= OnDragging;
                 element.MouseMove += OnDragging;
             }
             //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");

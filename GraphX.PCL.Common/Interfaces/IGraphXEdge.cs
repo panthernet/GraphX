@@ -34,5 +34,9 @@
         /// Optional parameter to bind edge to static vertex connection point
         /// </summary>
         int? TargetConnectionPointId { get; }
-    }
+    
+		/// <summary>
+		/// Reverse the calculated routing path points.
+		/// </summary>
+		bool ReversePath { get; set; }}
 }

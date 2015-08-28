@@ -780,10 +780,12 @@ namespace GraphX.Controls
                     if (hasEpTarget)
                         routePoints[routePoints.Count - 1] = routePoints[routePoints.Count - 1].Subtract(UpdateTargetEpData(p2, routePoints[routePoints.Count - 2]));
 
-                    var pcol = new PointCollection();
-                    foreach (var item in routePoints)
-                        pcol.Add(item);
+                    // Reverse the path if specified.
+					if (gEdge.ReversePath)
+		                routePoints.Reverse();
 
+                    var pcol = new PointCollection(routePoints);
+                    
                     lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
                 }
 
@@ -795,7 +797,7 @@ namespace GraphX.Controls
                 if (hasEpTarget)
                     p2 = p2.Subtract(UpdateTargetEpData(p2, p1));
 
-                lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new LineSegment() { Point = p2 } }, IsClosed = false };
+                lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };            
             }
             ((PathGeometry)_linegeometry).Figures.Add(lineFigure);
 #if WPF
