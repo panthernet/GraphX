@@ -5,6 +5,9 @@ DETAILED CHANGELOG:
 + Added parameters class RandomLayoutAlgorithmParams for corresponding algorithm. It contains Bounds property which can restrict vertex coordinates to respect provided bounds.
 + Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
 + Added VertexShape.Ellipse math shape
++ Added support for reversing the geometry. This is required for animating shapes along a path where the direction needs to be reversed without using the Storyboard.AutoReverse property (thanks to bleibold)
++ Fixed NaN result for FR algorithms calc (thanks to bleibold)
++ Fixed edge bundling in the case when empty Control points are present that would sometimes cause exceptions.(thanks to bleibold)
 + Fixed bindings to DefaultEdgePointer::Visibility property
 + Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
 + Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart

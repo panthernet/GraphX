@@ -53,9 +53,9 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.LogicCore.Graph.Vertices.Where(a=> a.GroupId == 0).ForEach(a => a.GroupId = 2);
             dg_Area.LogicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
             //generate group params
-            var prms = new List<AlgorithmGroupParameters<DataVertex>>()
+            var prms = new List<AlgorithmGroupParameters<DataVertex>>
             {
-                new AlgorithmGroupParameters<DataVertex>()
+                new AlgorithmGroupParameters<DataVertex>
                 {
                     GroupId = 1,
                     LayoutAlgorithm =
@@ -64,7 +64,7 @@ namespace ShowcaseApp.WPF.Pages
                             new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
                     ZoneRectangle = new Rect(0, 0, 500, 500)
                 },
-                new AlgorithmGroupParameters<DataVertex>()
+                new AlgorithmGroupParameters<DataVertex>
                 {
                     GroupId = 2,
                     LayoutAlgorithm =
@@ -85,7 +85,7 @@ namespace ShowcaseApp.WPF.Pages
             //generate group visuals
             foreach (var item in prms)
             {
-                var rect = new Rectangle()
+                var rect = new Rectangle
                 {
                     Width = item.ZoneRectangle.Width,
                     Height = item.ZoneRectangle.Height,
@@ -111,8 +111,8 @@ namespace ShowcaseApp.WPF.Pages
         {
             dg_Area.ClearLayout();
             dg_Area.Dispose();
-            dg_Area = new GraphAreaExample() {Name = "dg_Area", LogicCore = new LogicCoreExample()};
-            dg_Area.Resources = new ResourceDictionary() { Source = new Uri("/Templates/Debug/TestTemplates.xaml", UriKind.RelativeOrAbsolute) };
+            dg_Area = new GraphAreaExample {Name = "dg_Area", LogicCore = new LogicCoreExample()};
+            dg_Area.Resources = new ResourceDictionary { Source = new Uri("/Templates/Debug/TestTemplates.xaml", UriKind.RelativeOrAbsolute) };
             dg_Area.SetVerticesDrag(true, true);
             dg_Area.GenerateGraphFinished += dg_Area_GenerateGraphFinished;
             dg_Area.RelayoutFinished += dg_Area_GenerateGraphFinished;
@@ -140,7 +140,7 @@ namespace ShowcaseApp.WPF.Pages
             var edge = new DataEdge(vlist[0], vlist[1]) {Text = "Testing edge labels..."};
             dg_Area.LogicCore.Graph.AddEdge(edge);
 
-            dg_Area.PreloadGraph(new Dictionary<DataVertex, Point>() { {vlist[0], new Point()}, {vlist[1], new Point(0, 200)}});
+            dg_Area.PreloadGraph(new Dictionary<DataVertex, Point> { {vlist[0], new Point()}, {vlist[1], new Point(0, 200)}});
             dg_Area.VertexList.Values.ToList().ForEach(a => a.SetConnectionPointsVisibility(false));
         }
 
@@ -166,7 +166,7 @@ namespace ShowcaseApp.WPF.Pages
 
             var vertex = dg_Area.VertexList[edge.Target];
             var vcp = vertex.VertexConnectionPointsList.First();
-            var newVcp = new StaticVertexConnectionPoint() {Id = 5};
+            var newVcp = new StaticVertexConnectionPoint {Id = 5};
             ((StackPanel)((Border) vcp.GetParent()).Parent).Children.Add(newVcp);
             edge.TargetConnectionPointId = 5;
             vertex.VertexConnectionPointsList.Add(newVcp);

@@ -10,6 +10,12 @@ using QuickGraph;
 
 namespace ShowcaseApp.WPF
 {
+
+    public class GroupingLayoutAlgorithmParameters : LayoutParametersBase
+    {
+        
+    }
+
     public class GroupingLayoutAlgorithm<TVertex, TEdge, TGraph> : LayoutAlgorithmBase<TVertex, TEdge, TGraph>
         where TVertex: class, IGraphXVertex
         where TEdge : IGraphXEdge<TVertex>
