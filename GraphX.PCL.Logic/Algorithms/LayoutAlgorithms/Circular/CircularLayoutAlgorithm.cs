@@ -27,6 +27,11 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// </summary>
         public override bool SupportsObjectFreeze { get { return false; } }
 
+        public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+        {
+            //
+        }
+
         public override void Compute(CancellationToken cancellationToken)
         {
             //calculate the size of the circle

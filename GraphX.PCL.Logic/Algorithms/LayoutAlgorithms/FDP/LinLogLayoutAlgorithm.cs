@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Models;
 using QuickGraph;
 
@@ -11,7 +12,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 	public partial class LinLogLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, LinLogLayoutParameters>
 		where TVertex : class
 		where TEdge : IEdge<TVertex>
-		where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
 	{
 		#region Constructors
 		public LinLogLayoutAlgorithm( TGraph visitedGraph )
@@ -160,7 +161,16 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 			NormalizePositions();
 		}
 
-		protected void CopyPositions()
+	    public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+	    {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
+	    }
+
+	    protected void CopyPositions()
 		{
 			// Copy positions
 			foreach ( var v in _vertices )

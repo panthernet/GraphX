@@ -101,7 +101,7 @@ namespace GraphX.PCL.Common.Interfaces
         /// Gets or sets external layout algorithm that will be used instead of the default one.
         /// Negates DefaultLayoutAlgorithm property value if set.
         /// </summary>
-        IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
+        IExternalLayout<TVertex, TEdge> ExternalLayoutAlgorithm { get; set; }
 
         /// <summary>
         /// Gets or sets external overlap removal algorithm that will be used instead of the default one.
@@ -147,7 +147,7 @@ namespace GraphX.PCL.Common.Interfaces
         /// </summary>
         /// <param name="vertexSizes">Vertices sizes</param>
         /// <param name="vertexPositions">Vertices positions</param>
-        IExternalLayout<TVertex> GenerateLayoutAlgorithm(Dictionary<TVertex, Size> vertexSizes, IDictionary<TVertex, Point> vertexPositions);
+        IExternalLayout<TVertex, TEdge> GenerateLayoutAlgorithm(Dictionary<TVertex, Size> vertexSizes, IDictionary<TVertex, Point> vertexPositions);
 
         /// <summary>
         /// Generate overlap removal algorithm according to LogicCore overlap removal algorithm default/external properties set

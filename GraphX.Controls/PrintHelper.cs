@@ -88,7 +88,7 @@ namespace GraphX.Controls
         }
 
 
-        public static void ShowPrintPreview(GraphAreaBase surface, string description = "")
+        public static void ShowPrintPreview(Visual surface, string description = "")
         {
             try
             {

@@ -6,8 +6,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
 	public partial class SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph> 
         where TVertex : class 
-        where TEdge : IEdge<TVertex> 
-        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
+        where TEdge : IEdge<TVertex>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
 	{
 		[DebuggerDisplay( "{Original} [{LayerIndex}] Pos={Position} Meas={Measure} RealPos={RealPosition}" )]
 		private class SugiVertex : WrappedVertex<TVertex>

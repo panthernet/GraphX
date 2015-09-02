@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 using QuickGraph.Algorithms.Search;
 
@@ -11,7 +12,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
     public partial class SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, SugiyamaLayoutParameters>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         #region Private fields, constants
 
@@ -905,6 +906,15 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             //IncrementalExtensionImproved();
             _statusInPercent = PERCENT_OF_PREPARATION + PERCENT_OF_SUGIYAMA + PERCENT_OF_INCREMENTAL_EXTENSION;
             _statusInPercent = 100;
+        }
+
+        public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+        {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
         }
 
         protected void OnIterationEnded( string message )

@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets layout algorithm
         /// </summary>
-        IExternalLayout<TVertex> Layout { get; }
+        IExternalLayout<TVertex, TEdge> Layout { get; }
 
         /// <summary>
         /// Gets overlap removal algorithm

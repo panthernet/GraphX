@@ -55,7 +55,7 @@ namespace GraphX.PCL.Logic.Models
         /// Gets or sets external layout algorithm that will be used instead of the default one.
         /// Negates DefaultLayoutAlgorithm property value if set.
         /// </summary>
-        public IExternalLayout<TVertex> ExternalLayoutAlgorithm { get; set; }
+        public IExternalLayout<TVertex, TEdge> ExternalLayoutAlgorithm { get; set; }
         
         /// <summary>
         /// Gets or sets external overlap removal algorithm that will be used instead of the default one.
@@ -235,7 +235,7 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="layout">Layout algorithm</param>
         /// <param name="or">Overlap removal algorithm</param>
         /// <param name="er">Edge routing algorithm</param>
-        public void CreateNewAlgorithmStorage(IExternalLayout<TVertex> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er)
+        public void CreateNewAlgorithmStorage(IExternalLayout<TVertex, TEdge> layout, IExternalOverlapRemoval<TVertex> or, IExternalEdgeRouting<TVertex, TEdge> er)
         {
             AlgorithmStorage = new AlgorithmStorage<TVertex, TEdge>(layout, or, er);
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
@@ -10,7 +11,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 	public class ISOMLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, ISOMLayoutParameters>
 		where TVertex : class
 		where TEdge : IEdge<TVertex>
-		where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
 	{
 		#region Private fields
 		private Queue<TVertex> _queue;
@@ -92,7 +93,16 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 			}
 		}
 
-		/// <summary>
+	    public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+	    {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
+	    }
+
+	    /// <summary>
 		/// Rántsunk egyet az összes ponton.
 		/// </summary>
 		protected void Adjust(CancellationToken cancellationToken)

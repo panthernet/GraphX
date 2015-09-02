@@ -142,7 +142,6 @@
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\BalloonTreeLayoutParameters.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.Data.cs" />
-    <Compile Include="Algorithms\LayoutAlgorithms\Tree\SimpleTreeLayoutAlgorithm.WidthAndHeightOpt.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\SimpleTreeLayoutParameters.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Tree\SpanningTreeGeneration.cs" />
     <Compile Include="Algorithms\OverlapRemoval\FSAAlgorithm.cs" />
@@ -160,6 +159,7 @@
     <Compile Include="Algorithms\SoftMutableHierarchicalGraph.cs" />
     <Compile Include="Algorithms\TypedEdge.cs" />
     <Compile Include="Algorithms\WrappedVertex.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ThreadingHelper.cs" />
     <Compile Include="Models\AlgorithmFactory.cs" />
     <Compile Include="Models\AlgorithmStorage.cs" />

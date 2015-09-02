@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Data;
 using GraphX.PCL.Common.Enums;
 #if WPF
+using System.Windows.Data;
 using System.Windows;
 using System.Windows.Media;
 #elif METRO

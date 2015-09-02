@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Threading;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
@@ -1470,7 +1471,7 @@ namespace GraphX.Controls
 
         public Bitmap ExportToBitmap(double dpi = PrintHelper.DEFAULT_DPI)
         {
-            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
+           return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
         }
 
         
@@ -1480,7 +1481,17 @@ namespace GraphX.Controls
         /// <param name="description">Optional header description</param>
         public void PrintDialog(string description = "")
         {
-            PrintHelper.ShowPrintPreview(this, description);
+            UIElement vis = this;
+            var zoomControl = Parent as IZoomControl;
+            if (zoomControl != null)
+                vis = zoomControl.PresenterVisual;
+            else
+            {
+                var frameworkElement = Parent as FrameworkElement;
+                if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
+                    vis = ((IZoomControl)frameworkElement.Parent).PresenterVisual;
+            }
+            PrintHelper.ShowPrintPreview(vis, description);
         }
 
         #endregion

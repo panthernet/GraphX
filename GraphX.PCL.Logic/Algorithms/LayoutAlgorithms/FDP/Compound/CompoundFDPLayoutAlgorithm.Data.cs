@@ -9,7 +9,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
     public partial class CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         /// <summary>
         /// Informations for compound vertices.

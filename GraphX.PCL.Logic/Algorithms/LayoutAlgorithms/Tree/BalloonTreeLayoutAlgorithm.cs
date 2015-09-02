@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
@@ -9,7 +10,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 	public class BalloonTreeLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, BalloonTreeLayoutParameters>
 		where TVertex : class
 		where TEdge : IEdge<TVertex>
-		where TGraph : IBidirectionalGraph<TVertex, TEdge>
+		where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
 	{
 		protected readonly TVertex Root;
 	    private readonly IDictionary<TVertex, BalloonData> _datas = new Dictionary<TVertex, BalloonData>();
@@ -48,7 +49,16 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 			NormalizePositions();
 		}
 
-		private void FirstWalk( TVertex v )
+	    public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+	    {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
+	    }
+
+	    private void FirstWalk( TVertex v )
 		{
 			var data = _datas[v];
 			_visitedVertices.Add( v );

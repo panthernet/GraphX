@@ -12,7 +12,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
           ILayoutEdgeRouting<TEdge>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         /// <summary>
         /// The copy of the VisitedGraph which should be laid out.

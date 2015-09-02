@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
@@ -15,7 +16,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         ICompoundLayoutAlgorithm<TVertex, TEdge, TGraph>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         /*[ContractInvariantMethod]
         private void InvariantContracts()
@@ -151,6 +152,15 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 _temperature *= Parameters.TemperatureDecreasing;
             }
             SavePositions();
+        }
+
+        public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+        {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
         }
 
         private void SavePositions()

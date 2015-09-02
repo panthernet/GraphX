@@ -23,9 +23,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                    <Ellipse Fill="{TemplateBinding Background}"
-                             Stroke="{TemplateBinding BorderBrush}" Width="150" Height="80">
-                    </Ellipse>
+                    <Border Background="{TemplateBinding Background}"
+                             BorderBrush="{TemplateBinding BorderBrush}" Width="20" Height="20" BorderThickness="1">
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

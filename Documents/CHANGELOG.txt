@@ -1,18 +1,30 @@
 ﻿WIP 2.2.1
 
+HIGHLIGHTS:
+	* Added new layout algorithm GroupingLayoutAlgorithm which allows to layout graph vertices by different groups each using its own sublayout algorithm.
+      Currently there are two modes supoported:
+		- Layout groups to predefined bounds, when you can specify rectangular bounds in which vertices are layed (Bounds must be supported by algorithm used to layout vertices group)
+		- Generate bounds from groups, when each group is layouted using its algorithm and bounds are automatically calculated to fit all vertices in the group and then group bounds overlaps can be removed.
+
 DETAILED CHANGELOG:
-+ Added GroupId property to IGraphXVertex interface
-+ Added parameters class RandomLayoutAlgorithmParams for corresponding algorithm. It contains Bounds property which can restrict vertex coordinates to respect provided bounds.
-+ Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
-+ Added VertexShape.Ellipse math shape
-+ Added support for reversing the geometry. This is required for animating shapes along a path where the direction needs to be reversed without using the Storyboard.AutoReverse property (thanks to bleibold)
-+ Fixed NaN result for FR algorithms calc (thanks to bleibold)
-+ Fixed edge bundling in the case when empty Control points are present that would sometimes cause exceptions.(thanks to bleibold)
-+ Fixed bindings to DefaultEdgePointer::Visibility property
-+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
-+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
-+ Implemented many changed in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
-+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
+	+ Added GroupId property to IGraphXVertex interface
+	+ Added parameters class RandomLayoutAlgorithmParams for corresponding algorithm. It contains Bounds property which can restrict vertex coordinates to respect provided bounds.
+	+ Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
+	+ Added VertexShape.Ellipse math shape
+	+ Added support for reversing the geometry. This is required for animating shapes along a path where the direction needs to be reversed without using the Storyboard.AutoReverse property (thanks to bleibold)
+	+ Fixed NaN result for FR algorithms calc (thanks to bleibold)
+	+ Fixed edge bundling in the case when empty Control points are present that would sometimes cause exceptions.(thanks to bleibold)
+	+ Fixed bindings to DefaultEdgePointer::Visibility property
+	+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
+	+ Improved random layout algorithm randomness by seeding new Guid hash whcih fixes some odd behaviour in rare cases
+	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
+	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
+	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
+
+BREAKING CHANGES:
+	* IExternalLayoutAlgorithm interface now demands TEdge generic specification and have one new method ResetGraph().
+	* All built-in algorithms now use IMutableVertexAndEdgeSet<TVertex, TEdge> for TGraph generic specification to be able to modify Graph data on demand.
+
 
 RELEASE 2.2.0
 NEW TERMS: 

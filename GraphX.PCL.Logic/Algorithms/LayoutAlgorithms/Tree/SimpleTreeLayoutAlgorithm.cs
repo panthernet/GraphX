@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 using QuickGraph.Algorithms.Search;
 using QuickGraph.Collections;
@@ -12,7 +13,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
     public partial class SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph> : DefaultParameterizedLayoutAlgorithmBase<TVertex, TEdge, TGraph, SimpleTreeLayoutParameters>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IBidirectionalGraph<TVertex, TEdge>
+        where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         private BidirectionalGraph<TVertex, Edge<TVertex>> _spanningTree;
         readonly IDictionary<TVertex, Size> _sizes;
@@ -55,6 +56,15 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 CalculatePosition( source, null, 0 );
 
             AssignPositions(cancellationToken);
+        }
+
+        public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+        {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
         }
 
         private void GenerateSpanningTree(CancellationToken cancellationToken)

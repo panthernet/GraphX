@@ -4,7 +4,7 @@ using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 {
-	public class StandardOverlapRemovalAlgorithmFactory<TVertex> : IOverlapRemovalAlgorithmFactory<TVertex>
+	/*public class StandardOverlapRemovalAlgorithmFactory<TVertex> : IOverlapRemovalAlgorithmFactory<TVertex>
 		where TVertex : class
 	{
 		protected static readonly string[] _algorithmTypes = { "FSA", "OneWayFSA" };
@@ -59,5 +59,5 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 		{
 			return AlgorithmTypes.Contains( algorithmType );
 		}
-	}
+	}*/
 }

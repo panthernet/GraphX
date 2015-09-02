@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
@@ -9,7 +10,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
     public partial class EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>
         where TVertex : class
         where TEdge : IEdge<TVertex>
-        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>
+        where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
         private class WHOptimizationLayerInfo
         {
@@ -399,6 +400,15 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             _graph.AddVertex(vertex);
 
             return vertex;
+        }
+
+        public override void ResetGraph(IEnumerable<TVertex> vertices, IEnumerable<TEdge> edges)
+        {
+            if (VisitedGraph == null && !TryCreateNewGraph())
+                throw new GX_GeneralException("Can't create new graph through reflection. Make sure it support default constructor.");
+            VisitedGraph.Clear();
+            VisitedGraph.AddVertexRange(vertices);
+            VisitedGraph.AddEdgeRange(edges);
         }
     }
 }

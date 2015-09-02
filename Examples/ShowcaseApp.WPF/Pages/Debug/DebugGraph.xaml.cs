@@ -53,31 +53,30 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.LogicCore.Graph.Vertices.Where(a=> a.GroupId == 0).ForEach(a => a.GroupId = 2);
             dg_Area.LogicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
             //generate group params
-            var prms = new List<AlgorithmGroupParameters<DataVertex>>
+            var prms = new List<AlgorithmGroupParameters<DataVertex, DataEdge>>
             {
-                new AlgorithmGroupParameters<DataVertex>
+                new AlgorithmGroupParameters<DataVertex, DataEdge>
                 {
                     GroupId = 1,
                     LayoutAlgorithm =
-                        new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
-                            dg_Area.LogicCore.Graph, null,
+                        new RandomLayoutAlgorithm<DataVertex, DataEdge, GraphExample>(
                             new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
-                    ZoneRectangle = new Rect(0, 0, 500, 500)
+                   // ZoneRectangle = new Rect(0, 0, 500, 500)
                 },
-                new AlgorithmGroupParameters<DataVertex>
+                new AlgorithmGroupParameters<DataVertex, DataEdge>
                 {
                     GroupId = 2,
                     LayoutAlgorithm =
-                        new RandomLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
-                            dg_Area.LogicCore.Graph, null,
-                            new RandomLayoutAlgorithmParams {Bounds = new Rect(1000, 0, 500, 500)}),
-                    ZoneRectangle = new Rect(1000, 0, 500, 500)
+                        new RandomLayoutAlgorithm<DataVertex, DataEdge, GraphExample>(
+                            new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
+                   // ZoneRectangle = new Rect(1000, 0, 500, 500)
                 }
             };
+
+            var gParams = new GroupingLayoutAlgorithmParameters<DataVertex, DataEdge>(prms, true);
             //generate grouping algo
             dg_Area.LogicCore.ExternalLayoutAlgorithm =
-                new GroupingLayoutAlgorithm<DataVertex, DataEdge, IVertexAndEdgeListGraph<DataVertex, DataEdge>>(
-                    dg_Area.LogicCore.Graph, null, prms);
+                new GroupingLayoutAlgorithm<DataVertex, DataEdge, BidirectionalGraph<DataVertex, DataEdge>>(dg_Area.LogicCore.Graph, null, gParams);
 
             //generate graphs
             dg_Area.GenerateGraph();
@@ -85,16 +84,17 @@ namespace ShowcaseApp.WPF.Pages
             //generate group visuals
             foreach (var item in prms)
             {
+                if (!item.ZoneRectangle.HasValue) continue;
                 var rect = new Rectangle
                 {
-                    Width = item.ZoneRectangle.Width,
-                    Height = item.ZoneRectangle.Height,
+                    Width = item.ZoneRectangle.Value.Width,
+                    Height = item.ZoneRectangle.Value.Height,
                     Fill = item.GroupId == 1 ? Brushes.Blue : Brushes.Black,
                     Opacity = .5
                 };
                 dg_Area.InsertCustomChildControl(0, rect);
-                GraphAreaBase.SetX(rect, item.ZoneRectangle.X);
-                GraphAreaBase.SetY(rect, item.ZoneRectangle.Y);
+                GraphAreaBase.SetX(rect, item.ZoneRectangle.Value.X);
+                GraphAreaBase.SetY(rect, item.ZoneRectangle.Value.Y);
             }
             dg_zoomctrl.ZoomToFill();
         }
@@ -109,13 +109,20 @@ namespace ShowcaseApp.WPF.Pages
 
         void CreateNewArea()
         {
+            if (dg_Area != null)
+            {
+                dg_Area.GenerateGraphFinished -= dg_Area_GenerateGraphFinished;
+                dg_Area.RelayoutFinished -= dg_Area_GenerateGraphFinished;
+            }
             dg_Area.ClearLayout();
             dg_Area.Dispose();
-            dg_Area = new GraphAreaExample {Name = "dg_Area", LogicCore = new LogicCoreExample()};
-            dg_Area.Resources = new ResourceDictionary { Source = new Uri("/Templates/Debug/TestTemplates.xaml", UriKind.RelativeOrAbsolute) };
+            dg_Area = new GraphAreaExample
+            {
+                Name = "dg_Area",
+                LogicCore = new LogicCoreExample(),
+                Resources = new ResourceDictionary {Source = new Uri("/Templates/Debug/TestTemplates.xaml", UriKind.RelativeOrAbsolute)}
+            };
             dg_Area.SetVerticesDrag(true, true);
-            dg_Area.GenerateGraphFinished += dg_Area_GenerateGraphFinished;
-            dg_Area.RelayoutFinished += dg_Area_GenerateGraphFinished;
             dg_zoomctrl.Content = dg_Area;
             dg_Area.ShowAllEdgesLabels(false);
 

@@ -3,7 +3,7 @@ using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 {
-	public interface IOverlapRemovalAlgorithmFactory<TVertex>
+	/*public interface IOverlapRemovalAlgorithmFactory<TVertex>
 		where TVertex : class
 	{
 		/// <summary>
@@ -18,5 +18,5 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 		bool IsValidAlgorithm( string algorithmType );
 
 		string GetAlgorithmType( IOverlapRemovalAlgorithm<TVertex> algorithm );
-	}
+	}*/
 }

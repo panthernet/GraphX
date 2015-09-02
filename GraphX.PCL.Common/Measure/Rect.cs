@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace GraphX.Measure
 {
     /// <summary>
     /// Custom PCL implementation of Rect class
     /// </summary>
+    [DebuggerDisplay("Size={X} {Y} {Width} {Height}")]
     public struct Rect
     {
         internal double _x;
