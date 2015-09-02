@@ -167,27 +167,32 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             _graph.AddVertexRange(_isolatedVertices);
             if (_isolatedVertices.Count < 2) return;
             _sparseCompactionGraph.AddVertexRange(_isolatedVertices.OfType<Data>());
-            int layer = 0;
-            SugiVertex prevIsolatedVertex = null;
-            foreach (var isolatedVertex in _isolatedVertices)
-            {
-                var lastOnLayer = _sparseCompactionByLayerBackup[layer].LastOrDefault();
-                _layers[layer].Add(isolatedVertex);
-                isolatedVertex.LayerIndex = layer;
-                isolatedVertex.Position = _layers[layer].Count - 1;
-                if (lastOnLayer != null)
-                {
-                    var edge = new Edge<Data>(lastOnLayer.Target, isolatedVertex);
-                    _sparseCompactionByLayerBackup[layer].Add(edge);
-                    _sparseCompactionGraph.AddEdge(edge);
-                }
-                if (layer > 0 && prevIsolatedVertex != null)
-                {
-                    _graph.AddEdge(new SugiEdge(default(TEdge), prevIsolatedVertex, isolatedVertex));
-                }
-                layer = (layer + 1) % _layers.Count;
-                prevIsolatedVertex = isolatedVertex;
-            }
+            
+			// Note: _sparseCompactionByLayerBackup will be empty if no edges exist.
+			if (_sparseCompactionByLayerBackup.Any())
+			{
+				int layer = 0;
+				SugiVertex prevIsolatedVertex = null;
+				foreach (var isolatedVertex in _isolatedVertices)
+				{
+					var lastOnLayer = _sparseCompactionByLayerBackup[layer].LastOrDefault();
+					_layers[layer].Add(isolatedVertex);
+					isolatedVertex.LayerIndex = layer;
+					isolatedVertex.Position = _layers[layer].Count - 1;
+					if (lastOnLayer != null)
+					{
+						var edge = new Edge<Data>(lastOnLayer.Target, isolatedVertex);
+						_sparseCompactionByLayerBackup[layer].Add(edge);
+						_sparseCompactionGraph.AddEdge(edge);
+					}
+					if (layer > 0 && prevIsolatedVertex != null)
+					{
+						_graph.AddEdge(new SugiEdge(default(TEdge), prevIsolatedVertex, isolatedVertex));
+					}
+					layer = (layer + 1) % _layers.Count;
+					prevIsolatedVertex = isolatedVertex;
+				}
+			}
         }
 
         private void CalculateLayerHeightsAndPositions()
@@ -237,11 +242,21 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         private void CalculateVerticalPositions()
         {
-            if (_graph.Vertices.Count() == 1)
-                _graph.Vertices.First().VerticalPosition = 0;
-            else 
-            foreach (var vertex in _graph.Vertices)
-                vertex.VerticalPosition = _layerPositions[vertex.LayerIndex] + (vertex.Size.Height <= 0 ? _layerHeights[vertex.LayerIndex] : vertex.Size.Height) / 2.0;
+			// Note: _layerPositions will be empty if no edges exist.
+			if (_layerPositions != null && _layerHeights != null)
+			{
+				foreach (var vertex in _graph.Vertices)
+					vertex.VerticalPosition = _layerPositions[vertex.LayerIndex] + (vertex.Size.Height <= 0 ? _layerHeights[vertex.LayerIndex] : vertex.Size.Height) / 2.0;
+			}
+			else
+			{
+				var vertPos = 0;
+				foreach (var sugiVertex in _graph.Vertices)
+				{
+					sugiVertex.VerticalPosition = vertPos;
+					vertPos += 100; // Just default to a value that will visually look OK for the graph surface.
+				}
+			}
         }
 
         /// <summary>
