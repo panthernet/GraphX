@@ -1165,6 +1165,7 @@ namespace GraphX.Controls
             //var br = TranslatePoint(new Point(screenRectangle.Right, screenRectangle.Bottom), ContentVisual);
             //return new Rect(tl.X, tl.Y, Math.Abs(Math.Abs(br.X) - Math.Abs(tl.X)), Math.Abs(Math.Abs(br.Y) - Math.Abs(tl.Y)));
 
+            if (screenRectangle == Rect.Empty) return Rect.Empty;
             return new Rect(tl.X, tl.Y, screenRectangle.Width / Zoom, screenRectangle.Height / Zoom);
         }
 

@@ -12,6 +12,7 @@ DETAILED CHANGELOG:
 	+ Added two methods to EdgeControl: GetEdgePointerForSource() and GetEdgePointerForTarget() which allows to get to edge pointer objects manualy
 	+ Added VertexShape.Ellipse math shape
 	+ Added support for reversing the geometry. This is required for animating shapes along a path where the direction needs to be reversed without using the Storyboard.AutoReverse property (thanks to bleibold)
+	+ Fixed an exception in ZoomControl caused by Ctrl + Alt + DblClick combination (thanks to persalmi)
 	+ Fixed NaN result for FR algorithms calc (thanks to bleibold)
 	+ Fixed edge bundling in the case when empty Control points are present that would sometimes cause exceptions.(thanks to bleibold)
 	+ Fixed bindings to DefaultEdgePointer::Visibility property
