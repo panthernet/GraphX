@@ -96,7 +96,7 @@ namespace GraphX.Controls.Models
             foreach (var item in _states[id].VertexPositions)
             {
                 _area.VertexList[item.Key].SetPosition(item.Value.X, item.Value.Y);
-                _area.VertexList[item.Key].Visibility = Visibility.Visible;
+                _area.VertexList[item.Key].SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true);
             }
             //setup visible edges
             foreach (var item in _states[id].VisibleEdges)

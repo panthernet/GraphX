@@ -172,12 +172,12 @@ namespace GraphX.Controls
 
         public void Hide()
         {
-            Visibility = Visibility.Collapsed;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
         }
 
         public void Show()
         {
-            Visibility = Visibility.Visible;
+            SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
         }
 
         void VertexLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
