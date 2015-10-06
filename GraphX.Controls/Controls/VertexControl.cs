@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
@@ -9,44 +10,59 @@ using GraphX.Controls.Models;
 
 namespace GraphX.Controls
 {
-	/// <summary>
-	/// Visual vertex control
-	/// </summary>
+    /// <summary>
+    /// Visual vertex control
+    /// </summary>
     [Serializable]
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
     public class VertexControl: VertexControlBase
     {
-		static VertexControl()
-		{
-			//override the StyleKey Property
+        static VertexControl()
+        {
+            //override the StyleKey Property
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VertexControl), new FrameworkPropertyMetadata(typeof(VertexControl)));
-		}
+        }
 
         #region Position trace feature
 
 
-
-        private DependencyPropertyDescriptor _sxDescriptor;
-        private DependencyPropertyDescriptor _syDescriptor;
+        private ChangeMonitor _xChangeMonitor = null;
+        private ChangeMonitor _yChangeMonitor = null;
         internal void UpdatePositionTraceState()
         {
             if (EventOptions.PositionChangeNotification)
             {
-                _sxDescriptor = DependencyPropertyDescriptor.FromProperty(GraphAreaBase.XProperty, typeof(VertexControl));
-                _sxDescriptor.AddValueChanged(this, source_PositionChanged);
-                _syDescriptor = DependencyPropertyDescriptor.FromProperty(GraphAreaBase.YProperty, typeof(VertexControl));
-                _syDescriptor.AddValueChanged(this, source_PositionChanged);
+                if (_xChangeMonitor == null)
+                {
+                    _xChangeMonitor = new ChangeMonitor();
+                    _xChangeMonitor.Bind(this, GraphAreaBase.XProperty);
+                    _xChangeMonitor.ChangeDetected += changeMonitor_ChangeDetected;
+                }
+                if (_yChangeMonitor == null)
+                {
+                    _yChangeMonitor = new ChangeMonitor();
+                    _yChangeMonitor.Bind(this, GraphAreaBase.YProperty);
+                    _yChangeMonitor.ChangeDetected += changeMonitor_ChangeDetected;
+                }
             }
             else
             {
-                if (_sxDescriptor != null)
-                    _sxDescriptor.RemoveValueChanged(this, source_PositionChanged);
-                if (_syDescriptor != null)
-                    _syDescriptor.RemoveValueChanged(this, source_PositionChanged);
+                if (_xChangeMonitor != null)
+                {
+                    _xChangeMonitor.ChangeDetected -= changeMonitor_ChangeDetected;
+                    _xChangeMonitor.Unbind(this);
+                    _xChangeMonitor = null;
+                }
+                if (_yChangeMonitor == null)
+                {
+                    _yChangeMonitor.ChangeDetected -= changeMonitor_ChangeDetected;
+                    _yChangeMonitor.Unbind(this);
+                    _yChangeMonitor = null;
+                }
             }
         }
 
-        private void source_PositionChanged(object sender, EventArgs e)
+        private void changeMonitor_ChangeDetected(object source, EventArgs args)
         {
             if(ShowLabel && VertexLabelControl != null)
                 VertexLabelControl.UpdatePosition();
@@ -69,7 +85,6 @@ namespace GraphX.Controls
             foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
                 UpdateEventhandling(item);
         }
-
 
         public override void OnApplyTemplate()
         {
@@ -181,6 +196,58 @@ namespace GraphX.Controls
             }
         }
 
+        #region ChangeMonitor class
 
+        /// <summary>
+        /// This class is used to monitor for changes on the specified property of the specified control.
+        /// </summary>
+        private class ChangeMonitor : DependencyObject
+        {
+            public ChangeMonitor()
+            {
+            }
+
+            public void Bind(UIElement el, DependencyProperty property)
+            {
+                Binding b = new Binding();
+                b.Path = new PropertyPath(property);
+                b.Source = el;
+                BindingOperations.SetBinding(this, MonitorForChangeProperty, b);
+            }
+
+            public void Unbind(UIElement el)
+            {
+                BindingOperations.ClearBinding(this, MonitorForChangeProperty);
+            }
+
+            public delegate void Changed(object source, EventArgs args);
+
+            public event Changed ChangeDetected;
+
+            public static readonly DependencyProperty MonitorForChangeProperty =
+                DependencyProperty.Register("MonitorForChange", typeof(object), typeof(ChangeMonitor), new PropertyMetadata(null, MonitoredPropertyChanged));
+
+            public object MonitorForChange
+            {
+                get { return (object)GetValue(MonitorForChangeProperty); }
+                set { SetValue(MonitorForChangeProperty, value); }
+            }
+
+            private static void MonitoredPropertyChanged(object source, DependencyPropertyChangedEventArgs args)
+            {
+                var cm = source as ChangeMonitor;
+                if (cm == null)
+                {
+                    return;
+                }
+                var changeDetected = cm.ChangeDetected;
+                if (changeDetected != null)
+                {
+                    changeDetected(cm, new EventArgs());
+                }
+            }
+        }
+
+        #endregion
     }
 }
