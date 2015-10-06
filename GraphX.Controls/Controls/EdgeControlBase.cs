@@ -238,11 +238,11 @@ namespace GraphX.Controls
         /// </summary>
         public bool IsHiddenEdgesUpdated { get; set; }
 
-        public static readonly DependencyProperty ShowArrowsProperty = DependencyProperty.Register("ShowArrows", typeof(bool), typeof(EdgeControl), new PropertyMetadata(true, showarrows_changed));
+        public static readonly DependencyProperty ShowArrowsProperty = DependencyProperty.Register("ShowArrows", typeof(bool), typeof(EdgeControlBase), new PropertyMetadata(true, showarrows_changed));
 
         private static void showarrows_changed(object sender, DependencyPropertyChangedEventArgs args)
         {
-            var ctrl = sender as EdgeControl;
+            var ctrl = sender as EdgeControlBase;
             if (ctrl == null)
                 return;
 
@@ -260,12 +260,12 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty ShowLabelProperty = DependencyProperty.Register("ShowLabel",
                                                                                typeof (bool),
-                                                                               typeof (EdgeControl),
+                                                                               typeof (EdgeControlBase),
                                                                                new PropertyMetadata(false, showlabel_changed));
 
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ec = (d as EdgeControl);
+            var ec = (d as EdgeControlBase);
             if (ec == null) return;
 
             ec.UpdateEdge(false);
@@ -295,7 +295,7 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty LabelVerticalOffsetProperty = DependencyProperty.Register("LabelVerticalOffset",
                                                                                typeof(double),
-                                                                               typeof(EdgeControl),
+                                                                               typeof(EdgeControlBase),
                                                                                new PropertyMetadata(0d));
 
         /// <summary>
@@ -456,10 +456,10 @@ namespace GraphX.Controls
             if (Template == null) return;
 
             LinePathObject = GetTemplatePart("PART_edgePath") as Path;
-            if (LinePathObject == null) throw new GX_ObjectNotFoundException("EdgeControl Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
+            if (LinePathObject == null) throw new GX_ObjectNotFoundException("EdgeControlBase Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
             LinePathObject.Data = _linegeometry;
             if (this.FindDescendantByName("PART_edgeArrowPath") != null)
-                throw new GX_ObsoleteException("PART_edgeArrowPath is obsolete! Please use new DefaultEdgePointer object in your EdgeControl template!");
+                throw new GX_ObsoleteException("PART_edgeArrowPath is obsolete! Please use new DefaultEdgePointer object in your EdgeControlBase template!");
 
             EdgeLabelControl = GetTemplatePart("PART_edgeLabel") as IEdgeLabelControl;
 
