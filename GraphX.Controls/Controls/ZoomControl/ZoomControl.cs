@@ -1586,7 +1586,10 @@ namespace GraphX.Controls
                     }
                 };
             }
-            ZoomToFill();
+            if (Mode == ZoomControlModes.Fill)
+            {
+                DoZoomToFill();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
