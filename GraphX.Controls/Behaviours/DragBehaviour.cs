@@ -103,74 +103,31 @@ namespace GraphX.Controls
             {
                 //register the event handlers
 #if WPF
-                element.MouseLeftButtonDown += OnDragStarted;
-                element.MouseLeftButtonUp += OnDragFinished;
+                element.MouseMove += OnDragging;
 #elif METRO
-                element.PointerPressed += OnDragStarted;
-				element.PointerReleased += OnDragFinished;
+                element.PointerMoved += OnDragging;
 #endif
             }
             else
             {
                 //unregister the event handlers
 #if WPF
-                element.MouseLeftButtonDown -= OnDragStarted;
-                element.MouseLeftButtonUp -= OnDragFinished;
+                element.MouseMove -= OnDragging;
+                element.PreviewMouseLeftButtonUp -= OnDragFinished;
 #elif METRO
-                element.PointerPressed -= OnDragStarted;
-				element.PointerReleased -= OnDragFinished;
+                element.PointerMoved -= OnDragging;
+                element.PointerReleased -= OnDragFinished;
 #endif
             }
         }
         #endregion
 
         private static Point _scale = new Point(1, 1);
-#if WPF
-        private static void OnDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
-#elif METRO
-		private static void OnDragStarted( object sender, PointerRoutedEventArgs e )
-#endif
-        {
-            var obj = sender as DependencyObject;
-            //we are starting the drag
-            SetIsDragging(obj, true);
-
-#if WPF
-            var pos = e.GetPosition(obj as IInputElement);
-#elif METRO
-			var pos = e.GetCurrentPoint(obj as UIElement).Position;
-#endif
-
-            //save the position of the mouse to the start position
-            SetOriginalX(obj, pos.X);
-            SetOriginalY(obj, pos.Y);
-
-            //capture the mouse
-#if WPF
-            var element = obj as IInputElement;
-            if (element != null)
-            {
-                element.CaptureMouse();
-                element.MouseMove -= OnDragging;
-                element.MouseMove += OnDragging;
-            }
-            //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
-            e.Handled = false;
-#elif METRO
-            var element = obj as FrameworkElement;
-			if ( element != null )
-			{
-				element.CapturePointer(e.Pointer);
-				element.PointerMoved += OnDragging;
-			}
-            e.Handled = true;
-#endif
-        }
 
 #if WPF
         private static void OnDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
 #elif METRO
-		private static void OnDragFinished( object sender, PointerRoutedEventArgs e )
+        private static void OnDragFinished( object sender, PointerRoutedEventArgs e )
 #endif
         {
             UpdateVertexEdges(sender as VertexControl);
@@ -185,35 +142,69 @@ namespace GraphX.Controls
             var element = sender as IInputElement;
             if (element != null)
             {
-                element.MouseMove -= OnDragging;
                 element.ReleaseMouseCapture();
+                element.PreviewMouseLeftButtonUp -= OnDragFinished;
             }
 #elif METRO
             var element = sender as FrameworkElement;
-			if ( element != null )
-			{
-				element.PointerMoved -= OnDragging;
-				element.ReleasePointerCapture(e.Pointer);
-			}
-#endif
+            if ( element != null )
+            {
+                element.ReleasePointerCapture(e.Pointer);
+                element.PointerReleased -= OnDragFinished;
+            }
             e.Handled = true;
+#endif
         }
 
 #if WPF
         private static void OnDragging(object sender, System.Windows.Input.MouseEventArgs e)
 #elif METRO
-		private static void OnDragging( object sender, PointerRoutedEventArgs e )
+        private static void OnDragging( object sender, PointerRoutedEventArgs e )
 #endif
         {
-            var obj = sender as DependencyObject;
-            if (!GetIsDragging(obj))
+            if (e.LeftButton != System.Windows.Input.MouseButtonState.Pressed)
+            {
                 return;
+            }
 
+            var obj = sender as DependencyObject;
 #if WPF
-            Point pos = e.GetPosition(obj as IInputElement);
+            var pos = e.GetPosition(obj as IInputElement);
 #elif METRO
-            Point pos = e.GetCurrentPoint(obj as UIElement).Position;
+            var pos = e.GetCurrentPoint(obj as UIElement).Position;
 #endif
+
+            if (!GetIsDragging(obj))
+            {
+                //we are starting the drag
+                SetIsDragging(obj, true);
+
+                //save the position of the mouse to the start position
+                SetOriginalX(obj, pos.X);
+                SetOriginalY(obj, pos.Y);
+
+                //capture the mouse
+#if WPF
+                var element = obj as IInputElement;
+                if (element != null)
+                {
+                    element.CaptureMouse();
+                    element.PreviewMouseLeftButtonUp += OnDragFinished;
+                }
+                //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
+                e.Handled = true;
+#elif METRO
+                var element = obj as FrameworkElement;
+                if ( element != null )
+                {
+                    element.CapturePointer(e.Pointer);
+                    element.PointerReleased += OnDragFinished;
+                }
+                e.Handled = true;
+#endif
+                return;
+            }
+
             double horizontalChange = (pos.X - GetOriginalX(obj)) * _scale.X;
             double verticalChange = (pos.Y - GetOriginalY(obj)) * _scale.Y;
             if (GetIsTagged(obj))
