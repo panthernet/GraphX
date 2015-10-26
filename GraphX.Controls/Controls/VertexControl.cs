@@ -107,7 +107,8 @@ namespace GraphX.Controls
 
         #region Events handling
 
-        private bool clickTrack = false;
+		private bool clickTrack = false;
+		private Point clickTrackPoint;
 
         internal void UpdateEventhandling(EventType typ)
         {
@@ -150,7 +151,17 @@ namespace GraphX.Controls
 
         void VertexControl_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            clickTrack = false;
+			if (!clickTrack)
+				return;
+
+			Point curPoint;
+			if (RootArea != null)
+				curPoint = Mouse.GetPosition(RootArea);
+			else
+				curPoint = new Point();
+
+			if (curPoint != clickTrackPoint)
+				clickTrack = false;
         }
 
         void VertexControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -196,9 +207,10 @@ namespace GraphX.Controls
 
         void VertexControl_Down(object sender, MouseButtonEventArgs e)
         {
-            if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
+			if (RootArea != null && Visibility == Visibility.Visible)
+				RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
             clickTrack = true;
+			clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
             e.Handled = true;
         }
         #endregion
