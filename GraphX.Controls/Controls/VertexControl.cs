@@ -107,13 +107,24 @@ namespace GraphX.Controls
 
         #region Events handling
 
+		private bool clickTrack = false;
+		private Point clickTrackPoint;
+
         internal void UpdateEventhandling(EventType typ)
         {
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled) MouseDown += VertexControl_Down;
-                    else MouseDown -= VertexControl_Down;
+                    if (EventOptions.MouseClickEnabled)
+                    {
+                        MouseDown += VertexControl_Down;
+                        PreviewMouseMove += VertexControl_PreviewMouseMove;
+                    }
+                    else
+                    {
+                        MouseDown -= VertexControl_Down;
+                        PreviewMouseMove -= VertexControl_PreviewMouseMove;
+                    }
                     break;
                 case EventType.MouseDoubleClick:
                     if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += VertexControl_MouseDoubleClick;
@@ -138,10 +149,32 @@ namespace GraphX.Controls
             MouseUp += VertexControl_MouseUp;
         }
 
+        void VertexControl_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+			if (!clickTrack)
+				return;
+
+			Point curPoint;
+			if (RootArea != null)
+				curPoint = Mouse.GetPosition(RootArea);
+			else
+				curPoint = new Point();
+
+			if (curPoint != clickTrackPoint)
+				clickTrack = false;
+        }
+
         void VertexControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
+            {
                 RootArea.OnVertexMouseUp(this, e, Keyboard.Modifiers);
+                if (clickTrack)
+                {
+                    RaiseClick();
+                }
+            }
+            clickTrack = false;
             e.Handled = true;
         }
 
@@ -169,15 +202,34 @@ namespace GraphX.Controls
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnVertexDoubleClick(this);
-            e.Handled = true;
+            //e.Handled = true;
         }
 
         void VertexControl_Down(object sender, MouseButtonEventArgs e)
         {
-            if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
+			if (RootArea != null && Visibility == Visibility.Visible)
+				RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
+            clickTrack = true;
+			clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
             e.Handled = true;
         }
+        #endregion
+
+        #region Click Event
+
+        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VertexControl));
+        public event RoutedEventHandler Click
+        {
+            add { AddHandler(ClickEvent, value); }
+            remove { RemoveHandler(ClickEvent, value); }
+        }
+
+        // This method raises the PageNavigation event
+        private void RaiseClick()
+        {
+            RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+        }
+
         #endregion
 
         /// <summary>
