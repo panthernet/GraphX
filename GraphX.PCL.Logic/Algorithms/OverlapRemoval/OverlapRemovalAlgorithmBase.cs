@@ -16,6 +16,9 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
             set { OriginalRectangles = value; }
 		}
 
+        /// <summary>
+        /// Algorithm parameters
+        /// </summary>
 		public TParam Parameters { get; private set; }
 
 		public IOverlapRemovalParameters GetParameters()
@@ -25,14 +28,31 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
 
 		protected List<RectangleWrapper<TObject>> WrappedRectangles;
 
-
 	    protected OverlapRemovalAlgorithmBase(IDictionary<TObject, Rect> rectangles, TParam parameters )
 		{
-			//eredeti téglalapok listája
 			OriginalRectangles = rectangles;
-
 			Parameters = parameters;
 		}
+
+        /// <summary>
+        /// Initialize algorithm initial data
+        /// </summary>
+        /// <param name="rectangles">Size rectangles</param>
+        /// <param name="parameters">algorithm parameters</param>
+	    public void Initialize(IDictionary<TObject, Rect> rectangles, TParam parameters)
+	    {
+            OriginalRectangles = rectangles;
+            Parameters = parameters;	        
+	    }
+
+        /// <summary>
+        /// Initialize algorithm initial data
+        /// </summary>
+        /// <param name="rectangles">Size rectangles</param>
+        public void Initialize(IDictionary<TObject, Rect> rectangles)
+        {
+            OriginalRectangles = rectangles;
+        }
 
         private void GenerateWrappedRectangles(IDictionary<TObject, Rect> rectangles)
         {

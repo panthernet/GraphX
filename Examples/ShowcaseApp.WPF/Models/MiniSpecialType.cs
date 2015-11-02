@@ -4,6 +4,7 @@
     {
         None,
         LayoutVCP,
-        EdgesParallel
+        EdgesParallel,
+        LayoutGrouped
     }
 }

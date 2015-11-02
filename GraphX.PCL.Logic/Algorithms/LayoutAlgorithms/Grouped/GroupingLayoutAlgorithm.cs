@@ -1,57 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using GraphX.Controls;
 using GraphX.Measure;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using GraphX.PCL.Logic.Helpers;
 using QuickGraph;
 
-namespace ShowcaseApp.WPF
+namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms.Grouped
 {
-
-    public class GroupingLayoutAlgorithmParameters<TVertex, TEdge> : LayoutParametersBase
-        where TVertex : class, IGraphXVertex
-        where TEdge : IGraphXEdge<TVertex>
-    {
-        /// <summary>
-        /// If true runs layouting pass for resulting group zone rectangles (auto calc if not specified) to eliminate overlaps
-        /// </summary>
-        public bool ArrangeGroups { get; set; }
-
-        /// <summary>
-        /// Gets or sets minimum horizontal gap between arranged groups. If ArrangeGroups = True.
-        /// </summary>
-        public bool ArrangeHorizontalGap { get; set; }
-
-        /// <summary>
-        /// Gets or sets minimum vertical gap between arranged groups. If ArrangeGroups = True.
-        /// </summary>
-        public bool ArrangeVerticalGap { get; set; }
-
-
-        public List<AlgorithmGroupParameters<TVertex, TEdge>> GroupParametersList { get; set; }
-
-        public GroupingLayoutAlgorithmParameters()
-        {
-            GroupParametersList = new List<AlgorithmGroupParameters<TVertex, TEdge>>();
-        }
-
-        /// <summary>
-        /// Creates grouping algorithm parameters
-        /// </summary>
-        /// <param name="paramsList">Params list</param>
-        /// <param name="arrangeGroups">Arrange groups of vertices on the last step to exclude group overlaps</param>
-        public GroupingLayoutAlgorithmParameters(List<AlgorithmGroupParameters<TVertex, TEdge>> paramsList, bool arrangeGroups = false)
-            : this()
-        {
-            GroupParametersList = paramsList;
-            ArrangeGroups = arrangeGroups;
-        }
-    }
-
     public class GroupingLayoutAlgorithm<TVertex, TEdge, TGraph> : LayoutAlgorithmBase<TVertex, TEdge, TGraph>
         where TVertex: class, IGraphXVertex
         where TEdge : IGraphXEdge<TVertex>
@@ -150,7 +108,8 @@ namespace ShowcaseApp.WPF
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var origList = listRect.ToDictionary(a => a.Key, a => a.Value);
-                var ora = new FSAAlgorithm<object>(listRect, new OverlapRemovalParameters {HorizontalGap = 10, VerticalGap = 10});
+                var ora = _params != null && _params.OverlapRemovalAlgorithm != null ? _params.OverlapRemovalAlgorithm : new FSAAlgorithm<object>(listRect, new OverlapRemovalParameters {HorizontalGap = 10, VerticalGap = 10});
+                ora.Initialize(listRect);
                 ora.Compute(cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
                 ora.Rectangles.ForEach(a =>

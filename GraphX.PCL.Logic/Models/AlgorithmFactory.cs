@@ -16,6 +16,14 @@ namespace GraphX.PCL.Logic.Models
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
     {
         #region Layout factory
+        /// <summary>
+        /// Generate and initialize layout algorithm
+        /// </summary>
+        /// <param name="newAlgorithmType">Layout algorithm type</param>
+        /// <param name="iGraph">Graph</param>
+        /// <param name="positions">Optional vertex positions</param>
+        /// <param name="sizes">Optional vertex sizes</param>
+        /// <param name="parameters">Optional algorithm parameters</param>
         public ILayoutAlgorithm<TVertex, TEdge, TGraph> CreateLayoutAlgorithm(LayoutAlgorithmTypeEnum newAlgorithmType, TGraph iGraph, IDictionary<TVertex, Point> positions = null, IDictionary<TVertex, Size> sizes = null, ILayoutParameters parameters = null)
         {
             if (iGraph == null) return null;
@@ -65,6 +73,10 @@ namespace GraphX.PCL.Logic.Models
             }
         }
 
+        /// <summary>
+        /// Creates parameters data for layout algorithm
+        /// </summary>
+        /// <param name="algorithmType">Layout algorithm type</param>
         public ILayoutParameters CreateLayoutParameters(LayoutAlgorithmTypeEnum algorithmType)
         {
             switch (algorithmType)
@@ -98,6 +110,10 @@ namespace GraphX.PCL.Logic.Models
             }
         }
 
+        /// <summary>
+        /// Returns True if specified layout algorithm needs vertex size data for its calculations
+        /// </summary>
+        /// <param name="algorithmType">Layout algorithm type</param>
         public bool NeedSizes(LayoutAlgorithmTypeEnum algorithmType)
         {
             return (algorithmType == LayoutAlgorithmTypeEnum.Tree) /*|| (algorithmType == LayoutAlgorithmTypeEnum.BalloonTree)*/ || (algorithmType == LayoutAlgorithmTypeEnum.Circular) ||
@@ -105,11 +121,19 @@ namespace GraphX.PCL.Logic.Models
                  || (algorithmType == LayoutAlgorithmTypeEnum.CompoundFDP);
         }
 
+        /// <summary>
+        /// Returns True if specified layout algorithm ever needs edge routing pass
+        /// </summary>
+        /// <param name="algorithmType">Layout algorithm type</param>
         public bool NeedEdgeRouting(LayoutAlgorithmTypeEnum algorithmType)
         {
             return (algorithmType != LayoutAlgorithmTypeEnum.Sugiyama) && (algorithmType != LayoutAlgorithmTypeEnum.EfficientSugiyama);
         }
 
+        /// <summary>
+        /// Returns True if specified layout algorithm ever needs overlap removal pass
+        /// </summary>
+        /// <param name="algorithmType">Layout algorithm type</param>
         public bool NeedOverlapRemoval(LayoutAlgorithmTypeEnum algorithmType)
         {
             return (algorithmType != LayoutAlgorithmTypeEnum.Sugiyama
@@ -122,6 +146,21 @@ namespace GraphX.PCL.Logic.Models
 
         #region OverlapRemoval factory
 
+        /// <summary>
+        /// Creates uninitialized overlap removal algorithm
+        /// </summary>
+        /// <param name="newAlgorithmType">Algorithm type</param>
+        public IOverlapRemovalAlgorithm<TVertex> CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum newAlgorithmType)
+        {
+            return CreateOverlapRemovalAlgorithm(newAlgorithmType, null);
+        }
+
+        /// <summary>
+        /// Create and initialize overlap removal algorithm
+        /// </summary>
+        /// <param name="newAlgorithmType">Algorithm type</param>
+        /// <param name="rectangles">Object sizes list</param>
+        /// <param name="parameters">Optional algorithm parameters</param>
         public IOverlapRemovalAlgorithm<TVertex> CreateOverlapRemovalAlgorithm(OverlapRemovalAlgorithmTypeEnum newAlgorithmType, IDictionary<TVertex, Rect> rectangles, IOverlapRemovalParameters parameters = null)
         {
             //if (Rectangles == null) return null;
@@ -141,9 +180,25 @@ namespace GraphX.PCL.Logic.Models
 
         public IOverlapRemovalAlgorithm<T> CreateFSAA<T>(IDictionary<T, Rect> rectangles, float horGap, float vertGap) where T : class
         {
-            return  new FSAAlgorithm<T>(rectangles, new OverlapRemovalParameters { HorizontalGap = horGap, VerticalGap = vertGap});
+            return new FSAAlgorithm<T>(rectangles, new OverlapRemovalParameters { HorizontalGap = horGap, VerticalGap = vertGap});
         }
 
+        /// <summary>
+        /// Creates uninitialized FSAA overlap removal algorithm instance
+        /// </summary>
+        /// <typeparam name="T">Data type</typeparam>
+        /// <typeparam name="TParam">Algorithm parameters</typeparam>
+        /// <param name="horGap">Horizontal gap setting</param>
+        /// <param name="vertGap">Vertical gap setting</param>
+        public IOverlapRemovalAlgorithm<T, IOverlapRemovalParameters> CreateFSAA<T>(float horGap, float vertGap) where T : class 
+        {
+            return new FSAAlgorithm<T, IOverlapRemovalParameters>(null, new OverlapRemovalParameters { HorizontalGap = horGap, VerticalGap = vertGap });
+        }
+
+        /// <summary>
+        /// Create overlap removal algorithm parameters
+        /// </summary>
+        /// <param name="algorithmType">Overlap removal algorithm type</param>
         public IOverlapRemovalParameters CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum algorithmType)
         {
             switch (algorithmType)

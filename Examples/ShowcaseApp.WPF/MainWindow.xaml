@@ -55,6 +55,7 @@
         <mui:LinkGroup DisplayName="GraphX layout features and examples" GroupKey="miniFeaturesLayout">
             <mui:LinkGroup.Links>
                 <mui:Link DisplayName="Vertex connection points (VCP)"  Source="/Pages/Mini/LayoutVCP.xaml" />
+                <mui:Link DisplayName="Grouped layout"  Source="/Pages/Mini/LayoutGrouped.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         

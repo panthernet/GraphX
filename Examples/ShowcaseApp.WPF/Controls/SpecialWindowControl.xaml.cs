@@ -17,7 +17,7 @@ namespace ShowcaseApp.WPF.Controls
         public SpecialWindowControl(object type)
         {
             InitializeComponent();
-            tabControl.ContentLoader = new SpecialContentLoader(type == null ? MiniSpecialType.None : (MiniSpecialType)type);
+            tabControl.ContentLoader = new SpecialContentLoader((MiniSpecialType?) type ?? MiniSpecialType.None);
         }
     }
 

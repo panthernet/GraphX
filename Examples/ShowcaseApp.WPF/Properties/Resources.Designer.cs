@@ -106,6 +106,17 @@ namespace ShowcaseApp.WPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In this example you can see grouped graph at work. Play with different setting to see all the supported features.
+        ///
+        ///Point mouse over the different settings to see tooltips..
+        /// </summary>
+        internal static string LayoutGroupedtext {
+            get {
+                return ResourceManager.GetString("LayoutGroupedtext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;UserControl x:Class=&quot;ShowcaseApp.WPF.Pages.Mini.LayoutVCP&quot;
         ///             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;

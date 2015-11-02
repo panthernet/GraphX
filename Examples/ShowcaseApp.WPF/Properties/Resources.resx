@@ -129,6 +129,11 @@
 
 Point mouse over the different settings to see tooltips.</value>
   </data>
+  <data name="LayoutGroupedtext" xml:space="preserve">
+    <value>In this example you can see grouped graph at work. Play with different setting to see all the supported features.
+
+Point mouse over the different settings to see tooltips.</value>
+  </data>
   <data name="LayoutVCP" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Pages\Mini\LayoutVCP.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

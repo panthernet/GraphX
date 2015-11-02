@@ -127,7 +127,6 @@
     <Compile Include="ExampleModels\ExampleMoveAnimation.cs" />
     <Compile Include="ExampleModels\GraphAreaExample.cs" />
     <Compile Include="ExampleModels\GraphExample.cs" />
-    <Compile Include="ExampleModels\GroupingLayoutAlgorithm.cs" />
     <Compile Include="ExampleModels\LogicCoreExample.cs" />
     <Compile Include="ExampleModels\OrthEr.cs" />
     <Compile Include="External\WindowGlow\GlowManager.cs" />
@@ -177,6 +176,11 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Mini\EdgesParallel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
+    <Page Include="Pages\Mini\LayoutGrouped.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -241,6 +245,10 @@
     <Page Include="Templates\MiniFeatures.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\Mini\LayoutGroupedTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Templates\Mini\LayoutVCPTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -313,6 +321,10 @@
     </Compile>
     <Compile Include="Pages\Mini\EdgesParallel.xaml.cs">
       <DependentUpon>EdgesParallel.xaml</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Pages\Mini\LayoutGrouped.xaml.cs">
+      <DependentUpon>LayoutGrouped.xaml</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\NNGraph.xaml.cs">

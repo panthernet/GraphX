@@ -110,6 +110,8 @@
     <Compile Include="Algorithms\LayoutAlgorithms\FDP\LinLogLayoutAlgorithm.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\FDP\LinLogLayoutAlgorithm.QuadTree.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\FDP\LinLogLayoutParameters.cs" />
+    <Compile Include="Algorithms\LayoutAlgorithms\Grouped\GroupingLayoutAlgorithm.cs" />
+    <Compile Include="Algorithms\LayoutAlgorithms\Grouped\GroupingLayoutAlgorithmParameters.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.BuildSparseNormalizedGraph.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.DoCrossingMinimizations.cs" />
     <Compile Include="Algorithms\LayoutAlgorithms\Hierarchical\EfficientSugiyamaAlgorithm.DoPreparing.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Algorithms\WrappedVertex.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ThreadingHelper.cs" />
+    <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Models\AlgorithmFactory.cs" />
     <Compile Include="Models\AlgorithmStorage.cs" />
     <Compile Include="Models\GXLogicCore.cs" />

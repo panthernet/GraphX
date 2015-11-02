@@ -5,6 +5,7 @@ using System.Linq;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
+using GraphX.PCL.Logic.Helpers;
 using QuickGraph;
 #if WPF
 using System.Windows;

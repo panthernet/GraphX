@@ -13,7 +13,9 @@ using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms.Grouped;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using GraphX.PCL.Logic.Helpers;
 using QuickGraph;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
@@ -61,6 +63,7 @@ namespace ShowcaseApp.WPF.Pages
                     LayoutAlgorithm =
                         new RandomLayoutAlgorithm<DataVertex, DataEdge, GraphExample>(
                             new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
+                            
                    // ZoneRectangle = new Rect(0, 0, 500, 500)
                 },
                 new AlgorithmGroupParameters<DataVertex, DataEdge>
@@ -69,6 +72,7 @@ namespace ShowcaseApp.WPF.Pages
                     LayoutAlgorithm =
                         new RandomLayoutAlgorithm<DataVertex, DataEdge, GraphExample>(
                             new RandomLayoutAlgorithmParams {Bounds = new Rect(0, 0, 500, 500)}),
+
                    // ZoneRectangle = new Rect(1000, 0, 500, 500)
                 }
             };

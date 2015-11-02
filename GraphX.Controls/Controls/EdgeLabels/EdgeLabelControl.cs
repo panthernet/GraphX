@@ -253,6 +253,16 @@ namespace GraphX.Controls
             Arrange(LastKnownRectSize);
         }
 
+        /// <summary>
+        /// Gets or sets if label should update its position and size data on visual size change. Helps to update label correctly on template manipulations. Can be turned off for better performance.
+        /// </summary>
+        public bool UpdateLabelOnSizeChange { get; set; }
+
+        /// <summary>
+        /// Gets or sets if label should additionaly update its position and size data on label visibility change. Can be turned off for better performance.
+        /// </summary>
+        public bool UpdateLabelOnVisibilityChange { get; set; }
+
         internal SysRect LastKnownRectSize;
 
         protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent())); } }
@@ -327,6 +337,23 @@ namespace GraphX.Controls
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
             VerticalAlignment = VerticalAlignment.Top;
+            IsVisibleChanged += EdgeLabelControl_IsVisibleChanged;
+            SizeChanged += EdgeLabelControl_SizeChanged;
+            UpdateLabelOnSizeChange = true;
+            UpdateLabelOnVisibilityChange = true;
+        }
+
+        void EdgeLabelControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (!UpdateLabelOnSizeChange) return;
+            UpdatePosition();
+            Debug.WriteLine(EdgeControl.Edge.ToString());
+        }
+
+        void EdgeLabelControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!UpdateLabelOnVisibilityChange) return;
+            UpdatePosition();
         }
 
         DependencyObject GetParent()

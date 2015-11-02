@@ -148,6 +148,15 @@ namespace GraphX.Controls
             base.Children.Remove(control);
         }
 
+        /// <summary>
+        /// Returns all child controls of specified type using optional condition predicate
+        /// </summary>
+        /// <typeparam name="T">Type of the child</typeparam>
+        public IEnumerable<T> GetChildControls<T>(Func<T, bool> condition = null)
+        {
+            return condition == null ? base.Children.OfType<T>() : base.Children.OfType<T>().Where(condition);
+        }
+
         #region StateStorage
         /// <summary>
         /// Provides methods for saving and loading graph layout states

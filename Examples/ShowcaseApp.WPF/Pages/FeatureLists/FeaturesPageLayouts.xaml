@@ -19,7 +19,12 @@
                         Command="mui:LinkCommands.NavigateLink"
                         CommandParameter="/Pages/Mini/LayoutVCP.xaml"
                         />
-                
+                <Button Content="Grouped layout" 
+                        ToolTip="Introduces grouped graphs showcase and usage examples. Grouped graph can host multiple vertex groups arranged by their own layout algorithms." 
+                        Command="mui:LinkCommands.NavigateLink"
+                        CommandParameter="/Pages/Mini/LayoutGrouped.xaml"
+                        />
+
             </DockPanel>
         </ScrollViewer>
 

@@ -90,11 +90,5 @@ namespace GraphX.Controls
                                                .SelectMany(FindLogicalChildren<T>))
                 yield return c;
         }
-
-        public static void ForEach<T>(this IEnumerable<T> list, Action<T> func)
-        {
-            foreach (var item in list)
-                func(item);
-        }
     }
 }

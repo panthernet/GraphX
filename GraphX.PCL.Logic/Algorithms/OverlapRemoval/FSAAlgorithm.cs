@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using GraphX.Measure;
 using GraphX.PCL.Common.Interfaces;
@@ -12,6 +11,11 @@ namespace GraphX.PCL.Logic.Algorithms.OverlapRemoval
     {
         public FSAAlgorithm( IDictionary<TObject, Rect> rectangles, IOverlapRemovalParameters parameters )
             : base( rectangles, parameters )
+        {
+        }
+
+        public FSAAlgorithm()
+            : base(null, null)
         {
         }
     }
