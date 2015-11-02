@@ -27,7 +27,7 @@ namespace GraphX.PCL.Common.Models
         /// <summary>
         /// Unique edge ID
         /// </summary>
-        public int ID { get; set; }
+        public long ID { get; set; }
 
         /// <summary>
         /// Returns true if Source vertex equals Target vertex

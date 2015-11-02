@@ -7,7 +7,7 @@ namespace GraphX.PCL.Common.Interfaces
         /// <summary>
         /// Unique object identifier
         /// </summary>
-        int ID { get; set; }
+        long ID { get; set; }
 
         /// <summary>
         /// Skip object in algorithm calc and visual control generation

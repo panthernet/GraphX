@@ -22,7 +22,7 @@ namespace GraphX.PCL.Common.Models
         /// <summary>
         /// Unique vertex ID
         /// </summary>
-        public int ID { get; set; }
+        public long ID { get; set; }
 
         public bool Equals(IGraphXVertex other)
         {

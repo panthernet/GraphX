@@ -123,7 +123,14 @@
 					<Border Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
 							CornerRadius="10,10,10,10"
-						Padding="{TemplateBinding Padding}">
+						    Padding="{TemplateBinding Padding}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="Common">
+                                <VisualState x:Name="Snapped">
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -134,8 +141,14 @@
                     </Border>
                 </ControlTemplate>
 			</Setter.Value>
-		</Setter>	
-	</Style>
+		</Setter>
+        <!-- TODO - HIDE vertices when layout not finished yet -->
+        <!--<Style.Triggers>
+            <Trigger Property="graphxRoot:GraphAreaBase.PositioningComplete" Value="False">
+                <Setter Property="Visibility" Value="Hidden"/>
+            </Trigger>
+        </Style.Triggers>-->
+    </Style>
     <!-- ENDREGION -->
 
     <!-- REGION EDGE CONTROL -->

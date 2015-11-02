@@ -998,15 +998,15 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 
         struct KeyPair
         {
-            public KeyPair(int n1, int n2)
+            public KeyPair(long n1, long n2)
             {
                 K1 = n1;
                 K2 = n2;
             }
 
-            public readonly int K1;
+            public readonly long K1;
             
-            public readonly int K2;
+            public readonly long K2;
         }
 
         /// <summary>

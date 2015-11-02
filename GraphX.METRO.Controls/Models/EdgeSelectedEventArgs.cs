@@ -2,7 +2,7 @@ using Windows.UI.Xaml.Input;
 
 namespace GraphX.Controls.Models
 {
-    public sealed class EdgeSelectedEventArgs : System.EventArgs
+    public class EdgeSelectedEventArgs : System.EventArgs
     {
         public EdgeControl EdgeControl { get; set; }
         public PointerRoutedEventArgs Args { get; set; }
@@ -12,6 +12,18 @@ namespace GraphX.Controls.Models
         {
             EdgeControl = ec;
             Args = e;
+        }
+    }
+
+    public sealed class EdgeLabelSelectedEventArgs : EdgeSelectedEventArgs
+    {
+        public IEdgeLabelControl EdgeLabelControl { get; set; }
+
+
+        public EdgeLabelSelectedEventArgs(IEdgeLabelControl label, EdgeControl ec, PointerRoutedEventArgs e)
+            : base(ec, e)
+        {
+            EdgeLabelControl = label;
         }
     }
 }

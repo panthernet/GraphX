@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Input;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
@@ -39,6 +40,8 @@ namespace GraphX.Controls
 #endif
 
         #region Properties & Fields
+
+        
 
         public abstract bool IsSelfLooped { get; protected set; }
         public abstract void Dispose();
@@ -318,10 +321,11 @@ namespace GraphX.Controls
         /// </summary>
         protected Path LinePathObject;
 
+        private IEdgeLabelControl _edgeLabelControl;
         /// <summary>
         /// Templated label control to display labels
         /// </summary>
-        protected IEdgeLabelControl EdgeLabelControl;
+        protected IEdgeLabelControl EdgeLabelControl { get { return _edgeLabelControl; } set { _edgeLabelControl = value; OnEdgeLabelUpdated(); } }
 
         protected IEdgePointer EdgePointerForSource;
         protected IEdgePointer EdgePointerForTarget;
@@ -362,6 +366,21 @@ namespace GraphX.Controls
         {
             get { return GetValue(EdgeProperty); }
             set { SetValue(EdgeProperty, value); }
+        }
+
+        internal void InjectEdgeLable(IEdgeLabelControl ctrl)
+        {
+            EdgeLabelControl = ctrl;
+            UpdateLabelLayout();
+        }
+
+        /// <summary>
+        /// Update edge label if any
+        /// </summary>
+        public void UpdateLabel()
+        {
+            if(_edgeLabelControl != null && ShowLabel)
+                UpdateLabelLayout(true);
         }
 
         #endregion
@@ -445,6 +464,9 @@ namespace GraphX.Controls
         {
             get { return LinePathObject != null; }
         }
+
+        protected virtual void OnEdgeLabelUpdated() { }
+
 #if WPF
         public override void OnApplyTemplate()
 #elif METRO
@@ -461,7 +483,8 @@ namespace GraphX.Controls
             if (this.FindDescendantByName("PART_edgeArrowPath") != null)
                 throw new GX_ObsoleteException("PART_edgeArrowPath is obsolete! Please use new DefaultEdgePointer object in your EdgeControlBase template!");
 
-            EdgeLabelControl = GetTemplatePart("PART_edgeLabel") as IEdgeLabelControl;
+            EdgeLabelControl = EdgeLabelControl ?? GetTemplatePart("PART_edgeLabel") as IEdgeLabelControl;
+            
 
             EdgePointerForSource = GetTemplatePart("PART_EdgePointerForSource") as IEdgePointer;
             EdgePointerForTarget = GetTemplatePart("PART_EdgePointerForTarget") as IEdgePointer;
@@ -472,7 +495,7 @@ namespace GraphX.Controls
                 {
                     if (SelfLoopIndicator != null) SelfLoopIndicator.Arrange(_selfLoopedEdgeLastKnownRect);
                 };
-
+            var x = this.ShowLabel;
             MeasureChild(EdgePointerForSource as UIElement);
             MeasureChild(EdgePointerForTarget as UIElement);
             MeasureChild(SelfLoopIndicator);
@@ -784,7 +807,8 @@ namespace GraphX.Controls
 					if (gEdge.ReversePath)
 		                routePoints.Reverse();
 
-                    var pcol = new PointCollection(routePoints);
+                    var pcol = new PointCollection();
+                    routePoints.ForEach(a=> pcol.Add(a));
                     
                     lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
                 }
@@ -848,10 +872,10 @@ namespace GraphX.Controls
             EdgeLabelControl.SetSize(rect);
         }
 
-        internal virtual void UpdateLabelLayout()
+        internal virtual void UpdateLabelLayout(bool force = false)
         {
             EdgeLabelControl.Show();
-            if (EdgeLabelControl.GetSize() == SysRect.Empty)
+            if (EdgeLabelControl.GetSize() == SysRect.Empty || force)
 
             {
                 EdgeLabelControl.UpdateLayout();

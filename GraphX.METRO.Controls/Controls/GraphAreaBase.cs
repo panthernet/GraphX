@@ -111,7 +111,15 @@ namespace GraphX.Controls
             obj.SetValue(FinalYProperty, value);
         }
 
-        
+        public static bool GetPositioningComplete(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(PositioningCompleteProperty);
+        }
+
+        public static void SetPositioningComplete(DependencyObject obj, bool value)
+        {
+            obj.SetValue(PositioningCompleteProperty, value);
+        }
         #endregion
 
         #region DP - ExternalSettings
@@ -184,6 +192,9 @@ namespace GraphX.Controls
 
         public static readonly DependencyProperty MouseOverAnimationProperty =
             DependencyProperty.Register("MouseOverAnimation", typeof(IBidirectionalControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty PositioningCompleteProperty =
+            DependencyProperty.RegisterAttached("PositioningComplete", typeof(bool), typeof(GraphAreaBase), new PropertyMetadata(true));
 
         #endregion
 

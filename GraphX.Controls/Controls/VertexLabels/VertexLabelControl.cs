@@ -112,7 +112,7 @@ namespace GraphX.Controls
             VerticalAlignment = VerticalAlignment.Top;
         }
 
-        private static VertexControl GetVertexControl(DependencyObject parent)
+        protected virtual VertexControl GetVertexControl(DependencyObject parent)
         {
             while (parent != null)
             {
@@ -126,7 +126,7 @@ namespace GraphX.Controls
 
         public virtual void UpdatePosition()
         {
-            if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
+           if (double.IsNaN(DesiredSize.Width) || DesiredSize.Width == 0) return;
 
             var vc = GetVertexControl(GetParent());
             if (vc == null) return;
@@ -172,12 +172,20 @@ namespace GraphX.Controls
 
         public void Hide()
         {
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#endif
         }
 
         public void Show()
         {
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+#endif
         }
 
         void VertexLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
@@ -187,7 +195,7 @@ namespace GraphX.Controls
             UpdatePosition();
         }
 
-        DependencyObject GetParent()
+        protected virtual DependencyObject GetParent()
         {
 #if WPF
             return VisualParent;

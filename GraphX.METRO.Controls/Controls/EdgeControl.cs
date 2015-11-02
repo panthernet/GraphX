@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
@@ -111,6 +112,19 @@ namespace GraphX.Controls
             _sourceWatcher = this.WatchProperty("Source", SourceChanged);
             _targetWatcher = this.WatchProperty("Target", TargetChanged);
         }
+
+        public event EdgeLabelEventHandler LabelMouseDown;
+        protected void OnLabelMouseDown(PointerRoutedEventArgs mArgs)
+        {
+            if (LabelMouseDown != null)
+                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs));
+        }
+
+        protected override void OnEdgeLabelUpdated()
+        {
+            if (EdgeLabelControl is Control)
+                ((Control)EdgeLabelControl).PointerPressed += (sender, args) => OnLabelMouseDown(args);
+        }  
 
         #region Position tracing
 

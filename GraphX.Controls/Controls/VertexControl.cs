@@ -7,6 +7,7 @@ using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.Controls.Models;
+using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.Controls
 {
@@ -22,6 +23,15 @@ namespace GraphX.Controls
             //override the StyleKey Property
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VertexControl), new FrameworkPropertyMetadata(typeof(VertexControl)));
         }
+
+        /// <summary>
+        /// Gets Vertex data as specified class
+        /// </summary>
+        /// <typeparam name="T">Class</typeparam>
+        public T GetDataVertex<T>() where T: IGraphXVertex
+        {
+            return (T)Vertex;
+        }        
 
         #region Position trace feature
 
@@ -84,6 +94,15 @@ namespace GraphX.Controls
             EventOptions = new VertexEventOptions(this) { PositionChangeNotification = tracePositionChange };
             foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
                 UpdateEventhandling(item);
+
+            SizeChanged += VertexControl_SizeChanged;
+        }
+
+        void VertexControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            /*if (ShowLabel && VertexLabelControl != null)
+                VertexLabelControl.UpdatePosition();
+            OnPositionChanged(new Point(), GetPosition());*/
         }
 
         public override void OnApplyTemplate()

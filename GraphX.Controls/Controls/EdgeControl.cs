@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
 using GraphX.Controls.Models;
@@ -63,6 +64,20 @@ namespace GraphX.Controls
             ((EdgeControl)d).ActivateTargetListener();
         }
 
+        public event EdgeLabelEventHandler LabelMouseDown;
+        protected void OnLabelMouseDown(MouseButtonEventArgs mArgs, ModifierKeys keys)
+        {
+            if (LabelMouseDown != null)
+                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
+        }
+
+        protected override void OnEdgeLabelUpdated()
+        {
+            if (EdgeLabelControl is Control)
+                ((Control) EdgeLabelControl).MouseDown += (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
+        }        
+
+        public object TargetObj { get { return Target; } }
 
         #region public Clean()
         public override void Clean()

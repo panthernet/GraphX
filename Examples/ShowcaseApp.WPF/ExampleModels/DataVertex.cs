@@ -11,6 +11,8 @@ namespace ShowcaseApp.WPF
         public int Age { get; set; }
         public int ImageId { get; set; }
 
+        public bool IsBlue { get; set; }
+
         #region Calculated or static props
 
         public override string ToString()

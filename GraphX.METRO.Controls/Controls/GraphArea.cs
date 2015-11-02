@@ -333,7 +333,7 @@ namespace GraphX.Controls
         public void AddVertex(TVertex vertexData, VertexControl vertexControl)
         {
             if (AutoAssignMissingDataId && vertexData.ID == -1)
-                vertexData.ID = GetNextUniqueId();
+                vertexData.ID = GetNextUniqueId(true);
             InternalAddVertex(vertexData, vertexControl);
             if (EnableVisualPropsApply && vertexControl != null)
                 ReapplySingleVertexVisualProperties(vertexControl);
@@ -356,7 +356,7 @@ namespace GraphX.Controls
         public void AddEdge(TEdge edgeData, EdgeControl edgeControl)
         {
             if (AutoAssignMissingDataId && edgeData.ID == -1)
-                edgeData.ID = GetNextUniqueId();
+                edgeData.ID = GetNextUniqueId(false);
             InternalAddEdge(edgeData, edgeControl);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
@@ -380,7 +380,7 @@ namespace GraphX.Controls
         public void InsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
         {
             if (AutoAssignMissingDataId && edgeData.ID == -1)
-                edgeData.ID = GetNextUniqueId();
+                edgeData.ID = GetNextUniqueId(false);
             InternalInsertEdge(edgeData, edgeControl, num);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
@@ -409,18 +409,29 @@ namespace GraphX.Controls
         #endregion
 
         #region Automatic data ID storage and resolving
-        private int _dataIdCounter;
-        private int GetNextUniqueId()
+        private int _dataIdCounter = 1;
+        private int _edgeDataIdCounter = 1;
+        private int GetNextUniqueId(bool isVertex)
         {
-            while (_dataIdsCollection.Contains(_dataIdCounter))
+            if (isVertex)
             {
-                _dataIdCounter++;
+                while (_dataIdsCollection.Contains(_dataIdCounter))
+                {
+                    _dataIdCounter++;
+                }
+                _dataIdsCollection.Add(_dataIdCounter);
+                return _dataIdCounter;
             }
-            _dataIdsCollection.Add(_dataIdCounter);
-            return _dataIdCounter;
+            while (_edgeDataIdsCollection.Contains(_edgeDataIdCounter))
+            {
+                _edgeDataIdCounter++;
+            }
+            _edgeDataIdsCollection.Add(_edgeDataIdCounter);
+            return _edgeDataIdCounter;
         }
 
-        private readonly HashSet<int> _dataIdsCollection = new HashSet<int>();
+        private readonly HashSet<long> _dataIdsCollection = new HashSet<long>();
+        private readonly HashSet<long> _edgeDataIdsCollection = new HashSet<long>();
 
         #endregion
 
@@ -495,8 +506,9 @@ namespace GraphX.Controls
                 {
                     if (VertexList.ContainsKey(item.Key))
                         VertexList[item.Key].SetPosition(item.Value);
-                    if (showObjectsIfPosSpecified)
-                        VertexList[item.Key].Visibility = Visibility.Visible;
+                    //if (showObjectsIfPosSpecified)
+                    //    VertexList[item.Key].Visibility = Visibility.Visible;
+                    VertexList[item.Key].SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true);
                 }
             }
 
@@ -529,6 +541,7 @@ namespace GraphX.Controls
                 var vc = ControlFactory.CreateVertexControl(it);
                 vc.DataContext = dataContextToDataItem ? it : null;
                 vc.Visibility = Visibility.Visible; // make them invisible (there is no layout positions yet calculated)
+                vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, false); // Style can make them invisible until positioning is complete (after layout positions are calculated)
                 InternalAddVertex(it, vc);
             }
             if (forceVisPropRecovery)
@@ -599,7 +612,8 @@ namespace GraphX.Controls
                         if (MoveAnimation == null || double.IsNaN(GetX(vc)))
                             vc.SetPosition(item.Value.X, item.Value.Y, false);
                         else MoveAnimation.AddVertexData(vc, item.Value);
-                        vc.Visibility = Visibility.Visible; //show vertexes with layout positions assigned
+                        //vc.Visibility = Visibility.Visible; //show vertexes with layout positions assigned
+                        vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true); // Style can show vertexes with layout positions assigned
                     }
                     if (MoveAnimation != null)
                     {
@@ -736,6 +750,8 @@ namespace GraphX.Controls
 
             _dataIdsCollection.Clear();
             _dataIdCounter = 1;
+            _edgeDataIdsCollection.Clear();
+            _edgeDataIdCounter = 1;
 
             // First, rebuild data ID collection for all vertices and edges that already have assigned IDs.
             foreach (var item in graph.Vertices.Where(a => a.ID != -1))
@@ -745,15 +761,15 @@ namespace GraphX.Controls
             }
             foreach (var item in graph.Edges.Where(a => a.ID != -1))
             {
-                bool added = _dataIdsCollection.Add(item.ID);
+                bool added = _edgeDataIdsCollection.Add(item.ID);
                 Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
             }
 
             // Generate unique IDs for all vertices and edges that don't already have a unique ID.
             foreach (var item in graph.Vertices.Where(a => a.ID == -1))
-                item.ID = GetNextUniqueId();
+                item.ID = GetNextUniqueId(true);
             foreach (var item in graph.Edges.Where(a => a.ID == -1))
-                item.ID = GetNextUniqueId();
+                item.ID = GetNextUniqueId(false);
         }
         #endregion 
 
@@ -1012,7 +1028,7 @@ namespace GraphX.Controls
         /// </summary>
         public void UpdateParallelEdgesData()
         {
-            var usedIds = _edgeslist.Count > 20 ? new HashSet<int>() as ICollection<int> : new List<int>();
+            var usedIds = _edgeslist.Count > 20 ? new HashSet<long>() as ICollection<long> : new List<long>();
 
             //clear IsParallel flag
             EdgesList.Values.ForEach(a=> a.IsParallel = false);

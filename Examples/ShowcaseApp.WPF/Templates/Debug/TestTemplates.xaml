@@ -20,16 +20,32 @@
     
     
     <Style TargetType="{x:Type controls:VertexControl}">
+        <Setter Property="Background" Value="Yellow"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
                     <Border Background="{TemplateBinding Background}"
-                             BorderBrush="{TemplateBinding BorderBrush}" Width="20" Height="20" BorderThickness="1">
+                            BorderBrush="{TemplateBinding BorderBrush}" Width="20" Height="20" BorderThickness="1">
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsBlue}" Value="True">
+                <DataTrigger.Setters>
+                    <Setter Property="Background" Value="Blue"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type controls:VertexControl}">
+                                <Ellipse Width="50" Height="50" Fill="{TemplateBinding Background}"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger.Setters>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
+
 
     <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverter" Inverted="True" />
     <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverterNot" Inverted="True" Not="True"/>

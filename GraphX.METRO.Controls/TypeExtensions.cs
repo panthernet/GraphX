@@ -2,11 +2,21 @@
 using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
+#if METRO
+using Windows.UI.Xaml;
+#endif
 
 namespace GraphX.Controls
 {
     public static class TypeExtensions
     {
+#if METRO
+        public static void SetCurrentValue(this FrameworkElement el, DependencyProperty p, object value)
+        {
+            el.SetValue(p, value);
+        }
+#endif
+
         public static void Offset(this Point point, Point value)
         {
             point.X = point.X + value.X;

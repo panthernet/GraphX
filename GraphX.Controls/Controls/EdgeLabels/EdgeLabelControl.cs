@@ -111,7 +111,7 @@ namespace GraphX.Controls
 
         private EdgeControl _edgeControl;
 
-        private static EdgeControl GetEdgeControl(DependencyObject parent)
+        protected virtual EdgeControl GetEdgeControl(DependencyObject parent)
         {
             while (parent != null)
             {
@@ -125,12 +125,20 @@ namespace GraphX.Controls
         public void Show()
         {
             if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
+ #if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+#endif
         }
 
         public void Hide()
         {
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#endif
         }
 
 

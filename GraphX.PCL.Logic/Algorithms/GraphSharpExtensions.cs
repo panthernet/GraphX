@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
 using QuickGraph.Algorithms.ShortestPath;
 
@@ -40,9 +41,11 @@ namespace GraphX.PCL.Logic.Algorithms
         /// <param name="g">The graph.</param>
         /// <param name="set1"></param>
         /// <param name="set2"></param>
+        /// <param name="undirected">Assume undirected graph - get both in and out edges</param>
         /// <returns>Return the list of the selected edges.</returns>
-        public static IEnumerable<TEdge> GetEdgesBetween<TVertex, TEdge>(this IVertexAndEdgeListGraph<TVertex, TEdge> g, List<TVertex> set1, List<TVertex> set2)
+        public static IEnumerable<TEdge> GetEdgesBetween<TVertex, TEdge>(this IVertexAndEdgeListGraph<TVertex, TEdge> g, List<TVertex> set1, List<TVertex> set2, bool undirected = false)
             where TEdge : IEdge<TVertex>
+            where TVertex: class
         {
             var edgesBetween = new List<TEdge>();
 
@@ -50,6 +53,8 @@ namespace GraphX.PCL.Logic.Algorithms
             foreach (var v in set1)
             {
                 edgesBetween.AddRange(g.OutEdges(v).Where(edge => set2.Contains(edge.Target)));
+                if(undirected)
+                    edgesBetween.AddRange(g.Edges.Where(a=> a.Target == v).Where(edge => set2.Contains(edge.Source)));
             }
 
             return edgesBetween;

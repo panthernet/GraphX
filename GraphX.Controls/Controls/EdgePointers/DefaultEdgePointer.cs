@@ -53,12 +53,20 @@ namespace GraphX.Controls
 
         public void Show()
         {
+ #if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+#endif
         }
 
         public void Hide()
         {
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#else
+            SetValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+#endif
         }
 
         private static EdgeControl GetEdgeControl(DependencyObject parent)

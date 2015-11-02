@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace GraphX.Controls.Models
 {
-    public sealed class EdgeSelectedEventArgs : System.EventArgs
+    public class EdgeSelectedEventArgs : System.EventArgs
     {
         public EdgeControl EdgeControl { get; set; }
         public ModifierKeys Modifiers { get; set; }
@@ -13,6 +13,18 @@ namespace GraphX.Controls.Models
             EdgeControl = ec;
             Modifiers = keys;
             MouseArgs = e;
+        }
+    }
+
+    public sealed class EdgeLabelSelectedEventArgs : EdgeSelectedEventArgs
+    {
+        public IEdgeLabelControl EdgeLabelControl { get; set; }
+
+
+        public EdgeLabelSelectedEventArgs(IEdgeLabelControl label, EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+            :base(ec,e,keys)
+        {
+            EdgeLabelControl = label;
         }
     }
 }
