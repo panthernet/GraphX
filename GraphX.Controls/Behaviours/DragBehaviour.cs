@@ -104,7 +104,7 @@ namespace GraphX.Controls
                 //register the event handlers
 #if WPF
                 element.MouseLeftButtonDown += OnDragStarted;
-                element.MouseLeftButtonUp += OnDragFinished;
+                element.PreviewMouseLeftButtonUp += OnDragFinished;
 #elif METRO
                 element.PointerPressed += OnDragStarted;
 				element.PointerReleased += OnDragFinished;
@@ -115,7 +115,7 @@ namespace GraphX.Controls
                 //unregister the event handlers
 #if WPF
                 element.MouseLeftButtonDown -= OnDragStarted;
-                element.MouseLeftButtonUp -= OnDragFinished;
+                element.PreviewMouseLeftButtonUp -= OnDragFinished;
 #elif METRO
                 element.PointerPressed -= OnDragStarted;
 				element.PointerReleased -= OnDragFinished;
@@ -196,7 +196,7 @@ namespace GraphX.Controls
 				element.ReleasePointerCapture(e.Pointer);
 			}
 #endif
-            e.Handled = true;
+            //e.Handled = true;
         }
 
 #if WPF
