@@ -27,6 +27,7 @@ using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using GraphX.Controls.Models;
+using GraphX.PCL.Logic.Helpers;
 using QuickGraph;
 using Rect = GraphX.Measure.Rect;
 using Size = GraphX.Measure.Size;
@@ -560,7 +561,7 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("LogicCore.Graph -> Not initialized!");
 
             if(autoresolveIds)
-                AutoresolveIds();
+                AutoresolveIds(false);
 
             PreloadVertexes();
 
@@ -575,7 +576,7 @@ namespace GraphX.Controls
             }
             UpdateLayout();
             RestoreAlgorithmStorage();
-            GenerateAllEdges(positions != null ? Visibility.Visible : Visibility.Collapsed);
+            GenerateAllEdges(positions != null ? Visibility.Visible : Visibility.Collapsed, false);
         }
 
         /// <summary>
@@ -709,7 +710,7 @@ namespace GraphX.Controls
                     {
                         if (_edgeslist.Count == 0)
                         {
-                            this.generateAllEdges();
+                            this.GenerateAllEdgesInternal();
                             if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
                         }
                         else UpdateAllEdges();
@@ -773,7 +774,7 @@ namespace GraphX.Controls
             {
                 if (_edgeslist.Count == 0)
                 {
-                    this.generateAllEdges();
+                    this.GenerateAllEdgesInternal();
                     if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
                 }
                 else UpdateAllEdges();
@@ -949,7 +950,7 @@ namespace GraphX.Controls
         public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
-                AutoresolveIds(graph);
+                AutoresolveIds(false, graph);
             if (!LogicCore.IsCustomLayout)
                 PreloadVertexes(graph, dataContextToDataItem);
             return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, false);
@@ -978,7 +979,7 @@ namespace GraphX.Controls
         public void GenerateGraph(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
-                AutoresolveIds(graph);
+                AutoresolveIds(false, graph);
             if(!LogicCore.IsCustomLayout)
                 PreloadVertexes(graph, dataContextToDataItem);
             _relayoutGraphMain(generateAllEdges, false);
@@ -998,7 +999,7 @@ namespace GraphX.Controls
             GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 #endif
-        private void AutoresolveIds(TGraph graph = null)
+        private void AutoresolveIds(bool includeEdgeIds, TGraph graph = null)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1006,9 +1007,7 @@ namespace GraphX.Controls
             if (graph == null) return;
 
             _dataIdsCollection.Clear();
-            _edgeDataIdsCollection.Clear();
             _dataIdCounter = 1;
-            _edgeDataIdCounter = 1;
 
 			// First, rebuild data ID collection for all vertices and edges that already have assigned IDs.
 			foreach (var item in graph.Vertices.Where(a => a.ID != -1))
@@ -1016,18 +1015,32 @@ namespace GraphX.Controls
 				bool added = _dataIdsCollection.Add(item.ID);
 				Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
             }
-			foreach (var item in graph.Edges.Where(a => a.ID != -1))
-			{
-				bool added = _edgeDataIdsCollection.Add(item.ID);
-				Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
-			}
 
 			// Generate unique IDs for all vertices and edges that don't already have a unique ID.
 			foreach (var item in graph.Vertices.Where(a => a.ID == -1))
 				item.ID = GetNextUniqueId(true);
-			foreach (var item in graph.Edges.Where(a => a.ID == -1))
+            if(includeEdgeIds)
+                AutoresolveEdgeIds(graph);
+        }
+
+        private void AutoresolveEdgeIds(TGraph graph = null)
+        {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+            if (graph == null) graph = LogicCore.Graph;
+            if (graph == null) return;
+
+            _edgeDataIdsCollection.Clear();
+            _edgeDataIdCounter = 1;
+            foreach (var item in graph.Edges.Where(a => a.ID != -1))
+            {
+                bool added = _edgeDataIdsCollection.Add(item.ID);
+                Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
+            }
+            foreach (var item in graph.Edges.Where(a => a.ID == -1))
                 item.ID = GetNextUniqueId(false);
         }
+
         #endregion 
 
 
@@ -1242,11 +1255,14 @@ namespace GraphX.Controls
 
         #region GenerateAllEdges()
 
-        private void generateAllEdges(Visibility defaultVisibility = Visibility.Visible)
+        private void GenerateAllEdgesInternal(Visibility defaultVisibility = Visibility.Visible)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             RemoveAllEdges();
+
+            AutoresolveEdgeIds();
+
             foreach (var item in LogicCore.Graph.Edges)
             {
                 if (item.Source == null || item.Target == null) continue;
@@ -1272,7 +1288,7 @@ namespace GraphX.Controls
         public void GenerateAllEdges(Visibility defaultVisibility = Visibility.Visible, bool updateLayout = true)
         {
             if(updateLayout) UpdateLayout();
-            generateAllEdges(defaultVisibility);
+            GenerateAllEdgesInternal(defaultVisibility);
         }
 
         /// <summary>
@@ -1505,7 +1521,7 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
 
             if (AutoAssignMissingDataId)
-                AutoresolveIds();
+                AutoresolveIds(true);
 
             var dlist = new List<GraphSerializationData>();
             foreach (var item in VertexList) //ALWAYS serialize vertices first
@@ -1568,7 +1584,7 @@ namespace GraphX.Controls
             }
 			
 			if (AutoAssignMissingDataId)
-				AutoresolveIds();
+				AutoresolveIds(true);
 
 			//update edge layout and shapes manually
             //to correctly draw arrows in any case except they are manually disabled

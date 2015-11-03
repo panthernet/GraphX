@@ -35,6 +35,7 @@ namespace ShowcaseApp.WPF.Models
         {
             var edge = new DataEdge(source, target, weight)
             {
+                ID = Rand.Next(),
                 Text = string.Empty,
                 SourceConnectionPointId = sourcePoint,
                 TargetConnectionPointId = targetPoint,

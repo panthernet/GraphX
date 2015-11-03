@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Input;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Logic.Helpers;
 #if WPF 
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
