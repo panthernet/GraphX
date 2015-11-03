@@ -1,4 +1,4 @@
-﻿WIP 2.2.1
+﻿WIP 2.3.0
 
 HIGHLIGHTS:
 	* Added new layout algorithm GroupingLayoutAlgorithm which allows to layout graph vertices by different groups each using its own sublayout algorithm. You can see it in action using new feature highlight in showcase app.
