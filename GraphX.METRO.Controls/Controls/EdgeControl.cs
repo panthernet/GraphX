@@ -197,28 +197,28 @@ namespace GraphX.Controls
         void EdgeControl_MouseLeave(object sender, PointerRoutedEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseLeave(this, e);
+                RootArea.OnEdgeMouseLeave(this, e, null);
             // e.Handled = true;
         }
 
         void EdgeControl_MouseEnter(object sender, PointerRoutedEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseEnter(this, e);
+                RootArea.OnEdgeMouseEnter(this, e, null);
             // e.Handled = true;
         }
 
         void EdgeControl_MouseMove(object sender, PointerRoutedEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeMouseMove(this, e);
+                RootArea.OnEdgeMouseMove(this, e, null);
             e.Handled = true;
         }
 
         void GraphEdge_MouseDown(object sender, PointerRoutedEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnEdgeSelected(this, e);
+                RootArea.OnEdgeSelected(this, e, null);
             e.Handled = true;
         }
 

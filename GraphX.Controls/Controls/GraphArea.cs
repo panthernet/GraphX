@@ -1,25 +1,33 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
+#if WPF
+using System.ComponentModel;
+using Microsoft.Win32;
 using System.Drawing;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using Point = System.Windows.Point;
+using USize = System.Windows.Size;
+using GraphX.PCL.Logic.Helpers;
+#elif METRO
+using Point = Windows.Foundation.Point;
+using USize = Windows.Foundation.Size;
+using Windows.ApplicationModel;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
+#endif
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using GraphX.Controls.Models;
-using GraphX.PCL.Logic.Helpers;
-using Microsoft.Win32;
 using QuickGraph;
-using Point = System.Windows.Point;
 using Rect = GraphX.Measure.Rect;
 using Size = GraphX.Measure.Size;
 
@@ -34,20 +42,33 @@ namespace GraphX.Controls
 
         #region My properties
 
+#if WPF
+        /// <summary>
+        /// Dummy property. Use EdgesList and VertexList instead.
+        /// Also use corresponding methods to modify item collections.
+        /// </summary>
+        private new UIElementCollection Children { get { return null; } }
+#endif
+
         /// <summary>
         /// Gets or sets in which order GraphX controls are drawn
         /// </summary>
         public ControlDrawOrder ControlsDrawOrder { get; set; }
 
         public static readonly DependencyProperty LogicCoreProperty =
-            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new UIPropertyMetadata(null, logic_core_changed));
+            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
 
-        private static void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static 
+#if METRO 
+            async 
+#endif
+            void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var graph = d as GraphArea<TVertex, TEdge, TGraph>;
             if(graph == null) return;
             switch(graph.LogicCoreChangeAction)
             {
+#if WPF
                 case LogicCoreChangedAction.GenerateGraph:
                     graph.GenerateGraph();
                     break;
@@ -60,6 +81,20 @@ namespace GraphX.Controls
                 case LogicCoreChangedAction.RelayoutGraphWithEdges:
                     graph.RelayoutGraph(true);
                     break;
+#elif METRO
+                case LogicCoreChangedAction.GenerateGraph:
+                    await graph.GenerateGraphAsync();
+                    break;
+                case LogicCoreChangedAction.GenerateGraphWithEdges:
+                    await graph.GenerateGraphAsync(true);
+                    break;
+                case LogicCoreChangedAction.RelayoutGraph:
+                    await graph.RelayoutGraphAsync();
+                    break;
+                case LogicCoreChangedAction.RelayoutGraphWithEdges:
+                    await graph.RelayoutGraphAsync(true);
+                    break;
+#endif
                 default:
                     break;
             }
@@ -120,12 +155,6 @@ namespace GraphX.Controls
         /// Link to LogicCore. Gets if edge curving tolerance.
         /// </summary>
         internal override double EdgeCurvingTolerance { get { return LogicCore == null ? 0 : LogicCore.EdgeCurvingTolerance; } }
-
-        /// <summary>
-        /// Dummy property. Use EdgesList and VertexList instead.
-        /// Also use corresponding methods to modify item collections.
-        /// </summary>
-        private new UIElementCollection Children { get { return null; } }
 
         /// <summary>
         /// Add custom control for 
@@ -199,15 +228,20 @@ namespace GraphX.Controls
         {
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
-            //CacheMode = new BitmapCache(2) { EnableClearType = false, SnapsToDevicePixels = true };
 
             #region Designer Data
 
+#if WPF
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
+                _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
+#elif METRO
+            if (!DesignMode.DesignModeEnabled)
+            {
+                Transitions = new TransitionCollection { new ContentThemeTransition() };
+#endif
                 ControlFactory = new GraphControlFactory(this);
                 StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
-                _uiTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
             } 
             else
             {                
@@ -255,7 +289,7 @@ namespace GraphX.Controls
         /// <param name="position">GraphArea coordinate space position</param>
         public VertexControl GetVertexControlAt(Point position)
         {
-            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
             return VertexList.Values.FirstOrDefault(a =>
             {
                 var pos = a.GetPosition();
@@ -462,7 +496,7 @@ namespace GraphX.Controls
 
         #endregion
 
-        #region xph
+        #region GenerateGraph
 
         #region Sizes operations
         /// <summary>
@@ -470,8 +504,8 @@ namespace GraphX.Controls
         /// </summary>
         public Dictionary<TVertex, Size> GetVertexSizes()
         {          
-            //measure if needed and get all vertex sizes
-            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            //measure if needed and get all vertex sizes            
+            Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
             var vertexSizes = new Dictionary<TVertex, Size>(_vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude));
             //go through the vertex presenters and get the actual layoutpositions
             foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
@@ -485,7 +519,7 @@ namespace GraphX.Controls
         public Dictionary<TVertex, Size> GetVertexSizesAndPositions(out IDictionary<TVertex, Measure.Point> vertexPositions)
         {
             //measure if needed and get all vertex sizes
-            if (!IsMeasureValid) Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
             var count = _vertexlist.Count(a => ((IGraphXVertex) a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude);
             var vertexSizes = new Dictionary<TVertex, Size>(count);
             vertexPositions = new Dictionary<TVertex, Measure.Point>(count);
@@ -558,6 +592,7 @@ namespace GraphX.Controls
             if (graph == null && LogicCore.Graph == null)
                 throw new GX_InvalidDataException("graph param empty and LogicCore.Graph -> Not initialized!");
             graph = graph ?? LogicCore.Graph;
+
             //clear edge and vertex controls
             RemoveAllVertices();
             RemoveAllEdges();
@@ -581,102 +616,130 @@ namespace GraphX.Controls
         private Task _layoutTask;
         private CancellationTokenSource _layoutCancellationSource; 
 
-        private enum Event
-        {
-            LayoutCalculationFinished,
-            OverlapRemovalCalculationFinished,
-            EdgeRoutingCalculationFinished
-        }
-  
+
+#if WPF
         private void _relayoutGraph(CancellationToken cancellationToken)
         {
-            Dictionary<TVertex, Size> vertexSizes = null;
-            IDictionary<TVertex, Measure.Point> vertexPositions = null;
-            IGXLogicCore<TVertex, TEdge, TGraph> localLogicCore = null;
-
-            RunOnDispatcherThread(() =>
+#elif METRO
+        private Task _relayoutGraph(CancellationToken cancellationToken, bool generateAllEdges = false, bool standalone = true)
+        {
+            return Task.Run(async () =>
             {
-                if (LogicCore == null) return;
+#endif
+                Dictionary<TVertex, Size> vertexSizes = null;
+                IDictionary<TVertex, Measure.Point> vertexPositions = null;
+                IGXLogicCore<TVertex, TEdge, TGraph> localLogicCore = null;
 
-                UpdateLayout(); //update layout so we can get actual control sizes
-
-                if (LogicCore.AreVertexSizesNeeded())
-                    vertexSizes = GetVertexSizesAndPositions(out vertexPositions);
-                else vertexPositions = GetVertexPositions();
-                localLogicCore = LogicCore;
-            });
-            
-            if(localLogicCore == null)
-                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-
-            if (!localLogicCore.GenerateAlgorithmStorage(vertexSizes, vertexPositions))
-                return;
-
-            var resultCoords = localLogicCore.Compute(cancellationToken);
-
-            RunOnDispatcherThread(() =>
-            {
-                if (MoveAnimation != null)
+#if WPF
+                RunOnDispatcherThread(() =>
+#elif METRO
+                await DispatcherHelper.CheckBeginInvokeOnUi(() =>
+#endif
                 {
-                    MoveAnimation.CleanupBaseData();
-                    MoveAnimation.Cleanup();
-                }
-                //setup vertex positions from result data
-                foreach (var item in resultCoords)
+                    if (LogicCore == null) return;
+
+                    UpdateLayout(); //update layout so we can get actual control sizes
+
+                    if (LogicCore.AreVertexSizesNeeded())
+                        vertexSizes = GetVertexSizesAndPositions(out vertexPositions);
+                    else vertexPositions = GetVertexPositions();
+
+#if METRO
+                    //TODO may be wrong. Fix for vertexControl pos not NaN by default as in WPF
+                    //So if all coordinates are zeroes then it is initial run - clear them
+                    if(vertexPositions.All(a=> a.Value == GraphX.Measure.Point.Zero))
+                        vertexPositions.Clear();
+#endif
+
+                    localLogicCore = LogicCore;
+                });
+
+                if (localLogicCore == null)
+                    throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+
+                if (!localLogicCore.GenerateAlgorithmStorage(vertexSizes, vertexPositions))
+                    return;
+
+                var resultCoords = localLogicCore.Compute(cancellationToken);
+
+#if WPF
+                RunOnDispatcherThread(() =>
+#elif METRO
+                await DispatcherHelper.CheckBeginInvokeOnUi(() =>
+#endif
                 {
-                    if (!_vertexlist.ContainsKey(item.Key)) continue;
-                    var vc = _vertexlist[item.Key];
+                    if (MoveAnimation != null)
+                    {
+                        MoveAnimation.CleanupBaseData();
+                        MoveAnimation.Cleanup();
+                    }
+                    //setup vertex positions from result data
+                    foreach (var item in resultCoords)
+                    {
+                        if (!_vertexlist.ContainsKey(item.Key)) continue;
+                        var vc = _vertexlist[item.Key];
 
-                    SetFinalX(vc, item.Value.X);
-                    SetFinalY(vc, item.Value.Y);
+                        SetFinalX(vc, item.Value.X);
+                        SetFinalY(vc, item.Value.Y);
 
-                    if (MoveAnimation == null || double.IsNaN(GetX(vc)))
-                        vc.SetPosition(item.Value.X,item.Value.Y, false);
-                    else MoveAnimation.AddVertexData(vc, item.Value);
-                    vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true); // Style can show vertexes with layout positions assigned
-                }
-                if (MoveAnimation != null) 
-                {
-                    if (MoveAnimation.VertexStorage.Count > 0)
-                        MoveAnimation.RunVertexAnimation();
+                        if (MoveAnimation == null || double.IsNaN(GetX(vc)))
+                            vc.SetPosition(item.Value.X, item.Value.Y, false);
+                        else MoveAnimation.AddVertexData(vc, item.Value);
+                        vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true); // Style can show vertexes with layout positions assigned
+                    }
+                    if (MoveAnimation != null)
+                    {
+                        if (MoveAnimation.VertexStorage.Count > 0)
+                            MoveAnimation.RunVertexAnimation();
 
-                    foreach (var item in _edgeslist.Values)
-                        MoveAnimation.AddEdgeData(item);
-                    if (MoveAnimation.EdgeStorage.Count > 0)
-                        MoveAnimation.RunEdgeAnimation();
-                }
+                        foreach (var item in _edgeslist.Values)
+                            MoveAnimation.AddEdgeData(item);
+                        if (MoveAnimation.EdgeStorage.Count > 0)
+                            MoveAnimation.RunEdgeAnimation();
+                    }
 
-                SetCurrentValue(LogicCoreProperty, localLogicCore);
-                UpdateLayout(); //update all changes
-            });
+#if WPF
+                    SetCurrentValue(LogicCoreProperty, localLogicCore);
+                    UpdateLayout(); //update all changes
+                });
+#elif METRO
+                    MeasureOverride(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+
+                    if (generateAllEdges)
+                    {
+                        if (_edgeslist.Count == 0)
+                        {
+                            this.generateAllEdges();
+                            if (EnableVisualPropsRecovery) ReapplyEdgeVisualProperties();
+                        }
+                        else UpdateAllEdges();
+                    }
+                    if (!standalone)
+                    {
+                        if (EnableVisualPropsRecovery) ReapplyVertexVisualProperties();
+                        OnGenerateGraphFinished();
+                    }
+                    else OnRelayoutFinished();
+                });
+            }, cancellationToken);
+#endif
         }
+
+#if METRO
+        private void SetCurrentValue(DependencyProperty property, object value)
+        {
+            SetValue(property, value);
+        }
+#endif
 
         /// <summary>
         /// Relayout graph using the same vertexes
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
+#if WPF
         public void RelayoutGraph(bool generateAllEdges = false)
         {
             _relayoutGraphMain(generateAllEdges);
-        }
-
-        private void ReportProgress(int percent, Event @event)
-        {
-            RunOnDispatcherThread(() =>
-            {
-                switch (@event)
-                {
-                    case Event.LayoutCalculationFinished:
-                        OnLayoutCalculationFinished();
-                        break;
-                    case Event.OverlapRemovalCalculationFinished:
-                        OnOverlapRemovalCalculationFinished();
-                        break;
-                    case Event.EdgeRoutingCalculationFinished:
-                        OnEdgeRoutingCalculationFinished();
-                        break;
-                }
-            });
         }
 
         private void _relayoutGraphMain(bool generateAllEdges = false, bool standalone = true)
@@ -723,6 +786,36 @@ namespace GraphX.Controls
             else OnRelayoutFinished();
         }
 
+#elif METRO
+        public Task RelayoutGraphAsync(bool generateAllEdges = false)
+        {
+            return RelayoutGraphAsync(CancellationToken.None, generateAllEdges);
+        }
+
+        public Task RelayoutGraphAsync(CancellationToken cancellationToken, bool generateAllEdges = false)
+        {
+            return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, standalone: true);
+        }
+
+        private async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
+        {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+
+            await CancelRelayoutAsync();
+
+            _layoutCancellationSource = new CancellationTokenSource();
+
+            if (externalCancellationToken != CancellationToken.None)
+                _linkedLayoutCancellationSource = CancellationTokenSource.CreateLinkedTokenSource(_layoutCancellationSource.Token, externalCancellationToken);
+
+            _layoutTask = _relayoutGraph((_linkedLayoutCancellationSource ?? _layoutCancellationSource).Token, generateAllEdges, standalone);
+            await _layoutTask;
+        }
+#endif
+
+        #region WPF/METRO threading stuff
+#if WPF
         private void RunOnDispatcherThread(Action action)
         {
             var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
@@ -792,12 +885,21 @@ namespace GraphX.Controls
                 UnwrapAndRethrow(ex);
             }
         }
+#elif METRO
+        private CancellationTokenSource _linkedLayoutCancellationSource;
+#endif
+        #endregion
+
         #endregion
 
         /// <summary>
         /// Cancel all undergoing async calculations
         /// </summary>
+#if WPF        
         public void CancelRelayout()
+#elif METRO
+        public async Task CancelRelayoutAsync()
+#endif
         {
             if (_layoutTask == null)
                 return;
@@ -807,18 +909,66 @@ namespace GraphX.Controls
             try
             {
                 // Wait, but don't block the dispatcher, because the background task might be trying to execute on the UI thread.
+#if WPF
                 Await(_layoutTask);
-
-                _layoutCancellationSource.Dispose();
-                _layoutCancellationSource = null;
-                _layoutTask = null;
+#elif METRO
+                await _layoutTask;
+#endif
             }
             catch (OperationCanceledException)
             {
                 // This is expected if the task was indeed canceled
             }
+
+            _layoutCancellationSource.Dispose();
+            _layoutCancellationSource = null;
+            _layoutTask = null;
+
+#if METRO
+            if (_linkedLayoutCancellationSource != null)
+            {
+                _linkedLayoutCancellationSource.Dispose();
+                _linkedLayoutCancellationSource = null;
+            }
+#endif
         }
 
+
+#if METRO
+        /// <summary>
+        /// Generate visual graph asynchronously
+        /// </summary>
+        /// <param name="graph">Data graph</param>
+        /// <param name="generateAllEdges">Generate all available edges for graph</param>
+        /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
+        public Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
+        {
+            return GenerateGraphAsync(graph, CancellationToken.None, generateAllEdges, dataContextToDataItem);
+        }
+
+        public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
+        {
+            if (AutoAssignMissingDataId)
+                AutoresolveIds(graph);
+            if (!LogicCore.IsCustomLayout)
+                PreloadVertexes(graph, dataContextToDataItem);
+            return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, false);
+        }
+
+        /// <summary>
+        /// Generate visual graph asynchronously using Graph property (it must be set before this method is called)
+        /// </summary>
+        /// <param name="generateAllEdges">Generate all available edges for graph</param>
+        /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
+        public Task GenerateGraphAsync(bool generateAllEdges = true, bool dataContextToDataItem = true)
+        {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
+            if (LogicCore.Graph == null)
+                throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
+            return GenerateGraphAsync(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
+        }
+#elif WPF
         /// <summary>
         /// Generate visual graph
         /// </summary>
@@ -847,7 +997,7 @@ namespace GraphX.Controls
                 throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
             GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
-
+#endif
         private void AutoresolveIds(TGraph graph = null)
         {
             if (LogicCore == null)
@@ -864,12 +1014,12 @@ namespace GraphX.Controls
 			foreach (var item in graph.Vertices.Where(a => a.ID != -1))
 			{
 				bool added = _dataIdsCollection.Add(item.ID);
-				Debug.Assert(added, "Duplicate ID found", string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
+				Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
             }
 			foreach (var item in graph.Edges.Where(a => a.ID != -1))
 			{
 				bool added = _edgeDataIdsCollection.Add(item.ID);
-				Debug.Assert(added, "Duplicate ID found", string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
+				Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
 			}
 
 			// Generate unique IDs for all vertices and edges that don't already have a unique ID.
@@ -947,7 +1097,7 @@ namespace GraphX.Controls
         {
             _svShowEdgeArrows = isEnabled;
             foreach (var item in _edgeslist.Values)
-                item.SetCurrentValue(EdgeControl.ShowArrowsProperty, isEnabled);
+                item.SetCurrentValue(EdgeControlBase.ShowArrowsProperty, isEnabled);
         }
 
         private bool? _svShowEdgeLabels;
@@ -959,8 +1109,10 @@ namespace GraphX.Controls
         {
             _svShowEdgeLabels = isEnabled;
             foreach (var item in _edgeslist.Values)
-                item.ShowLabel = isEnabled;
+                item.SetCurrentValue(EdgeControlBase.ShowLabelProperty, isEnabled);
+#if WPF
             InvalidateVisual();
+#endif
         }
 
         private bool? _svVertexLabelShow;
@@ -972,8 +1124,10 @@ namespace GraphX.Controls
         {
             _svVertexLabelShow = isEnabled;
             foreach (var item in _vertexlist.Values)
-                item.ShowLabel = isEnabled;
+                item.SetCurrentValue(VertexControlBase.ShowLabelProperty, isEnabled);
+#if WPF
             InvalidateVisual();
+#endif
         }
 
         private bool? _svAlignEdgeLabels;
@@ -988,7 +1142,9 @@ namespace GraphX.Controls
             {
                 item.AlignLabelsToEdges = isEnabled;
             }
+#if WPF
             InvalidateVisual();
+#endif
         }
 
         private bool? _svVerticesDragEnabled;
@@ -1019,7 +1175,7 @@ namespace GraphX.Controls
         {
             _svVertexShape = shape;
             foreach (var item in VertexList)
-                item.Value.VertexShape = shape;
+                item.Value.SetCurrentValue(VertexControlBase.VertexShapeProperty, shape);
         }
 
         private bool? _svVertexHlEnabled;
@@ -1100,21 +1256,12 @@ namespace GraphX.Controls
                 InternalInsertEdge(item, edgectrl);
                 //setup path
                 if (_svShowEdgeLabels == true)
-                    edgectrl.ShowLabel = true;
+                    edgectrl.SetCurrentValue(EdgeControlBase.ShowLabelProperty, true);
                 edgectrl.PrepareEdgePath();
-                //edgectrl.InvalidateChildren();
             }
-            //this.InvalidateVisual();
 
             if (LogicCore.EnableParallelEdges)
                 UpdateParallelEdgesData();
-            /*if (_svShowEdgeLabels == true && LogicCore.EnableEdgeLabelsOverlapRemoval)
-               RemoveEdgeLabelsOverlap();*/
-
-        }
-
-        private void RemoveEdgeLabelsOverlap()
-        {
         }
 
         /// <summary>
@@ -1296,7 +1443,7 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if(LogicCore.Graph == null) 
             {
-                Debug.Write("LogicCore.Graph property not set while using GetRelatedControls method!");
+                Debug.WriteLine("LogicCore.Graph property not set while using GetRelatedControls method!");
                 return null;
             }
 
@@ -1427,7 +1574,11 @@ namespace GraphX.Controls
             //to correctly draw arrows in any case except they are manually disabled
             UpdateLayout();
             foreach (var item in EdgesList.Values)
+#if WPF
                 item.OnApplyTemplate();
+#elif METRO
+                item.ApplyTemplate();
+#endif
 
             RestoreAlgorithmStorage();
         }
@@ -1469,6 +1620,7 @@ namespace GraphX.Controls
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
         public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
+#if WPF
             string fileExt;
             string fileType = itype.ToString();
             switch (itype)
@@ -1491,12 +1643,15 @@ namespace GraphX.Controls
             {
                 PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, true, dpi, quality);
             }
+#endif
         }
 
+#if WPF
         public Bitmap ExportToBitmap(double dpi = PrintHelper.DEFAULT_DPI)
         {
            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
         }
+#endif
 
         
         /// <summary>
@@ -1505,6 +1660,7 @@ namespace GraphX.Controls
         /// <param name="description">Optional header description</param>
         public void PrintDialog(string description = "")
         {
+#if WPF
             UIElement vis = this;
             var zoomControl = Parent as IZoomControl;
             if (zoomControl != null)
@@ -1516,6 +1672,7 @@ namespace GraphX.Controls
                     vis = ((IZoomControl)frameworkElement.Parent).PresenterVisual;
             }
             PrintHelper.ShowPrintPreview(vis, description);
+#endif
         }
 
         #endregion
@@ -1523,8 +1680,9 @@ namespace GraphX.Controls
         #region IDisposable
         public void Dispose()
         {
+#if WPF
             CancelRelayout(); // In case some asynchronouse relayout is active
-
+#endif
             if (StateStorage != null)
             {
                 StateStorage.Dispose();

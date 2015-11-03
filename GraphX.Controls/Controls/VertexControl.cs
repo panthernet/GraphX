@@ -9,6 +9,7 @@ using GraphX.PCL.Common.Exceptions;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Interfaces;
 
+
 namespace GraphX.Controls
 {
     /// <summary>
@@ -200,21 +201,21 @@ namespace GraphX.Controls
         void VertexControl_MouseLeave(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexMouseLeave(this);
+                RootArea.OnVertexMouseLeave(this, e);
             //e.Handled = true;
         }
 
         void VertexControl_MouseEnter(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexMouseEnter(this);
+                RootArea.OnVertexMouseEnter(this, e);
            // e.Handled = true;
         }
 
         void VertexControl_MouseMove(object sender, MouseEventArgs e)
         {
             if (RootArea != null)
-                RootArea.OnVertexMouseMove(this);
+                RootArea.OnVertexMouseMove(this, e);
         }
 
         void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)

@@ -21,7 +21,7 @@ using Size = GraphX.Measure.Size;
 
 namespace GraphX.Controls
 {
-    public class GraphArea<TVertex, TEdge, TGraph>  : GraphAreaBase, IDisposable
+ /*   public class GraphAreaZ<TVertex, TEdge, TGraph>  : GraphAreaBase, IDisposable
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
         where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
@@ -184,7 +184,7 @@ namespace GraphX.Controls
 
         #endregion
 
-        public GraphArea()
+        public GraphAreaZ()
         {
             ControlFactory = new GraphControlFactory(this);
             StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
@@ -420,6 +420,7 @@ namespace GraphX.Controls
         #region Automatic data ID storage and resolving
         private int _dataIdCounter = 1;
         private int _edgeDataIdCounter = 1;
+
         private int GetNextUniqueId(bool isVertex)
         {
             if (isVertex)
@@ -566,10 +567,6 @@ namespace GraphX.Controls
             return Task.Run(async () =>
             {
                 Dictionary<TVertex, Size> vertexSizes = null;
-               // IExternalLayout<TVertex> alg = null; //layout algorithm
-                //Dictionary<TVertex, Rect> rectangles = null; //rectangled size data
-                //IExternalOverlapRemoval<TVertex> overlap = null; //overlap removal algorithm
-                //IExternalEdgeRouting<TVertex, TEdge> eralg = null;
                 IDictionary<TVertex, Measure.Point> vertexPositions = null;
                 IGXLogicCore<TVertex, TEdge, TGraph> localLogicCore = null;
 
@@ -603,7 +600,6 @@ namespace GraphX.Controls
 
                 await DispatcherHelper.CheckBeginInvokeOnUi(() =>
                 {
-
                     if (MoveAnimation != null)
                     {
                         MoveAnimation.CleanupBaseData();
@@ -621,7 +617,6 @@ namespace GraphX.Controls
                         if (MoveAnimation == null || double.IsNaN(GetX(vc)))
                             vc.SetPosition(item.Value.X, item.Value.Y, false);
                         else MoveAnimation.AddVertexData(vc, item.Value);
-                        //vc.Visibility = Visibility.Visible; //show vertexes with layout positions assigned
                         vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, true); // Style can show vertexes with layout positions assigned
                     }
                     if (MoveAnimation != null)
@@ -674,6 +669,9 @@ namespace GraphX.Controls
 
         private async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
         {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized!");
+
             await CancelRelayoutAsync();
 
             _layoutCancellationSource = new CancellationTokenSource();
@@ -691,27 +689,28 @@ namespace GraphX.Controls
 
         public async Task CancelRelayoutAsync()
         {
-            if (_layoutTask != null)
+            if (_layoutTask == null) 
+                return;
+
+            _layoutCancellationSource.Cancel();
+
+            try
             {
-                _layoutCancellationSource.Cancel();
-                try
-                {
-                    await _layoutTask;
-                }
-                catch (OperationCanceledException)
-                {
-                    // This is expected, so just ignore it
-                }
+                await _layoutTask;
+            }
+            catch (OperationCanceledException)
+            {
+                // This is expected, so just ignore it
+            }
 
-                _layoutTask = null;
-                _layoutCancellationSource.Dispose();
-                _layoutCancellationSource = null;
+            _layoutTask = null;
+            _layoutCancellationSource.Dispose();
+            _layoutCancellationSource = null;
 
-                if (_linkedLayoutCancellationSource != null)
-                {
-                    _linkedLayoutCancellationSource.Dispose();
-                    _linkedLayoutCancellationSource = null;
-                }
+            if (_linkedLayoutCancellationSource != null)
+            {
+                _linkedLayoutCancellationSource.Dispose();
+                _linkedLayoutCancellationSource = null;
             }
         }
         #endregion
@@ -1357,7 +1356,7 @@ namespace GraphX.Controls
         /// <param name="quality">Optional image quality parameter</param>   
         public void ExportAsJpeg(int quality = 100)
         {
-            ExportAsImage(ImageType.JPEG, true, PrintHelper.DefaultDPI, quality);
+            ExportAsImage(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
         }
 
         /// <summary>
@@ -1367,36 +1366,10 @@ namespace GraphX.Controls
         /// <param name="dpi">Optional image DPI parameter</param>
         /// <param name="useZoomControlSurface">Use zoom control parent surface to render bitmap (only visible zoom content will be exported)</param>
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
-        public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DefaultDPI, int quality = 100)
+        public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
-            /*string fileExt;
-            string fileType = itype.ToString();
-            switch (itype)
-            {
-                case ImageType.PNG: fileExt = "*.png";
-                    break;
-                case ImageType.JPEG: fileExt = "*.jpg";
-                    break;
-                case ImageType.BMP: fileExt = "*.bmp";
-                    break;
-                case ImageType.GIF: fileExt = "*.gif";
-                    break;
-                case ImageType.TIFF: fileExt = "*.tiff";
-                    break;
-                default: throw new GX_InvalidDataException("ExportAsImage() -> Unknown output image format specified!");
-            }
-            //TODO dialog
-            var dlg = new SaveFileDialog { Filter = String.Format("{0} Image File ({1})|{1}", fileType, fileExt), Title = String.Format("Exporting graph as {0} image...", fileType) };
-            if (dlg.ShowDialog() == true)
-            {
-                PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, true, dpi, quality);
-            }*/
+          
         }
-
-       /* public Bitmap ExportToBitmap(double dpi = PrintHelper.DefaultDPI)
-        {
-            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
-        }*/
 
         
         /// <summary>
@@ -1440,5 +1413,5 @@ namespace GraphX.Controls
                 base.Children.Clear();
         }
         #endregion
-    }
+    }*/
 }

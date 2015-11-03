@@ -157,7 +157,7 @@ namespace GraphX.Controls
         void VertexControl_Down(object sender, PointerRoutedEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexSelected(this, e);
+                RootArea.OnVertexSelected(this, e, null);
             //e.Handled = true;
             VisualStateManager.GoToState(this, "Pressed", true);
         }

@@ -20,8 +20,9 @@ DETAILED CHANGELOG:
 	+ Added two new attached label classes for Edge and Vertex controls.
 	+ Added EdgeControl::LabelMouseDown event
 	+ Added separate ID counter for edges while autoresolving missing id 
-	+ Added EdgeControl.UpdateLabel() method to be able to update attached edge label manually (tech means to overcome some template quizes)
-	+ Added GraphArea::GetChildControls method to easily fetch any child objects (incl. custom) by condition or just get all of them
+	+ Added EdgeControl::UpdateLabel() method to be able to update attached edge label manually (tech means to overcome some template quizes)
+	+ Added GraphArea::GetChildControls() method to easily fetch any child objects (incl. custom) by condition or just get all of them
+	+ Fixed some METRO code not that hasn't been ported correctly
 	+ Fixed an exception in ZoomControl caused by Ctrl + Alt + DblClick combination (thanks to persalmi)
 	+ Fixed NaN result for FR algorithms calc (thanks to bleibold)
 	+ Fixed edge bundling in the case when empty Control points are present that would sometimes cause exceptions.(thanks to bleibold)
@@ -29,17 +30,18 @@ DETAILED CHANGELOG:
 	+ Fixed numerous event issues with graphX controls where events wasn't passed down the hierarchy tree
 	+ Fixed edge label size on some template manipulations by adding additional update on label size change event. You can turn it off using EdgeLabelControl::UpdateLabelOnSizeChange property.
 	+ Improved styles flexibility by working with dependency values instead of straight assignment in some places
+	+ Improved random layout algorithm randomness by seeding new Guid hash which fixes some odd behavior in rare cases
 	+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
-	+ Improved random layout algorithm randomness by seeding new Guid hash whcih fixes some odd behaviour in rare cases
 	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
+	+ Merged GraphArea code for WPF & METRO into a shared files
 
 BREAKING CHANGES:
 	* IExternalLayoutAlgorithm interface now demands TEdge generic specification and have one new method ResetGraph().
 	* All built-in algorithms now use IMutableVertexAndEdgeSet<TVertex, TEdge> for TGraph generic specification to be able to modify Graph data on demand.
 	* Made Vertex and Edge ID Int64 be default. Was Int32.
-	* Added mandatory IOverlapRemovalAlgorithm::Initialize() method for all OR algorithms to be able to initialize initial data not only upon class instantiation but at any time
+	* Added mandatory IOverlapRemovalAlgorithm::Initialize() method for all OR algorithms to be able to initialize initial data not only when you instantiate class but at any time
 
 
 RELEASE 2.2.0

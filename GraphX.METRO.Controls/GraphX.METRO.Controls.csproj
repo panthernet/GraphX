@@ -170,6 +170,12 @@
     <Compile Include="..\GraphX.Controls\Controls\EdgePointers\DefaultEdgePointer.cs">
       <Link>Controls\EdgePointers\DefaultEdgePointer.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\GraphArea.cs">
+      <Link>Controls\GraphArea.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\GraphAreaBase.cs">
+      <Link>Controls\GraphAreaBase.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\ControlDrawOrder.cs">
       <Link>Controls\Misc\ControlDrawOrder.cs</Link>
     </Compile>
@@ -267,8 +273,8 @@
       <Link>Models\VertexSelectedEventHandler.cs</Link>
     </Compile>
     <Compile Include="Controls\EdgeControl.cs" />
-    <Compile Include="Controls\GraphArea.cs" />
-    <Compile Include="Controls\GraphAreaBase.cs" />
+    <Compile Include="Controls\GraphArea_.cs" />
+    <Compile Include="Controls\GraphAreaBase_.cs" />
     <Compile Include="Controls\VertexControl.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />

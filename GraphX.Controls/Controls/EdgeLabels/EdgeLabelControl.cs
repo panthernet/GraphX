@@ -337,7 +337,6 @@ namespace GraphX.Controls
             LayoutUpdated += EdgeLabelControl_LayoutUpdated;
             HorizontalAlignment = HorizontalAlignment.Left;
             VerticalAlignment = VerticalAlignment.Top;
-            IsVisibleChanged += EdgeLabelControl_IsVisibleChanged;
             SizeChanged += EdgeLabelControl_SizeChanged;
             UpdateLabelOnSizeChange = true;
             UpdateLabelOnVisibilityChange = true;
@@ -348,12 +347,6 @@ namespace GraphX.Controls
             if (!UpdateLabelOnSizeChange) return;
             UpdatePosition();
             Debug.WriteLine(EdgeControl.Edge.ToString());
-        }
-
-        void EdgeLabelControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (!UpdateLabelOnVisibilityChange) return;
-            UpdatePosition();
         }
 
         DependencyObject GetParent()

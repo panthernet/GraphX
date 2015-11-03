@@ -1,9 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.ComponentModel;
+#elif METRO
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.Foundation;
+using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using Windows.ApplicationModel;
+#endif
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.Controls;
@@ -45,8 +55,10 @@ namespace GraphX
         }
 
         #region Attached Dependency Property registrations
+
         public static readonly DependencyProperty XProperty =
-            DependencyProperty.RegisterAttached("X", typeof(double), typeof(GraphAreaBase),
+            DependencyProperty.RegisterAttached("X", typeof (double), typeof (GraphAreaBase),
+#if WPF
                                                  new FrameworkPropertyMetadata(double.NaN,
                                                                                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                                                                                 FrameworkPropertyMetadataOptions.AffectsArrange |
@@ -54,6 +66,9 @@ namespace GraphX
                                                                                 FrameworkPropertyMetadataOptions.AffectsParentMeasure |
                                                                                 FrameworkPropertyMetadataOptions.AffectsParentArrange |
                                                                                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, x_changed));
+#elif METRO
+                                                 new PropertyMetadata(double.NaN, x_changed));
+#endif
 
         private static void x_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -62,15 +77,16 @@ namespace GraphX
 
         public static readonly DependencyProperty FinalXProperty =
             DependencyProperty.RegisterAttached("FinalX", typeof(double), typeof(GraphAreaBase),
-                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                                                 new PropertyMetadata(double.NaN));
         public static readonly DependencyProperty FinalYProperty =
             DependencyProperty.RegisterAttached("FinalY", typeof(double), typeof(GraphAreaBase),
-                                                 new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                                                 new PropertyMetadata(double.NaN));
 
 
 
         public static readonly DependencyProperty YProperty =
             DependencyProperty.RegisterAttached("Y", typeof(double), typeof(GraphAreaBase),
+#if WPF
                                                  new FrameworkPropertyMetadata(double.NaN,
                                                    FrameworkPropertyMetadataOptions.AffectsMeasure |
                                                    FrameworkPropertyMetadataOptions.AffectsArrange |
@@ -79,258 +95,77 @@ namespace GraphX
                                                    FrameworkPropertyMetadataOptions.AffectsParentArrange |
                                                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
                                                    , y_changed));
-
+#elif METRO
+                                                 new PropertyMetadata(double.NaN, y_changed));
+#endif
 
         private static void y_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             d.SetValue(TopProperty, e.NewValue);
         }
 
-        public static readonly DependencyProperty PositioningCompleteProperty =
-            DependencyProperty.RegisterAttached("PositioningComplete", typeof(bool), typeof(GraphAreaBase), new FrameworkPropertyMetadata(true));
-
-        #endregion
-
-        #region Child EVENTS
-
-        internal static readonly Size DesignSize = new Size(70, 25);
-
-        /// <summary>
-        /// Fires when ContentSize property is changed
-        /// </summary>
-        public event ContentSizeChangedEventHandler ContentSizeChanged;
-
-        protected void OnContentSizeChanged(Rect oldSize, Rect newSize)
+        public static double GetX(DependencyObject obj)
         {
-            if (ContentSizeChanged != null)
-                ContentSizeChanged(this, new ContentSizeChangedEventArgs(oldSize, newSize));
+#if WPF
+            return (double)obj.GetValue(XProperty);
+#elif METRO
+            return (double)obj.GetValue(LeftProperty);
+#endif
         }
 
-        /// <summary>
-        /// Fires when edge is selected
-        /// </summary>
-        public virtual event EdgeSelectedEventHandler EdgeSelected;
-
-        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        public static void SetX(DependencyObject obj, double value, bool alsoSetFinal = true)
         {
-            if (EdgeSelected != null)
-                EdgeSelected(this, new EdgeSelectedEventArgs(ec, e, keys));
+            obj.SetValue(XProperty, value);
+            if (alsoSetFinal)
+                obj.SetValue(FinalXProperty, value);
         }
 
-        /// <summary>
-        /// Fires when vertex is double clicked
-        /// </summary>
-        public virtual event VertexSelectedEventHandler VertexDoubleClick;
-
-        internal virtual void OnVertexDoubleClick(VertexControl vc)
+        public static double GetY(DependencyObject obj)
         {
-            if (VertexDoubleClick != null)
-                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
+#if WPF
+            return (double)obj.GetValue(YProperty);
+#elif METRO
+            return (double)obj.GetValue(TopProperty);
+#endif
         }
 
-        /// <summary>
-        /// Fires when vertex is selected
-        /// </summary>
-        public virtual event VertexSelectedEventHandler VertexSelected;
-
-        internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        public static void SetY(DependencyObject obj, double value, bool alsoSetFinal = false)
         {
-            if (VertexSelected != null)
-                VertexSelected(this, new VertexSelectedEventArgs(vc, e, keys));
+            obj.SetValue(YProperty, value);
+            if (alsoSetFinal)
+                obj.SetValue(FinalYProperty, value);
         }
 
-        /// <summary>
-        /// Fires when mouse up on vertex
-        /// </summary>
-        public virtual event VertexSelectedEventHandler VertexMouseUp;
 
-        internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        public static double GetFinalX(DependencyObject obj)
         {
-            if (VertexMouseUp != null)
-                VertexMouseUp(this, new VertexSelectedEventArgs(vc, e, keys));
-        }
-        /// <summary>
-        /// Fires when mouse is over the vertex control
-        /// </summary>
-        public virtual event VertexSelectedEventHandler VertexMouseEnter;
-
-        internal virtual void OnVertexMouseEnter(VertexControl vc)
-        {
-            if (VertexMouseEnter != null)
-                VertexMouseEnter(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateVertexForward(vc);
+            return (double)obj.GetValue(FinalXProperty);
         }
 
-        /// <summary>
-        /// Fires when mouse is moved over the vertex control
-        /// </summary>
-        public virtual event VertexMovedEventHandler VertexMouseMove;
-
-        internal virtual void OnVertexMouseMove(VertexControl vc)
+        public static void SetFinalX(DependencyObject obj, double value)
         {
-            if (VertexMouseMove != null)
-                VertexMouseMove(this, new VertexMovedEventArgs(vc, new Point()));
+            obj.SetValue(FinalXProperty, value);
         }
 
-        /// <summary>
-        /// Fires when mouse leaves vertex control
-        /// </summary>
-        public virtual event VertexSelectedEventHandler VertexMouseLeave;
-
-        internal virtual void OnVertexMouseLeave(VertexControl vc)
+        public static double GetFinalY(DependencyObject obj)
         {
-            if (VertexMouseLeave != null)
-                VertexMouseLeave(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateVertexBackward(vc);
+            return (double)obj.GetValue(FinalYProperty);
         }
 
-        /// <summary>
-        /// Fires when layout algorithm calculation is finished
-        /// </summary>
-        public virtual event EventHandler LayoutCalculationFinished;
-
-        protected virtual void OnLayoutCalculationFinished()
+        public static void SetFinalY(DependencyObject obj, double value)
         {
-            if (LayoutCalculationFinished != null)
-                LayoutCalculationFinished(this, null);
+            obj.SetValue(FinalYProperty, value);
         }
 
-        /// <summary>
-        /// Fires when overlap removal algorithm calculation is finished
-        /// </summary>
-        public virtual event EventHandler OverlapRemovalCalculationFinished;
-
-        protected virtual void OnOverlapRemovalCalculationFinished()
+        public static bool GetPositioningComplete(DependencyObject obj)
         {
-            if (OverlapRemovalCalculationFinished != null)
-                OverlapRemovalCalculationFinished(this, null);
+            return (bool)obj.GetValue(PositioningCompleteProperty);
         }
 
-        /// <summary>
-        /// Fires when edge routing algorithm calculation is finished
-        /// </summary>
-        public virtual event EventHandler EdgeRoutingCalculationFinished;
-
-        protected virtual void OnEdgeRoutingCalculationFinished()
+        public static void SetPositioningComplete(DependencyObject obj, bool value)
         {
-            if (EdgeRoutingCalculationFinished != null)
-                EdgeRoutingCalculationFinished(this, null);
+            obj.SetValue(PositioningCompleteProperty, value);
         }
-
-        /// <summary>
-        /// Fires when relayout operation is finished
-        /// </summary>
-        public virtual event EventHandler RelayoutFinished;
-
-        protected virtual void OnRelayoutFinished()
-        {
-            if (RelayoutFinished != null)
-                RelayoutFinished(this, null);
-        }
-
-        /// <summary>
-        /// Fires when move animation for all objects is finished
-        /// </summary>
-       /* public virtual event EventHandler MoveAnimationFinished;
-
-        protected virtual void OnMoveAnimationFinished()
-        {
-            if (MoveAnimationFinished != null)
-                MoveAnimationFinished(this, null);
-        }*/
-
-        /// <summary>
-        /// Fires when graph generation operation is finished
-        /// </summary>
-        public virtual event EventHandler GenerateGraphFinished;
-
-        protected virtual void OnGenerateGraphFinished()
-        {
-            if (GenerateGraphFinished != null)
-                GenerateGraphFinished(this, null);
-        }
-
-        public virtual event EdgeSelectedEventHandler EdgeDoubleClick;
-        internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
-        {
-            if (EdgeDoubleClick != null)
-                EdgeDoubleClick(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
-        }
-
-        public virtual event EdgeSelectedEventHandler EdgeMouseMove;
-        internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
-        {
-            if (EdgeMouseMove != null)
-                EdgeMouseMove(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
-        }
-
-        public virtual event EdgeSelectedEventHandler EdgeMouseEnter;
-        internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
-        {
-            if (EdgeMouseEnter != null)
-                EdgeMouseEnter(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateEdgeForward(edgeControl);
-        }
-
-        public virtual event EdgeSelectedEventHandler EdgeMouseLeave;
-        internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
-        {
-            if (EdgeMouseLeave != null)
-                EdgeMouseLeave(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateEdgeBackward(edgeControl);
-        }
-
-        #endregion
-
-        #region ComputeEdgeRoutesByVertex()
-        /// <summary>
-        /// Compute new edge routes for all edges of the vertex
-        /// </summary>
-        /// <param name="vc">Vertex visual control</param>
-        /// <param name="vertexDataNeedUpdate">If vertex data inside edge routing algorthm needs to be updated</param>
-        internal virtual void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true) { }
-        #endregion
-
-        #region Virtual members
-        /// <summary>
-        /// Returns all existing VertexControls addded into the layout
-        /// </summary>
-        /// <returns></returns>
-        public abstract VertexControl[] GetAllVertexControls();
-
-        /* INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY */
-        internal abstract bool IsEdgeRoutingEnabled { get; }
-        internal abstract bool EnableParallelEdges { get; }
-        internal abstract bool EdgeCurvingEnabled { get; }
-        internal abstract double EdgeCurvingTolerance { get; }
-
-
-        /// <summary>
-        /// Get controls related to specified control 
-        /// </summary>
-        /// <param name="ctrl">Original control</param>
-        /// <param name="resultType">Type of resulting related controls</param>
-        /// <param name="edgesType">Optional edge controls type</param>
-        public abstract List<IGraphControl> GetRelatedControls(IGraphControl ctrl, GraphControlType resultType = GraphControlType.VertexAndEdge, EdgesType edgesType = EdgesType.Out);
-
-        /// <summary>
-        /// Generates and displays edges for specified vertex
-        /// </summary>
-        /// <param name="vc">Vertex control</param>
-        /// <param name="edgeType">Type of edges to display</param>
-        /// <param name="defaultVisibility">Default edge visibility on layout</param>
-        public abstract void GenerateEdgesForVertex(VertexControl vc, EdgesType edgeType, Visibility defaultVisibility = Visibility.Visible);
-
-        #endregion
-
-        /// <summary>
-        /// Use native object measure and arrange algorithm. This results in the odd zoom control operability but differently handles object coordinates.
-        /// </summary>
-       // public bool UseNativeObjectArrange { get; set; }
 
         #region DP - ExternalSettings
         public static readonly DependencyProperty ExternalSettingsProperty = DependencyProperty.Register("ExternalSettingsOnly", typeof(object),
@@ -357,7 +192,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty MoveAnimationProperty =
-            DependencyProperty.Register("MoveAnimation", typeof(MoveAnimationBase), typeof(GraphAreaBase), new UIPropertyMetadata(null));
+            DependencyProperty.Register("MoveAnimation", typeof(MoveAnimationBase), typeof(GraphAreaBase), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets vertex and edge controls delete animation
@@ -369,7 +204,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty DeleteAnimationProperty =
-            DependencyProperty.Register("DeleteAnimation", typeof(IOneWayControlAnimation), typeof(GraphAreaBase), new UIPropertyMetadata(DeleteAnimationPropertyChanged));
+            DependencyProperty.Register("DeleteAnimation", typeof(IOneWayControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null, DeleteAnimationPropertyChanged));
 
         private static void DeleteAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -379,9 +214,9 @@ namespace GraphX
                 old.Completed -= GraphAreaBase_Completed;
             }
             var newone = (e.NewValue as IOneWayControlAnimation);
-            if(newone != null)
+            if (newone != null)
                 newone.Completed += GraphAreaBase_Completed;
-            
+
         }
 
         static void GraphAreaBase_Completed(object sender, ControlEventArgs e)
@@ -401,9 +236,293 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty MouseOverAnimationProperty =
-            DependencyProperty.Register("MouseOverAnimation", typeof(IBidirectionalControlAnimation), typeof(GraphAreaBase), new UIPropertyMetadata(null));
+            DependencyProperty.Register("MouseOverAnimation", typeof(IBidirectionalControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null));
 
         #endregion
+
+        public static readonly DependencyProperty PositioningCompleteProperty =
+            DependencyProperty.RegisterAttached("PositioningComplete", typeof(bool), typeof(GraphAreaBase), new PropertyMetadata(true));
+
+        #endregion
+
+        #region Child EVENTS
+
+        internal static readonly Size DesignSize = new Size(70, 25);
+
+        /// <summary>
+        /// Fires when ContentSize property is changed
+        /// </summary>
+        public event ContentSizeChangedEventHandler ContentSizeChanged;
+
+        protected void OnContentSizeChanged(Rect oldSize, Rect newSize)
+        {
+            if (ContentSizeChanged != null)
+                ContentSizeChanged(this, new ContentSizeChangedEventArgs(oldSize, newSize));
+        }
+
+        /// <summary>
+        /// Fires when edge is selected
+        /// </summary>
+        public event EdgeSelectedEventHandler EdgeSelected;
+
+        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (EdgeSelected != null)
+                EdgeSelected(this, new EdgeSelectedEventArgs(ec, e
+#if WPF
+                    , keys));
+#elif METRO
+                    ));
+#endif
+        }
+
+        /// <summary>
+        /// Fires when vertex is double clicked
+        /// </summary>
+        public event VertexSelectedEventHandler VertexDoubleClick;
+
+#if WPF
+        internal virtual void OnVertexDoubleClick(VertexControl vc)
+        {
+            if (VertexDoubleClick != null)
+                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
+        }
+#elif METRO
+        internal virtual void OnVertexDoubleClick(VertexControl vc, PointerRoutedEventArgs e)
+        {
+            if (VertexDoubleClick != null)
+                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, e));
+        }
+#endif
+
+        /// <summary>
+        /// Fires when vertex is selected
+        /// </summary>
+        public event VertexSelectedEventHandler VertexSelected;
+
+        internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (VertexSelected != null)
+                VertexSelected(this, new VertexSelectedEventArgs(vc, e
+#if WPF
+                    , keys));
+#elif METRO
+                    ));
+#endif
+        }
+
+        /// <summary>
+        /// Fires when mouse up on vertex
+        /// </summary>
+        public event VertexSelectedEventHandler VertexMouseUp;
+
+        internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (VertexMouseUp != null)
+                VertexMouseUp(this, new VertexSelectedEventArgs(vc, e
+#if WPF
+                    , keys));
+#elif METRO
+                    ));
+#endif
+        }
+        /// <summary>
+        /// Fires when mouse is over the vertex control
+        /// </summary>
+        public event VertexSelectedEventHandler VertexMouseEnter;
+
+        internal virtual void OnVertexMouseEnter(VertexControl vc, MouseEventArgs e)
+        {
+            if (VertexMouseEnter != null)
+                VertexMouseEnter(this, new VertexSelectedEventArgs(vc, e
+#if WPF
+                    , Keyboard.Modifiers));
+#elif METRO
+                    ));
+#endif
+            if (MouseOverAnimation != null)
+                MouseOverAnimation.AnimateVertexForward(vc);
+        }
+
+        /// <summary>
+        /// Fires when mouse is moved over the vertex control
+        /// </summary>
+        public event VertexMovedEventHandler VertexMouseMove;
+
+        internal virtual void OnVertexMouseMove(VertexControl vc, MouseEventArgs e)
+        {
+            if (VertexMouseMove != null)
+                VertexMouseMove(this, new VertexMovedEventArgs(vc, e));
+        }
+
+        /// <summary>
+        /// Fires when mouse leaves vertex control
+        /// </summary>
+        public event VertexSelectedEventHandler VertexMouseLeave;
+
+        internal virtual void OnVertexMouseLeave(VertexControl vc, MouseEventArgs e)
+        {
+            if (VertexMouseLeave != null)
+                VertexMouseLeave(this, new VertexSelectedEventArgs(vc, e
+#if WPF
+                    , Keyboard.Modifiers));
+#elif METRO
+));
+#endif
+            if (MouseOverAnimation != null)
+                MouseOverAnimation.AnimateVertexBackward(vc);
+        }
+
+        /// <summary>
+        /// Fires when layout algorithm calculation is finished
+        /// </summary>
+        public event EventHandler LayoutCalculationFinished;
+
+        protected virtual void OnLayoutCalculationFinished()
+        {
+            if (LayoutCalculationFinished != null)
+                LayoutCalculationFinished(this, null);
+        }
+
+        /// <summary>
+        /// Fires when overlap removal algorithm calculation is finished
+        /// </summary>
+        public event EventHandler OverlapRemovalCalculationFinished;
+
+        protected virtual void OnOverlapRemovalCalculationFinished()
+        {
+            if (OverlapRemovalCalculationFinished != null)
+                OverlapRemovalCalculationFinished(this, null);
+        }
+
+        /// <summary>
+        /// Fires when edge routing algorithm calculation is finished
+        /// </summary>
+        public event EventHandler EdgeRoutingCalculationFinished;
+
+        protected virtual void OnEdgeRoutingCalculationFinished()
+        {
+            if (EdgeRoutingCalculationFinished != null)
+                EdgeRoutingCalculationFinished(this, null);
+        }
+
+        /// <summary>
+        /// Fires when relayout operation is finished
+        /// </summary>
+        public event EventHandler RelayoutFinished;
+
+        protected virtual void OnRelayoutFinished()
+        {
+            if (RelayoutFinished != null)
+                RelayoutFinished(this, null);
+        }
+
+        /// <summary>
+        /// Fires when graph generation operation is finished
+        /// </summary>
+        public event EventHandler GenerateGraphFinished;
+
+        protected virtual void OnGenerateGraphFinished()
+        {
+            if (GenerateGraphFinished != null)
+                GenerateGraphFinished(this, null);
+        }
+
+        public event EdgeSelectedEventHandler EdgeDoubleClick;
+        internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (EdgeDoubleClick != null)
+                EdgeDoubleClick(this, new EdgeSelectedEventArgs(edgeControl, e
+#if WPF
+                    , keys));
+#elif METRO
+                    ));
+#endif                    
+        }
+
+        public event EdgeSelectedEventHandler EdgeMouseMove;
+        internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (EdgeMouseMove != null)
+                EdgeMouseMove(this, new EdgeSelectedEventArgs(edgeControl, e
+#if WPF
+                    , keys));
+#elif METRO
+));
+#endif
+        }
+
+        public event EdgeSelectedEventHandler EdgeMouseEnter;
+        internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (EdgeMouseEnter != null)
+                EdgeMouseEnter(this, new EdgeSelectedEventArgs(edgeControl, e
+#if WPF
+                    , keys));
+#elif METRO
+));
+#endif
+            if (MouseOverAnimation != null)
+                MouseOverAnimation.AnimateEdgeForward(edgeControl);
+        }
+
+        public event EdgeSelectedEventHandler EdgeMouseLeave;
+        internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            if (EdgeMouseLeave != null)
+                EdgeMouseLeave(this, new EdgeSelectedEventArgs(edgeControl, e
+#if WPF
+                    , keys));
+#elif METRO
+));
+#endif
+            if (MouseOverAnimation != null)
+                MouseOverAnimation.AnimateEdgeBackward(edgeControl);
+        }
+
+        #endregion
+
+        #region ComputeEdgeRoutesByVertex()
+        /// <summary>
+        /// Compute new edge routes for all edges of the vertex
+        /// </summary>
+        /// <param name="vc">Vertex visual control</param>
+        /// <param name="vertexDataNeedUpdate">If vertex data inside edge routing algorthm needs to be updated</param>
+        internal virtual void ComputeEdgeRoutesByVertex(VertexControl vc, bool vertexDataNeedUpdate = true) { }
+        #endregion
+
+        #region Virtual members
+        /// <summary>
+        /// Returns all existing VertexControls addded into the layout
+        /// </summary>
+        /// <returns></returns>
+        public abstract VertexControl[] GetAllVertexControls();
+
+        // INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY
+        internal abstract bool IsEdgeRoutingEnabled { get; }
+        internal abstract bool EnableParallelEdges { get; }
+        internal abstract bool EdgeCurvingEnabled { get; }
+        internal abstract double EdgeCurvingTolerance { get; }
+
+
+        /// <summary>
+        /// Get controls related to specified control 
+        /// </summary>
+        /// <param name="ctrl">Original control</param>
+        /// <param name="resultType">Type of resulting related controls</param>
+        /// <param name="edgesType">Optional edge controls type</param>
+        public abstract List<IGraphControl> GetRelatedControls(IGraphControl ctrl, GraphControlType resultType = GraphControlType.VertexAndEdge, EdgesType edgesType = EdgesType.Out);
+
+        /// <summary>
+        /// Generates and displays edges for specified vertex
+        /// </summary>
+        /// <param name="vc">Vertex control</param>
+        /// <param name="edgeType">Type of edges to display</param>
+        /// <param name="defaultVisibility">Default edge visibility on layout</param>
+        public abstract void GenerateEdgesForVertex(VertexControl vc, EdgesType edgeType, Visibility defaultVisibility = Visibility.Visible);
+
+        #endregion
+
 
         #region Measure & Arrange
 
@@ -449,8 +568,11 @@ namespace GraphX
 
             var minPoint = new Point(double.PositiveInfinity, double.PositiveInfinity);
             var maxPoint = new Point(double.NegativeInfinity, double.NegativeInfinity);
-
+#if WPF
             foreach (UIElement child in InternalChildren)
+#elif METRO
+            foreach (UIElement child in Children)
+#endif            
             {
                 var x = GetX(child);
                 var y = GetY(child);
@@ -464,8 +586,9 @@ namespace GraphX
                         x = 0;
                         y = 0;
                     }
-                    
-
+#if METRO
+                    else continue;
+#endif
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {
                         var routingInfo = ec.Edge as IRoutingInfo;
@@ -493,8 +616,12 @@ namespace GraphX
 
                 child.Arrange(new Rect(x, y, child.DesiredSize.Width, child.DesiredSize.Height));
             }
+#if WPF
 
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : new Size(10, 10);
+#elif METRO
+            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
+#endif    
         }
 
         /// <summary>
@@ -509,7 +636,11 @@ namespace GraphX
             _topLeft = new Point(double.PositiveInfinity, double.PositiveInfinity);
             _bottomRight = new Point(double.NegativeInfinity, double.NegativeInfinity);
 
+#if WPF
             foreach (UIElement child in InternalChildren)
+#elif METRO
+            foreach (UIElement child in Children)
+#endif    
             {
                 //measure the child
                 child.Measure(constraint);
@@ -557,69 +688,11 @@ namespace GraphX
             var newSize = ContentSize;
             if (oldSize != newSize)
                 OnContentSizeChanged(oldSize, newSize);
+#if WPF
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : new Size(10, 10);
-        }
-        #endregion
-
-        #region Attached Properties
-        [AttachedPropertyBrowsableForChildren]
-        public static double GetX(DependencyObject obj)
-        {
-            return (double)obj.GetValue(XProperty);
-        }
-
-        public static void SetX(DependencyObject obj, double value, bool alsoSetFinal = true)
-        {
-            obj.SetValue(XProperty, value);
-            if(alsoSetFinal)
-                obj.SetValue(FinalXProperty, value);
-        }
-
-        [AttachedPropertyBrowsableForChildren]
-        public static double GetY(DependencyObject obj)
-        {
-            return (double)obj.GetValue(YProperty);
-        }
-
-        public static void SetY(DependencyObject obj, double value, bool alsoSetFinal = false)
-        {
-            obj.SetValue(YProperty, value);
-            if (alsoSetFinal)
-                obj.SetValue(FinalYProperty, value);
-        }
-
-
-        [AttachedPropertyBrowsableForChildren]
-        public static double GetFinalX(DependencyObject obj)
-        {
-            return (double)obj.GetValue(FinalXProperty);
-        }
-
-        public static void SetFinalX(DependencyObject obj, double value)
-        {
-            obj.SetValue(FinalXProperty, value);
-        }
-
-        [AttachedPropertyBrowsableForChildren]
-        public static double GetFinalY(DependencyObject obj)
-        {
-            return (double)obj.GetValue(FinalYProperty);
-        }
-
-        public static void SetFinalY(DependencyObject obj, double value)
-        {
-            obj.SetValue(FinalYProperty, value);
-        }
-
-        [AttachedPropertyBrowsableForChildren]
-        public static bool GetPositioningComplete(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(PositioningCompleteProperty);
-        }
-
-        public static void SetPositioningComplete(DependencyObject obj, bool value)
-        {
-            obj.SetValue(PositioningCompleteProperty, value);
+#elif METRO
+            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
+#endif
         }
         #endregion
 

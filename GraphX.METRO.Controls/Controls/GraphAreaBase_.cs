@@ -12,7 +12,7 @@ using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.Controls
 {
-    public abstract class GraphAreaBase : Canvas, ITrackableContent
+ /*   public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
         /// <summary>
         /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
@@ -39,6 +39,7 @@ namespace GraphX.Controls
         }
 
         #region Attached Dependency Property registrations
+
         public static readonly DependencyProperty XProperty =
             DependencyProperty.RegisterAttached("X", typeof(double), typeof(GraphAreaBase),
                                                  new PropertyMetadata(double.NaN, x_changed));
@@ -216,7 +217,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when edge is selected
         /// </summary>
-        public virtual event EdgeSelectedEventHandler EdgeSelected;
+        public event EdgeSelectedEventHandler EdgeSelected;
 
         internal virtual void OnEdgeSelected(EdgeControl ec, PointerRoutedEventArgs e)
         {
@@ -227,7 +228,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when vertex is double clicked
         /// </summary>
-        public virtual event VertexSelectedEventHandler VertexDoubleClick;
+        public event VertexSelectedEventHandler VertexDoubleClick;
 
         internal virtual void OnVertexDoubleClick(VertexControl vc, PointerRoutedEventArgs e)
         {
@@ -238,7 +239,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when vertex is selected
         /// </summary>
-        public virtual event VertexSelectedEventHandler VertexSelected;
+        public event VertexSelectedEventHandler VertexSelected;
 
         internal virtual void OnVertexSelected(VertexControl vc, PointerRoutedEventArgs e)
         {
@@ -248,7 +249,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when mouse is over the vertex control
         /// </summary>
-        public virtual event VertexSelectedEventHandler VertexMouseEnter;
+        public event VertexSelectedEventHandler VertexMouseEnter;
 
         internal virtual void OnVertexMouseEnter(VertexControl vc, PointerRoutedEventArgs e)
         {
@@ -262,7 +263,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when mouse is moved over the vertex control
         /// </summary>
-        public virtual event VertexMovedEventHandler VertexMouseMove;
+        public event VertexMovedEventHandler VertexMouseMove;
 
         internal virtual void OnVertexMouseMove(VertexControl vc, PointerRoutedEventArgs e)
         {
@@ -327,16 +328,6 @@ namespace GraphX.Controls
                 RelayoutFinished(this, null);
         }
 
-        /// <summary>
-        /// Fires when move animation for all objects is finished
-        /// </summary>
-       /* public virtual event EventHandler MoveAnimationFinished;
-
-        protected virtual void OnMoveAnimationFinished()
-        {
-            if (MoveAnimationFinished != null)
-                MoveAnimationFinished(this, null);
-        }*/
 
         /// <summary>
         /// Fires when graph generation operation is finished
@@ -399,7 +390,6 @@ namespace GraphX.Controls
         /// <returns></returns>
         public abstract VertexControl[] GetAllVertexControls();
 
-        /* INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY */
         internal abstract bool IsEdgeRoutingEnabled { get; }
         internal abstract bool EnableParallelEdges { get; }
         internal abstract bool EdgeCurvingEnabled { get; }
@@ -580,5 +570,5 @@ namespace GraphX.Controls
         }
         #endregion
 
-    }
+    }*/
 }

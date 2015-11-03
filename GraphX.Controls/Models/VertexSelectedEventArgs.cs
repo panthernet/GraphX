@@ -8,10 +8,10 @@ namespace GraphX.Controls.Models
         public MouseButtonEventArgs MouseArgs { get; private set; }
         public ModifierKeys Modifiers { get; private set; }
 
-        public VertexSelectedEventArgs(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        public VertexSelectedEventArgs(VertexControl vc, MouseEventArgs e, ModifierKeys keys)
         {
             VertexControl = vc;
-            MouseArgs = e;
+            MouseArgs = e is MouseButtonEventArgs ? (MouseButtonEventArgs)e : null;
             Modifiers = keys;
         }
     }

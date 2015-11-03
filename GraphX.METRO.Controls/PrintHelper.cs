@@ -8,7 +8,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Default image resolution
         /// </summary>
-        public const double DefaultDPI = 96d;
+        public const double DEFAULT_DPI = 96d;
 
         //Set pixelformat of image.
        /////!!! private static PixelFormat pixelFormat = PixelFormats.Pbgra32;
@@ -20,7 +20,7 @@ namespace GraphX.Controls
         /// <param name="path">Image destination path</param>
         /// <param name="imgdpi">Optional image DPI parameter</param>
         /// <param name="imgQuality">Optional image quality parameter (for some formats like JPEG)</param>
-        public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DefaultDPI, int imgQuality = 100)
+        public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
             //TODO
             //Create a render bitmap and push the surface to it
