@@ -10,7 +10,7 @@ using GraphX.PCL.Common.Exceptions;
 
 namespace GraphX.Controls
 {
-	/// <summary>
+/*	/// <summary>
 	/// Visual vertex control
 	/// </summary>
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
@@ -19,7 +19,7 @@ namespace GraphX.Controls
     [TemplateVisualState(GroupName = "CommonStates", Name = "PointerOver")]
     [TemplateVisualState(GroupName = "CommonStates", Name = "PointerLeave")]
     [TemplateVisualState(GroupName = "CommonStates", Name = "Disabled")]
-    public class VertexControl : VertexControlBase
+    public class VertexControlZ : VertexControlBase
     {
 
         #region Attached property tracer
@@ -49,7 +49,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="vertexData">Vertex data object</param>
         /// <param name="bindToDataObject">Bind DataContext to the Vertex data. True by default. </param>
-        public VertexControl(object vertexData,  bool bindToDataObject = true)
+        public VertexControlZ(object vertexData,  bool bindToDataObject = true)
         {
             DefaultStyleKey = typeof (VertexControl);
             if (bindToDataObject) DataContext = vertexData;
@@ -59,7 +59,7 @@ namespace GraphX.Controls
             foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
                 UpdateEventhandling(item);
 
-            IsEnabledChanged += VertexControl_IsEnabledChanged;
+            IsEnabledChanged += (sender, args) => VisualStateManager.GoToState(this, IsEnabled ? "Normal" : "Disabled", true);
 
             var xBinding = new Binding
             {
@@ -73,11 +73,6 @@ namespace GraphX.Controls
                 Source = this
             };
             SetBinding(TestYProperty, yBinding);
-        }
-
-        void VertexControl_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            VisualStateManager.GoToState(this, IsEnabled ? "Normal" : "Disabled", true);
         }
 
         protected override void OnApplyTemplate()
@@ -179,5 +174,5 @@ namespace GraphX.Controls
             }
         }
 
-    }
+    }*/
 }

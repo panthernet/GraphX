@@ -158,6 +158,9 @@
     <Compile Include="..\GraphX.Controls\Behaviours\HighlightBehaviour.cs">
       <Link>Behaviours\HighlightBehaviour.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\EdgeControl.cs">
+      <Link>Controls\EdgeControl.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\EdgeControlBase.cs">
       <Link>Controls\EdgeControlBase.cs</Link>
     </Compile>
@@ -214,6 +217,9 @@
     </Compile>
     <Compile Include="..\GraphX.Controls\Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs">
       <Link>Controls\VertexConnectionPoints\StaticVertexConnectionPoint.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\VertexControl.cs">
+      <Link>Controls\VertexControl.cs</Link>
     </Compile>
     <Compile Include="..\GraphX.Controls\Controls\VertexControlBase.cs">
       <Link>Controls\VertexControlBase.cs</Link>
@@ -272,10 +278,13 @@
     <Compile Include="..\GraphX.Controls\Models\VertexSelectedEventHandler.cs">
       <Link>Models\VertexSelectedEventHandler.cs</Link>
     </Compile>
-    <Compile Include="Controls\EdgeControl.cs" />
+    <Compile Include="..\GraphX.Controls\TypeExtensions.cs">
+      <Link>TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="Controls\EdgeControl_.cs" />
     <Compile Include="Controls\GraphArea_.cs" />
     <Compile Include="Controls\GraphAreaBase_.cs" />
-    <Compile Include="Controls\VertexControl.cs" />
+    <Compile Include="Controls\VertexControl_.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
@@ -311,7 +320,7 @@
     <Compile Include="Models\XamlTypes\XamlTypeProvider.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeExtensions.cs" />
+    <Compile Include="TypeExtensions_.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\cross-icon.png" />

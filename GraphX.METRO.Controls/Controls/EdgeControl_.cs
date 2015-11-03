@@ -12,7 +12,7 @@ namespace GraphX.Controls
     /// <summary>
     /// Visual edge control
     /// </summary>
-    public class EdgeControl : EdgeControlBase
+ /*   public class EdgeControlZ : EdgeControlBase
     {
         #region Dependency Properties
 
@@ -45,6 +45,18 @@ namespace GraphX.Controls
 
         #endregion
 
+        public event EdgeLabelEventHandler LabelMouseDown;
+        protected void OnLabelMouseDown(PointerRoutedEventArgs mArgs)
+        {
+            if (LabelMouseDown != null)
+                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs));
+        }
+
+        protected override void OnEdgeLabelUpdated()
+        {
+            if (EdgeLabelControl is Control)
+                ((Control)EdgeLabelControl).PointerPressed += (sender, args) => OnLabelMouseDown(args);
+        }  
 
         #region public Clean()
         public override void Clean()
@@ -88,12 +100,12 @@ namespace GraphX.Controls
         }
         #endregion
 
-        public EdgeControl()
+        public EdgeControlZ()
             : this(null, null, null)
         {
         }
 
-        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
+        public EdgeControlZ(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
         {
             DefaultStyleKey = typeof(EdgeControl);
             DataContext = edge;
@@ -112,19 +124,6 @@ namespace GraphX.Controls
             _sourceWatcher = this.WatchProperty("Source", SourceChanged);
             _targetWatcher = this.WatchProperty("Target", TargetChanged);
         }
-
-        public event EdgeLabelEventHandler LabelMouseDown;
-        protected void OnLabelMouseDown(PointerRoutedEventArgs mArgs)
-        {
-            if (LabelMouseDown != null)
-                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs));
-        }
-
-        protected override void OnEdgeLabelUpdated()
-        {
-            if (EdgeLabelControl is Control)
-                ((Control)EdgeLabelControl).PointerPressed += (sender, args) => OnLabelMouseDown(args);
-        }  
 
         #region Position tracing
 
@@ -228,5 +227,5 @@ namespace GraphX.Controls
         {
             Clean();
         }
-    }
+    }*/
 }

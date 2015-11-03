@@ -20,7 +20,7 @@ namespace GraphX.Controls.Models
         public IEdgeLabelControl EdgeLabelControl { get; set; }
 
 
-        public EdgeLabelSelectedEventArgs(IEdgeLabelControl label, EdgeControl ec, PointerRoutedEventArgs e)
+        public EdgeLabelSelectedEventArgs(IEdgeLabelControl label, EdgeControl ec, PointerRoutedEventArgs e, object nu = null)
             : base(ec, e)
         {
             EdgeLabelControl = label;

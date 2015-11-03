@@ -35,7 +35,9 @@ DETAILED CHANGELOG:
 	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
-	+ Merged GraphArea code for WPF & METRO into a shared files
+	+ Merged GraphArea code for WPF & METRO into the shared files
+	+ Merged EdgeControl and VertexControl code for WPF & METRO into the shared files
+
 
 BREAKING CHANGES:
 	* IExternalLayoutAlgorithm interface now demands TEdge generic specification and have one new method ResetGraph().

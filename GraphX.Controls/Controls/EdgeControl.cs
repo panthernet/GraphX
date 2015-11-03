@@ -1,26 +1,38 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
+#if WPF
+using SysRect = System.Windows.Rect;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
+#elif METRO
+using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using SysRect =Windows.Foundation.Rect;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+#endif
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
-using SysRect = System.Windows.Rect;
 
 namespace GraphX.Controls
 {
     /// <summary>
     /// Visual edge control
     /// </summary>
+#if WPF
     [Serializable]
+#endif
     public class EdgeControl : EdgeControlBase
     {
         #region Dependency Properties
 
-       public static readonly DependencyProperty StrokeThicknessProperty = Shape.StrokeThicknessProperty.AddOwner(typeof(EdgeControl),
-                                                                                                                    new UIPropertyMetadata(5.0));
+        public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double),
+                                                                                              typeof(EdgeControl),
+                                                                                              new PropertyMetadata(5.0));
 
 
        /// <summary>
@@ -33,36 +45,19 @@ namespace GraphX.Controls
        }
 
 
-        private static readonly DependencyPropertyKey IsSelfLoopedPropertyKey
-    = DependencyProperty.RegisterReadOnly("IsSelfLooped", typeof(bool), typeof(EdgeControl),
-    new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.None));
+       private static readonly DependencyProperty IsSelfLoopedProperty = DependencyProperty.Register("IsSelfLooped", typeof(bool), typeof(EdgeControl), new PropertyMetadata(false));
 
-        public static readonly DependencyProperty IsSelfLoopedPropProperty
-            = IsSelfLoopedPropertyKey.DependencyProperty;
-
-        private bool _isSelfLooped { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
-        /// <summary>
-        /// Gets if this edge is self looped (have same Source and Target)
-        /// </summary>
-        public override bool IsSelfLooped
-        {
-            get { return _isSelfLooped; }
-            protected set { SetValue(IsSelfLoopedPropertyKey, value); }
-        }
+       private bool IsSelfLoopedInternal { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
+       /// <summary>
+       /// Gets if this edge is self looped (have same Source and Target)
+       /// </summary>
+       public override bool IsSelfLooped
+       {
+           get { return IsSelfLoopedInternal; }
+           protected set { SetValue(IsSelfLoopedProperty, value); }
+       }
 
         #endregion
-
-        protected override void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue == null) return;
-            ((EdgeControl)d).ActivateSourceListener();
-        }
-
-        protected override void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.NewValue == null) return;
-            ((EdgeControl)d).ActivateTargetListener();
-        }
 
         public event EdgeLabelEventHandler LabelMouseDown;
         protected void OnLabelMouseDown(MouseButtonEventArgs mArgs, ModifierKeys keys)
@@ -74,18 +69,28 @@ namespace GraphX.Controls
         protected override void OnEdgeLabelUpdated()
         {
             if (EdgeLabelControl is Control)
-                ((Control) EdgeLabelControl).MouseDown += (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
+            {
+                var ctrl = (Control)EdgeLabelControl;
+#if WPF
+                MouseButtonEventHandler func = (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
+                ctrl.MouseDown -= func;
+                ctrl.MouseDown += func;
+#elif METRO
+                PointerEventHandler func = (sender, args) => OnLabelMouseDown(args, null);
+                ctrl.PointerPressed -= func;
+                ctrl.PointerPressed += func;
+#endif                
+            }
         }        
-
-        public object TargetObj { get { return Target; } }
 
         #region public Clean()
         public override void Clean()
         {
-            if(_sourceListener != null)
-                _sourceListener.Dispose();
-            if(_targetListener != null)
-                _targetListener.Dispose();
+            //TODO rename to _sourceWatcher _targetWatcher
+            if (_sourceWatcher != null)
+                _sourceWatcher.Dispose();
+            if (_targetWatcher != null)
+                _targetWatcher.Dispose();
             if (Source != null)
                 Source.PositionChanged -= source_PositionChanged;
             if (Target != null)
@@ -121,38 +126,20 @@ namespace GraphX.Controls
         }
         #endregion
 
-        public EdgeControl()
-            : this(null, null, null)
+#if WPF 
+        protected override void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == null) return;
+            ((EdgeControl)d).ActivateSourceListener();
         }
 
-        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
+        protected override void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            DataContext = edge;
-            Source = source; Target = target;
-            Edge = edge; DataContext = edge;
-            SetCurrentValue(ShowArrowsProperty, showArrows);
-            ShowLabel = showLabels;
-            IsHiddenEdgesUpdated = true;
-
-            if (!DesignerProperties.GetIsInDesignMode(this))
-            {
-                EventOptions = new EdgeEventOptions(this);
-                foreach (var item in Enum.GetValues(typeof (EventType)).Cast<EventType>())
-                    UpdateEventhandling(item);
-
-                ActivateSourceListener();
-                ActivateTargetListener();
-
-            }
-            /*var dpd = DependencyPropertyDescriptor.FromProperty(SourceProperty, typeof(EdgeControl));
-            if (dpd != null) dpd.AddValueChanged(this, SourceChanged);
-            dpd = DependencyPropertyDescriptor.FromProperty(TargetProperty, typeof(EdgeControl));
-            if (dpd != null) dpd.AddValueChanged(this, TargetChanged);*/
-
-            IsSelfLooped = _isSelfLooped;
+            if (e.NewValue == null) return;
+            ((EdgeControl)d).ActivateTargetListener();
         }
 
+        #region Vertex position tracing
         internal void ActivateSourceListener()
         {
             if (Source != null && !_posTracersActivatedS)
@@ -160,10 +147,10 @@ namespace GraphX.Controls
                 _sourceTrace = Source.EventOptions.PositionChangeNotification;
                 Source.EventOptions.PositionChangeNotification = true;
                 Source.PositionChanged += source_PositionChanged;
-                _sourceListener = new PropertyChangeNotifier(this, SourceProperty);
-                _sourceListener.ValueChanged += SourceChanged;
+                _sourceWatcher = new PropertyChangeNotifier(this, SourceProperty);
+                _sourceWatcher.ValueChanged += SourceChanged;
                 _posTracersActivatedS = true;
-            } 
+            }
         }
 
 
@@ -174,8 +161,8 @@ namespace GraphX.Controls
                 _targetTrace = Target.EventOptions.PositionChangeNotification;
                 Target.EventOptions.PositionChangeNotification = true;
                 Target.PositionChanged += source_PositionChanged;
-                _targetListener = new PropertyChangeNotifier(this, TargetProperty);
-                _targetListener.ValueChanged += TargetChanged;
+                _targetWatcher = new PropertyChangeNotifier(this, TargetProperty);
+                _targetWatcher.ValueChanged += TargetChanged;
                 _posTracersActivatedT = true;
             }
         }
@@ -189,8 +176,6 @@ namespace GraphX.Controls
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EdgeControl), new FrameworkPropertyMetadata(typeof(EdgeControl)));
         }
 
-
-        #region Vertex position tracing
         private void SourceChanged(object sender, EventArgs e)
         {
             if (_oldSource != null)
@@ -205,7 +190,7 @@ namespace GraphX.Controls
                 Source.EventOptions.PositionChangeNotification = true;
                 Source.PositionChanged += source_PositionChanged;
             }
-            IsSelfLooped = _isSelfLooped;
+            IsSelfLooped = IsSelfLoopedInternal;
             UpdateSelfLoopedEdgeData();
         }
         private void TargetChanged(object sender, EventArgs e)
@@ -222,7 +207,7 @@ namespace GraphX.Controls
                 Target.EventOptions.PositionChangeNotification = true;
                 Target.PositionChanged += source_PositionChanged;
             }
-            IsSelfLooped = _isSelfLooped;
+            IsSelfLooped = IsSelfLoopedInternal;
             UpdateSelfLoopedEdgeData();
         }
 
@@ -237,8 +222,6 @@ namespace GraphX.Controls
         private VertexControl _oldSource;
         private VertexControl _oldTarget;
         #endregion
-
-        #region Event handlers
 
         internal void UpdateEventhandling(EventType typ)
         {
@@ -267,6 +250,113 @@ namespace GraphX.Controls
                     break;
             }
         }
+#elif METRO
+        #region Position tracing
+
+        private void TargetChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            if (_oldTarget != null)
+                _oldTarget.PositionChanged -= source_PositionChanged;
+            _oldTarget = Target;
+            if (Target != null)
+                Target.PositionChanged += source_PositionChanged;
+            IsSelfLooped = IsSelfLoopedInternal;
+            UpdateSelfLoopedEdgeData();
+        }
+
+        private void SourceChanged(object sender, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            if (_oldSource != null)
+                _oldSource.PositionChanged -= source_PositionChanged;
+            _oldSource = Source;
+
+            if (Source != null)
+                Source.PositionChanged += source_PositionChanged;
+            IsSelfLooped = IsSelfLoopedInternal;
+            UpdateSelfLoopedEdgeData();
+        }
+
+
+        private void source_PositionChanged(object sender, EventArgs e)
+        {
+            //update edge on any connected vertex position changes
+            UpdateEdge();
+        }
+
+        private readonly IDisposable _sourceWatcher;
+        private readonly IDisposable _targetWatcher;
+        private VertexControl _oldSource;
+        private VertexControl _oldTarget;
+        #endregion
+
+        internal void UpdateEventhandling(EventType typ)
+        {
+            switch (typ)
+            {
+                case EventType.MouseClick:
+                    if (EventOptions.MouseClickEnabled) PointerPressed += GraphEdge_MouseDown;
+                    else PointerPressed -= GraphEdge_MouseDown;
+                    break;
+                case EventType.MouseDoubleClick:
+                    //if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
+                    //else MouseDoubleClick -= EdgeControl_MouseDoubleClick;
+                    break;
+                case EventType.MouseEnter:
+                    if (EventOptions.MouseEnterEnabled) PointerEntered += EdgeControl_MouseEnter;
+                    else PointerEntered -= EdgeControl_MouseEnter;
+                    break;
+                case EventType.MouseLeave:
+                    if (EventOptions.MouseLeaveEnabled) PointerExited += EdgeControl_MouseLeave;
+                    else PointerExited -= EdgeControl_MouseLeave;
+                    break;
+
+                case EventType.MouseMove:
+                    if (EventOptions.MouseMoveEnabled) PointerMoved += EdgeControl_MouseMove;
+                    else PointerMoved -= EdgeControl_MouseMove;
+                    break;
+            }
+        }
+#endif
+
+        public EdgeControl()
+            : this(null, null, null)
+        {
+        }
+
+        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
+        {
+            DataContext = edge;
+            Source = source; Target = target;
+            Edge = edge; DataContext = edge;
+            this.SetCurrentValue(ShowArrowsProperty, showArrows);
+            this.SetCurrentValue(ShowLabelProperty, showLabels);
+            IsHiddenEdgesUpdated = true;
+
+#if METRO
+            DefaultStyleKey = typeof(EdgeControl);
+#elif WPF
+#endif
+
+            if (!this.IsInDesignMode())
+            {
+                EventOptions = new EdgeEventOptions(this);
+                foreach (var item in Enum.GetValues(typeof (EventType)).Cast<EventType>())
+                    UpdateEventhandling(item);
+
+#if WPF
+                ActivateSourceListener();
+                ActivateTargetListener();
+#elif METRO
+                SourceChanged(null, null);
+                _sourceWatcher = this.WatchProperty("Source", SourceChanged);
+                _targetWatcher = this.WatchProperty("Target", TargetChanged);
+#endif
+            }
+
+            IsSelfLooped = IsSelfLoopedInternal;
+        }
+
+        #region Event handlers
 
         void EdgeControl_MouseLeave(object sender, MouseEventArgs e)
         {

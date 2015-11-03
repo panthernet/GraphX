@@ -1,9 +1,15 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
+#if WPF
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+#elif METRO
+using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Data;
+#endif
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.Controls.Models;
@@ -15,10 +21,18 @@ namespace GraphX.Controls
     /// <summary>
     /// Visual vertex control
     /// </summary>
+#if WPF
     [Serializable]
+#endif
+    [TemplateVisualState(GroupName = "CommonStates", Name = "Normal")]
+    [TemplateVisualState(GroupName = "CommonStates", Name = "Pressed")]
+    [TemplateVisualState(GroupName = "CommonStates", Name = "PointerOver")]
+    [TemplateVisualState(GroupName = "CommonStates", Name = "PointerLeave")]
+    [TemplateVisualState(GroupName = "CommonStates", Name = "Disabled")]
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
     public class VertexControl: VertexControlBase
     {
+#if WPF
         static VertexControl()
         {
             //override the StyleKey Property
@@ -26,19 +40,27 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Gets Vertex data as specified class
+        /// Create vertex visual control
         /// </summary>
-        /// <typeparam name="T">Class</typeparam>
-        public T GetDataVertex<T>() where T: IGraphXVertex
+        /// <param name="vertexData">Vertex data object</param>
+        /// <param name="tracePositionChange">Listen for the vertex position changed events and fire corresponding event</param>
+        /// <param name="bindToDataObject">Bind DataContext to the Vertex data. True by default. </param>
+        public VertexControl(object vertexData, bool tracePositionChange = true, bool bindToDataObject = true)
         {
-            return (T)Vertex;
-        }        
+            if (bindToDataObject) DataContext = vertexData;
+            Vertex = vertexData;
+
+            EventOptions = new VertexEventOptions(this) { PositionChangeNotification = tracePositionChange };
+            foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
+                UpdateEventhandling(item);
+        }
+
 
         #region Position trace feature
 
 
-        private ChangeMonitor _xChangeMonitor = null;
-        private ChangeMonitor _yChangeMonitor = null;
+        private ChangeMonitor _xChangeMonitor;
+        private ChangeMonitor _yChangeMonitor;
         internal void UpdatePositionTraceState()
         {
             if (EventOptions.PositionChangeNotification)
@@ -61,13 +83,13 @@ namespace GraphX.Controls
                 if (_xChangeMonitor != null)
                 {
                     _xChangeMonitor.ChangeDetected -= changeMonitor_ChangeDetected;
-                    _xChangeMonitor.Unbind(this);
+                    _xChangeMonitor.Unbind();
                     _xChangeMonitor = null;
                 }
-                if (_yChangeMonitor == null)
+                if (_yChangeMonitor != null)
                 {
                     _yChangeMonitor.ChangeDetected -= changeMonitor_ChangeDetected;
-                    _yChangeMonitor.Unbind(this);
+                    _yChangeMonitor.Unbind();
                     _yChangeMonitor = null;
                 }
             }
@@ -79,56 +101,18 @@ namespace GraphX.Controls
                 VertexLabelControl.UpdatePosition();
             OnPositionChanged(new Point(), GetPosition());
         }
+
         #endregion
 
-        /// <summary>
-        /// Create vertex visual control
-        /// </summary>
-        /// <param name="vertexData">Vertex data object</param>
-        /// <param name="tracePositionChange">Listen for the vertex position changed events and fire corresponding event</param>
-        /// <param name="bindToDataObject">Bind DataContext to the Vertex data. True by default. </param>
-        public VertexControl(object vertexData, bool tracePositionChange = true, bool bindToDataObject = true)
+        public T FindDescendant<T>(string name)
         {
-            if (bindToDataObject) DataContext = vertexData;
-            Vertex = vertexData;
-
-            EventOptions = new VertexEventOptions(this) { PositionChangeNotification = tracePositionChange };
-            foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
-                UpdateEventhandling(item);
-
-            SizeChanged += VertexControl_SizeChanged;
+            return (T)Template.FindName(name, this);
         }
 
-        void VertexControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            /*if (ShowLabel && VertexLabelControl != null)
-                VertexLabelControl.UpdatePosition();
-            OnPositionChanged(new Point(), GetPosition());*/
-        }
+        #region Event tracing
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            if (Template == null) return;
-            VertexLabelControl = Template.FindName("PART_vertexLabel", this) as IVertexLabelControl;
-
-            if (VertexLabelControl != null)
-            {
-                if(ShowLabel) VertexLabelControl.Show(); else VertexLabelControl.Hide();
-                UpdateLayout();
-                VertexLabelControl.UpdatePosition();
-            }
-
-            VertexConnectionPointsList = this.FindDescendantsOfType<IVertexConnectionPoint>().ToList();
-            if (VertexConnectionPointsList.GroupBy(x => x.Id).Count(group => @group.Count() > 1) > 0)
-                throw new GX_InvalidDataException("Vertex connection points in VertexControl template must have unique Id!");
-        }
-
-        #region Events handling
-
-		private bool clickTrack = false;
-		private Point clickTrackPoint;
+        private bool _clickTrack;
+		private Point _clickTrackPoint;
 
         internal void UpdateEventhandling(EventType typ)
         {
@@ -171,17 +155,13 @@ namespace GraphX.Controls
 
         void VertexControl_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-			if (!clickTrack)
+			if (!_clickTrack)
 				return;
 
-			Point curPoint;
-			if (RootArea != null)
-				curPoint = Mouse.GetPosition(RootArea);
-			else
-				curPoint = new Point();
+            var curPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
 
-			if (curPoint != clickTrackPoint)
-				clickTrack = false;
+			if (curPoint != _clickTrackPoint)
+				_clickTrack = false;
         }
 
         void VertexControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -189,36 +169,16 @@ namespace GraphX.Controls
             if (RootArea != null && Visibility == Visibility.Visible)
             {
                 RootArea.OnVertexMouseUp(this, e, Keyboard.Modifiers);
-                if (clickTrack)
+                if (_clickTrack)
                 {
                     RaiseClick();
                 }
             }
-            clickTrack = false;
+            _clickTrack = false;
             e.Handled = true;
         }
 
-        void VertexControl_MouseLeave(object sender, MouseEventArgs e)
-        {
-            if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexMouseLeave(this, e);
-            //e.Handled = true;
-        }
-
-        void VertexControl_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexMouseEnter(this, e);
-           // e.Handled = true;
-        }
-
-        void VertexControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (RootArea != null)
-                RootArea.OnVertexMouseMove(this, e);
-        }
-
-        void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+                void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnVertexDoubleClick(this);
@@ -229,8 +189,8 @@ namespace GraphX.Controls
         {
 			if (RootArea != null && Visibility == Visibility.Visible)
 				RootArea.OnVertexSelected(this, e, Keyboard.Modifiers);
-            clickTrack = true;
-			clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
+            _clickTrack = true;
+			_clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
             e.Handled = true;
         }
         #endregion
@@ -252,22 +212,6 @@ namespace GraphX.Controls
 
         #endregion
 
-        /// <summary>
-        /// Cleans all potential memory-holding code
-        /// </summary>
-        public override void Clean()
-        {
-            Vertex = null;
-            RootArea = null;
-            HighlightBehaviour.SetIsHighlightEnabled(this, false);
-            DragBehaviour.SetIsDragEnabled(this, false);
-            if (EventOptions != null)
-            {
-                EventOptions.PositionChangeNotification = false;
-                EventOptions.Clean();
-            }
-        }
-
         #region ChangeMonitor class
 
         /// <summary>
@@ -275,19 +219,17 @@ namespace GraphX.Controls
         /// </summary>
         private class ChangeMonitor : DependencyObject
         {
-            public ChangeMonitor()
-            {
-            }
-
             public void Bind(UIElement el, DependencyProperty property)
             {
-                Binding b = new Binding();
-                b.Path = new PropertyPath(property);
-                b.Source = el;
+                var b = new Binding
+                {
+                    Path = new PropertyPath(property),
+                    Source = el
+                };
                 BindingOperations.SetBinding(this, MonitorForChangeProperty, b);
             }
 
-            public void Unbind(UIElement el)
+            public void Unbind()
             {
                 BindingOperations.ClearBinding(this, MonitorForChangeProperty);
             }
@@ -301,7 +243,7 @@ namespace GraphX.Controls
 
             public object MonitorForChange
             {
-                get { return (object)GetValue(MonitorForChangeProperty); }
+                get { return GetValue(MonitorForChangeProperty); }
                 set { SetValue(MonitorForChangeProperty, value); }
             }
 
@@ -321,5 +263,178 @@ namespace GraphX.Controls
         }
 
         #endregion
+#elif METRO
+        #region Attached property tracer
+        private static readonly DependencyProperty TestXProperty =
+            DependencyProperty.Register("TestX", typeof(double), typeof(VertexControl), new PropertyMetadata(0, Testxchanged));
+
+        private static readonly DependencyProperty TestYProperty =
+            DependencyProperty.Register("TestY", typeof(double), typeof(VertexControl), new PropertyMetadata(0, Testychanged));
+
+        private static void Testychanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var vc = d as IPositionChangeNotify;
+            if (vc != null)
+                vc.OnPositionChanged();
+        }
+
+        private static void Testxchanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var vc = d as IPositionChangeNotify;
+            if (vc != null)
+                vc.OnPositionChanged();
+        }
+        #endregion
+
+        /// <summary>
+        /// Create vertex visual control
+        /// </summary>
+        /// <param name="vertexData">Vertex data object</param>
+        /// <param name="bindToDataObject">Bind DataContext to the Vertex data. True by default. </param>
+        public VertexControl(object vertexData,  bool bindToDataObject = true)
+        {
+            DefaultStyleKey = typeof (VertexControl);
+            if (bindToDataObject) DataContext = vertexData;
+            Vertex = vertexData;
+
+            EventOptions = new VertexEventOptions(this);
+            foreach(var item in Enum.GetValues(typeof(EventType)).Cast<EventType>())
+                UpdateEventhandling(item);
+
+            IsEnabledChanged += (sender, args) => VisualStateManager.GoToState(this, IsEnabled ? "Normal" : "Disabled", true);
+
+            var xBinding = new Binding
+            {
+                Path = new PropertyPath("(Canvas.Left)"),
+                Source = this
+            };
+            SetBinding(TestXProperty, xBinding);
+            var yBinding = new Binding
+            {
+                Path = new PropertyPath("(Canvas.Top)"),
+                Source = this
+            };
+            SetBinding(TestYProperty, yBinding);
+        }
+
+        public T FindDescendant<T>(string name)
+        {
+            return (T)(object)this.FindDescendantByName(name);
+        }
+
+        internal void UpdateEventhandling(EventType typ)
+        {
+            switch (typ)
+            {
+                case EventType.MouseClick:
+                    if (EventOptions.MouseClickEnabled) PointerPressed += VertexControl_Down;
+                    else PointerPressed -= VertexControl_Down;
+                    break;
+                case EventType.MouseDoubleClick:
+                    // if (EventOptions.MouseDoubleClickEnabled) Poi += VertexControl_MouseDoubleClick;
+                    // else MouseDoubleClick -= VertexControl_MouseDoubleClick;
+                    break;
+                case EventType.MouseMove:
+                    if (EventOptions.MouseMoveEnabled) PointerMoved += VertexControl_MouseMove;
+                    else PointerMoved -= VertexControl_MouseMove;
+                    break;
+                case EventType.MouseEnter:
+                    if (EventOptions.MouseEnterEnabled) PointerEntered += VertexControl_MouseEnter;
+                    else PointerEntered -= VertexControl_MouseEnter;
+                    break;
+                case EventType.MouseLeave:
+                    if (EventOptions.MouseLeaveEnabled) PointerExited += VertexControl_MouseLeave;
+                    else PointerExited -= VertexControl_MouseLeave;
+                    break;
+            }
+        }
+
+        void VertexControl_Down(object sender, MouseButtonEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+                RootArea.OnVertexSelected(this, e, null);
+            //e.Handled = true;
+            VisualStateManager.GoToState(this, "Pressed", true);
+        }
+#endif
+
+#if WPF
+        public 
+#elif METRO
+        protected
+#endif
+            override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            if (Template == null) return;
+            VertexLabelControl = FindDescendant<IVertexLabelControl>("PART_vertexLabel");
+
+            if (VertexLabelControl != null)
+            {
+                if(ShowLabel) VertexLabelControl.Show(); else VertexLabelControl.Hide();
+                UpdateLayout();
+                VertexLabelControl.UpdatePosition();
+            }
+
+            VertexConnectionPointsList = this.FindDescendantsOfType<IVertexConnectionPoint>().ToList();
+            if (VertexConnectionPointsList.GroupBy(x => x.Id).Count(group => @group.Count() > 1) > 0)
+                throw new GX_InvalidDataException("Vertex connection points in VertexControl template must have unique Id!");
+        }
+
+        #region Events handling
+
+		
+
+        void VertexControl_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+                RootArea.OnVertexMouseLeave(this, e);
+            VisualStateManager.GoToState(this, "PointerLeave", true);
+        }
+
+        void VertexControl_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+                RootArea.OnVertexMouseEnter(this, e);
+            VisualStateManager.GoToState(this, "PointerOver", true);
+        }
+
+        void VertexControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (RootArea != null)
+                RootArea.OnVertexMouseMove(this, e);
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Cleans all potential memory-holding code
+        /// </summary>
+        public override void Clean()
+        {
+            Vertex = null;
+            RootArea = null;
+            HighlightBehaviour.SetIsHighlightEnabled(this, false);
+            DragBehaviour.SetIsDragEnabled(this, false);
+            VertexLabelControl = null;
+
+            if (EventOptions != null)
+            {
+#if WPF
+                EventOptions.PositionChangeNotification = false;
+#endif
+                EventOptions.Clean();
+            }
+        }
+
+        /// <summary>
+        /// Gets Vertex data as specified class
+        /// </summary>
+        /// <typeparam name="T">Class</typeparam>
+        public T GetDataVertex<T>() where T : IGraphXVertex
+        {
+            return (T)Vertex;
+        }   
     }
 }

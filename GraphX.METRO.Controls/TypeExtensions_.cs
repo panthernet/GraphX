@@ -1,19 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+#if METRO
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
-#if METRO
 using Windows.UI.Xaml;
 #endif
 
 namespace GraphX.Controls
 {
-    public static class TypeExtensions
+/*    public static class TypeExtensionsZ
     {
 #if METRO
         public static void SetCurrentValue(this FrameworkElement el, DependencyProperty p, object value)
         {
             el.SetValue(p, value);
+        }
+
+        public static bool IsInDesignMode(this FrameworkElement el)
+        {
+            return DesignMode.DesignModeEnabled;
+        }
+#elif WPF
+        public static bool IsInDesignMode(this FrameworkElement el)
+        {
+            return DesignerProperties.GetIsInDesignMode(el);
         }
 #endif
 
@@ -140,5 +151,5 @@ namespace GraphX.Controls
             foreach (var item in list)
                 func(item);
         }
-    }
+    }*/
 }
