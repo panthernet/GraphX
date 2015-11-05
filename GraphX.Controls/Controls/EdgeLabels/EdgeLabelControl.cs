@@ -346,7 +346,7 @@ namespace GraphX.Controls
         {
             if (!UpdateLabelOnSizeChange) return;
             UpdatePosition();
-            Debug.WriteLine(EdgeControl.Edge.ToString());
+           // Debug.WriteLine(EdgeControl.Edge.ToString());
         }
 
         DependencyObject GetParent()

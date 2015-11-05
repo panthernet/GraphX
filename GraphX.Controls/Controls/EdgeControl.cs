@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 #endif
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
+using GraphX.PCL.Common.Interfaces;
 
 namespace GraphX.Controls
 {
@@ -147,12 +148,12 @@ namespace GraphX.Controls
                 _sourceTrace = Source.EventOptions.PositionChangeNotification;
                 Source.EventOptions.PositionChangeNotification = true;
                 Source.PositionChanged += source_PositionChanged;
+                Source.SizeChanged += Source_SizeChanged;
                 _sourceWatcher = new PropertyChangeNotifier(this, SourceProperty);
                 _sourceWatcher.ValueChanged += SourceChanged;
                 _posTracersActivatedS = true;
             }
         }
-
 
         internal void ActivateTargetListener()
         {
@@ -161,6 +162,7 @@ namespace GraphX.Controls
                 _targetTrace = Target.EventOptions.PositionChangeNotification;
                 Target.EventOptions.PositionChangeNotification = true;
                 Target.PositionChanged += source_PositionChanged;
+                Target.SizeChanged += Source_SizeChanged;
                 _targetWatcher = new PropertyChangeNotifier(this, TargetProperty);
                 _targetWatcher.ValueChanged += TargetChanged;
                 _posTracersActivatedT = true;
@@ -181,6 +183,7 @@ namespace GraphX.Controls
             if (_oldSource != null)
             {
                 _oldSource.PositionChanged -= source_PositionChanged;
+                _oldSource.SizeChanged -= Source_SizeChanged;
                 _oldSource.EventOptions.PositionChangeNotification = _sourceTrace;
             }
             _oldSource = Source;
@@ -189,6 +192,7 @@ namespace GraphX.Controls
                 _sourceTrace = Source.EventOptions.PositionChangeNotification;
                 Source.EventOptions.PositionChangeNotification = true;
                 Source.PositionChanged += source_PositionChanged;
+                Source.SizeChanged += Source_SizeChanged;
             }
             IsSelfLooped = IsSelfLoopedInternal;
             UpdateSelfLoopedEdgeData();
@@ -198,6 +202,7 @@ namespace GraphX.Controls
             if (_oldTarget != null)
             {
                 _oldTarget.PositionChanged -= source_PositionChanged;
+                _oldTarget.SizeChanged -= Source_SizeChanged;
                 _oldTarget.EventOptions.PositionChangeNotification = _targetTrace;
             }
             _oldTarget = Target;
@@ -206,6 +211,7 @@ namespace GraphX.Controls
                 _targetTrace = Target.EventOptions.PositionChangeNotification;
                 Target.EventOptions.PositionChangeNotification = true;
                 Target.PositionChanged += source_PositionChanged;
+                Target.SizeChanged += Source_SizeChanged;
             }
             IsSelfLooped = IsSelfLoopedInternal;
             UpdateSelfLoopedEdgeData();
@@ -214,8 +220,14 @@ namespace GraphX.Controls
         private void source_PositionChanged(object sender, EventArgs e)
         {
             //update edge on any connected vertex position changes
+            UpdateEdge(false);
+        }
+
+        void Source_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
             UpdateEdge();
         }
+
 
         private bool _sourceTrace;
         private bool _targetTrace;
@@ -399,5 +411,14 @@ namespace GraphX.Controls
         {
             Clean();
         }
+
+        /// <summary>
+        /// Gets Edge data as specified class
+        /// </summary>
+        /// <typeparam name="T">Class</typeparam>
+        public T GetDataEdge<T>() where T : IGraphXCommonEdge
+        {
+            return (T)Edge;
+        }   
     }
 }

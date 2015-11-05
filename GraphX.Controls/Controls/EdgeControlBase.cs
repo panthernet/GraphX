@@ -573,11 +573,11 @@ namespace GraphX.Controls
         /// <summary>
         /// Internal value to store last calculated Source vertex connection point
         /// </summary>
-        internal Point? SourceConnectionPoint;
+        protected internal Point? SourceConnectionPoint;
         /// <summary>
         /// Internal value to store last calculated Target vertex connection point
         /// </summary>
-        internal Point? TargetConnectionPoint;
+        protected internal Point? TargetConnectionPoint;
 
         /// <summary>
         ///Gets is looped edge indicator template available. Used to pass some heavy cycle checks.
