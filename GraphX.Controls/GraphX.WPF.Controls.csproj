@@ -114,6 +114,7 @@
     <Compile Include="Controls\EdgePointers\DefaultEdgePointer.cs" />
     <Compile Include="Controls\VertexControlBase.cs" />
     <Compile Include="Controls\VertexLabels\AttachableVertexLabelControl.cs" />
+    <Compile Include="Models\Interfaces\IAttachableControl.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Controls\Misc\IEdgeLabelControl.cs" />
@@ -157,10 +158,12 @@
     <Compile Include="Controls\Misc\IGraphControl.cs" />
     <Compile Include="Animations\Interfaces\IOneWayControlAnimation.cs" />
     <Compile Include="Models\Interfaces\IGraphControlFactory.cs" />
+    <Compile Include="Models\Interfaces\ILabelFactory.cs" />
     <Compile Include="Models\PropertyChangeNotifier.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
     <Compile Include="Models\VertexEventOptions.cs" />
+    <Compile Include="Models\DefaultLabelFactory.cs" />
     <Compile Include="Models\VertexMovedEventArgs.cs" />
     <Compile Include="Models\VertexPositionChangedEH.cs" />
     <Compile Include="Models\VertexPositionEventArgs.cs" />

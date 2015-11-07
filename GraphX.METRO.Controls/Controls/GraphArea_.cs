@@ -425,23 +425,23 @@ namespace GraphX.Controls
         {
             if (isVertex)
             {
-                while (_dataIdsCollection.Contains(_dataIdCounter))
+                while (DataIdsCollection.Contains(_dataIdCounter))
                 {
                     _dataIdCounter++;
                 }
-                _dataIdsCollection.Add(_dataIdCounter);
+                DataIdsCollection.Add(_dataIdCounter);
                 return _dataIdCounter;
             }
-            while (_edgeDataIdsCollection.Contains(_edgeDataIdCounter))
+            while (EdgeDataIdsCollection.Contains(_edgeDataIdCounter))
             {
                 _edgeDataIdCounter++;
             }
-            _edgeDataIdsCollection.Add(_edgeDataIdCounter);
+            EdgeDataIdsCollection.Add(_edgeDataIdCounter);
             return _edgeDataIdCounter;
         }
 
-        private readonly HashSet<long> _dataIdsCollection = new HashSet<long>();
-        private readonly HashSet<long> _edgeDataIdsCollection = new HashSet<long>();
+        private readonly HashSet<long> DataIdsCollection = new HashSet<long>();
+        private readonly HashSet<long> EdgeDataIdsCollection = new HashSet<long>();
 
         #endregion
 
@@ -756,20 +756,20 @@ namespace GraphX.Controls
             if (graph == null) graph = LogicCore.Graph;
             if (graph == null) return;
 
-            _dataIdsCollection.Clear();
+            DataIdsCollection.Clear();
             _dataIdCounter = 1;
-            _edgeDataIdsCollection.Clear();
+            EdgeDataIdsCollection.Clear();
             _edgeDataIdCounter = 1;
 
             // First, rebuild data ID collection for all vertices and edges that already have assigned IDs.
             foreach (var item in graph.Vertices.Where(a => a.ID != -1))
             {
-                bool added = _dataIdsCollection.Add(item.ID);
+                bool added = DataIdsCollection.Add(item.ID);
                 Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
             }
             foreach (var item in graph.Edges.Where(a => a.ID != -1))
             {
-                bool added = _edgeDataIdsCollection.Add(item.ID);
+                bool added = EdgeDataIdsCollection.Add(item.ID);
                 Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
             }
 

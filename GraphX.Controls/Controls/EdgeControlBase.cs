@@ -326,7 +326,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Templated label control to display labels
         /// </summary>
-        protected IEdgeLabelControl EdgeLabelControl { get { return _edgeLabelControl; } set { _edgeLabelControl = value; OnEdgeLabelUpdated(); } }
+        protected internal IEdgeLabelControl EdgeLabelControl { get { return _edgeLabelControl; } set { _edgeLabelControl = value; OnEdgeLabelUpdated(); } }
 
         protected IEdgePointer EdgePointerForSource;
         protected IEdgePointer EdgePointerForTarget;
@@ -369,7 +369,11 @@ namespace GraphX.Controls
             set { SetValue(EdgeProperty, value); }
         }
 
-        internal void InjectEdgeLable(IEdgeLabelControl ctrl)
+        /// <summary>
+        /// Internal method. Attaches label to control
+        /// </summary>
+        /// <param name="ctrl"></param>
+        public void AttachEdgeLabel(IEdgeLabelControl ctrl)
         {
             EdgeLabelControl = ctrl;
             UpdateLabelLayout();

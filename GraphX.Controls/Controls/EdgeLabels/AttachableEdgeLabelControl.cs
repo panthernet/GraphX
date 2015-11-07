@@ -1,4 +1,6 @@
 ﻿
+
+using GraphX.Controls.Models;
 #if WPF
 using System.Windows;
 using System.Windows.Controls;
@@ -15,8 +17,11 @@ namespace GraphX.Controls
 #if METRO
     [Bindable]
 #endif
-    public class AttachableEdgeLabelControl : EdgeLabelControl
+    public class AttachableEdgeLabelControl : EdgeLabelControl, IAttachableControl<EdgeControl>
     {
+        /// <summary>
+        /// Gets label attach node
+        /// </summary>
         public EdgeControl AttachNode { get { return (EdgeControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
 
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
@@ -28,10 +33,14 @@ namespace GraphX.Controls
             DataContext = this;
         }
 
+        /// <summary>
+        /// Attach label to VertexControl
+        /// </summary>
+        /// <param name="node">VertexControl node</param>
         public void Attach(EdgeControl node)
         {
             AttachNode = node;
-            node.InjectEdgeLable(this);
+            node.AttachEdgeLabel(this);
         }
 
         protected override EdgeControl GetEdgeControl(DependencyObject parent)
@@ -40,12 +49,5 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");
             return AttachNode;
         }
-
-       /* public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-           // var container = Template.FindName("PART_container", this) as ContentPresenter;
-            //container.Content = AttachNode.Vertex;
-        }*/
     }
 }

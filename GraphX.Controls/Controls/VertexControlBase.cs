@@ -16,7 +16,7 @@ namespace GraphX.Controls
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
     public abstract class VertexControlBase : Control, IGraphControl
     {
-        protected IVertexLabelControl VertexLabelControl;
+        protected internal IVertexLabelControl VertexLabelControl;
 
         /// <summary>
         /// Fires when IsPositionTraceEnabled property set and object changes its coordinates.
@@ -178,6 +178,15 @@ namespace GraphX.Controls
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
             if (result != null) result.Update();
             return result;
+        }
+
+        /// <summary>
+        /// Internal method. Attaches label to control
+        /// </summary>
+        /// <param name="ctrl">Control</param>
+        public void AttachVertexLabel(IVertexLabelControl ctrl)
+        {
+            VertexLabelControl = ctrl;
         }
 
         /// <summary>

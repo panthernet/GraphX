@@ -220,7 +220,7 @@ namespace GraphX.Controls
         private void source_PositionChanged(object sender, EventArgs e)
         {
             //update edge on any connected vertex position changes
-            UpdateEdge(false);
+            UpdateEdge(true);
         }
 
         void Source_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -301,7 +301,7 @@ namespace GraphX.Controls
         private VertexControl _oldTarget;
         #endregion
 
-        internal void UpdateEventhandling(EventType typ)
+        protected internal virtual void UpdateEventhandling(EventType typ)
         {
             switch (typ)
             {

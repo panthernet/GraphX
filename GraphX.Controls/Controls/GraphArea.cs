@@ -16,6 +16,7 @@ using Point = Windows.Foundation.Point;
 using USize = Windows.Foundation.Size;
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 #endif
 using System.IO;
@@ -43,13 +44,22 @@ namespace GraphX.Controls
 
         #region My properties
 
-#if WPF
+        /// <summary>
+        /// Gets or sets vertex label control factory. Vertex labels will be generated at the end of the graph generation process.
+        /// </summary>
+        public ILabelFactory<IVertexLabelControl> VertexLabelFactory { get; set; }
+        /// <summary>
+        /// Gets or sets edge label control factory. Edge labels will be generated at the end of the graph generation process.
+        /// </summary>
+        public ILabelFactory<IEdgeLabelControl> EdgeLabelFactory { get; set; }
+
+
         /// <summary>
         /// Dummy property. Use EdgesList and VertexList instead.
         /// Also use corresponding methods to modify item collections.
         /// </summary>
         private new UIElementCollection Children { get { return null; } }
-#endif
+
 
         /// <summary>
         /// Gets or sets in which order GraphX controls are drawn
@@ -161,7 +171,7 @@ namespace GraphX.Controls
         /// Add custom control for 
         /// </summary>
         /// <param name="control"></param>
-        public void AddCustomChildControl(UIElement control)
+        public virtual void AddCustomChildControl(UIElement control)
         {
             base.Children.Add(control);
             SetX(control, 0);
@@ -173,7 +183,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="index">Insertion index</param>
         /// <param name="control">Custom control</param>
-        public void InsertCustomChildControl(int index, UIElement control)
+        public virtual void InsertCustomChildControl(int index, UIElement control)
         {
             base.Children.Insert(index, control);
             SetX(control, 0);
@@ -184,7 +194,7 @@ namespace GraphX.Controls
         /// Remove custom control from GraphArea children.
         /// </summary>
         /// <param name="control">Custom control</param>
-        public void RemoveCustomChildControl(UIElement control)
+        public virtual void RemoveCustomChildControl(UIElement control)
         {
             base.Children.Remove(control);
         }
@@ -288,7 +298,7 @@ namespace GraphX.Controls
         /// Returns first vertex that is found under specified coordinates
         /// </summary>
         /// <param name="position">GraphArea coordinate space position</param>
-        public VertexControl GetVertexControlAt(Point position)
+        public virtual VertexControl GetVertexControlAt(Point position)
         {
             Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
             return VertexList.Values.FirstOrDefault(a =>
@@ -399,7 +409,7 @@ namespace GraphX.Controls
                 ReapplySingleVertexVisualProperties(vertexControl);
         }
 
-        private void InternalAddVertex(TVertex vertexData, VertexControl vertexControl)
+        protected void InternalAddVertex(TVertex vertexData, VertexControl vertexControl)
         {
             if (vertexControl == null || vertexData == null) return;
             vertexControl.RootArea = this;
@@ -422,7 +432,7 @@ namespace GraphX.Controls
                 ReapplySingleEdgeVisualProperties(edgeControl);
         }
 
-        private void InternalAddEdge(TEdge edgeData, EdgeControl edgeControl)
+        protected void InternalAddEdge(TEdge edgeData, EdgeControl edgeControl)
         {
             if (edgeControl == null || edgeData == null) return;
             if (_edgeslist.ContainsKey(edgeData)) throw new GX_InvalidDataException("AddEdge() -> An edge with the same data has already been added to layout!");
@@ -446,7 +456,7 @@ namespace GraphX.Controls
                 ReapplySingleEdgeVisualProperties(edgeControl);
         }
 
-        private void InternalInsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
+        protected void InternalInsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
         {
             if (edgeControl == null || edgeData == null) return;
             if (_edgeslist.ContainsKey(edgeData)) throw new GX_InvalidDataException("AddEdge() -> An edge with the same data has already been added!");
@@ -472,32 +482,70 @@ namespace GraphX.Controls
         private int _dataIdCounter = 1;
         private int _edgeDataIdCounter = 1;
         
-        private int GetNextUniqueId(bool isVertex)
+        protected virtual int GetNextUniqueId(bool isVertex)
         {
             if (isVertex)
             {
-                while (_dataIdsCollection.Contains(_dataIdCounter))
+                while (DataIdsCollection.Contains(_dataIdCounter))
                 {
                     _dataIdCounter++;
                 }
-                _dataIdsCollection.Add(_dataIdCounter);
+                DataIdsCollection.Add(_dataIdCounter);
                 return _dataIdCounter;
             }
-            while (_edgeDataIdsCollection.Contains(_edgeDataIdCounter))
+            while (EdgeDataIdsCollection.Contains(_edgeDataIdCounter))
             {
                 _edgeDataIdCounter++;
             }
-            _edgeDataIdsCollection.Add(_edgeDataIdCounter);
+            EdgeDataIdsCollection.Add(_edgeDataIdCounter);
             return _edgeDataIdCounter;
         }
 
-        private readonly HashSet<long> _dataIdsCollection = new HashSet<long>();
-        private readonly HashSet<long> _edgeDataIdsCollection = new HashSet<long>();
+        protected readonly HashSet<long> DataIdsCollection = new HashSet<long>();
+        protected readonly HashSet<long> EdgeDataIdsCollection = new HashSet<long>();
         
 
         #endregion
 
         #region GenerateGraph
+
+        #region Label factories
+
+        protected virtual void GenerateVertexLabels()
+        {
+            if (VertexLabelFactory == null) return;
+            base.Children.OfType<IVertexLabelControl>().Cast<UIElement>().ToList().ForEach(a => base.Children.Remove(a));            
+            VertexList.ForEach(a =>
+            {
+                var label = (UIElement)VertexLabelFactory.CreateLabel(a.Value);
+                if(_svVertexLabelShow == false)
+                    label.Visibility = Visibility.Collapsed;
+                AddCustomChildControl(label);
+                label.Measure(new USize(double.MaxValue, double.MaxValue));
+                var iLabel = label as IVertexLabelControl;
+                if(iLabel != null)
+                    iLabel.UpdatePosition();
+            });
+        }
+
+        protected virtual void GenerateEdgeLabels()
+        {
+            if (EdgeLabelFactory == null) return;
+            base.Children.OfType<IEdgeLabelControl>().Cast<UIElement>().ToList().ForEach(a => base.Children.Remove(a));
+            EdgesList.ForEach(a =>
+            {
+                var label = (UIElement)EdgeLabelFactory.CreateLabel(a.Value);
+                if (_svShowEdgeLabels == false)
+                    label.Visibility = Visibility.Collapsed;
+                AddCustomChildControl(label);
+                label.Measure(new USize(double.MaxValue, double.MaxValue));
+                var iLabel = label as IEdgeLabelControl;
+                if (iLabel != null)
+                    iLabel.UpdatePosition();
+            });
+        }
+
+        #endregion
 
         #region Sizes operations
         /// <summary>
@@ -553,7 +601,7 @@ namespace GraphX.Controls
         /// <param name="positions">Optional vertex positions</param>
         /// <param name="showObjectsIfPosSpecified">If True, all objects will be made visible when positions are specified</param>
         /// <param name="autoresolveIds">Automaticaly assign unique Ids to data objects. Can be vital for different GraphX logic parts such as parallel edges.</param>
-        public void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true, bool autoresolveIds = true)
+        public virtual void PreloadGraph(Dictionary<TVertex, Point> positions = null, bool showObjectsIfPosSpecified = true, bool autoresolveIds = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -586,7 +634,7 @@ namespace GraphX.Controls
         /// <param name="graph">Data graph, by default is null and uses LogicCore.Graph as the source</param>
         /// <param name="dataContextToDataItem">Sets DataContext property to vertex data item of the control</param>
         /// <param name="forceVisPropRecovery"></param>
-        public void PreloadVertexes(TGraph graph = null, bool dataContextToDataItem = true, bool forceVisPropRecovery = false)
+        public virtual void PreloadVertexes(TGraph graph = null, bool dataContextToDataItem = true, bool forceVisPropRecovery = false)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -606,6 +654,9 @@ namespace GraphX.Controls
                 vc.SetCurrentValue(GraphAreaBase.PositioningCompleteProperty, false); // Style can make them invisible until positioning is complete (after layout positions are calculated)
                 InternalAddVertex(it, vc);
             }
+
+            GenerateVertexLabels();
+
             if (forceVisPropRecovery)
                 ReapplyVertexVisualProperties();
             //assign graph
@@ -619,10 +670,10 @@ namespace GraphX.Controls
 
 
 #if WPF
-        private void _relayoutGraph(CancellationToken cancellationToken)
+        protected virtual void _relayoutGraph(CancellationToken cancellationToken)
         {
 #elif METRO
-        private Task _relayoutGraph(CancellationToken cancellationToken, bool generateAllEdges = false, bool standalone = true)
+        protected virtual Task _relayoutGraph(CancellationToken cancellationToken, bool generateAllEdges = false, bool standalone = true)
         {
             return Task.Run(async () =>
             {
@@ -726,24 +777,17 @@ namespace GraphX.Controls
 #endif
         }
 
-#if METRO
-        private void SetCurrentValue(DependencyProperty property, object value)
-        {
-            SetValue(property, value);
-        }
-#endif
-
         /// <summary>
         /// Relayout graph using the same vertexes
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
 #if WPF
-        public void RelayoutGraph(bool generateAllEdges = false)
+        public virtual void RelayoutGraph(bool generateAllEdges = false)
         {
             _relayoutGraphMain(generateAllEdges);
         }
 
-        private void _relayoutGraphMain(bool generateAllEdges = false, bool standalone = true)
+        protected virtual void _relayoutGraphMain(bool generateAllEdges = false, bool standalone = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -768,7 +812,7 @@ namespace GraphX.Controls
             }  
         }
 
-        private void _finishUpRelayoutGraph(bool generateAllEdges, bool standalone)
+        protected virtual void _finishUpRelayoutGraph(bool generateAllEdges, bool standalone)
         {
             if (generateAllEdges)
             {
@@ -798,7 +842,7 @@ namespace GraphX.Controls
             return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, standalone: true);
         }
 
-        private async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
+        protected virtual async Task _relayoutGraphMainAsync(CancellationToken externalCancellationToken, bool generateAllEdges = false, bool standalone = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -942,12 +986,12 @@ namespace GraphX.Controls
         /// <param name="graph">Data graph</param>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
+        public virtual Task GenerateGraphAsync(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             return GenerateGraphAsync(graph, CancellationToken.None, generateAllEdges, dataContextToDataItem);
         }
 
-        public Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
+        public virtual Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
                 AutoresolveIds(false, graph);
@@ -961,7 +1005,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public Task GenerateGraphAsync(bool generateAllEdges = true, bool dataContextToDataItem = true)
+        public virtual Task GenerateGraphAsync(bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
@@ -976,7 +1020,7 @@ namespace GraphX.Controls
         /// <param name="graph">Data graph</param>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
+        public virtual void GenerateGraph(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (AutoAssignMissingDataId)
                 AutoresolveIds(false, graph);
@@ -990,7 +1034,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
-        public void GenerateGraph(bool generateAllEdges = true, bool dataContextToDataItem = true)
+        public virtual void GenerateGraph(bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
@@ -999,20 +1043,20 @@ namespace GraphX.Controls
             GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 #endif
-        private void AutoresolveIds(bool includeEdgeIds, TGraph graph = null)
+        protected virtual void AutoresolveIds(bool includeEdgeIds, TGraph graph = null)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (graph == null) graph = LogicCore.Graph;
             if (graph == null) return;
 
-            _dataIdsCollection.Clear();
+            DataIdsCollection.Clear();
             _dataIdCounter = 1;
 
 			// First, rebuild data ID collection for all vertices and edges that already have assigned IDs.
 			foreach (var item in graph.Vertices.Where(a => a.ID != -1))
 			{
-				bool added = _dataIdsCollection.Add(item.ID);
+				bool added = DataIdsCollection.Add(item.ID);
 				Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding a vertex ID during rebuild of data ID collection.", item.ID));
             }
 
@@ -1023,18 +1067,18 @@ namespace GraphX.Controls
                 AutoresolveEdgeIds(graph);
         }
 
-        private void AutoresolveEdgeIds(TGraph graph = null)
+        protected virtual void AutoresolveEdgeIds(TGraph graph = null)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
             if (graph == null) graph = LogicCore.Graph;
             if (graph == null) return;
 
-            _edgeDataIdsCollection.Clear();
+            EdgeDataIdsCollection.Clear();
             _edgeDataIdCounter = 1;
             foreach (var item in graph.Edges.Where(a => a.ID != -1))
             {
-                bool added = _edgeDataIdsCollection.Add(item.ID);
+                bool added = EdgeDataIdsCollection.Add(item.ID);
                 Debug.Assert(added, string.Format("Duplicate ID '{0}' found while adding an edge ID during rebuild of data ID collection.", item.ID));
             }
             foreach (var item in graph.Edges.Where(a => a.ID == -1))
@@ -1046,13 +1090,13 @@ namespace GraphX.Controls
 
         #region Methods for EDGE and VERTEX properties set
 
-        private void ReapplyVertexVisualProperties()
+        protected void ReapplyVertexVisualProperties()
         {
             foreach (var item in VertexList.Values)
                 ReapplySingleVertexVisualProperties(item);
         }
 
-        private void ReapplySingleVertexVisualProperties(VertexControl item)
+        protected void ReapplySingleVertexVisualProperties(VertexControl item)
         {
             if (_svVerticesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, _svVerticesDragEnabled.Value);
             if (_svVerticesDragUpdateEdges != null) DragBehaviour.SetUpdateEdgesOnMove(item, _svVerticesDragUpdateEdges.Value);
@@ -1061,15 +1105,20 @@ namespace GraphX.Controls
             if (_svVertexHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svVertexHlEnabled.Value);
             if (_svVertexHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svVertexHlObjectType.Value);
             if (_svVertexHlEdgesType != null) HighlightBehaviour.SetHighlightEdges(item, _svVertexHlEdgesType.Value);
+            CustomReapplySingleVertexVisualProperties(item);
         }
 
-        private void ReapplyEdgeVisualProperties()
+        protected virtual void CustomReapplySingleVertexVisualProperties(VertexControl item) { }
+
+        protected void ReapplyEdgeVisualProperties()
         {
             foreach (var item in EdgesList.Values)
                 ReapplySingleEdgeVisualProperties(item);
         }
 
-        private void ReapplySingleEdgeVisualProperties(EdgeControl item)
+        protected virtual void CustomReapplySingleEdgeVisualProperties(EdgeControl item) { }
+
+        protected void ReapplySingleEdgeVisualProperties(EdgeControl item)
         {
             if (_svEdgeDashStyle != null) item.DashStyle = _svEdgeDashStyle.Value;
             if (_svShowEdgeArrows != null) item.SetCurrentValue(EdgeControl.ShowArrowsProperty, _svShowEdgeArrows.Value);
@@ -1079,6 +1128,7 @@ namespace GraphX.Controls
             if (_svEdgeHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svEdgeHlEnabled.Value);
             if (_svEdgeHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svEdgeHlObjectType.Value);
             HighlightBehaviour.SetHighlightEdges(item, EdgesType.All);
+            CustomReapplySingleEdgeVisualProperties(item);
         }
 
         private bool? _svUpdateLabelPosition;
@@ -1255,7 +1305,7 @@ namespace GraphX.Controls
 
         #region GenerateAllEdges()
 
-        private void GenerateAllEdgesInternal(Visibility defaultVisibility = Visibility.Visible)
+        protected virtual void GenerateAllEdgesInternal(Visibility defaultVisibility = Visibility.Visible)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1278,6 +1328,8 @@ namespace GraphX.Controls
 
             if (LogicCore.EnableParallelEdges)
                 UpdateParallelEdgesData();
+
+            GenerateEdgeLabels();
         }
 
         /// <summary>
@@ -1285,7 +1337,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="defaultVisibility">Default edge visibility on layout</param>
         /// <param name="updateLayout">Ensures that layout is properly updated before edges calculation. If you are sure that it is already updated you can set this param to False to increase performance. </param>
-        public void GenerateAllEdges(Visibility defaultVisibility = Visibility.Visible, bool updateLayout = true)
+        public virtual void GenerateAllEdges(Visibility defaultVisibility = Visibility.Visible, bool updateLayout = true)
         {
             if(updateLayout) UpdateLayout();
             GenerateAllEdgesInternal(defaultVisibility);
@@ -1295,7 +1347,7 @@ namespace GraphX.Controls
         /// Update parallel edges information. Only needed to be run when edges has been added manualy and has to track parallel ones.
         /// Essentialy refreshes EdgeControl::IsParallel property
         /// </summary>
-        public void UpdateParallelEdgesData()
+        public virtual void UpdateParallelEdgesData()
         {
             var usedIds = _edgeslist.Count > 20 ? new HashSet<long>() as ICollection<long> : new List<long>();
 
@@ -1427,7 +1479,7 @@ namespace GraphX.Controls
         /// Update visual appearance for all possible visual edges
         /// </summary>
         /// <param name="performFullUpdate">If True - perform full edge update including all children checks such as pointers & labels. If False - update only edge routing and edge visual</param>
-        public void UpdateAllEdges(bool performFullUpdate = false)
+        public virtual void UpdateAllEdges(bool performFullUpdate = false)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1515,7 +1567,7 @@ namespace GraphX.Controls
         /// Obtain graph layout data, which can then be used with a serializer.
         /// </summary>
         /// <exception cref="GX_InvalidDataException">Occurs when LogicCore or object Id isn't set</exception>
-        public List<GraphSerializationData> ExtractSerializationData()
+        public virtual List<GraphSerializationData> ExtractSerializationData()
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1544,7 +1596,7 @@ namespace GraphX.Controls
         /// <param name="data">The serialization data</param>
         /// <exception cref="GX_InvalidDataException">Occurs when LogicCore isn't set</exception>
         /// <exception cref="GX_SerializationException">Occurs when edge source or target isn't set</exception>
-        public void RebuildFromSerializationData(IEnumerable<GraphSerializationData> data)
+        public  virtual void RebuildFromSerializationData(IEnumerable<GraphSerializationData> data)
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -1613,7 +1665,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Export current graph layout into the PNG image file. layout will be saved in full size.
         /// </summary>
-        public void ExportAsPng()
+        public virtual void ExportAsPng()
         {
             ExportAsImage(ImageType.PNG);
         }
@@ -1622,7 +1674,7 @@ namespace GraphX.Controls
         /// Export current graph layout into the JPEG image file. layout will be saved in full size.
         /// </summary>
         /// <param name="quality">Optional image quality parameter</param>   
-        public void ExportAsJpeg(int quality = 100)
+        public virtual void ExportAsJpeg(int quality = 100)
         {
             ExportAsImage(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
         }
@@ -1634,7 +1686,7 @@ namespace GraphX.Controls
         /// <param name="dpi">Optional image DPI parameter</param>
         /// <param name="useZoomControlSurface">Use zoom control parent surface to render bitmap (only visible zoom content will be exported)</param>
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
-        public void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
+        public virtual void ExportAsImage(ImageType itype, bool useZoomControlSurface = true, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
 #if WPF
             string fileExt;
@@ -1674,7 +1726,7 @@ namespace GraphX.Controls
         /// Print current visual graph layout
         /// </summary>
         /// <param name="description">Optional header description</param>
-        public void PrintDialog(string description = "")
+        public virtual void PrintDialog(string description = "")
         {
 #if WPF
             UIElement vis = this;
@@ -1712,7 +1764,13 @@ namespace GraphX.Controls
             MoveAnimation = null;
             DeleteAnimation = null;
             MouseOverAnimation = null;
+            OnDispose();
         }
+
+        /// <summary>
+        /// Runs when base dispose is done
+        /// </summary>
+        protected virtual void OnDispose() {}
 
         /// <summary>
         /// Clear graph visual layout (all edges, vertices and their states storage if any) and (optionally) LogicCore
@@ -1720,7 +1778,7 @@ namespace GraphX.Controls
         /// <param name="removeCustomObjects">Also remove any possible custom objects</param>
         /// <param name="clearStates">Also clear states storage (if you select clearLogicCore it will be cleaned anyway)</param>
         /// <param name="clearLogicCore">Also clear LogiCore data</param>
-        public void ClearLayout(bool removeCustomObjects = true, bool clearStates = false, bool clearLogicCore = false)
+        public virtual void ClearLayout(bool removeCustomObjects = true, bool clearStates = false, bool clearLogicCore = false)
         {
             RemoveAllEdges();
             RemoveAllVertices();
@@ -1734,6 +1792,64 @@ namespace GraphX.Controls
             if(clearLogicCore || clearStates)
                 if (StateStorage != null)
                     StateStorage.Dispose();
+        }
+        #endregion
+
+        #region MoveTo routines
+        /// <summary>
+        /// Move specified visual entity on top of the visual tree
+        /// </summary>
+        /// <param name="control">Visual entity</param>
+        /// <param name="moveLabels">Also move attached labels (if any)</param>
+        public virtual void MoveToFront<T>(T control, bool moveLabels = true)
+            where T : class
+        {
+            MoveTo(true, control, moveLabels);
+        }
+
+        /// <summary>
+        /// Move specified visual entity to the bottom of the visual tree
+        /// </summary>
+        /// <param name="control">Visual entity</param>
+        /// <param name="moveLabels">Also move attached labels (if any). Disable to decrease performance hit if you don't use labels.</param>
+        public virtual void MoveToBack<T>(T control, bool moveLabels = true)
+            where T : class
+        {
+            MoveTo(false, control, moveLabels);
+        }
+
+        /// <summary>
+        /// Internal method to process MoveTo public methods
+        /// </summary>
+        /// <typeparam name="T">Control type</typeparam>
+        /// <param name="toFront">If True - move to front overwise move to back</param>
+        /// <param name="control">Control</param>
+        /// <param name="moveLabels">Also move labels</param>
+        protected virtual void MoveTo<T>(bool toFront, T control, bool moveLabels = true)
+            where T : class
+        {
+            var result = (UIElement)(object)base.Children.OfType<T>().FirstOrDefault(a => a == control);
+            if (result == null) return;
+            if (!base.Children.Contains(result)) return;
+            base.Children.Remove(result);
+            if (toFront) base.Children.Add(result);
+            else base.Children.Insert(0, result);
+            if (moveLabels)
+            {
+                var vResult = result as VertexControl;
+                var eResult = result as EdgeControl;
+                UIElement element = null;
+                if (vResult != null && vResult.VertexLabelControl != null)
+                    element = (UIElement)vResult.VertexLabelControl;
+                if (eResult != null && eResult.EdgeLabelControl != null)
+                    element = (UIElement)eResult.EdgeLabelControl;
+                if (element != null && base.Children.Contains(element))
+                {
+                    base.Children.Remove(element);
+                    if (toFront) base.Children.Add(element);
+                    else base.Children.Insert(0, element);
+                }
+            }
         }
         #endregion
     }

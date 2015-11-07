@@ -24,7 +24,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                    <Border Background="{TemplateBinding Background}"
+                    <Border Name="bb"  Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}" Width="20" Height="20" BorderThickness="1">
                     </Border>
                 </ControlTemplate>

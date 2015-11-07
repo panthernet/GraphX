@@ -1,4 +1,6 @@
 ﻿
+
+using GraphX.Controls.Models;
 #if WPF
 using System.Windows;
 using DefaultEventArgs = System.EventArgs;
@@ -16,8 +18,11 @@ namespace GraphX.Controls
 #if METRO
     [Bindable]
 #endif
-    public class AttachableVertexLabelControl : VertexLabelControl
+    public class AttachableVertexLabelControl : VertexLabelControl, IAttachableControl<VertexControl>
     {
+        /// <summary>
+        /// Gets label attach node
+        /// </summary>
         public VertexControl AttachNode { get { return (VertexControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
 
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(VertexControl), typeof(AttachableVertexLabelControl), 
@@ -29,9 +34,14 @@ namespace GraphX.Controls
             DataContext = this;
         }
 
+        /// <summary>
+        /// Attach label to VertexControl
+        /// </summary>
+        /// <param name="node">VertexControl node</param>
         public void Attach(VertexControl node)
         {
             AttachNode = node;
+            node.AttachVertexLabel(this);
         }
 
         protected override VertexControl GetVertexControl(DependencyObject parent)
@@ -40,13 +50,6 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("AttachableVertexLabelControl node is not attached!");
             return AttachNode;
         }
-
-       /* public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            var container = Template.FindName("PART_container", this) as ContentPresenter;
-            container.Content = AttachNode.Vertex;
-        }*/
 
         public override void UpdatePosition()
         {

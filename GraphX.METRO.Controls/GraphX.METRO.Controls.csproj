@@ -248,6 +248,9 @@
     <Compile Include="..\GraphX.Controls\Models\ControlEventArgs.cs">
       <Link>Models\ControlEventArgs.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Models\DefaultLabelFactory.cs">
+      <Link>Models\DefaultLabelFactory.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Models\EdgeEventOptions.cs">
       <Link>Models\EdgeEventOptions.cs</Link>
     </Compile>
@@ -257,8 +260,14 @@
     <Compile Include="..\GraphX.Controls\Models\GraphControlFactory.cs">
       <Link>Models\GraphControlFactory.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Models\Interfaces\IAttachableControl.cs">
+      <Link>Models\Interfaces\IAttachableControl.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Models\Interfaces\IGraphControlFactory.cs">
       <Link>Models\Interfaces\IGraphControlFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Models\Interfaces\ILabelFactory.cs">
+      <Link>Models\Interfaces\ILabelFactory.cs</Link>
     </Compile>
     <Compile Include="..\GraphX.Controls\Models\RemoveControlEventHandler.cs">
       <Link>Models\RemoveControlEventHandler.cs</Link>

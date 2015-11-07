@@ -322,7 +322,7 @@ namespace GraphX.Controls
             return (T)(object)this.FindDescendantByName(name);
         }
 
-        internal void UpdateEventhandling(EventType typ)
+        protected internal virtual void UpdateEventhandling(EventType typ)
         {
             switch (typ)
             {
@@ -363,12 +363,12 @@ namespace GraphX.Controls
 #elif METRO
         protected
 #endif
-            override void OnApplyTemplate()
+        override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
             if (Template == null) return;
-            VertexLabelControl = FindDescendant<IVertexLabelControl>("PART_vertexLabel");
+            VertexLabelControl = VertexLabelControl ?? FindDescendant<IVertexLabelControl>("PART_vertexLabel");
 
             if (VertexLabelControl != null)
             {
