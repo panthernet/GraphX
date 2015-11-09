@@ -58,7 +58,7 @@ namespace GraphX.Controls
         /// Dummy property. Use EdgesList and VertexList instead.
         /// Also use corresponding methods to modify item collections.
         /// </summary>
-        private new UIElementCollection Children { get { return null; } }
+        //private new UIElementCollection Children { get { return null; } }
 
 
         /// <summary>
