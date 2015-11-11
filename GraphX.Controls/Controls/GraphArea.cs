@@ -1615,7 +1615,8 @@ namespace GraphX.Controls
                 ctrl.SetPosition(item.Position.X, item.Position.Y);
                 AddVertex(vertexdata, ctrl);
                 LogicCore.Graph.AddVertex(vertexdata);
-            }
+				ctrl.ApplyTemplate();
+			}
             var elist = data.Where(a => a.Data is TEdge);
 
             foreach (var item in elist)
