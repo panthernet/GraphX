@@ -181,7 +181,7 @@ namespace GraphX.Controls
                 void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
-                RootArea.OnVertexDoubleClick(this);
+                RootArea.OnVertexDoubleClick(this, e);
             //e.Handled = true;
         }
 

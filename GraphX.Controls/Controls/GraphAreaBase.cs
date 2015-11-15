@@ -282,10 +282,10 @@ namespace GraphX
         public event VertexSelectedEventHandler VertexDoubleClick;
 
 #if WPF
-        internal virtual void OnVertexDoubleClick(VertexControl vc)
+        internal virtual void OnVertexDoubleClick(VertexControl vc, MouseButtonEventArgs e)
         {
             if (VertexDoubleClick != null)
-                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, null, Keyboard.Modifiers));
+                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
         }
 #elif METRO
         internal virtual void OnVertexDoubleClick(VertexControl vc, PointerRoutedEventArgs e)

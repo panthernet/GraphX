@@ -24,6 +24,7 @@ DETAILED CHANGELOG:
 	+ Added GraphArea::GetChildControls() method to easily fetch any child objects (incl. custom) by condition or just get all of them
 	+ Added GraphArea::VertexLabelFactory and GraphArea::EdgeLabelFactory properties for corresponding label factories. Will generate labels automatically after the graph layout if defined
 	+ Added GraphArea::MoveToFront() and GraphArea::MoveToBack() methods that will move specified GraphArea child to the top/bottom of the visual tree respectively
+	+ Added MouseEventArgs for VertexDoubleClick event to be able to correctly block click event when you're dragging vertex and open dialog window at once
 	+ Fixed id autoresolve issue when calling GraphArea::GenerateAllEdges() after manual edge data compilation (thanks to Hannes Hasenauer)
 	+ Fixed some METRO code not that hasn't been ported correctly
 	+ Fixed an exception in ZoomControl caused by Ctrl + Alt + DblClick combination (thanks to persalmi)
