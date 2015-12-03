@@ -125,7 +125,7 @@ namespace GraphX.Controls
         public void Show()
         {
             if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
- #if WPF
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
 #else
             SetValue(UIElement.VisibilityProperty, Visibility.Visible);

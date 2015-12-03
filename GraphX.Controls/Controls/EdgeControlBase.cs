@@ -42,8 +42,6 @@ namespace GraphX.Controls
 
         #region Properties & Fields
 
-        
-
         public abstract bool IsSelfLooped { get; protected set; }
         public abstract void Dispose();
         public abstract void Clean();

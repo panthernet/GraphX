@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using Microsoft.Win32;
 using QuickGraph;
 using ShowcaseApp.WPF.FileSerialization;
@@ -193,6 +194,19 @@ namespace ShowcaseApp.WPF.Pages
         {
             var late = (LayoutAlgorithmTypeEnum)gg_layalgo.SelectedItem;
             gg_Area.LogicCore.DefaultLayoutAlgorithm = late;
+            if (late == LayoutAlgorithmTypeEnum.EfficientSugiyama)
+            {
+                var prms = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.EfficientSugiyama) as EfficientSugiyamaLayoutParameters;
+                prms.EdgeRouting = SugiyamaEdgeRoutings.Orthogonal;
+                prms.LayerDistance = prms.VertexDistance = 100;
+                gg_Area.LogicCore.EdgeCurvingEnabled = false;
+                gg_Area.LogicCore.DefaultLayoutAlgorithmParams = prms;
+                gg_eralgo.SelectedItem = EdgeRoutingAlgorithmTypeEnum.None;
+            }
+            else
+            {
+                gg_Area.LogicCore.EdgeCurvingEnabled = true;
+            }
             if (late == LayoutAlgorithmTypeEnum.BoundedFR)
                 gg_Area.LogicCore.DefaultLayoutAlgorithmParams
                     = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.BoundedFR);
@@ -276,6 +290,15 @@ namespace ShowcaseApp.WPF.Pages
             gg_Area.ClearLayout();
             var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
             graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
+            if (gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.EfficientSugiyama || gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Sugiyama)
+            {
+                var vlist = graph.Vertices.ToList();
+                graph.AddEdge(new DataEdge(vlist[0], vlist[1]));
+                graph.AddEdge(new DataEdge(vlist[0], vlist[2]));
+
+            }
+
+
             //assign graph again as we need to update Graph param inside and i have no independent examples
             if (gg_Area.LogicCore.ExternalLayoutAlgorithm != null)
                 AssignExternalLayoutAlgorithm(graph);

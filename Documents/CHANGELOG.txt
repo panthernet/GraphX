@@ -26,6 +26,7 @@ DETAILED CHANGELOG:
 	+ Added GraphArea::MoveToFront() and GraphArea::MoveToBack() methods that will move specified GraphArea child to the top/bottom of the visual tree respectively
 	+ Added MouseEventArgs for VertexDoubleClick event to be able to correctly block click event when you're dragging vertex and open dialog window at once
 	+ Fixed id autoresolve issue when calling GraphArea::GenerateAllEdges() after manual edge data compilation (thanks to Hannes Hasenauer)
+	+ Fixed edge label visibility when hideing/showing edges through Visibility property [WPF]
 	+ Fixed some METRO code not that hasn't been ported correctly
 	+ Fixed an exception in ZoomControl caused by Ctrl + Alt + DblClick combination (thanks to persalmi)
 	+ Fixed NaN result for FR algorithms calc (thanks to bleibold)
@@ -36,6 +37,7 @@ DETAILED CHANGELOG:
 	+ Improved styles flexibility by working with dependency values instead of straight assignment in some places
 	+ Improved random layout algorithm randomness by seeding new Guid hash which fixes some odd behavior in rare cases
 	+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
+	+ Improved general graph showcase for Sugiyama like algorithms
 	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class

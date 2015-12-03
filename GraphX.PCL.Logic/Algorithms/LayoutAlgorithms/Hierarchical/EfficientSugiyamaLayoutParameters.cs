@@ -10,7 +10,7 @@
         private double _widthPerHeight = 1.0;
         private bool _minimizeEdgeLength = true;
         internal const int MAX_PERMUTATIONS = 50;
-        private SugiyamaEdgeRoutings _edgeRouting = SugiyamaEdgeRoutings.Traditional;
+        private SugiyamaEdgeRoutings _edgeRouting = SugiyamaEdgeRoutings.Orthogonal;
 
         /// <summary>
         /// Layout direction

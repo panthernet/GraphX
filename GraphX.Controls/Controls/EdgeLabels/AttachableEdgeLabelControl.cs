@@ -27,7 +27,6 @@ namespace GraphX.Controls
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
             new PropertyMetadata(null));
 
-
         public AttachableEdgeLabelControl()
         {
             DataContext = this;
@@ -39,10 +38,28 @@ namespace GraphX.Controls
         /// <param name="node">VertexControl node</param>
         public void Attach(EdgeControl node)
         {
+#if WPF
+            if(AttachNode != null)
+                AttachNode.IsVisibleChanged -= AttachNode_IsVisibleChanged;
             AttachNode = node;
+            AttachNode.IsVisibleChanged += AttachNode_IsVisibleChanged;
+#elif METRO
+            AttachNode = node;
+#endif
             node.AttachEdgeLabel(this);
         }
 
+#if WPF
+        void AttachNode_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(AttachNode.IsVisible && AttachNode.ShowLabel)
+                base.Show();
+            else if (!AttachNode.IsVisible)
+            {
+                base.Hide();
+            }
+        }
+#endif
         protected override EdgeControl GetEdgeControl(DependencyObject parent)
         {
             if(AttachNode == null)
