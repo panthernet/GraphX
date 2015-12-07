@@ -9,7 +9,7 @@ HIGHLIGHTS:
 		- No more label cuts when vertex is strictly limited in width or height
 		- No more jerky edge endpoints when edge label is too large
 		- No more labels behind edges or vertices. You can control how to inject them		
-	To use new labels you have to specify GraphArea::VertexLabelFactory and GraphArea::EdgeLabelFactory factories to generate labels when graph is generated.
+	To use new labels you have to specify GraphArea::VertexLabelFactory and GraphArea::EdgeLabelFactory factories to generate labels when graph is generated.	
 
 DETAILED CHANGELOG:
 	+ Added GroupId property to IGraphXVertex interface
@@ -25,6 +25,7 @@ DETAILED CHANGELOG:
 	+ Added GraphArea::VertexLabelFactory and GraphArea::EdgeLabelFactory properties for corresponding label factories. Will generate labels automatically after the graph layout if defined
 	+ Added GraphArea::MoveToFront() and GraphArea::MoveToBack() methods that will move specified GraphArea child to the top/bottom of the visual tree respectively
 	+ Added MouseEventArgs for VertexDoubleClick event to be able to correctly block click event when you're dragging vertex and open dialog window at once
+	+ Added VertexControl::HideWithEdges() and VertexControl::ShowWithEdges() methods to hide/show the control and all related edges at once
 	+ Fixed id autoresolve issue when calling GraphArea::GenerateAllEdges() after manual edge data compilation (thanks to Hannes Hasenauer)
 	+ Fixed edge label visibility when hideing/showing edges through Visibility property [WPF]
 	+ Fixed some METRO code not that hasn't been ported correctly
@@ -34,6 +35,7 @@ DETAILED CHANGELOG:
 	+ Fixed bindings to DefaultEdgePointer::Visibility property
 	+ Fixed numerous event issues with graphX controls where events wasn't passed down the hierarchy tree
 	+ Fixed edge label size on some template manipulations by adding additional update on label size change event. You can turn it off using EdgeLabelControl::UpdateLabelOnSizeChange property.
+	+ Fixed vertex and edge display when directly manipulating Visibility property
 	+ Improved styles flexibility by working with dependency values instead of straight assignment in some places
 	+ Improved random layout algorithm randomness by seeding new Guid hash which fixes some odd behavior in rare cases
 	+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks

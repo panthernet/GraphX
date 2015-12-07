@@ -329,7 +329,6 @@
     <Compile Include="Models\XamlTypes\XamlTypeProvider.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeExtensions_.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\cross-icon.png" />

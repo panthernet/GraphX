@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
+using GraphX.PCL.Logic.Helpers;
 #endif
 using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
@@ -32,6 +33,37 @@ namespace GraphX.Controls
         protected VertexControlBase()
         {
             VertexConnectionPointsList = new List<IVertexConnectionPoint>();
+        }
+
+        /// <summary>
+        /// Hides this control with all related edges
+        /// </summary>
+        public void HideWithEdges()
+        {
+            this.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            SetConnectionPointsVisibility(false);
+            RootArea.GetRelatedControls(this, GraphControlType.Edge, EdgesType.All).ForEach(a =>
+            {
+                //if (a is EdgeControlBase)
+               //     ((EdgeControlBase)a).SetVisibility(Visibility.Collapsed);
+               // else
+                a.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        /// <summary>
+        /// Shows this control with all related edges
+        /// </summary>
+        public void ShowWithEdges()
+        {
+            this.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            SetConnectionPointsVisibility(true);
+            RootArea.GetRelatedControls(this, GraphControlType.Edge, EdgesType.All).ForEach(a =>
+            {
+                if(a is EdgeControlBase)
+                    ((EdgeControlBase)a).SetVisibility(Visibility.Visible);
+                else a.Visibility = Visibility.Visible;
+            });
         }
 
         #region Properties

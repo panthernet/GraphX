@@ -649,6 +649,8 @@ namespace GraphX
                 var left = GetFinalX(child);
                 var top = GetFinalY(child);
 
+                if(child.Visibility == Visibility.Collapsed) continue;
+
                 if (double.IsNaN(left) || double.IsNaN(top))
                 {
                     var ec = child as EdgeControl;

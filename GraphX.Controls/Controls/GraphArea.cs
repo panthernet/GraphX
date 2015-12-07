@@ -53,7 +53,6 @@ namespace GraphX.Controls
         /// </summary>
         public ILabelFactory<IEdgeLabelControl> EdgeLabelFactory { get; set; }
 
-
         /// <summary>
         /// Dummy property. Use EdgesList and VertexList instead.
         /// Also use corresponding methods to modify item collections.
@@ -239,6 +238,8 @@ namespace GraphX.Controls
         {
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
+            //EdgeLabelFactory = new DefaultLabelFactory<AttachableEdgeLabelControl, IEdgeLabelControl>();
+            //VertexLabelFactory = new DefaultLabelFactory<AttachableVertexLabelControl, IVertexLabelControl>();
 
             #region Designer Data
 

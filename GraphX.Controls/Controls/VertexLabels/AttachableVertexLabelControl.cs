@@ -40,9 +40,28 @@ namespace GraphX.Controls
         /// <param name="node">VertexControl node</param>
         public void Attach(VertexControl node)
         {
+#if WPF
+            if (AttachNode != null)
+                AttachNode.IsVisibleChanged -= AttachNode_IsVisibleChanged;
             AttachNode = node;
+            AttachNode.IsVisibleChanged += AttachNode_IsVisibleChanged;
+#elif METRO
+            AttachNode = node;
+#endif
             node.AttachVertexLabel(this);
         }
+
+#if WPF
+        void AttachNode_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (AttachNode.IsVisible && AttachNode.ShowLabel)
+                Show();
+            else if (!AttachNode.IsVisible)
+            {
+                Hide();
+            }
+        }
+#endif
 
         protected override VertexControl GetVertexControl(DependencyObject parent)
         {

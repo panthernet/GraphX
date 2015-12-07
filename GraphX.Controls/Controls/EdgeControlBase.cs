@@ -449,6 +449,11 @@ namespace GraphX.Controls
         }
         #endregion
 
+        internal void SetVisibility(Visibility value)
+        {
+            this.SetCurrentValue(VisibilityProperty, value);
+        }
+
         internal virtual void InvalidateChildren()
         {
             if (EdgeLabelControl != null)
