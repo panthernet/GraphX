@@ -35,6 +35,7 @@ namespace ShowcaseApp.WPF.Pages
             graphArea.VertexSelected += graphArea_VertexSelected;
             graphArea.EdgeSelected += graphArea_EdgeSelected;
             graphArea.SetVerticesMathShape(VertexShape.Circle);
+            graphArea.VertexLabelFactory = new DefaultVertexlabelFactory();
            // addVertexButton.Click += addVertexButton_Click;
            // addEdgeButton.Click += addEdgeButton_Click;
 
@@ -188,11 +189,9 @@ namespace ShowcaseApp.WPF.Pages
         private VertexControl CreateVertexControl(Point position)
         {
             var data = new DataVertex("Vertex " + (graphArea.VertexList.Count + 1)) { ImageId = ShowcaseHelper.Rand.Next(0, ThemedDataStorage.EditorImages.Count) };
-            graphArea.LogicCore.Graph.AddVertex(data);
             var vc = new VertexControl(data);
-            graphArea.AddVertex(data, vc);
-            GraphAreaBase.SetX(vc, position.X, true);
-            GraphAreaBase.SetY(vc, position.Y, true);
+            vc.SetPosition(position);
+            graphArea.AddVertexAndData(data, vc, true);
             return vc;
         }
 
@@ -208,9 +207,8 @@ namespace ShowcaseApp.WPF.Pages
             if(_ecFrom == vc) return;
 
             var data = new DataEdge((DataVertex)_ecFrom.Vertex, (DataVertex)vc.Vertex);
-            graphArea.LogicCore.Graph.AddEdge(data);
             var ec = new EdgeControl(_ecFrom, vc, data);
-            graphArea.InsertEdge(data, ec);
+            graphArea.InsertEdgeAndData(data, ec, 0, true);
 
             HighlightBehaviour.SetHighlighted(_ecFrom, false);
             _ecFrom = null;
@@ -227,6 +225,7 @@ namespace ShowcaseApp.WPF.Pages
             }
             graphArea.LogicCore.Graph.RemoveVertex(vc.Vertex as DataVertex);
             graphArea.RemoveVertex(vc.Vertex as DataVertex);
+
             if (removeFromSelected && _selectedVertices.Contains(vc))
                 _selectedVertices.Remove(vc);
         }

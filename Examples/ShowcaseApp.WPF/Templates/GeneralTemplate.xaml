@@ -17,8 +17,8 @@
 	
                     <Grid>
                         <Image Source="{Binding ImageId, Converter={StaticResource ValueToImage}}" Margin="1" Width="80" Stretch="UniformToFill"/>
-                        <!--<TextBlock Text="{Binding Text}" Grid.Row="1" HorizontalAlignment="Center" Margin="2" />-->
-                        <controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />
+                        <!-- removed in favor of new attachable vertex label logic
+                        <controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />-->
                     </Grid>
 
                 </ControlTemplate>

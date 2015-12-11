@@ -208,12 +208,13 @@ namespace GraphX
 
         private static void DeleteAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is IOneWayControlAnimation)
+            var animation = e.OldValue as IOneWayControlAnimation;
+            if (animation != null)
             {
-                var old = (e.OldValue as IOneWayControlAnimation);
+                var old = animation;
                 old.Completed -= GraphAreaBase_Completed;
             }
-            var newone = (e.NewValue as IOneWayControlAnimation);
+            var newone = e.NewValue as IOneWayControlAnimation;
             if (newone != null)
                 newone.Completed += GraphAreaBase_Completed;
 
@@ -222,9 +223,14 @@ namespace GraphX
         static void GraphAreaBase_Completed(object sender, ControlEventArgs e)
         {
             if (e.Control == null || e.Control.RootArea == null) return;
-            e.Control.RootArea.Children.Remove(e.Control as UIElement);
-            e.Control.Clean();
+            e.Control.RootArea.RemoveAnimatedControl(e.Control);
         }
+
+        /// <summary>
+        /// Deletes vertices and edges correctly after delete animation
+        /// </summary>
+        /// <param name="ctrl">Control</param>
+        protected abstract void RemoveAnimatedControl(IGraphControl ctrl);
 
         /// <summary>
         /// Gets or sets vertex and edge controls mouse over animation

@@ -27,9 +27,21 @@ namespace GraphX.Controls
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
             new PropertyMetadata(null));
 
+        
+#if WPF
+        static AttachableEdgeLabelControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AttachableEdgeLabelControl), new FrameworkPropertyMetadata(typeof(AttachableEdgeLabelControl)));
+        }
+#endif
+
+
         public AttachableEdgeLabelControl()
         {
             DataContext = this;
+#if METRO
+            DefaultStyleKey = typeof(AttachableEdgeLabelControl);
+#endif
         }
 
         /// <summary>
@@ -46,7 +58,19 @@ namespace GraphX.Controls
 #elif METRO
             AttachNode = node;
 #endif
-            node.AttachEdgeLabel(this);
+            node.AttachLabel(this);
+        }
+
+        /// <summary>
+        /// Detach label from control
+        /// </summary>
+        public void Detach()
+        {
+#if WPF
+            if (AttachNode != null)
+                AttachNode.IsVisibleChanged -= AttachNode_IsVisibleChanged;
+#endif
+            AttachNode = null;
         }
 
 #if WPF
@@ -62,8 +86,8 @@ namespace GraphX.Controls
 #endif
         protected override EdgeControl GetEdgeControl(DependencyObject parent)
         {
-            if(AttachNode == null)
-                throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");
+            //if(AttachNode == null)
+           //     throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");
             return AttachNode;
         }
     }

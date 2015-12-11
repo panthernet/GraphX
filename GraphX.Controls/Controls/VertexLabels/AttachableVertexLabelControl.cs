@@ -1,5 +1,6 @@
 ﻿
 
+using System.ComponentModel;
 using GraphX.Controls.Models;
 #if WPF
 using System.Windows;
@@ -18,20 +19,30 @@ namespace GraphX.Controls
 #if METRO
     [Bindable]
 #endif
-    public class AttachableVertexLabelControl : VertexLabelControl, IAttachableControl<VertexControl>
+    public class AttachableVertexLabelControl : VertexLabelControl, IAttachableControl<VertexControl>, INotifyPropertyChanged
     {
         /// <summary>
         /// Gets label attach node
         /// </summary>
-        public VertexControl AttachNode { get { return (VertexControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
+        public VertexControl AttachNode { get { return (VertexControl)GetValue(AttachNodeProperty); } private set { SetValue(AttachNodeProperty, value); OnPropertyChanged("AttachNode"); } }
 
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(VertexControl), typeof(AttachableVertexLabelControl), 
             new PropertyMetadata(null));
+
+#if WPF
+        static AttachableVertexLabelControl()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AttachableVertexLabelControl), new FrameworkPropertyMetadata(typeof(AttachableVertexLabelControl)));
+        }
+#endif
 
 
         public AttachableVertexLabelControl()
         {
             DataContext = this;
+#if METRO
+            DefaultStyleKey = typeof(AttachableVertexLabelControl);
+#endif
         }
 
         /// <summary>
@@ -44,11 +55,24 @@ namespace GraphX.Controls
             if (AttachNode != null)
                 AttachNode.IsVisibleChanged -= AttachNode_IsVisibleChanged;
             AttachNode = node;
+
             AttachNode.IsVisibleChanged += AttachNode_IsVisibleChanged;
 #elif METRO
             AttachNode = node;
 #endif
-            node.AttachVertexLabel(this);
+            node.AttachLabel(this);
+        }
+
+        /// <summary>
+        /// Detach label from control
+        /// </summary>
+        public void Detach()
+        {
+#if WPF
+            if (AttachNode != null)
+                AttachNode.IsVisibleChanged -= AttachNode_IsVisibleChanged;
+#endif 
+            AttachNode = null;
         }
 
 #if WPF
@@ -65,8 +89,8 @@ namespace GraphX.Controls
 
         protected override VertexControl GetVertexControl(DependencyObject parent)
         {
-            if(AttachNode == null)
-                throw new GX_InvalidDataException("AttachableVertexLabelControl node is not attached!");
+            //if(AttachNode == null)
+            //    throw new GX_InvalidDataException("AttachableVertexLabelControl node is not attached!");
             return AttachNode;
         }
 
@@ -115,6 +139,14 @@ namespace GraphX.Controls
             else LastKnownRectSize = new Rect(LabelPosition, DesiredSize);
 
             Arrange(LastKnownRectSize);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

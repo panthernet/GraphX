@@ -1,4 +1,6 @@
-﻿namespace GraphX.PCL.Common.Interfaces
+﻿using GraphX.Measure;
+
+namespace GraphX.PCL.Common.Interfaces
 {
     /// <summary>
     /// Base level interface for algorithm storage implementation
@@ -21,5 +23,10 @@
         /// Gets edge routing algorithm
         /// </summary>
         IExternalEdgeRouting<TVertex, TEdge> EdgeRouting { get; }
+
+        void RemoveSingleEdge(TEdge edge);
+        void AddSingleEdge(TEdge edge, Point[] routingPoints = null);
+        void RemoveSingleVertex(TVertex vertex);
+        void AddSingleVertex(TVertex vertex, Point position, Rect size);
     }
 }

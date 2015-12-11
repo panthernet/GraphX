@@ -5,7 +5,9 @@ using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 #elif WPF
+using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -16,6 +18,13 @@ namespace GraphX.Controls
 {
     public static class TypeExtensions
     {
+        public static void SetDesiredFrameRate(this Timeline tl, int fps)
+        {
+#if WPF
+            Timeline.SetDesiredFrameRate(tl, fps);
+#endif
+        }
+
 #if METRO
         public static void SetCurrentValue(this FrameworkElement el, DependencyProperty p, object value)
         {

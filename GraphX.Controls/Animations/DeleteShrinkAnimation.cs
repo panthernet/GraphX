@@ -37,6 +37,7 @@ namespace GraphX.Controls.Animations
             //create and run animation
 #if WPF
             var scaleAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(Duration)));
+            Timeline.SetDesiredFrameRate(scaleAnimation, 30);
             scaleAnimation.Completed += (sender, e) =>  OnCompleted(target);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);            
@@ -44,6 +45,7 @@ namespace GraphX.Controls.Animations
             var sb = new Storyboard();
             //create and run animation
             var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0  };
+            scaleAnimation.SetDesiredFrameRate(30);
             //scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
@@ -51,6 +53,7 @@ namespace GraphX.Controls.Animations
 
             scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0 };
             scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
             sb.Children.Add(scaleAnimation);
@@ -72,7 +75,7 @@ namespace GraphX.Controls.Animations
         /// </summary>
         public event RemoveControlEventHandler Completed;
 
-        public void OnCompleted(IGraphControl target)
+        private void OnCompleted(IGraphControl target)
         {
             if (Completed != null)
                 Completed(this, new ControlEventArgs(target));

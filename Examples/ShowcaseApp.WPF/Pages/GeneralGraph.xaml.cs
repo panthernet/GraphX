@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
+using GraphX.Controls.Models;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using Microsoft.Win32;
 using QuickGraph;
@@ -46,6 +47,7 @@ namespace ShowcaseApp.WPF.Pages
             gg_async.Unchecked += gg_async_Checked;
             gg_Area.RelayoutFinished += gg_Area_RelayoutFinished;
             gg_Area.GenerateGraphFinished += gg_Area_GenerateGraphFinished;
+            gg_Area.VertexLabelFactory = new DefaultVertexlabelFactory();
 
             ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             ggLogic.EdgeCurvingEnabled = true;                  

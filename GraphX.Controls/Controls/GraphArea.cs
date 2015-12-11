@@ -323,15 +323,11 @@ namespace GraphX.Controls
         /// </summary>
         public void RemoveAllVertices()
         {
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
             foreach (var item in _vertexlist)
             {
-                if (DeleteAnimation != null)
-                    DeleteAnimation.AnimateVertex(item.Value);
-                else
-                {
-                    item.Value.Clean();
-                    base.Children.Remove(item.Value);
-                }
+                RemoveVertexInternal(item.Key, false);
+                if (hasStorage && item.Key.SkipProcessing != ProcessingOptionEnum.Exclude) LogicCore.AlgorithmStorage.RemoveSingleVertex(item.Key);
             }
             _vertexlist.Clear();
         }
@@ -341,15 +337,11 @@ namespace GraphX.Controls
         /// </summary>
         public void RemoveAllEdges()
         {
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
             foreach (var item in _edgeslist)
             {
-                if (DeleteAnimation != null)
-                    DeleteAnimation.AnimateEdge(item.Value);
-                else
-                {
-                    item.Value.Clean();
-                    base.Children.Remove(item.Value);
-                }
+                RemoveEdgeInternal(item.Key, false);
+                if (hasStorage && item.Key.SkipProcessing != ProcessingOptionEnum.Exclude) LogicCore.AlgorithmStorage.RemoveSingleEdge(item.Key);
             }
             _edgeslist.Clear();
         }
@@ -360,18 +352,32 @@ namespace GraphX.Controls
         /// <param name="vertexData">Vertex data object</param>
         public void RemoveVertex(TVertex vertexData)
         {
+            RemoveVertexInternal(vertexData, true);
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && vertexData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleVertex(vertexData);
+        }
+
+        private void RemoveVertexInternal(TVertex vertexData, bool removeFromList)
+        {
             if (vertexData == null || !_vertexlist.ContainsKey(vertexData)) return;
 
             var ctrl = _vertexlist[vertexData];
-            _vertexlist.Remove(vertexData);
-
+            if (removeFromList)
+                _vertexlist.Remove(vertexData);
             if (DeleteAnimation != null)
                 DeleteAnimation.AnimateVertex(ctrl);
-            else
+            else RemoveVertexInternal(ctrl);
+        }
+
+        private void RemoveVertexInternal(VertexControl ctrl)
+        {
+            if (ctrl.VertexLabelControl != null)
             {
-                base.Children.Remove(ctrl);
-                ctrl.Clean();
+                Children.Remove((UIElement) ctrl.VertexLabelControl);
+                ctrl.DetachLabel();
             }
+            Children.Remove(ctrl);
+            ctrl.Clean();
         }
 
         /// <summary>
@@ -380,19 +386,54 @@ namespace GraphX.Controls
         /// <param name="edgeData">Edge data object</param>
         public void RemoveEdge(TEdge edgeData)
         {
+            RemoveEdgeInternal(edgeData, true);
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && edgeData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleEdge(edgeData);
+        }
+
+        private void RemoveEdgeInternal(TEdge edgeData, bool removeFromList)
+        {
             if (edgeData == null || !_edgeslist.ContainsKey(edgeData)) return;
 
             var ctrl = _edgeslist[edgeData];
-            _edgeslist.Remove(edgeData);
-            
+            if (removeFromList)
+                _edgeslist.Remove(edgeData);
             if (DeleteAnimation != null)
                 DeleteAnimation.AnimateEdge(ctrl);
-            else
+            else RemoveEdgeInternal(ctrl);
+        }
+
+        private void RemoveEdgeInternal(EdgeControl ctrl)
+        {
+            if (ctrl.EdgeLabelControl != null)
             {
-                base.Children.Remove(ctrl);
-                ctrl.Clean();
+                Children.Remove((UIElement) ctrl.EdgeLabelControl);
+                ctrl.DetachLabel();
+            }
+            Children.Remove(ctrl);
+            ctrl.Clean();
+        }
+
+        /// <summary>
+        /// Deletes vertices and edges correctly after delete animation
+        /// </summary>
+        /// <param name="ctrl">Control</param>
+        protected override void RemoveAnimatedControl(IGraphControl ctrl)
+        {
+            var control = ctrl as VertexControl;
+            if (control != null)
+            {
+                RemoveVertexInternal(control);
+                return;
+            }
+            var edgeControl = ctrl as EdgeControl;
+            if (edgeControl != null)
+            {
+                RemoveEdgeInternal(edgeControl);
+                return;
             }
         }
+
         #endregion
 
         #region Add controls
@@ -401,13 +442,38 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="vertexData">Vertex data object</param>
         /// <param name="vertexControl">Vertex visual control object</param>
-        public void AddVertex(TVertex vertexData, VertexControl vertexControl)
+        /// <param name="generateLabel">Generate vertex label for this control using VertexLabelFactory</param>
+        public void AddVertex(TVertex vertexData, VertexControl vertexControl, bool generateLabel = false)
         {
             if (AutoAssignMissingDataId && vertexData.ID == -1)
                 vertexData.ID = GetNextUniqueId(true);
             InternalAddVertex(vertexData, vertexControl);
             if (EnableVisualPropsApply && vertexControl != null)
                 ReapplySingleVertexVisualProperties(vertexControl);
+            if (generateLabel && VertexLabelFactory != null)
+                GenerateVertexLabel(vertexControl);
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && vertexData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            if (hasStorage)
+            {
+                var pos = vertexControl.GetPositionGraphX(true);
+                LogicCore.AlgorithmStorage.AddSingleVertex(vertexData, pos, new Rect(pos, new Size(vertexControl.ActualWidth, vertexControl.ActualHeight)));
+            }
+        }
+
+
+        /// <summary>
+        /// Usability extension method.
+        /// Add data vertex to graph and vertex control to layout. LogicCore::Graph should be assigned or exception will be thrown.
+        /// </summary>
+        /// <param name="vertexData">Vertex data object</param>
+        /// <param name="vertexControl">Vertex visual control object</param>
+        /// <param name="generateLabel">Generate vertex label for this control using VertexLabelFactory</param>
+        public void AddVertexAndData(TVertex vertexData, VertexControl vertexControl, bool generateLabel = false)
+        {
+            if(LogicCore == null || LogicCore.Graph == null)
+                throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data vertex!");
+            LogicCore.Graph.AddVertex(vertexData);
+            AddVertex(vertexData, vertexControl, generateLabel);
         }
 
         protected void InternalAddVertex(TVertex vertexData, VertexControl vertexControl)
@@ -424,13 +490,31 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="edgeData">Edge data object</param>
         /// <param name="edgeControl">Edge visual control</param>
-        public void AddEdge(TEdge edgeData, EdgeControl edgeControl)
+        /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
+        public void AddEdge(TEdge edgeData, EdgeControl edgeControl, bool generateLabel = false)
         {
             if (AutoAssignMissingDataId && edgeData.ID == -1)
                 edgeData.ID = GetNextUniqueId(false);
             InternalAddEdge(edgeData, edgeControl);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
+            if (generateLabel && EdgeLabelFactory != null)
+                GenerateEdgeLabel(edgeControl);
+        }
+
+        /// <summary>
+        /// Usability extension method.
+        /// Add data edge to graph and edge to layout. LogicCore::Graph should be assigned or exception will be thrown.
+        /// </summary>
+        /// <param name="edgeData">Edge data object</param>
+        /// <param name="edgeControl">Edge visual control</param>
+        /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
+        public void AddEdgeAndData(TEdge edgeData, EdgeControl edgeControl, bool generateLabel = false)
+        {
+            if (LogicCore == null || LogicCore.Graph == null)
+                throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data edge!");
+            LogicCore.Graph.AddEdge(edgeData);
+            AddEdge(edgeData, edgeControl, generateLabel);
         }
 
         protected void InternalAddEdge(TEdge edgeData, EdgeControl edgeControl)
@@ -448,13 +532,33 @@ namespace GraphX.Controls
         /// <param name="edgeData">Edge data object</param>
         /// <param name="edgeControl">Edge visual control</param>
         /// <param name="num">Insert position</param>
-        public void InsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
+        /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
+        public void InsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0, bool generateLabel = false)
         {
             if (AutoAssignMissingDataId && edgeData.ID == -1)
                 edgeData.ID = GetNextUniqueId(false);
             InternalInsertEdge(edgeData, edgeControl, num);
             if (EnableVisualPropsApply && edgeControl != null)
                 ReapplySingleEdgeVisualProperties(edgeControl);
+            if (generateLabel && EdgeLabelFactory != null)
+                GenerateEdgeLabel(edgeControl);
+        }
+
+        /// <summary>
+        /// Usability extension method.
+        /// Insert an edge to layout at specified position and add data edge. By default, edge is inserted into the begining of the visual tree causing it to be rendered below all of the vertices.
+        /// LogicCore::Graph should be assigned or exception will be thrown.
+        /// </summary>
+        /// <param name="edgeData">Edge data object</param>
+        /// <param name="edgeControl">Edge visual control</param>
+        /// <param name="num">Insert position</param>
+        /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
+        public void InsertEdgeAndData(TEdge edgeData, EdgeControl edgeControl, int num = 0, bool generateLabel = false)
+        {
+            if (LogicCore == null || LogicCore.Graph == null)
+                throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data edge!");
+            LogicCore.Graph.AddEdge(edgeData);
+            InsertEdge(edgeData, edgeControl, num, generateLabel);
         }
 
         protected void InternalInsertEdge(TEdge edgeData, EdgeControl edgeControl, int num = 0)
@@ -518,15 +622,20 @@ namespace GraphX.Controls
             base.Children.OfType<IVertexLabelControl>().Cast<UIElement>().ToList().ForEach(a => base.Children.Remove(a));            
             VertexList.ForEach(a =>
             {
-                var label = (UIElement)VertexLabelFactory.CreateLabel(a.Value);
-                if(_svVertexLabelShow == false)
-                    label.Visibility = Visibility.Collapsed;
-                AddCustomChildControl(label);
-                label.Measure(new USize(double.MaxValue, double.MaxValue));
-                var iLabel = label as IVertexLabelControl;
-                if(iLabel != null)
-                    iLabel.UpdatePosition();
+                GenerateVertexLabel(a.Value);
             });
+        }
+
+        protected virtual void GenerateVertexLabel(VertexControl vertexControl)
+        {
+            var label = (UIElement)VertexLabelFactory.CreateLabel(vertexControl);
+            if (_svVertexLabelShow == false || vertexControl.Visibility != Visibility.Visible)
+                label.Visibility = Visibility.Collapsed;
+            AddCustomChildControl(label);
+            label.Measure(new USize(double.MaxValue, double.MaxValue));
+            var iLabel = label as IVertexLabelControl;
+            if (iLabel != null)
+                iLabel.UpdatePosition();
         }
 
         protected virtual void GenerateEdgeLabels()
@@ -535,15 +644,20 @@ namespace GraphX.Controls
             base.Children.OfType<IEdgeLabelControl>().Cast<UIElement>().ToList().ForEach(a => base.Children.Remove(a));
             EdgesList.ForEach(a =>
             {
-                var label = (UIElement)EdgeLabelFactory.CreateLabel(a.Value);
-                if (_svShowEdgeLabels == false)
-                    label.Visibility = Visibility.Collapsed;
-                AddCustomChildControl(label);
-                label.Measure(new USize(double.MaxValue, double.MaxValue));
-                var iLabel = label as IEdgeLabelControl;
-                if (iLabel != null)
-                    iLabel.UpdatePosition();
+                GenerateEdgeLabel(a.Value);
             });
+        }
+
+        protected virtual void GenerateEdgeLabel(EdgeControl edgeControl)
+        {
+            var label = (UIElement)EdgeLabelFactory.CreateLabel(edgeControl);
+            if (_svShowEdgeLabels == false || edgeControl.Visibility != Visibility.Visible)
+                label.Visibility = Visibility.Collapsed;
+            AddCustomChildControl(label);
+            label.Measure(new USize(double.MaxValue, double.MaxValue));
+            var iLabel = label as IEdgeLabelControl;
+            if (iLabel != null)
+                iLabel.UpdatePosition();
         }
 
         #endregion
@@ -1723,15 +1837,16 @@ namespace GraphX.Controls
         }
 #endif
 
-        
+
         /// <summary>
         /// Print current visual graph layout
         /// </summary>
         /// <param name="description">Optional header description</param>
-        public virtual void PrintDialog(string description = "")
+        public virtual void PrintDialog(string description = "", double zoomModifier = 1d)
         {
 #if WPF
             UIElement vis = this;
+
             var zoomControl = Parent as IZoomControl;
             if (zoomControl != null)
                 vis = zoomControl.PresenterVisual;
@@ -1739,9 +1854,22 @@ namespace GraphX.Controls
             {
                 var frameworkElement = Parent as FrameworkElement;
                 if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
-                    vis = ((IZoomControl)frameworkElement.Parent).PresenterVisual;
+                    vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
             }
-            PrintHelper.ShowPrintPreview(vis, description);
+
+          /*  if (vis != this && zoomModifier != 1d)
+            {
+                var p = zoomControl;
+                var oW = p.Width;
+                var oH = p.Height;
+                var oZoom = p.Zoom;
+                p.Width = p.ActualWidth*zoomModifier;
+                p.Height = p.ActualHeight*zoomModifier;
+                PrintHelper.ShowPrintPreview(vis, description);
+                p.Width = oW;
+                p.Height = oH;
+            }else*/
+                PrintHelper.ShowPrintPreview(vis, description);
 #endif
         }
 

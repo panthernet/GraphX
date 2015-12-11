@@ -1,4 +1,6 @@
-﻿WIP 2.3.0
+﻿TODO: deleted object affects dynamic edge routing (themed graph!)
+
+WIP 2.3.0
 
 HIGHLIGHTS:
 	* Added new layout algorithm GroupingLayoutAlgorithm which allows to layout graph vertices by different groups each using its own sublayout algorithm. You can see it in action using new feature highlight in showcase app.
@@ -36,10 +38,13 @@ DETAILED CHANGELOG:
 	+ Fixed numerous event issues with graphX controls where events wasn't passed down the hierarchy tree
 	+ Fixed edge label size on some template manipulations by adding additional update on label size change event. You can turn it off using EdgeLabelControl::UpdateLabelOnSizeChange property.
 	+ Fixed vertex and edge display when directly manipulating Visibility property
+	+ Fixed edge labels display when they there generated hidden by default and then are displayed using ShowLabel property change
+	+ Fixed edge routing counting deleted vertices as obstacles for an edge
 	+ Improved styles flexibility by working with dependency values instead of straight assignment in some places
 	+ Improved random layout algorithm randomness by seeding new Guid hash which fixes some odd behavior in rare cases
 	+ Improved overall graph cleaning in different areas allowing to easily clean graph data and fix potentional memory leaks
 	+ Improved general graph showcase for Sugiyama like algorithms
+	+ Improved graph area control removal logic to be more extensible and allow to handle attached controls
 	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
 	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
@@ -53,6 +58,7 @@ BREAKING CHANGES:
 	* All built-in algorithms now use IMutableVertexAndEdgeSet<TVertex, TEdge> for TGraph generic specification to be able to modify Graph data on demand.
 	* Made Vertex and Edge ID Int64 be default. Was Int32.
 	* Added mandatory IOverlapRemovalAlgorithm::Initialize() method for all OR algorithms to be able to initialize initial data not only when you instantiate class but at any time
+	* IZoomControl interface now must implement Width and Height properties
 
 
 RELEASE 2.2.0

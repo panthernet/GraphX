@@ -1065,6 +1065,7 @@ namespace GraphX.Controls
 
         public ZoomControl()
         {
+           // ClipToBounds = true;
             if (DesignerProperties.GetIsInDesignMode(this))
             {
                 //Mode = ZoomControlModes.Fill;
@@ -1348,6 +1349,8 @@ namespace GraphX.Controls
                 return;
             }
             var animation = new DoubleAnimation(toValue, duration);
+            Timeline.SetDesiredFrameRate(animation, 30);
+
             if (dp == ZoomProperty)
             {
                 _zoomAnimCount++;

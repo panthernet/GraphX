@@ -270,7 +270,7 @@ namespace GraphX.Controls
             var ec = (d as EdgeControlBase);
             if (ec == null) return;
 
-            ec.UpdateEdge(false);
+            ec.UpdateEdge();
         }
         /// <summary>
         /// Show edge label.Default value is False.
@@ -371,10 +371,20 @@ namespace GraphX.Controls
         /// Internal method. Attaches label to control
         /// </summary>
         /// <param name="ctrl"></param>
-        public void AttachEdgeLabel(IEdgeLabelControl ctrl)
+        public void AttachLabel(IEdgeLabelControl ctrl)
         {
             EdgeLabelControl = ctrl;
             UpdateLabelLayout();
+        }
+
+        /// <summary>
+        /// Internal method. Detaches label from control.
+        /// </summary>
+        public void DetachLabel()
+        {
+            if (EdgeLabelControl is IAttachableControl<EdgeControl>)
+                ((IAttachableControl<EdgeControl>)EdgeLabelControl).Detach();
+            EdgeLabelControl = null;
         }
 
         /// <summary>
@@ -534,10 +544,10 @@ namespace GraphX.Controls
         {
             if (Visibility == Visibility.Visible || IsHiddenEdgesUpdated)
             {
-                UpdateEdgeRendering(updateLabel);
-
+                //first show label to get DesiredSize
                 if (EdgeLabelControl != null)
                     if (ShowLabel) EdgeLabelControl.Show(); else EdgeLabelControl.Hide();
+                UpdateEdgeRendering(updateLabel);
             }
         }
 

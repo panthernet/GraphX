@@ -117,7 +117,6 @@ namespace GraphX.Controls
         {
             LastKnownRectSize = new Rect(new Point(position.X - DesiredSize.Width * .5, position.Y - DesiredSize.Height * .5), DesiredSize);
             Arrange(LastKnownRectSize);
-            
         }
 
         public void Dispose()

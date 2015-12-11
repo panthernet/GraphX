@@ -216,9 +216,19 @@ namespace GraphX.Controls
         /// Internal method. Attaches label to control
         /// </summary>
         /// <param name="ctrl">Control</param>
-        public void AttachVertexLabel(IVertexLabelControl ctrl)
+        public void AttachLabel(IVertexLabelControl ctrl)
         {
             VertexLabelControl = ctrl;
+        }
+
+        /// <summary>
+        /// Internal method. Detaches label from control.
+        /// </summary>
+        public void DetachLabel()
+        {
+            if(VertexLabelControl is IAttachableControl<VertexControl>)
+                ((IAttachableControl<VertexControl>)VertexLabelControl).Detach();
+            VertexLabelControl = null;
         }
 
         /// <summary>

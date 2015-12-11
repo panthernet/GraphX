@@ -1,4 +1,5 @@
-﻿namespace GraphX.Controls.Models
+﻿
+namespace GraphX.Controls.Models
 {
     /// <summary>
     /// Default label factory class
@@ -12,7 +13,7 @@
         /// Returns newly generated label for parent control. Attachable labels will be auto attached if derived from IAttachableControl<T>
         /// </summary>
         /// <param name="control">Parent control</param>
-        public TResult CreateLabel<TCtrl>(TCtrl control)
+        public virtual TResult CreateLabel<TCtrl>(TCtrl control)
         {
             var label = new TLabel();
             var aLabel = label as IAttachableControl<TCtrl>;
@@ -20,5 +21,20 @@
                 aLabel.Attach(control);
             return (TResult)(object)label;
         }
+    }
+
+    /// <summary>
+    /// Default vertex label factory class
+    /// </summary>
+    public class DefaultVertexlabelFactory : DefaultLabelFactory<AttachableVertexLabelControl, IVertexLabelControl>
+    {
+        
+    }
+    /// <summary>
+    /// Default edge label factory class
+    /// </summary>
+    public class DefaultEdgelabelFactory : DefaultLabelFactory<AttachableEdgeLabelControl, IEdgeLabelControl>
+    {
+
     }
 }

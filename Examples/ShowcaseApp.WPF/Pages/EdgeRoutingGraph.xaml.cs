@@ -9,6 +9,7 @@ using GraphX;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using GraphX.Controls;
+using GraphX.Controls.Models;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 
@@ -35,6 +36,7 @@ namespace ShowcaseApp.WPF.Pages
             _logicCore = new LogicCoreExample();
             erg_Area.LogicCore = _logicCore;
             erg_Area.LogicCore.ParallelEdgeDistance = 20;
+            erg_Area.EdgeLabelFactory = new DefaultEdgelabelFactory();
 
             erg_showEdgeArrows.IsChecked = true;
             BundleEdgeRoutingParameters = (BundleEdgeRoutingParameters)_logicCore.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.Bundling);
