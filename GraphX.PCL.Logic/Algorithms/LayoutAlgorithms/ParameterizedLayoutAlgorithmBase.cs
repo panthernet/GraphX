@@ -143,10 +143,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 		/// <param name="translate_y">Translates the generated y coordinate.</param>
 		protected virtual void InitializeWithRandomPositions( double width, double height, double translate_x, double translate_y )
 		{
-			var rnd = new System.Random( DateTime.Now.Millisecond );
+            var rnd = new System.Random(Parameters.Seed);
 
-			//initialize with random position
-			foreach ( TVertex v in VisitedGraph.Vertices )
+            //initialize with random position
+            foreach ( TVertex v in VisitedGraph.Vertices )
 			{
 				//for vertices without assigned position
 				if ( !VertexPositions.ContainsKey( v ) )

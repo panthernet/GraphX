@@ -51,6 +51,7 @@ DETAILED CHANGELOG:
 	+ Made many methods virtual/protected for easier derived classes customization
 	+ Merged GraphArea code for WPF & METRO into the shared files
 	+ Merged EdgeControl and VertexControl code for WPF & METRO into the shared files
+	+ Added integer seed to ILayoutParameters to be used by alogrithms in order to get deterministic output.
 
 
 BREAKING CHANGES:
