@@ -1,5 +1,5 @@
 ﻿
-WIP 2.3.0
+RELEASE 2.3.0
 
 HIGHLIGHTS:
 	* Added new layout algorithm GroupingLayoutAlgorithm which allows to layout graph vertices by different groups each using its own sublayout algorithm. You can see it in action using new feature highlight in showcase app.
@@ -20,7 +20,7 @@ DETAILED CHANGELOG:
 	+ Added support for reversing the geometry. This is required for animating shapes along a path where the direction needs to be reversed without using the Storyboard.AutoReverse property (thanks to bleibold)
 	+ Added two new attached label classes for Edge and Vertex controls.
 	+ Added EdgeControl::LabelMouseDown event
-	+ Added separate ID counter for edges while autoresolving missing id 
+	+ Added separate ID counter for edges while autoresolving missing ids 
 	+ Added EdgeControl::UpdateLabel() method to be able to update attached edge label manually (tech means to overcome some template quizes)
 	+ Added GraphArea::GetChildControls() method to easily fetch any child objects (incl. custom) by condition or just get all of them
 	+ Added GraphArea::VertexLabelFactory and GraphArea::EdgeLabelFactory properties for corresponding label factories. Will generate labels automatically after the graph layout if defined
@@ -28,6 +28,7 @@ DETAILED CHANGELOG:
 	+ Added MouseEventArgs for VertexDoubleClick event to be able to correctly block click event when you're dragging vertex and open dialog window at once
 	+ Added VertexControl::HideWithEdges() and VertexControl::ShowWithEdges() methods to hide/show the control and all related edges at once
 	+ Added new optional parameters for GraphArea add/remove objects methods to allow vertex/edge data to be added to data graph in a single method call
+	+ Added integer seed to ILayoutParameters to be used by alogrithms in order to get deterministic output.
 	+ Fixed id autoresolve issue when calling GraphArea::GenerateAllEdges() after manual edge data compilation (thanks to Hannes Hasenauer)
 	+ Fixed edge label visibility when hideing/showing edges through Visibility property [WPF]
 	+ Fixed some METRO code not that hasn't been ported correctly
@@ -47,11 +48,10 @@ DETAILED CHANGELOG:
 	+ Improved graph area control removal logic to be more extensible and allow to handle attached controls
 	+ Implemented edge cut logic for EdgePointer placed at edge 'source' to gain better visual quality like its 'target' counterpart
 	+ Implemented many changes in algorithm base classes, mainly in AlgorithmLayoutBase: made VisitedGraph and VertexPositions props assignable externally
-	+ Implemented RandomLayoutAlgorithms to derive from LayoutAlgorithmBase class
+	+ Implemented RandomLayoutAlgorithm to derive from LayoutAlgorithmBase class
 	+ Made many methods virtual/protected for easier derived classes customization
 	+ Merged GraphArea code for WPF & METRO into the shared files
 	+ Merged EdgeControl and VertexControl code for WPF & METRO into the shared files
-	+ Added integer seed to ILayoutParameters to be used by alogrithms in order to get deterministic output.
 
 
 BREAKING CHANGES:
