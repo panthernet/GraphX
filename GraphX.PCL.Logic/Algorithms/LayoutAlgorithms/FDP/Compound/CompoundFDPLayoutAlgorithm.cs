@@ -28,7 +28,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         private double _temperature = 0;
         //private double _temperatureDelta; //need to be initialized
         private const double TEMPERATURE_LAMBDA = 0.99;
-        private readonly System.Random _rnd = new System.Random(DateTime.Now.Millisecond);
 
         /// <summary>
         /// <para>Phase of the layout process.</para>
@@ -98,7 +97,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
             var _temperatureMultipliers = new double[3]
                                               {
-                                                  1.0, 
+                                                  1.0,
                                                   Parameters.Phase2TemperatureInitialMultiplier,
                                                   Parameters.Phase3TemperatureInitialMultiplier
                                               };
@@ -109,6 +108,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
             _gravityCenterCalculated = false;
 
+            System.Random rnd = new System.Random(this.Parameters.Seed);
             for (_phase = 1; _phase <= 3; _phase++)
             {
                 _temperature = initialTemperature * _temperatureMultipliers[_phase - 1];
@@ -123,8 +123,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
                     /*error = 0;*/
 
-                    ApplySpringForces();
-                    ApplyRepulsionForces(cancellationToken);
+                    ApplySpringForces(rnd);
+                    ApplyRepulsionForces(cancellationToken, rnd);
 
                     if (_phase > 1)
                     {
@@ -132,8 +132,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                         ApplyApplicationSpecificForces();
                     }
 
-                   // if (ReportOnIterationEndNeeded)
-                  //      SavePositions();
+                    // if (ReportOnIterationEndNeeded)
+                    //      SavePositions();
 
                     CalcNodePositionsAndSizes(cancellationToken);
 
@@ -217,12 +217,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             }
         }
 
-        private Vector GetSpringForce(double idealLength, Point uPos, Point vPos, Size uSize, Size vSize)
+        private Vector GetSpringForce(double idealLength, Point uPos, Point vPos, Size uSize, Size vSize, System.Random rnd)
         {
             var positionVector = (uPos - vPos);
             if (positionVector.Length == 0)
             {
-                var compensationVector = new Vector(_rnd.NextDouble(), _rnd.NextDouble());
+                var compensationVector = new Vector(rnd.NextDouble(), rnd.NextDouble());
                 positionVector = compensationVector * 2;
                 uPos += compensationVector;
                 vPos -= compensationVector;
@@ -251,12 +251,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             return Fs;
         }
 
-        private Vector GetRepulsionForce(Point uPos, Point vPos, Size uSize, Size vSize, double repulsionRange)
+        private Vector GetRepulsionForce(Point uPos, Point vPos, Size uSize, Size vSize, double repulsionRange, System.Random rnd)
         {
             var positionVector = (uPos - vPos);
             if (positionVector.Length == 0)
             {
-                var compensationVector = new Vector(_rnd.NextDouble(), _rnd.NextDouble());
+                var compensationVector = new Vector(rnd.NextDouble(), rnd.NextDouble());
                 positionVector = compensationVector * 2;
                 uPos += compensationVector;
                 vPos -= compensationVector;
@@ -283,7 +283,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// Applies the attraction forces (between the end nodes
         /// of the edges).
         /// </summary>
-        private void ApplySpringForces()
+        private void ApplySpringForces(System.Random rnd)
         {
             foreach (var edge in VisitedGraph.Edges)
             {
@@ -301,7 +301,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     //multiplier = 1;
                 }
 
-                var Fs = GetSpringForce(idealLength, u.Position, v.Position, u.Size, v.Size) * multiplier;
+                var Fs = GetSpringForce(idealLength, u.Position, v.Position, u.Size, v.Size, rnd) * multiplier;
 
                 //aggregate the forces
                 if ((u.IsFixedToParent && u.MovableParent == null) ^ (v.IsFixedToParent && v.MovableParent == null))
@@ -324,7 +324,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// <summary>
         /// Applies the repulsion forces between every node-pair.
         /// </summary>
-        private void ApplyRepulsionForces(CancellationToken cancellationToken)
+        private void ApplyRepulsionForces(CancellationToken cancellationToken, System.Random rnd)
         {
             var repulsionRange = Parameters.IdealEdgeLength * Parameters.SeparationMultiplier;
             for (int i = _levels.Count - 1; i >= 0; i--)
@@ -345,7 +345,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                         if (u.Parent != v.Parent)
                             continue; //the two vertex not in the same graph
 
-                        var Fr = GetRepulsionForce(u.Position, v.Position, u.Size, v.Size, repulsionRange) * Math.Pow(u.Level + 1,2);
+                        var Fr = GetRepulsionForce(u.Position, v.Position, u.Size, v.Size, repulsionRange, rnd) * Math.Pow(u.Level + 1, 2);
 
                         if (u.IsFixedToParent ^ v.IsFixedToParent)
                             Fr *= 2;
@@ -378,7 +378,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
                     double length = Math.Max(1, Fg.Length / (Parameters.IdealEdgeLength * 2.0));
                     Fg.Normalize();
-                    Fg *= Parameters.GravitationFactor * _gravityForceMagnitude * Math.Pow(u.Level + 1,2) / Math.Pow(length, 0.25);
+                    Fg *= Parameters.GravitationFactor * _gravityForceMagnitude * Math.Pow(u.Level + 1, 2) / Math.Pow(length, 0.25);
                     u.GravitationForce += Fg;
                 }
             }

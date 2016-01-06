@@ -15,7 +15,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         where TEdge : IGraphXEdge<TVertex>
         where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
-        private readonly Random _rnd = new Random(Guid.NewGuid().GetHashCode());
         private readonly RandomLayoutAlgorithmParams _parameters;
 
         public RandomLayoutAlgorithm(TGraph graph, IDictionary<TVertex, Point> positions, RandomLayoutAlgorithmParams prms)
@@ -36,6 +35,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             var bounds = _parameters == null ? new RandomLayoutAlgorithmParams().Bounds : _parameters.Bounds;
             int boundsWidth = (int)bounds.Width;
             int boundsHeight = (int)bounds.Height;
+            int seed = _parameters == null ? DateTime.Now.Millisecond : _parameters.Seed;
+            System.Random rnd = new System.Random(seed);
             foreach (var item in VisitedGraph.Vertices)
             {
                 if (item.SkipProcessing != ProcessingOptionEnum.Freeze || VertexPositions.Count == 0)
@@ -44,8 +45,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     var y = (int) bounds.Y;
                     var size = VertexSizes.FirstOrDefault(a => a.Key == item).Value;
                     VertexPositions.Add(item,
-                        new Point(_rnd.Next(x, x + boundsWidth - (int) size.Width),
-                            _rnd.Next(y, y + boundsHeight - (int) size.Height)));
+                        new Point(rnd.Next(x, x + boundsWidth - (int) size.Width),
+                            rnd.Next(y, y + boundsHeight - (int) size.Height)));
                 }
                 /*else if (VertexPositions != null)
                 {

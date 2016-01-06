@@ -5,13 +5,19 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
 	public abstract class LayoutParametersBase : ILayoutParameters
 	{
-		#region ICloneable Members
+        public LayoutParametersBase()
+        {
+            Seed = System.DateTime.Now.Millisecond;
+        }
 
-		public object Clone()
+        #region ICloneable Members
+
+        public object Clone()
 		{
 			return MemberwiseClone();
 		}
 
+        public int Seed { get; set; }
 		#endregion
 
 		#region INotifyPropertyChanged Members
