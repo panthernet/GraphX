@@ -650,9 +650,10 @@ namespace GraphX.Controls
             if (hasNoTemplate)
             {
                 var geometry = _linegeometry as EllipseGeometry;
-                geometry.Center = pt;
-                geometry.RadiusX = SelfLoopIndicatorRadius;
-                geometry.RadiusY = SelfLoopIndicatorRadius;
+                //TODO
+                //geometry.Center = pt;
+                //geometry.RadiusX = SelfLoopIndicatorRadius;
+                //geometry.RadiusY = SelfLoopIndicatorRadius;
             }
             else _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
         }
@@ -781,7 +782,8 @@ namespace GraphX.Controls
             SourceConnectionPoint = p1;
             TargetConnectionPoint = p2;
 
-            _linegeometry = new PathGeometry(); PathFigure lineFigure;
+            _linegeometry = new PathGeometry(); 
+            PathFigure lineFigure;
 
             //if we have route and route consist of 2 or more points
             if (RootArea != null && hasRouteInfo)

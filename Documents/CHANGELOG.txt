@@ -1,5 +1,4 @@
-﻿TODO: deleted object affects dynamic edge routing (themed graph!)
-
+﻿
 WIP 2.3.0
 
 HIGHLIGHTS:

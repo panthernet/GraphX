@@ -86,8 +86,8 @@ namespace GraphX.Controls
 #endif
         protected override EdgeControl GetEdgeControl(DependencyObject parent)
         {
-            //if(AttachNode == null)
-           //     throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");
+            if(AttachNode == null)
+                throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");
             return AttachNode;
         }
     }

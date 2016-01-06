@@ -357,6 +357,23 @@ namespace GraphX.Controls
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleVertex(vertexData);
         }
 
+        /// <summary>
+        /// Remove vertex and all associated edges from the layout
+        /// </summary>
+        /// <param name="vertexData">Vertex data object</param>
+        /// <param name="eType">Edge types to remove</param>
+        public void RemoveVertexAndEdges(TVertex vertexData, EdgesType eType = EdgesType.All)
+        {
+            if (VertexList.ContainsKey(vertexData))
+            {
+                GetRelatedControls(VertexList[vertexData], GraphControlType.Edge, eType).ToList().ForEach(a =>
+                {
+                    RemoveEdge((TEdge)((EdgeControl)a).Edge);
+                });
+            }
+            RemoveVertex(vertexData);
+        }
+
         private void RemoveVertexInternal(TVertex vertexData, bool removeFromList)
         {
             if (vertexData == null || !_vertexlist.ContainsKey(vertexData)) return;
@@ -1158,6 +1175,12 @@ namespace GraphX.Controls
             GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 #endif
+
+        public void AutoresolveEntitiesId()
+        {
+            AutoresolveIds(true);
+        }
+
         protected virtual void AutoresolveIds(bool includeEdgeIds, TGraph graph = null)
         {
             if (LogicCore == null)
