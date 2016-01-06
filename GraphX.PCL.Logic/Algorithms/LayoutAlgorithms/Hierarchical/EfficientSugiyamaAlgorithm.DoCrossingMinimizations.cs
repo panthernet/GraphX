@@ -12,8 +12,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         where TEdge : IEdge<TVertex>
         where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
-        private readonly System.Random _rnd = new System.Random(DateTime.Now.Millisecond);
-
         private int[] _crossCounts;
 
         private IList<Edge<Data>>[] _sparseCompactionByLayerBackup;
@@ -363,7 +361,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 {
                     sortedVertexList = new List<SugiVertex>(verticesWithSameMeasure.Count);
                     var stack = new Stack<SugiVertex>(verticesWithSameMeasure.Count);
-                    var rnd = new System.Random(DateTime.Now.Millisecond);
+                    var rnd = new System.Random(this.Parameters.Seed);
                     foreach (var v in verticesWithSameMeasure)
                     {
                         if (stack.Count > 0 && (stack.Peek().MeasuredPosition != v.MeasuredPosition || rnd.NextDouble() > 0.8))
@@ -559,28 +557,29 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         private bool Permutate(IList<SugiVertex> vertices, IList<int> ranges) 
         {
+            System.Random rnd = new System.Random(this.Parameters.Seed);
             bool b = false;
             for (int i = 0, startIndex = 0; i < ranges.Count; startIndex += ranges[i], i++) {
-                b = b || PermutateSomeHow(vertices, startIndex, ranges[i]);
+                b = b || PermutateSomeHow(vertices, startIndex, ranges[i], rnd);
             }
             return b;
         }
 
-        private bool PermutateSomeHow(IList<SugiVertex> vertices, int startIndex, int count) 
+        private bool PermutateSomeHow(IList<SugiVertex> vertices, int startIndex, int count, System.Random rnd) 
         {
             if (count <= 4) {
                 return Permutate(vertices, startIndex, count);
             } else {
-                return PermutateRandom(vertices, startIndex, count);
+                return PermutateRandom(vertices, startIndex, count, rnd);
             }
         }
 
-        private bool PermutateRandom(IList<SugiVertex> vertices, int startIndex, int count) 
+        private bool PermutateRandom(IList<SugiVertex> vertices, int startIndex, int count, System.Random rnd) 
         {
             int endIndex = startIndex + count;
             for (int i = startIndex; i < endIndex; i++) 
             {
-                vertices[i].PermutationIndex = _rnd.Next(count);
+                vertices[i].PermutationIndex = rnd.Next(count);
             }
             return true;
         }
