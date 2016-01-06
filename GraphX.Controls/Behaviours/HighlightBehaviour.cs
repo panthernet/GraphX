@@ -20,8 +20,6 @@ namespace GraphX.Controls
         public static readonly DependencyProperty IsHighlightEnabledProperty = DependencyProperty.RegisterAttached("IsHighlightEnabled", typeof(bool), typeof(HighlightBehaviour), new PropertyMetadata(false, OnIsHighlightEnabledPropertyChanged));
         public static readonly DependencyProperty HighlightControlProperty = DependencyProperty.RegisterAttached("HighlightControl", typeof(GraphControlType), typeof(HighlightBehaviour), new PropertyMetadata(GraphControlType.VertexAndEdge));
         public static readonly DependencyProperty HighlightEdgesProperty = DependencyProperty.RegisterAttached("HighlightEdges", typeof(EdgesType), typeof(HighlightBehaviour), new PropertyMetadata(EdgesType.Out));
-        public static readonly DependencyProperty HighlightStrategyProperty = DependencyProperty.RegisterAttached("HighlightStrategy", typeof(HighlightStrategy), typeof(HighlightBehaviour), new PropertyMetadata(HighlightStrategy.UseExistingControls));
-
 
         public static bool GetIsHighlightEnabled(DependencyObject obj)
         {
@@ -61,16 +59,6 @@ namespace GraphX.Controls
         public static void SetHighlightEdges(DependencyObject obj, EdgesType value)
         {
             obj.SetValue(HighlightEdgesProperty, value);
-        }
-
-        public static HighlightStrategy GetHighlightStrategy(DependencyObject obj)
-        {
-            return (HighlightStrategy)obj.GetValue(HighlightStrategyProperty);
-        }
-
-        public static void SetHighlightStrategy(DependencyObject obj, HighlightStrategy value)
-        {
-            obj.SetValue(HighlightStrategyProperty, value);
         }
 
         #endregion

@@ -145,7 +145,7 @@ namespace METRO.SimpleGraph
             igraph.AddEdge(dataEdge);
         }
 
-        private readonly Random _rnd = new Random();
+        private readonly Random _rnd = new Random(Guid.NewGuid().GetHashCode());
         private GraphExample GraphExample_Setup()
         {
             var dataGraph = new GraphExample();

@@ -150,35 +150,8 @@
                           ToolTip="{TemplateBinding ToolTip}"
                           x:Name="PART_edgePath"/>
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="15" Height="15"/>
+                            <Path Data="M0,0.5 L1,1 1,0" Fill="{TemplateBinding Foreground}" Stretch="Uniform" Width="15" Height="15"/>
                         </controls:DefaultEdgePointer>
-
-                        <!--<Ellipse Width="7" Height="7" Fill="Gold" Visibility="{TemplateBinding IsSelfLooped, Converter={StaticResource BooleanToVisibility}}">
-                            <Ellipse.RenderTransform>
-                                <TransformGroup>
-                                    <TranslateTransform X="-203.5" Y="-253.5" />
-                                    <TranslateTransform x:Name="AnimatedTranslateTransform"/>
-                                </TransformGroup>
-                            </Ellipse.RenderTransform>
-                            <Ellipse.Triggers>
-                                <EventTrigger RoutedEvent="Binding.TargetUpdated">
-                                    <BeginStoryboard>
-                                        <Storyboard RepeatBehavior="Forever" AutoReverse="True">
-                                            <DoubleAnimationUsingPath
-                                                Source="X" Duration="0:0:1"
-                                                Storyboard.TargetProperty="X" 
-                                                Storyboard.TargetName="AnimatedTranslateTransform"
-                                                PathGeometry="{Binding ElementName=PART_edgePath, Path=Data, NotifyOnTargetUpdated=True, Converter={StaticResource GeometryToPathGeometry}}"/>
-                                            <DoubleAnimationUsingPath
-                                                Source="Y" Duration="0:0:1"
-                                                Storyboard.TargetProperty="Y" 
-                                                Storyboard.TargetName="AnimatedTranslateTransform"
-                                                PathGeometry="{Binding ElementName=PART_edgePath, Path=Data, NotifyOnTargetUpdated=True, Converter={StaticResource GeometryToPathGeometry}}"/>
-                                        </Storyboard>
-                                     </BeginStoryboard>
-                                </EventTrigger>
-                            </Ellipse.Triggers>
-                        </Ellipse>-->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

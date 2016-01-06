@@ -290,7 +290,10 @@ namespace ShowcaseApp.WPF.Pages
         private void gg_but_randomgraph_Click(object sender, RoutedEventArgs e)
         {
             gg_Area.ClearLayout();
-            var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
+            var mult = 25;
+            if (gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.LinLog)
+                mult = 45;
+            var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
             graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
             if (gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.EfficientSugiyama || gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Sugiyama)
             {

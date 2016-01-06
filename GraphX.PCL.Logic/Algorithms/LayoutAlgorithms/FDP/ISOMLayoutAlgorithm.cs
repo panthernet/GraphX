@@ -70,7 +70,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 			}
 
 			_radius = Parameters.InitialRadius;
-            System.Random rnd = new System.Random(Parameters.Seed);
+            var rnd = new Random(Parameters.Seed);
 			for ( var epoch = 0; epoch < Parameters.MaxEpoch; epoch++ )
 			{
                 cancellationToken.ThrowIfCancellationRequested();

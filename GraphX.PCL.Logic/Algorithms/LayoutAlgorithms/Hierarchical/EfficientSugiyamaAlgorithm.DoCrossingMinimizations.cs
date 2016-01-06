@@ -323,8 +323,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             int prevCrossCount,
             CancellationToken cancellationToken)
         {
-            IList<CrossCounterPair> virtualEdgePairs, realEdgePairs;
-            IList<SugiEdge> realEdges;
+            IList<CrossCounterPair> realEdgePairs;
             var topLayer = straightSweep ? alternatingLayer : nextAlternatingLayer;
             var bottomLayer = straightSweep ? nextAlternatingLayer : alternatingLayer;
 
@@ -334,8 +333,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             firstLayerSize = lastOnTopLayer.Position + (lastOnTopLayer is ISegmentContainer ? ((ISegmentContainer)lastOnTopLayer).Count : 1);
             secondLayerSize = lastOnBottomLayer.Position + (lastOnBottomLayer is ISegmentContainer ? ((ISegmentContainer)lastOnBottomLayer).Count : 1);
 
-            virtualEdgePairs = FindVirtualEdgePairs(topLayer, bottomLayer);
-            realEdges = FindRealEdges(topLayer, cancellationToken);
+            var virtualEdgePairs = FindVirtualEdgePairs(topLayer, bottomLayer);
+            var realEdges = FindRealEdges(topLayer, cancellationToken);
 
             if (enableSameMeasureOptimization || reverseVerticesWithSameMeasure)
             {
@@ -361,7 +360,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                 {
                     sortedVertexList = new List<SugiVertex>(verticesWithSameMeasure.Count);
                     var stack = new Stack<SugiVertex>(verticesWithSameMeasure.Count);
-                    var rnd = new System.Random(this.Parameters.Seed);
+                    var rnd = new Random(Parameters.Seed);
                     foreach (var v in verticesWithSameMeasure)
                     {
                         if (stack.Count > 0 && (stack.Peek().MeasuredPosition != v.MeasuredPosition || rnd.NextDouble() > 0.8))
@@ -384,14 +383,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     if (!reverseVerticesWithSameMeasure)
                     {
                         //sort by permutation index and measure
-                        sortedVertexList.Sort(new Comparison<SugiVertex>(
-                            (v1, v2) =>
-                            {
-                                if (v1.MeasuredPosition != v2.MeasuredPosition)
-                                    return Math.Sign(v1.MeasuredPosition - v2.MeasuredPosition);
-                                else
-                                    return v1.PermutationIndex - v2.PermutationIndex;
-                            }));
+                        sortedVertexList.Sort((v1, v2) =>
+                        {
+                            if (v1.MeasuredPosition != v2.MeasuredPosition)
+                                return Math.Sign(v1.MeasuredPosition - v2.MeasuredPosition);
+                            return v1.PermutationIndex - v2.PermutationIndex;
+                        });
                     }
 
                     //reinsert the vertices into the layer
@@ -434,7 +431,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     edge.LoadMarkedFromTemp();
 
                 //sort by permutation index and measure
-                sortedVertexList.Sort(new Comparison<SugiVertex>((v1, v2) => v1.Position - v2.Position));
+                sortedVertexList.Sort((v1, v2) => v1.Position - v2.Position);
 
                 //reinsert the vertices into the layer
                 ReinsertVerticesIntoLayer(nextAlternatingLayer, verticesWithSameMeasureSet, sortedVertexList);
@@ -442,15 +439,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
                 return bestCrossCount;
             }
-            else
-            {
-                realEdgePairs = ConvertRealEdgesToCrossCounterPairs(realEdges, true);
-                var edgePairs = new List<CrossCounterPair>();
-                edgePairs.AddRange(virtualEdgePairs);
-                edgePairs.AddRange(realEdgePairs);
+            realEdgePairs = ConvertRealEdgesToCrossCounterPairs(realEdges, true);
+            var fEdgePairs = new List<CrossCounterPair>();
+            fEdgePairs.AddRange(virtualEdgePairs);
+            fEdgePairs.AddRange(realEdgePairs);
 
-                return BiLayerCrossCount(edgePairs, firstLayerSize, secondLayerSize, cancellationToken);
-            }
+            return BiLayerCrossCount(fEdgePairs, firstLayerSize, secondLayerSize, cancellationToken);
         }
 
         private static void ReinsertVerticesIntoLayer(
@@ -557,7 +551,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         private bool Permutate(IList<SugiVertex> vertices, IList<int> ranges) 
         {
-            System.Random rnd = new System.Random(this.Parameters.Seed);
+            Random rnd = new Random(Parameters.Seed);
             bool b = false;
             for (int i = 0, startIndex = 0; i < ranges.Count; startIndex += ranges[i], i++) {
                 b = b || PermutateSomeHow(vertices, startIndex, ranges[i], rnd);
@@ -565,7 +559,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             return b;
         }
 
-        private bool PermutateSomeHow(IList<SugiVertex> vertices, int startIndex, int count, System.Random rnd) 
+        private bool PermutateSomeHow(IList<SugiVertex> vertices, int startIndex, int count, Random rnd) 
         {
             if (count <= 4) {
                 return Permutate(vertices, startIndex, count);
@@ -574,7 +568,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             }
         }
 
-        private bool PermutateRandom(IList<SugiVertex> vertices, int startIndex, int count, System.Random rnd) 
+        private bool PermutateRandom(IList<SugiVertex> vertices, int startIndex, int count, Random rnd) 
         {
             int endIndex = startIndex + count;
             for (int i = startIndex; i < endIndex; i++) 

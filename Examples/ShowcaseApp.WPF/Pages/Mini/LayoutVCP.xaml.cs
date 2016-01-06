@@ -35,7 +35,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
         private void GenerateGraph()
         {
-            var logicCore = new LogicCoreExample()
+            var logicCore = new LogicCoreExample
             {
                 Graph = ShowcaseHelper.GenerateDataGraph(6, false)
             };

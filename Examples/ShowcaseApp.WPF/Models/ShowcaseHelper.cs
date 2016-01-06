@@ -19,7 +19,7 @@ namespace ShowcaseApp.WPF.Models
         public static List<DataItem> DataSource { get; set; }
 
         public const int DATASOURCE_SIZE = 5000;
-        public static readonly Random Rand = new Random();
+        public static readonly Random Rand = new Random(Guid.NewGuid().GetHashCode());
 
         private static void GenerateData(int count)
         {
@@ -60,7 +60,7 @@ namespace ShowcaseApp.WPF.Models
         /// </summary>
         /// <param name="count">Items count</param>
         /// <param name="addEdges"></param>
-        public static GraphExample GenerateDataGraph(int count, bool addEdges = true)
+        public static GraphExample GenerateDataGraph(int count, bool addEdges = true, int edgeCountMult = 25)
         {
             var graph = new GraphExample();
 
@@ -74,7 +74,7 @@ namespace ShowcaseApp.WPF.Models
 
             foreach (var item in vlist)
             {
-                if (Rand.Next(0, 50) > 25) continue;
+                if (Rand.Next(0, 50) > edgeCountMult) continue;
                 var vertex2 = vlist[Rand.Next(0, graph.VertexCount - 1)];
                 var txt = string.Format("{0} -> {1}", item.Text, vertex2.Text);
                 graph.AddEdge(new DataEdge(item, vertex2, Rand.Next(1, 50)) { ID = edgeId, Text = txt, ToolTipText = txt });

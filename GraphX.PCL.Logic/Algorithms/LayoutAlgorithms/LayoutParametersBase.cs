@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using GraphX.PCL.Common.Interfaces;
 
@@ -5,9 +6,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
 	public abstract class LayoutParametersBase : ILayoutParameters
 	{
-        public LayoutParametersBase()
+	    protected LayoutParametersBase()
         {
-            Seed = System.DateTime.Now.Millisecond;
+            Seed = Guid.NewGuid().GetHashCode();
         }
 
         #region ICloneable Members

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using GraphX;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
 using GraphX.Controls.Animations;
@@ -46,8 +45,6 @@ namespace ShowcaseApp.WPF.Pages
             tg_deleteAnimation.SelectedItem = DeleteAnimation.Shrink;
             tg_mouseoverAnimation.ItemsSource = Enum.GetValues(typeof(MouseOverAnimation)).Cast<MouseOverAnimation>();
             tg_mouseoverAnimation.SelectedItem = MouseOverAnimation.Scale;
-            tg_highlightStrategy.ItemsSource = Enum.GetValues(typeof(HighlightStrategy)).Cast<HighlightStrategy>();
-            tg_highlightStrategy.SelectedItem = HighlightStrategy.UseExistingControls;
             tg_highlightType.ItemsSource = Enum.GetValues(typeof(GraphControlType)).Cast<GraphControlType>();
             tg_highlightType.SelectedItem = GraphControlType.VertexAndEdge;
             tg_highlightEdgeType.ItemsSource = Enum.GetValues(typeof(EdgesType)).Cast<EdgesType>();
@@ -111,12 +108,7 @@ namespace ShowcaseApp.WPF.Pages
             if (menuItem == null) return;
             var vc = menuItem.Tag as VertexControl;
             if (vc == null) return;
-            foreach (var ec in tg_Area.GetRelatedControls(vc, GraphControlType.Edge, EdgesType.All).Select(item => item as EdgeControl)) {
-                tg_Area.LogicCore.Graph.RemoveEdge(ec.Edge as DataEdge);
-                tg_Area.RemoveEdge(ec.Edge as DataEdge);
-            }
-            tg_Area.RemoveVertex(vc.Vertex as DataVertex);
-            tg_Area.LogicCore.Graph.RemoveVertex(vc.Vertex as DataVertex);
+            tg_Area.RemoveVertexAndEdges(vc.Vertex as DataVertex);
         }
 
         private void tg_but_randomgraph_Click(object sender, RoutedEventArgs e)
@@ -124,13 +116,9 @@ namespace ShowcaseApp.WPF.Pages
             var graph = ShowcaseHelper.GenerateDataGraph(ShowcaseHelper.Rand.Next(10, 20));
 
             foreach (var item in graph.Vertices)
-            {
                 ThemedDataStorage.FillDataVertex(item);
-            }
             foreach (var item in graph.Edges)
-            {
                 item.ToolTipText = string.Format("{0} -> {1}", item.Source.Name, item.Target.Name);
-            }
 
             //TIP: trick to disable zoomcontrol behaviour when it is performing fill animation from top left zoomed corner
             //instead we will fill-animate from maximum zoom distance            
@@ -154,8 +142,6 @@ namespace ShowcaseApp.WPF.Pages
             if (tg_Area.LogicCore.AsyncAlgorithmCompute)
                 tg_loader.Visibility = Visibility.Collapsed;
 
-
-            tg_highlightStrategy_SelectionChanged(null, null);
             tg_highlightType_SelectionChanged(null, null);
             tg_highlightEnabled_Checked(null, null);
             tg_highlightEdgeType_SelectionChanged(null, null);
@@ -243,14 +229,6 @@ namespace ShowcaseApp.WPF.Pages
             }
         }
 
-        private void tg_highlightStrategy_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            foreach (var item in tg_Area.VertexList)
-                HighlightBehaviour.SetHighlightStrategy(item.Value, (HighlightStrategy)tg_highlightStrategy.SelectedItem);
-            foreach (var item in tg_Area.EdgesList)
-                HighlightBehaviour.SetHighlightStrategy(item.Value, (HighlightStrategy)tg_highlightStrategy.SelectedItem);
-        }
-
         private void tg_highlightType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             foreach (var item in tg_Area.VertexList)
@@ -265,8 +243,6 @@ namespace ShowcaseApp.WPF.Pages
                 HighlightBehaviour.SetIsHighlightEnabled(item.Value, tg_highlightEnabled.IsChecked != null && tg_highlightEnabled.IsChecked.Value);
             foreach (var item in tg_Area.EdgesList)
                 HighlightBehaviour.SetIsHighlightEnabled(item.Value, tg_highlightEnabled.IsChecked != null && tg_highlightEnabled.IsChecked.Value);
-
-            tg_highlightStrategy.IsEnabled = tg_highlightType.IsEnabled = tg_highlightEdgeType.IsEnabled = tg_highlightEnabled.IsChecked != null && tg_highlightEnabled.IsChecked.Value;
         }
 
         private void tg_highlightEdgeType_SelectionChanged(object sender, SelectionChangedEventArgs e)

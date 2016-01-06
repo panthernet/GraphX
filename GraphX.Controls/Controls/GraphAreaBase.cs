@@ -223,14 +223,15 @@ namespace GraphX
         static void GraphAreaBase_Completed(object sender, ControlEventArgs e)
         {
             if (e.Control == null || e.Control.RootArea == null) return;
-            e.Control.RootArea.RemoveAnimatedControl(e.Control);
+            e.Control.RootArea.RemoveAnimatedControl(e.Control, e.RemoveDataObject);
         }
 
         /// <summary>
         /// Deletes vertices and edges correctly after delete animation
         /// </summary>
         /// <param name="ctrl">Control</param>
-        protected abstract void RemoveAnimatedControl(IGraphControl ctrl);
+        /// <param name="removeDataObject">Also remove data object from data graph if possible</param>
+        protected abstract void RemoveAnimatedControl(IGraphControl ctrl, bool removeDataObject);
 
         /// <summary>
         /// Gets or sets vertex and edge controls mouse over animation

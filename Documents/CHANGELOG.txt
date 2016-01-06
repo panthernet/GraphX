@@ -27,6 +27,7 @@ DETAILED CHANGELOG:
 	+ Added GraphArea::MoveToFront() and GraphArea::MoveToBack() methods that will move specified GraphArea child to the top/bottom of the visual tree respectively
 	+ Added MouseEventArgs for VertexDoubleClick event to be able to correctly block click event when you're dragging vertex and open dialog window at once
 	+ Added VertexControl::HideWithEdges() and VertexControl::ShowWithEdges() methods to hide/show the control and all related edges at once
+	+ Added new optional parameters for GraphArea add/remove objects methods to allow vertex/edge data to be added to data graph in a single method call
 	+ Fixed id autoresolve issue when calling GraphArea::GenerateAllEdges() after manual edge data compilation (thanks to Hannes Hasenauer)
 	+ Fixed edge label visibility when hideing/showing edges through Visibility property [WPF]
 	+ Fixed some METRO code not that hasn't been ported correctly
@@ -54,11 +55,15 @@ DETAILED CHANGELOG:
 
 
 BREAKING CHANGES:
+	* Changed Vertex and Edge ID type to Int64 (long) by default for easier id handling when working with databases and huge datasets. Was Int32.
+	
 	* IExternalLayoutAlgorithm interface now demands TEdge generic specification and have one new method ResetGraph().
 	* All built-in algorithms now use IMutableVertexAndEdgeSet<TVertex, TEdge> for TGraph generic specification to be able to modify Graph data on demand.
-	* Made Vertex and Edge ID Int64 be default. Was Int32.
 	* Added mandatory IOverlapRemovalAlgorithm::Initialize() method for all OR algorithms to be able to initialize initial data not only when you instantiate class but at any time
 	* IZoomControl interface now must implement Width and Height properties
+	* IOneWayControlAnimation interface methods AnimateVertex/AnimateEdge now has an additional parameter which flags if data vertex/edge should be deleted after animation is complete.
+		Any custom delete animations should be updated to handle this additional property.
+	* HighlightBehaviour::HighlightStrategy property has been removed due to redundancy
 
 
 RELEASE 2.2.0

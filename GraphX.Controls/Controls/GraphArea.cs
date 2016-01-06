@@ -319,29 +319,31 @@ namespace GraphX.Controls
         #region Remove controls
 
         /// <summary>
-        /// Remove all visual vertices
+        /// Remove all vertices from layout. Optionaly can remove vertices from data graph also.
         /// </summary>
-        public void RemoveAllVertices()
+        /// <param name="removeVerticesFromDataGraph">Also remove vertices from data graph if possible. Default value is False.</param>
+        public void RemoveAllVertices(bool removeVerticesFromDataGraph = false)
         {
             var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
             foreach (var item in _vertexlist)
             {
-                RemoveVertexInternal(item.Key, false);
-                if (hasStorage && item.Key.SkipProcessing != ProcessingOptionEnum.Exclude) LogicCore.AlgorithmStorage.RemoveSingleVertex(item.Key);
+                RemoveVertexInternal(item.Key, false, removeVerticesFromDataGraph);
+                if (hasStorage && (item.Key.SkipProcessing != ProcessingOptionEnum.Exclude || removeVerticesFromDataGraph)) LogicCore.AlgorithmStorage.RemoveSingleVertex(item.Key);
             }
             _vertexlist.Clear();
         }
 
         /// <summary>
-        /// Remove all visual edges
+        /// Remove all edges from layout. Optionaly can remove edges from data graph also.
         /// </summary>
-        public void RemoveAllEdges()
+        /// <param name="removeEdgesFromDataGraph">Also remove edges from data graph if possible. Default value is False.</param>
+        public void RemoveAllEdges(bool removeEdgesFromDataGraph = false)
         {
             var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
             foreach (var item in _edgeslist)
             {
-                RemoveEdgeInternal(item.Key, false);
-                if (hasStorage && item.Key.SkipProcessing != ProcessingOptionEnum.Exclude) LogicCore.AlgorithmStorage.RemoveSingleEdge(item.Key);
+                if (hasStorage && (item.Key.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgesFromDataGraph)) LogicCore.AlgorithmStorage.RemoveSingleEdge(item.Key);
+                RemoveEdgeInternal(item.Key, false, removeEdgesFromDataGraph);
             }
             _edgeslist.Clear();
         }
@@ -350,31 +352,34 @@ namespace GraphX.Controls
         /// Remove vertex from layout
         /// </summary>
         /// <param name="vertexData">Vertex data object</param>
-        public void RemoveVertex(TVertex vertexData)
+        /// <param name="removeVertexFromDataGraph">Also remove vertex from data graph if possible. Default value is False.</param>
+        public void RemoveVertex(TVertex vertexData, bool removeVertexFromDataGraph = false)
         {
-            RemoveVertexInternal(vertexData, true);
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && vertexData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            RemoveVertexInternal(vertexData, true, removeVertexFromDataGraph);
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && (vertexData.SkipProcessing != ProcessingOptionEnum.Exclude || removeVertexFromDataGraph);
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleVertex(vertexData);
         }
 
         /// <summary>
-        /// Remove vertex and all associated edges from the layout
+        /// Remove vertex and all associated edges from the layout.
         /// </summary>
         /// <param name="vertexData">Vertex data object</param>
         /// <param name="eType">Edge types to remove</param>
-        public void RemoveVertexAndEdges(TVertex vertexData, EdgesType eType = EdgesType.All)
+        /// <param name="removeEdgesFromDataGraph">Also remove edges from data graph if possible. Default value is True.</param>
+        /// <param name="removeVertexFromDataGraph">Also remove vertex from data graph if possible. Default value is True.</param>
+        public void RemoveVertexAndEdges(TVertex vertexData, EdgesType eType = EdgesType.All, bool removeEdgesFromDataGraph = true, bool removeVertexFromDataGraph = true)
         {
             if (VertexList.ContainsKey(vertexData))
             {
                 GetRelatedControls(VertexList[vertexData], GraphControlType.Edge, eType).ToList().ForEach(a =>
                 {
-                    RemoveEdge((TEdge)((EdgeControl)a).Edge);
+                    RemoveEdge((TEdge)((EdgeControl)a).Edge, removeEdgesFromDataGraph);
                 });
             }
-            RemoveVertex(vertexData);
+            RemoveVertex(vertexData, removeVertexFromDataGraph);
         }
 
-        private void RemoveVertexInternal(TVertex vertexData, bool removeFromList)
+        private void RemoveVertexInternal(TVertex vertexData, bool removeFromList, bool removeVertexFromDataGraph = false)
         {
             if (vertexData == null || !_vertexlist.ContainsKey(vertexData)) return;
 
@@ -383,10 +388,10 @@ namespace GraphX.Controls
                 _vertexlist.Remove(vertexData);
             if (DeleteAnimation != null)
                 DeleteAnimation.AnimateVertex(ctrl);
-            else RemoveVertexInternal(ctrl);
+            else RemoveVertexInternal(ctrl, removeVertexFromDataGraph);
         }
 
-        private void RemoveVertexInternal(VertexControl ctrl)
+        private void RemoveVertexInternal(VertexControl ctrl, bool removeVertexFromDataGraph = false)
         {
             if (ctrl.VertexLabelControl != null)
             {
@@ -394,6 +399,8 @@ namespace GraphX.Controls
                 ctrl.DetachLabel();
             }
             Children.Remove(ctrl);
+            if (removeVertexFromDataGraph && LogicCore != null && LogicCore.Graph != null && LogicCore.Graph.ContainsVertex(ctrl.Vertex as TVertex))
+                LogicCore.Graph.RemoveVertex(ctrl.Vertex as TVertex); 
             ctrl.Clean();
         }
 
@@ -401,14 +408,15 @@ namespace GraphX.Controls
         /// Remove edge from layout
         /// </summary>
         /// <param name="edgeData">Edge data object</param>
-        public void RemoveEdge(TEdge edgeData)
+        /// <param name="removeEdgeFromDataGraph">Remove edge from data graph if possible. Default value is False.</param>
+        public void RemoveEdge(TEdge edgeData, bool removeEdgeFromDataGraph = false)
         {
             RemoveEdgeInternal(edgeData, true);
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && edgeData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && (edgeData.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgeFromDataGraph);
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleEdge(edgeData);
         }
 
-        private void RemoveEdgeInternal(TEdge edgeData, bool removeFromList)
+        private void RemoveEdgeInternal(TEdge edgeData, bool removeFromList, bool removeEdgeFromDataGraph = false)
         {
             if (edgeData == null || !_edgeslist.ContainsKey(edgeData)) return;
 
@@ -417,10 +425,10 @@ namespace GraphX.Controls
                 _edgeslist.Remove(edgeData);
             if (DeleteAnimation != null)
                 DeleteAnimation.AnimateEdge(ctrl);
-            else RemoveEdgeInternal(ctrl);
+            else RemoveEdgeInternal(ctrl, removeEdgeFromDataGraph);
         }
 
-        private void RemoveEdgeInternal(EdgeControl ctrl)
+        private void RemoveEdgeInternal(EdgeControl ctrl, bool removeEdgeFromDataGraph = false)
         {
             if (ctrl.EdgeLabelControl != null)
             {
@@ -428,6 +436,8 @@ namespace GraphX.Controls
                 ctrl.DetachLabel();
             }
             Children.Remove(ctrl);
+            if (removeEdgeFromDataGraph && LogicCore != null && LogicCore.Graph != null && LogicCore.Graph.ContainsEdge(ctrl.Edge as TEdge))
+                LogicCore.Graph.RemoveEdge(ctrl.Edge as TEdge);
             ctrl.Clean();
         }
 
@@ -435,18 +445,19 @@ namespace GraphX.Controls
         /// Deletes vertices and edges correctly after delete animation
         /// </summary>
         /// <param name="ctrl">Control</param>
-        protected override void RemoveAnimatedControl(IGraphControl ctrl)
+        /// <param name="removeDataObject">Remove data object if possible</param>
+        protected override void RemoveAnimatedControl(IGraphControl ctrl, bool removeDataObject)
         {
             var control = ctrl as VertexControl;
             if (control != null)
             {
-                RemoveVertexInternal(control);
+                RemoveVertexInternal(control, removeDataObject);
                 return;
             }
             var edgeControl = ctrl as EdgeControl;
             if (edgeControl != null)
             {
-                RemoveEdgeInternal(edgeControl);
+                RemoveEdgeInternal(edgeControl, removeDataObject);
                 return;
             }
         }

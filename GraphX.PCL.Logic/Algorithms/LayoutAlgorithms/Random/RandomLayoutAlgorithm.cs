@@ -33,10 +33,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         {
             VertexPositions.Clear();
             var bounds = _parameters == null ? new RandomLayoutAlgorithmParams().Bounds : _parameters.Bounds;
-            int boundsWidth = (int)bounds.Width;
-            int boundsHeight = (int)bounds.Height;
-            int seed = _parameters == null ? DateTime.Now.Millisecond : _parameters.Seed;
-            System.Random rnd = new System.Random(seed);
+            var boundsWidth = (int)bounds.Width;
+            var boundsHeight = (int)bounds.Height;
+            var seed = _parameters == null ? Guid.NewGuid().GetHashCode() : _parameters.Seed;
+            var rnd = new Random(seed);
             foreach (var item in VisitedGraph.Vertices)
             {
                 if (item.SkipProcessing != ProcessingOptionEnum.Freeze || VertexPositions.Count == 0)
@@ -48,12 +48,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                         new Point(rnd.Next(x, x + boundsWidth - (int) size.Width),
                             rnd.Next(y, y + boundsHeight - (int) size.Height)));
                 }
-                /*else if (VertexPositions != null)
-                {
-                    var res = VertexPositions.FirstOrDefault(a => a.Key == item);
-                    if (res.Key != null)
-                        VertexPositions.Add(res.Key, res.Value);
-                }*/
             }
            
         }
