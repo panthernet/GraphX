@@ -209,7 +209,7 @@ namespace GraphX.Controls
 
         private void CreateVisualBrushForViewFinder(Visual visual)
         {
-            _viewFinderDisplay.VisualBrush = new VisualBrush(visual) {Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top};
+            _viewFinderDisplay.VisualBrush = new VisualBrush(visual) { Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top};
         }
 
         private void DetachFromVisualTree()
@@ -642,7 +642,6 @@ namespace GraphX.Controls
         #endregion
 
         #region Properties
-
         /// <summary>
         /// Gets or sets if animation should be disabled
         /// </summary>
@@ -810,6 +809,7 @@ namespace GraphX.Controls
         private static void Zoom_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var zc = (ZoomControl)d;
+            zc.HookBeforeZoomChanging();
 
             if (zc._scaleTransform == null)
                 return;
@@ -828,6 +828,7 @@ namespace GraphX.Controls
             zc.Presenter.OnPropertyChanged("RenderTransform");
             zc.OnPropertyChanged("Zoom");
             zc.UpdateViewport();
+            zc.HookAfterZoomChanging();
         }
         #endregion
 
@@ -1058,6 +1059,11 @@ namespace GraphX.Controls
 
         #endregion
 
+        #region Hooks
+        protected virtual void HookBeforeZoomChanging() { }
+        protected virtual void HookAfterZoomChanging() { }
+        #endregion
+
         static ZoomControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ZoomControl), new FrameworkPropertyMetadata(typeof(ZoomControl)));
@@ -1192,7 +1198,6 @@ namespace GraphX.Controls
         protected virtual void MouseWheelAction(int delta, Point mousePosition)
         {
             var origoPosition = OrigoPosition;
-
             DoZoom(
                 Math.Max(1 / MaximumZoomStep, Math.Min(MaximumZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
                 delta < 0 ? -1 : 1,

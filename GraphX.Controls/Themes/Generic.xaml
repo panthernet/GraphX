@@ -411,6 +411,10 @@
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
+                        <!-- Should hide view finder display to prevent excessive rendering issues -->
+                        <Trigger Property="Opacity" Value="0"  SourceName="ViewFinder">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="ViewFinderDisplay" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

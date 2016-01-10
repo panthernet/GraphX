@@ -28,7 +28,7 @@ namespace GraphX.PCL.Logic.Models
         {
             if (iGraph == null) return null;
             if (parameters == null) parameters = CreateLayoutParameters(newAlgorithmType);
-            IMutableBidirectionalGraph<TVertex, TEdge> graph = iGraph.CopyToBidirectionalGraph();
+            var graph = (TGraph)(object)iGraph.CopyToBidirectionalGraph();
             /*var dic = new Dictionary<TVertex, Point>();
             if (Positions != null)
             {
@@ -40,30 +40,30 @@ namespace GraphX.PCL.Logic.Models
             switch (newAlgorithmType)
             {
                 case LayoutAlgorithmTypeEnum.Tree:
-                    return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as SimpleTreeLayoutParameters);
+                    return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, sizes, parameters as SimpleTreeLayoutParameters);
                 case LayoutAlgorithmTypeEnum.SimpleRandom:
-                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as RandomLayoutAlgorithmParams);
+                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as RandomLayoutAlgorithmParams);
                 case LayoutAlgorithmTypeEnum.Circular:
-                    return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as CircularLayoutParameters);
+                    return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, sizes, parameters as CircularLayoutParameters);
                 case LayoutAlgorithmTypeEnum.FR:
-                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as FRLayoutParametersBase);
+                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as FRLayoutParametersBase);
                 case LayoutAlgorithmTypeEnum.BoundedFR:
-                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as BoundedFRLayoutParameters);
+                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as BoundedFRLayoutParameters);
                 case LayoutAlgorithmTypeEnum.KK:
-                    return new KKLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as KKLayoutParameters);
+                    return new KKLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as KKLayoutParameters);
                 case LayoutAlgorithmTypeEnum.ISOM:
-                    return new ISOMLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as ISOMLayoutParameters);
+                    return new ISOMLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as ISOMLayoutParameters);
                 case LayoutAlgorithmTypeEnum.LinLog:
-                    return new LinLogLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as LinLogLayoutParameters);
+                    return new LinLogLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as LinLogLayoutParameters);
                 case LayoutAlgorithmTypeEnum.EfficientSugiyama:
-                    return new EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, parameters as EfficientSugiyamaLayoutParameters, positions, sizes);
+                    return new EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, parameters as EfficientSugiyamaLayoutParameters, positions, sizes);
                 case LayoutAlgorithmTypeEnum.Sugiyama:
-                    return new SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, sizes, positions, parameters as SugiyamaLayoutParameters,
+                    return new SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, sizes, positions, parameters as SugiyamaLayoutParameters,
                                                                                    e => (e is TypedEdge<TVertex>
                                                                                         ? (e as TypedEdge<TVertex>).Type
                                                                                         : EdgeTypes.Hierarchical));
                 case LayoutAlgorithmTypeEnum.CompoundFDP:
-                    return new CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, sizes, new Dictionary<TVertex, Thickness>(), new Dictionary<TVertex, CompoundVertexInnerLayoutType>(),
+                    return new CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, sizes, new Dictionary<TVertex, Thickness>(), new Dictionary<TVertex, CompoundVertexInnerLayoutType>(),
                         positions, parameters as CompoundFDPLayoutParameters);
 
                 /*case LayoutAlgorithmTypeEnum.BalloonTree:

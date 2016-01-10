@@ -8,4 +8,12 @@ namespace GraphX.PCL.Common.Exceptions
         {
         }
     }
+
+    public sealed class GX_ConsistencyException : Exception
+    {
+        public GX_ConsistencyException(string text)
+            : base(text)
+        {
+        }
+    }
 }

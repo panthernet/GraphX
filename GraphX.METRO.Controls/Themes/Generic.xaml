@@ -189,7 +189,7 @@
     </Style>
     <!-- ENDREGION -->
 
-    <!-- REGION LABLE CONTROLS -->
+    <!-- REGION EDGE LABEL CONTROL -->
     <Style TargetType="ctrls:EdgeLabelControl">
         <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
         <Setter Property="Template">
@@ -205,7 +205,22 @@
         </Setter>
     </Style>
 
-    <!--VERTEX LABEL CONTROL -->
+    <Style TargetType="ctrls:AttachableEdgeLabelControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrls:AttachableEdgeLabelControl">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
+                        <ContentPresenter Margin="3" Content="{Binding AttachNode.Edge, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
+    </Style>
+    
+    <!-- ENDREGION -->
+
+    <!-- REGION VERTEX LABEL CONTROL -->
     <Style TargetType="ctrls:VertexLabelControl">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
@@ -218,6 +233,26 @@
                 <ControlTemplate TargetType="ctrls:VertexLabelControl">
                     <Grid>
                         <ContentPresenter Margin="3" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ctrls:AttachableVertexLabelControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="LabelPositionMode" Value="Sides"/>
+        <Setter Property="LabelPositionSide" Value="Bottom"/>
+
+        <!-- Custom label template body -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrls:AttachableVertexLabelControl">
+                    <Grid>
+                        <Border Background="White" CornerRadius="4" Opacity=".8" Padding="0">
+                            <ContentPresenter Name="PART_container" Margin="1" Content="{Binding AttachNode.Vertex, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
