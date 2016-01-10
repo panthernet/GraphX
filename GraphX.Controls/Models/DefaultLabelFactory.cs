@@ -1,39 +1,40 @@
 ﻿
+using System.Windows;
+
 namespace GraphX.Controls.Models
 {
     /// <summary>
     /// Default label factory class
     /// </summary>
-    /// <typeparam name="TLabel">Type of label to generate</typeparam>
-    /// <typeparam name="TResult">Factory entity return type</typeparam>
-    public class DefaultLabelFactory<TLabel, TResult> : ILabelFactory<TResult>
-        where TLabel: class, new()
+    /// <typeparam name="TLabel">Type of label to generate. Should be UIElement derived.</typeparam>
+    public class DefaultLabelFactory<TLabel> : ILabelFactory<TLabel>
+        where TLabel: UIElement, new()
     {
         /// <summary>
-        /// Returns newly generated label for parent control. Attachable labels will be auto attached if derived from IAttachableControl<T>
+        /// Returns newly generated label for parent control. Attachable labels will be auto attached if derived from IAttachableControl<TCtrl>
         /// </summary>
         /// <param name="control">Parent control</param>
-        public virtual TResult CreateLabel<TCtrl>(TCtrl control)
+        public virtual TLabel CreateLabel<TCtrl>(TCtrl control)
         {
             var label = new TLabel();
             var aLabel = label as IAttachableControl<TCtrl>;
             if(aLabel != null)
                 aLabel.Attach(control);
-            return (TResult)(object)label;
+            return label;
         }
     }
 
     /// <summary>
     /// Default vertex label factory class
     /// </summary>
-    public class DefaultVertexlabelFactory : DefaultLabelFactory<AttachableVertexLabelControl, IVertexLabelControl>
+    public class DefaultVertexlabelFactory : DefaultLabelFactory<AttachableVertexLabelControl>
     {
         
     }
     /// <summary>
     /// Default edge label factory class
     /// </summary>
-    public class DefaultEdgelabelFactory : DefaultLabelFactory<AttachableEdgeLabelControl, IEdgeLabelControl>
+    public class DefaultEdgelabelFactory : DefaultLabelFactory<AttachableEdgeLabelControl>
     {
 
     }

@@ -10,6 +10,7 @@ using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using GraphX.Controls;
 using GraphX.Controls.Models;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 
@@ -281,7 +282,8 @@ namespace ShowcaseApp.WPF.Pages
                         break;
                 }
 
-                erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.EfficientSugiyama;
+                erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.SimpleRandom;
+                erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithmParams = new RandomLayoutAlgorithmParams() { Bounds = new Rect(0,0, 500, 500)};
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithmParams = erg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
 

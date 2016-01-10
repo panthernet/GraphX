@@ -2,6 +2,8 @@
 DETAILED CHANGELOG:
  - Added default templates for attached vertex and edge labels
  - Fixed excessive rendering issue when ZoomControl viewfinder is hidden. Should significantly increase performance of the viewfinder in this case.
+ - Fixed showcase app edge example graph
+ - Improved attachable labels logic. Simplified base classes, added checks for mandatory base classes
  
 RELEASE 2.3.0
 
@@ -14,7 +16,7 @@ HIGHLIGHTS:
 		- No more label cuts when vertex is strictly limited in width or height
 		- No more jerky edge endpoints when edge label is too large
 		- No more labels behind edges or vertices. You can control how to inject them		
-	To use new labels you have to add AttachedVertexLabel and/or AttachedEdgeLabel XAML templates and also set GraphArea::VertexLabelFactory / EdgeLabelFactory.
+	To use new labels you have to add AttachableVertexLabelControl and/or AttachableEdgeLabelControl XAML templates and also set GraphArea::VertexLabelFactory / EdgeLabelFactory.
 
 DETAILED CHANGELOG:
 	+ Added GroupId property to IGraphXVertex interface

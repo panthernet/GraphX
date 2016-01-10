@@ -47,11 +47,11 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets or sets vertex label control factory. Vertex labels will be generated at the end of the graph generation process.
         /// </summary>
-        public ILabelFactory<IVertexLabelControl> VertexLabelFactory { get; set; }
+        public ILabelFactory<UIElement> VertexLabelFactory { get; set; }
         /// <summary>
         /// Gets or sets edge label control factory. Edge labels will be generated at the end of the graph generation process.
         /// </summary>
-        public ILabelFactory<IEdgeLabelControl> EdgeLabelFactory { get; set; }
+        public ILabelFactory<UIElement> EdgeLabelFactory { get; set; }
 
         /// <summary>
         /// Dummy property. Use EdgesList and VertexList instead.
@@ -657,13 +657,13 @@ namespace GraphX.Controls
         protected virtual void GenerateVertexLabel(VertexControl vertexControl)
         {
             var label = (UIElement)VertexLabelFactory.CreateLabel(vertexControl);
+            if (!(label is IVertexLabelControl))
+                throw new GX_InvalidDataException("Generated vertex label should implement IVertexLabelControl interface");
             if (_svVertexLabelShow == false || vertexControl.Visibility != Visibility.Visible)
                 label.Visibility = Visibility.Collapsed;
             AddCustomChildControl(label);
             label.Measure(new USize(double.MaxValue, double.MaxValue));
-            var iLabel = label as IVertexLabelControl;
-            if (iLabel != null)
-                iLabel.UpdatePosition();
+            ((IVertexLabelControl)label).UpdatePosition();
         }
 
         protected virtual void GenerateEdgeLabels()
@@ -679,13 +679,13 @@ namespace GraphX.Controls
         protected virtual void GenerateEdgeLabel(EdgeControl edgeControl)
         {
             var label = (UIElement)EdgeLabelFactory.CreateLabel(edgeControl);
+            if (!(label is IEdgeLabelControl))
+                throw new GX_InvalidDataException("Generated edge label should implement IEdgeLabelControl interface");
             if (_svShowEdgeLabels == false || edgeControl.Visibility != Visibility.Visible)
                 label.Visibility = Visibility.Collapsed;
             AddCustomChildControl(label);
             label.Measure(new USize(double.MaxValue, double.MaxValue));
-            var iLabel = label as IEdgeLabelControl;
-            if (iLabel != null)
-                iLabel.UpdatePosition();
+            ((IEdgeLabelControl)label).UpdatePosition();
         }
 
         #endregion
