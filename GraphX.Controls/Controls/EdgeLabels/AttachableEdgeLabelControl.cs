@@ -48,7 +48,7 @@ namespace GraphX.Controls
         /// Attach label to VertexControl
         /// </summary>
         /// <param name="node">VertexControl node</param>
-        public void Attach(EdgeControl node)
+        public virtual void Attach(EdgeControl node)
         {
 #if WPF
             if(AttachNode != null)
@@ -64,7 +64,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Detach label from control
         /// </summary>
-        public void Detach()
+        public virtual void Detach()
         {
 #if WPF
             if (AttachNode != null)

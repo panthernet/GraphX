@@ -4,7 +4,14 @@ DETAILED CHANGELOG:
  - Fixed excessive rendering issue when ZoomControl viewfinder is hidden. Should significantly increase performance of the viewfinder in this case.
  - Fixed showcase app edge example graph
  - Improved attachable labels logic. Simplified base classes, added checks for mandatory base classes
+ - Improved attachable labels customization possibilities by making several methods virtual
+
+BREAKING CHANGES:
+ - Made DefaultLabelFactory class abstract and it is now accepts only one generic param (output object type)
  
+ 
+
+
 RELEASE 2.3.0
 
 HIGHLIGHTS:

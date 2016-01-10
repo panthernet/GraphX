@@ -656,7 +656,7 @@ namespace GraphX.Controls
 
         protected virtual void GenerateVertexLabel(VertexControl vertexControl)
         {
-            var label = (UIElement)VertexLabelFactory.CreateLabel(vertexControl);
+            var label = VertexLabelFactory.CreateLabel(vertexControl);
             if (!(label is IVertexLabelControl))
                 throw new GX_InvalidDataException("Generated vertex label should implement IVertexLabelControl interface");
             if (_svVertexLabelShow == false || vertexControl.Visibility != Visibility.Visible)

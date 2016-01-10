@@ -7,7 +7,7 @@ namespace GraphX.Controls.Models
     /// Default label factory class
     /// </summary>
     /// <typeparam name="TLabel">Type of label to generate. Should be UIElement derived.</typeparam>
-    public class DefaultLabelFactory<TLabel> : ILabelFactory<TLabel>
+    public abstract class DefaultLabelFactory<TLabel> : ILabelFactory<TLabel>
         where TLabel: UIElement, new()
     {
         /// <summary>
