@@ -83,58 +83,18 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                             new Point(0, 0)
                         };
                 }
-
-                if ((Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft) && sourcePosition.Y != targetPosition.Y)
+                else if ((Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft) && sourcePosition.Y != targetPosition.Y)
                 {
                     _edgeRoutingPoints[edge] =
                         new[]
                         {
                             new Point(0, 0),
-                            new Point(sourcePosition.X + sourceSize.Width /2, targetPosition.Y + targetSize.Height / 2),
+                            new Point(sourcePosition.X + sourceSize.Width/2, targetPosition.Y + targetSize.Height/2),
                             new Point(0, 0)
                         };
                 }
-
-
+                else _edgeRoutingPoints[edge] = null;
             }
-           /* foreach (var edge in VisitedGraph.Edges)
-            {
-                Point[] orthoRoutePoints = new Point[2];
-                var sourceVertex = _vertexMap[edge.Source];
-                var targetVertex = _vertexMap[edge.Target];
-                bool notSwitched = (sourceVertex.LayerIndex < targetVertex.LayerIndex);
-                int sourceIndex = notSwitched ? 0 : 1;
-                int targetIndex = notSwitched ? 1 : 0;
-                orthoRoutePoints[sourceIndex] = new Point()
-                {
-                    X = sourceVertex.HorizontalPosition,
-                    Y = _layerPositions[sourceVertex.LayerIndex] + _layerHeights[sourceVertex.LayerIndex] + Parameters.LayerDistance / 2.0
-                };
-                orthoRoutePoints[targetIndex] = new Point()
-                {
-                    X = targetVertex.HorizontalPosition,
-                    Y = _layerPositions[targetVertex.LayerIndex] - Parameters.LayerDistance / 2.0
-                };
-                _edgeRoutingPoints[edge] = orthoRoutePoints;
-            }
-
-            foreach (var kvp in _dummyVerticesOfEdges)
-            {
-                Point[] orthoRoutePoints = _edgeRoutingPoints[kvp.Key];
-
-                var routePoints = new Point[kvp.Value.Count + 4];
-                routePoints[0] = orthoRoutePoints[0];
-                routePoints[kvp.Value.Count + 3] = orthoRoutePoints[1];
-                for (int i = 0; i < kvp.Value.Count; i++)
-                {
-                    var vertex = kvp.Value[i];
-                    routePoints[i+2] = new Point(vertex.HorizontalPosition, vertex.VerticalPosition);
-                }
-                routePoints[1] = new Point(routePoints[2].X, routePoints[0].Y);
-                routePoints[kvp.Value.Count + 2] = new Point(routePoints[kvp.Value.Count + 1].X, routePoints[kvp.Value.Count + 3].Y);
-                _edgeRoutingPoints[kvp.Key] = routePoints;
-            }
-            */
         }
 
         private void DoTraditionalEdgeRouting()

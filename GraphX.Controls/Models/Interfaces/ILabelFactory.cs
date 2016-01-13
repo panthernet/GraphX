@@ -1,4 +1,7 @@
 ﻿using System.Windows;
+#if METRO
+using Windows.UI.Xaml;
+#endif
 
 namespace GraphX.Controls.Models
 {

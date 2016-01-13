@@ -855,6 +855,9 @@ namespace GraphX.Controls
                 if (!localLogicCore.GenerateAlgorithmStorage(vertexSizes, vertexPositions))
                     return;
 
+                //clear routing info                
+                localLogicCore.Graph.Edges.ForEach(a => a.RoutingPoints = null);
+
                 var resultCoords = localLogicCore.Compute(cancellationToken);
 
 #if WPF
