@@ -204,6 +204,18 @@ namespace GraphX.Controls
                 _viewFinderDisplay.MouseMove += ViewFinderDisplayMouseMove;
                 _viewFinderDisplay.MouseLeftButtonDown += ViewFinderDisplayBeginCapture;
                 _viewFinderDisplay.MouseLeftButtonUp += ViewFinderDisplayEndCapture;
+                _viewFinderDisplay.IsVisibleChanged += _viewFinderDisplay_IsVisibleChanged;
+            }
+        }
+
+        void _viewFinderDisplay_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            //needed to overcome the case when viewbox was hidden by default so no size were calculated
+            if (_viewFinderDisplay.Visibility != Visibility.Collapsed)
+            {
+                _viewFinderDisplay.InvalidateMeasure();
+                _viewFinderDisplay.UpdateLayout();
+                UpdateViewFinderDisplayContentBounds();
             }
         }
 
@@ -588,7 +600,7 @@ namespace GraphX.Controls
 
         private void UpdateViewFinderDisplayContentBounds()
         {
-            if (ContentVisual == null || _viewFinderDisplay == null)
+            if (ContentVisual == null || _viewFinderDisplay == null || _viewFinderDisplay.Visibility == Visibility.Collapsed)
                 return;
 
             /*if (DesignerProperties.GetIsInDesignMode(this))
@@ -1136,11 +1148,8 @@ namespace GraphX.Controls
         {
             if (DesignerProperties.GetIsInDesignMode(this)) return;
 
-            if (oldContent != null)
-            {
-                var old = oldContent as ITrackableContent;
-                if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
-            }
+            var old = oldContent as ITrackableContent;
+            if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
             if (newContent != null)
             {
                 UpdateViewFinderDisplayContentBounds();
