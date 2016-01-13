@@ -601,8 +601,11 @@ namespace GraphX.Controls
             
             // ensure the display panel has a size
             var contentSize = IsContentTrackable ? TrackableContent.ContentSize.Size : ContentVisual.DesiredSize;
-
+            if (contentSize.IsEmpty || double.IsInfinity(contentSize.Width))
+                contentSize = new Size(1, 1);
             var viewFinderSize = _viewFinderDisplay.AvailableSize;
+            if (viewFinderSize.IsEmpty || double.IsInfinity(viewFinderSize.Width))
+                viewFinderSize = new Size(1,1);
             if (viewFinderSize.Width > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Height, 0d))
             {
                 // update height to accomodate width, while keeping a ratio equal to the actual content
@@ -618,6 +621,7 @@ namespace GraphX.Controls
             var aspectX = viewFinderSize.Width / contentSize.Width;
             var aspectY = viewFinderSize.Height / contentSize.Height;
             var scale = aspectX < aspectY ? aspectX : aspectY;
+            if (double.IsInfinity(scale) || double.IsNaN(scale)) scale = 1d;
             if (DesignerProperties.GetIsInDesignMode(this)) scale = 0.8;
 
             // determine the rect of the VisualBrush
