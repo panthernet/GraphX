@@ -82,9 +82,11 @@
       <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\net40-client\QuickGraph.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />

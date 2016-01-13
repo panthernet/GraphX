@@ -1,15 +1,23 @@
-﻿WIP 2.3.1
+﻿RELEASE 2.3.1
 DETAILED CHANGELOG:
  - Added default templates for attached vertex and edge labels
+ - Added HighlightBehavior::HighlightedEdgeType attached property that indicates In or Out edge is currently highlighted. Default value is None.
+ - Added GraphArea::GetRelatedVertexControls() and GraphArea::GetRelatedEdgeControls() methods to fetch corresponding objects faster and easily
+ - Added new printing logic. Now you can use GraphArea::PrintDialog() and GraphArea::PrintVisibleAreaDialog() methods with extended optional parameters
+ - Added new image export logic. Now GraphArea::ExportToImage() method allows graph image export in original size via optional parameter
+ - Added GraphArea::SetPrintMode() method which is used internally by print and image export methods but can be useful to override due to complex GraphArea print preparation logic.
  - Fixed excessive rendering issue when ZoomControl viewfinder is hidden. Should significantly increase performance of the viewfinder in this case.
  - Fixed showcase app edge example graph
+ - Fixed ZoomControl viewbox logic to correctly react on zoom control background change
  - Improved attachable labels logic. Simplified base classes, added checks for mandatory base classes
  - Improved attachable labels customization possibilities by making several methods virtual
 
 BREAKING CHANGES:
  - Made DefaultLabelFactory class abstract and it is now accepts only one generic param (output object type)
+ - GraphAreaBase now has new abstract members needed to be overriden in derived controls: GetRelatedVertexControls(), GetRelatedEdgeControls(), SetPrintMode()
  
- 
+KNOWN ISSUES:
+ - Graph image export may throw OutOfMemoryError for large graphs
 
 
 RELEASE 2.3.0

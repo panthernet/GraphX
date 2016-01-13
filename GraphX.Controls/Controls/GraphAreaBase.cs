@@ -25,6 +25,13 @@ namespace GraphX
     public abstract class GraphAreaBase : Canvas, ITrackableContent
     {
         /// <summary>
+        /// Gets or Sets if GraphArea is in print mode when its size is recalculated on each Measure pass
+        /// </summary>
+        protected bool IsInPrintMode;
+
+        public abstract void SetPrintMode(bool value, bool offsetControls = true, int margin = 0);
+
+        /// <summary>
         /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
         /// </summary>
         public bool AutoAssignMissingDataId { get; set; }
@@ -519,6 +526,19 @@ namespace GraphX
         /// <param name="resultType">Type of resulting related controls</param>
         /// <param name="edgesType">Optional edge controls type</param>
         public abstract List<IGraphControl> GetRelatedControls(IGraphControl ctrl, GraphControlType resultType = GraphControlType.VertexAndEdge, EdgesType edgesType = EdgesType.Out);
+        /// <summary>
+        /// Get vertex controls related to specified control 
+        /// </summary>
+        /// <param name="ctrl">Original control</param>
+        /// <param name="edgesType">Edge types to query for vertices</param>
+        public abstract List<IGraphControl> GetRelatedVertexControls(IGraphControl ctrl, EdgesType edgesType = EdgesType.All);
+        /// <summary>
+        /// Get edge controls related to specified control 
+        /// </summary>
+        /// <param name="ctrl">Original control</param>
+        /// <param name="edgesType">Edge types to query</param>
+        public abstract List<IGraphControl> GetRelatedEdgeControls(IGraphControl ctrl, EdgesType edgesType = EdgesType.All);
+
 
         /// <summary>
         /// Generates and displays edges for specified vertex
@@ -625,7 +645,7 @@ namespace GraphX
             }
 #if WPF
 
-            return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : new Size(10, 10);
+            return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : (IsInPrintMode ? ContentSize.Size : new Size(10, 10));
 #elif METRO
             return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
 #endif    
@@ -698,7 +718,7 @@ namespace GraphX
             if (oldSize != newSize)
                 OnContentSizeChanged(oldSize, newSize);
 #if WPF
-            return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : new Size(10, 10);
+            return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : (IsInPrintMode ? ContentSize.Size : new Size(10, 10));
 #elif METRO
             return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
 #endif

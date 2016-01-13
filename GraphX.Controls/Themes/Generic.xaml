@@ -328,7 +328,8 @@
                                     <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"/>
                                 </ToggleButton>
                                 <Border Grid.Row="1" BorderBrush="{StaticResource GlyphBrush}" BorderThickness="2" Background="#80FFFFFF" />
-                                <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
+                                <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" 
+                                                          Background="{TemplateBinding Background}" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
                             </Grid>
                         </Border>
                         <ToggleButton Name="ShowViewFinder" IsTabStop="False" ToolTip="Show View Finder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Height="22" Width="22"

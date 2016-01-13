@@ -16,7 +16,7 @@ namespace GraphX.Controls.Models
             FactoryRootArea = graphArea;
         }
 
-        public EdgeControl CreateEdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true, Visibility visibility = Visibility.Visible)
+        public virtual EdgeControl CreateEdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true, Visibility visibility = Visibility.Visible)
         {
             var edgectrl = new EdgeControl(source, target, edge, showLabels, showArrows) { RootArea = FactoryRootArea};
             edgectrl.SetCurrentValue(UIElement.VisibilityProperty, visibility);
@@ -24,7 +24,7 @@ namespace GraphX.Controls.Models
 
         }
 
-        public VertexControl CreateVertexControl(object vertexData)
+        public virtual VertexControl CreateVertexControl(object vertexData)
         {
             return new VertexControl(vertexData) {RootArea = FactoryRootArea};
         }

@@ -32,6 +32,8 @@ namespace GraphX.Controls
         /// <param name="itype"></param>
         public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
+            if(!useZoomControlSurface)
+                surface.SetPrintMode(true, true, 100);
             //Create a render bitmap and push the surface to it
             UIElement vis = surface;
             if (useZoomControlSurface)
@@ -48,8 +50,6 @@ namespace GraphX.Controls
             }
             var renderBitmap =
                     new RenderTargetBitmap(
-                                    //(int)surface.ActualWidth,
-                                    //(int)surface.ActualHeight,
                     (int)(vis.DesiredSize.Width * (imgdpi / DEFAULT_DPI) + 100),
                     (int)(vis.DesiredSize.Height * (imgdpi / DEFAULT_DPI) + 100),
                     imgdpi,
@@ -85,6 +85,13 @@ namespace GraphX.Controls
                 //Save the data to the stream
                 encoder.Save(outStream);
             }
+            //due to mem leak in wpf :(
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+
+            if (!useZoomControlSurface)
+                surface.SetPrintMode(false, true, 100);
         }
 
 
@@ -103,6 +110,93 @@ namespace GraphX.Controls
                 MessageBox.Show("Unexpected exception occured while trying to access default printer. Please ensure that default printer is installed in your OS!");
             }
         }
+
+
+        public static void PrintExtended(GraphAreaBase visual, string description, int margin = 0, bool fitPage = false)
+        {
+            var pd = new PrintDialog();
+            if (pd.ShowDialog() == true)
+            {
+                visual.SetPrintMode(true, true, margin);
+
+                //store original scale
+                var originalScale = visual.LayoutTransform;
+                //get selected printer capabilities
+                var capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
+
+                //get scale of the print wrt to screen of WPF visual
+                var scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / (visual.ActualWidth + margin), capabilities.PageImageableArea.ExtentHeight /
+                               (visual.ActualHeight + margin));
+
+                //Transform the Visual to scale
+                var group = new TransformGroup();
+                if (fitPage)
+                    group.Children.Add(new ScaleTransform(scale, scale));
+                visual.LayoutTransform = group;
+
+                if (fitPage)
+                {
+                    //get the size of the printer page
+                    var sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
+                    //update the layout of the visual to the printer page size.
+                    visual.Measure(sz);
+                    visual.Arrange(new Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
+                }
+                //now print the visual to printer to fit on the one page.
+                pd.PrintVisual(visual, description);
+
+                //apply the original transform.
+                visual.LayoutTransform = originalScale;
+                visual.SetPrintMode(false, true, margin);
+            }
+        }
+
+       /* /// <summary>
+        /// experimental method, not working
+        /// </summary>
+        /// <param name="controlToPrint"></param>
+        public void PrintExp(PocGraphLayout controlToPrint)
+        {
+            var fixedDoc = new FixedDocument();
+            var pageContent = new PageContent();
+            var fixedPage = new FixedPage();
+
+            zoomControl.Content = null;
+
+            //Create first page of document
+            fixedPage.Children.Add(controlToPrint);
+            FixedPage.SetLeft(controlToPrint, 0);
+            FixedPage.SetTop(controlToPrint, 0);
+            controlToPrint.InvalidateMeasure();
+            controlToPrint.UpdateLayout();
+            fixedPage.UpdateLayout();
+
+            pageContent.Child = fixedPage;
+            fixedDoc.Pages.Add(pageContent);
+            var dlg = new SaveFileDialog
+            {
+                FileName = "print",
+                DefaultExt = ".xps",
+                Filter = "XPS Documents (.xps)|*.xps"
+            };
+            // Show save file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+
+                var xpsd = new XpsDocument(filename, FileAccess.ReadWrite);
+                var xw = XpsDocument.CreateXpsDocumentWriter(xpsd);
+                xw.Write(fixedDoc);
+                xpsd.Close();
+            }
+            fixedPage.Children.Clear();
+            zoomControl.Content = graphLayout;
+        }
+        */
 
         public static Bitmap RenderTargetBitmapToBitmap(RenderTargetBitmap source)
         {

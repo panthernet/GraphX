@@ -1,4 +1,6 @@
-﻿#if WPF
+﻿
+using System.Linq;
+#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,6 +22,17 @@ namespace GraphX.Controls
         public static readonly DependencyProperty IsHighlightEnabledProperty = DependencyProperty.RegisterAttached("IsHighlightEnabled", typeof(bool), typeof(HighlightBehaviour), new PropertyMetadata(false, OnIsHighlightEnabledPropertyChanged));
         public static readonly DependencyProperty HighlightControlProperty = DependencyProperty.RegisterAttached("HighlightControl", typeof(GraphControlType), typeof(HighlightBehaviour), new PropertyMetadata(GraphControlType.VertexAndEdge));
         public static readonly DependencyProperty HighlightEdgesProperty = DependencyProperty.RegisterAttached("HighlightEdges", typeof(EdgesType), typeof(HighlightBehaviour), new PropertyMetadata(EdgesType.Out));
+        public static readonly DependencyProperty HighlightedEdgeTypeProperty = DependencyProperty.RegisterAttached("HighlightedEdgeType", typeof(HighlightedEdgeType), typeof(HighlightBehaviour), new PropertyMetadata(HighlightedEdgeType.None));
+
+        public static HighlightedEdgeType GetHighlightedEdgeType(DependencyObject obj)
+        {
+            return (HighlightedEdgeType)obj.GetValue(HighlightedEdgeTypeProperty);
+        }
+
+        public static void SetHighlightedEdgeType(DependencyObject obj, HighlightedEdgeType value)
+        {
+            obj.SetValue(HighlightedEdgeTypeProperty, value);
+        }
 
         public static bool GetIsHighlightEnabled(DependencyObject obj)
         {
@@ -116,10 +129,17 @@ namespace GraphX.Controls
             var type = GetHighlightControl(sender as DependencyObject);
             var edgesType = GetHighlightEdges(sender as DependencyObject);
             SetHighlighted(sender as DependencyObject, false);
-            foreach (var item in ctrl.RootArea.GetRelatedControls(ctrl, type, edgesType))
-            {
-                SetHighlighted(item as Control, false);
-            }
+
+            if (type == GraphControlType.Vertex || type == GraphControlType.VertexAndEdge)
+                foreach (var item in ctrl.RootArea.GetRelatedVertexControls(ctrl, edgesType).Cast<DependencyObject>())
+                    SetHighlighted(item, false);
+
+            if (type == GraphControlType.Edge || type == GraphControlType.VertexAndEdge)
+                foreach (var item in ctrl.RootArea.GetRelatedEdgeControls(ctrl, edgesType).Cast<DependencyObject>())
+                {
+                    SetHighlighted(item, false);
+                    SetHighlightedEdgeType(item, HighlightedEdgeType.None);
+                }
         }
 
 #if WPF
@@ -135,9 +155,27 @@ namespace GraphX.Controls
             var type = GetHighlightControl(sender as DependencyObject);
             var edgesType = GetHighlightEdges(sender as DependencyObject);
             SetHighlighted(sender as DependencyObject, true);
-            foreach (var item in ctrl.RootArea.GetRelatedControls(ctrl, type, edgesType))
+
+            //highlight related vertices
+            if(type == GraphControlType.Vertex || type == GraphControlType.VertexAndEdge)
+                foreach (var item in ctrl.RootArea.GetRelatedVertexControls(ctrl, edgesType).Cast<DependencyObject>())
+                    SetHighlighted(item, true);
+            //highlight related edges
+            if (type == GraphControlType.Edge || type == GraphControlType.VertexAndEdge)
             {
-                SetHighlighted(item as Control, true);
+                //separetely get in and out edges to set direction flag
+                if (edgesType == EdgesType.In || edgesType == EdgesType.All)
+                    foreach (var item in ctrl.RootArea.GetRelatedEdgeControls(ctrl, EdgesType.In).Cast<DependencyObject>())
+                    {
+                        SetHighlighted(item, true);
+                        SetHighlightedEdgeType(item, HighlightedEdgeType.In);
+                    }
+                if (edgesType == EdgesType.Out || edgesType == EdgesType.All)
+                    foreach (var item in ctrl.RootArea.GetRelatedEdgeControls(ctrl, EdgesType.Out).Cast<DependencyObject>())
+                    {
+                        SetHighlighted(item, true);
+                        SetHighlightedEdgeType(item, HighlightedEdgeType.Out);
+                    }
             }
         }
         #endregion
@@ -147,6 +185,13 @@ namespace GraphX.Controls
             Vertex,
             Edge,
             VertexAndEdge
+        }
+        
+        public enum HighlightedEdgeType
+        {
+            In,
+            Out,
+            None
         }
     }
 }
