@@ -1,9 +1,6 @@
 using QuickGraph;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace SimpleGraph
+namespace SimpleGraph.Models
 {
     /// <summary>
     /// This is our custom data graph derived from BidirectionalGraph class using custom data types.

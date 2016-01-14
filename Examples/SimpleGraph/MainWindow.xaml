@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:SimpleGraph"
         xmlns:controls="http://schemas.panthernet.ru/graphx/"
+        xmlns:models="clr-namespace:SimpleGraph.Models"
         Title="Simple graph example. Read code comments for more info." Height="600" Width="825">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,7 +14,7 @@
         <!-- Here we create our GraphArea layout container wrapped into the Zoombox for vast zooming capabilities.
              This is the standard approach for GraphX.-->
         <controls:ZoomControl x:Name="zoomctrl" Grid.Row="1">
-            <local:GraphAreaExample x:Name="Area"/>
+            <models:GraphAreaExample x:Name="Area"/>
         </controls:ZoomControl>
 
         <DockPanel LastChildFill="False" Grid.Column="1" Margin="3" Grid.RowSpan="2">

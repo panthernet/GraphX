@@ -179,7 +179,7 @@ namespace ShowcaseApp.WPF.Pages
 
         private void gg_saveAsPngImage_Click(object sender, RoutedEventArgs e)
         {
-            gg_Area.ExportAsImage(ImageType.PNG, true, 96D, 100);
+            gg_Area.ExportAsImageDialog(ImageType.PNG, true, 96D, 100);
         }
 
         private void gg_printlay_Click(object sender, RoutedEventArgs e)

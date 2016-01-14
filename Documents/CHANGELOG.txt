@@ -1,4 +1,11 @@
-﻿RELEASE 2.3.1
+﻿RELEASE 2.3.2
+DETAILED CHANGELOG:
+ - Added GraphArea::ExportAsImageDialog() method which act as old ExportAsImage and the ExportAsImage() method now accepts filename to work without the dialog
+
+BREAKING CHANGES:
+ - GraphArea::ExportAsImage() now takes filename as the first parameter and don't have save file dialog (use GraphArea::ExportAsImageDialog() instead)
+
+RELEASE 2.3.1
 DETAILED CHANGELOG:
  - Added default templates for attached vertex and edge labels
  - Added HighlightBehavior::HighlightedEdgeType attached property that indicates In or Out edge is currently highlighted. Default value is None.

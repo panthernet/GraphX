@@ -1,12 +1,10 @@
-﻿using GraphX;
-using QuickGraph;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.Controls;
+using SimpleGraph.Models;
 
 /* Some notes about the main objects and types in this example:
  * 
@@ -108,7 +106,7 @@ namespace SimpleGraph
                 //Create new vertex with specified Text. Also we will assign custom unique ID.
                 //This ID is needed for several features such as serialization and edge routing algorithms.
                 //If you don't need any custom IDs and you are using automatic Area.GenerateGraph() method then you can skip ID assignment
-                //because specified method automaticaly assigns missing data ids (this behavior controlled by method param).
+                //because specified method automaticaly assigns missing data ids (this behavior is controlled by method param).
                 var dataVertex = new DataVertex("MyVertex " + i);
                 //Add vertex to data graph
                 dataGraph.AddVertex(dataVertex);

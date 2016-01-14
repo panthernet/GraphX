@@ -1901,7 +1901,7 @@ namespace GraphX.Controls
         /// </summary>
         public virtual void ExportAsPng()
         {
-            ExportAsImage(ImageType.PNG);
+            ExportAsImageDialog(ImageType.PNG);
         }
 
         /// <summary>
@@ -1910,7 +1910,7 @@ namespace GraphX.Controls
         /// <param name="quality">Optional image quality parameter</param>   
         public virtual void ExportAsJpeg(int quality = 100)
         {
-            ExportAsImage(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
+            ExportAsImageDialog(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
         }
 
         /// <summary>
@@ -1920,7 +1920,7 @@ namespace GraphX.Controls
         /// <param name="dpi">Optional image DPI parameter</param>
         /// <param name="useZoomControlSurface">Use zoom control parent surface to render bitmap (only visible zoom content will be exported)</param>
         /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
-        public virtual void ExportAsImage(ImageType itype, bool useZoomControlSurface = false, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
+        public virtual void ExportAsImageDialog(ImageType itype, bool useZoomControlSurface = false, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
 #if WPF
             string fileExt;
@@ -1943,16 +1943,18 @@ namespace GraphX.Controls
             var dlg = new SaveFileDialog { Filter = String.Format("{0} Image File ({1})|{1}", fileType, fileExt), Title = String.Format("Exporting graph as {0} image...", fileType) };
             if (dlg.ShowDialog() == true)
             {
-                PrintHelper.ExportToImage(this, new Uri(dlg.FileName), itype, useZoomControlSurface, dpi, quality);
+                ExportAsImage(dlg.FileName, itype, useZoomControlSurface, dpi, quality);
             }
 #endif
         }
 
-#if WPF
-        public Bitmap ExportToBitmap(double dpi = PrintHelper.DEFAULT_DPI)
+        public virtual void ExportAsImage(string filename, ImageType itype, bool useZoomControlSurface = false, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
-            return PrintHelper.RenderTargetBitmapToBitmap(PrintHelper.RenderTargetBitmap(this, true, dpi));
+            PrintHelper.ExportToImage(this, new Uri(filename, UriKind.Absolute), itype, useZoomControlSurface, dpi, quality);
         }
+
+
+#if WPF
 
         private USize _oldSizeExpansion;
 
