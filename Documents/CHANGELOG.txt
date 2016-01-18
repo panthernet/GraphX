@@ -1,4 +1,9 @@
-﻿RELEASE 2.3.2
+﻿RELEASE 2.3.3
+DETAILED CHANGELOG:
+ - Exposed internal PrintHelper class with new CalculateEstimatedDPI() method which can calculate DPI required for image export based on specified criterias
+ - Fixed arrows display issue when printing 
+
+RELEASE 2.3.2
 DETAILED CHANGELOG:
  - Added GraphArea::ExportAsImageDialog() method which act as old ExportAsImage and the ExportAsImage() method now accepts filename to work without the dialog
 

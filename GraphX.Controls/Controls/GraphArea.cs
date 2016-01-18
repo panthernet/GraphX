@@ -2020,6 +2020,7 @@ namespace GraphX.Controls
             }
             InvalidateMeasure();
             UpdateLayout();
+            EdgesList.Values.ForEach(a=> a.UpdateEdge());
 #endif
         }
 

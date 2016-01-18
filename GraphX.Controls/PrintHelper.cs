@@ -8,10 +8,11 @@ using System.Windows.Media.Imaging;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using Brushes = System.Windows.Media.Brushes;
+using Size = System.Windows.Size;
 
 namespace GraphX.Controls
 {
-    internal static class PrintHelper
+    public static class PrintHelper
     {
         /// <summary>
         /// Default image resolution
@@ -20,6 +21,34 @@ namespace GraphX.Controls
 
         //Set pixelformat of image.
         private static readonly PixelFormat PixelFormat = PixelFormats.Pbgra32;
+
+        /// <summary>
+        /// Helper method which calculates estimated image DPI based on the input criterias
+        /// </summary>
+        /// <param name="vis">GraphArea object</param>
+        /// <param name="imgdpi">Desired DPI</param>
+        /// <param name="dpiStep">DPI decrease step while estimating</param>
+        /// <param name="estPixelCount">Pixel quantity threshold</param>
+        public static double CalculateEstimatedDPI(GraphAreaBase vis, double imgdpi, double dpiStep, int estPixelCount)
+        {
+            bool result = false;
+            double currentDPI = imgdpi;
+            while (!result)
+            {
+                if (CalulateSize(vis.ContentSize.Size, currentDPI) <= estPixelCount)
+                    result = true;
+                else currentDPI -= dpiStep;
+                if (currentDPI < 0) return 0;
+            }
+            return currentDPI;
+        }
+
+
+        private static int CalulateSize(Size desiredSize, double dpi)
+        {
+            return (int) (desiredSize.Width*(dpi/DEFAULT_DPI) + 100) *
+                   (int) (desiredSize.Height*(dpi/DEFAULT_DPI) + 100);
+        }
 
         /// <summary>
         /// Method exports the GraphArea to an png image.
@@ -32,7 +61,7 @@ namespace GraphX.Controls
         /// <param name="itype"></param>
         public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
-            if(!useZoomControlSurface)
+            if (!useZoomControlSurface)
                 surface.SetPrintMode(true, true, 100);
             //Create a render bitmap and push the surface to it
             UIElement vis = surface;
@@ -44,10 +73,13 @@ namespace GraphX.Controls
                 else
                 {
                     var frameworkElement = surface.Parent as FrameworkElement;
-                    if(frameworkElement != null && frameworkElement.Parent is IZoomControl)
+                    if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
                         vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
                 }
             }
+
+
+
             var renderBitmap =
                     new RenderTargetBitmap(
                     (int)(vis.DesiredSize.Width * (imgdpi / DEFAULT_DPI) + 100),
@@ -85,6 +117,8 @@ namespace GraphX.Controls
                 //Save the data to the stream
                 encoder.Save(outStream);
             }
+            renderBitmap.Clear();
+            renderBitmap = null;
             //due to mem leak in wpf :(
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -93,6 +127,7 @@ namespace GraphX.Controls
             if (!useZoomControlSurface)
                 surface.SetPrintMode(false, true, 100);
         }
+
 
 
         public static void ShowPrintPreview(Visual surface, string description = "")
