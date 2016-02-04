@@ -184,7 +184,7 @@ namespace ShowcaseApp.WPF.Pages
 
         private void gg_printlay_Click(object sender, RoutedEventArgs e)
         {
-            gg_Area.PrintDialog(false, "GraphX layout printing");
+            gg_Area.PrintDialog("GraphX layout printing");
         }
 
         private void gg_vertexCount_PreviewTextInput(object sender, TextCompositionEventArgs e)

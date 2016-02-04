@@ -1,4 +1,15 @@
-﻿RELEASE 2.3.3
+﻿WIP 2.3.5
+DETAILED CHANGELOG:
+ - Added StateStorage::ImportState() method to allow state import/export logic between several graphs
+ - Added GraphArea::IsDisposed property that indicated that GraphArea object has been disposed and shouldn't be used anymore
+ - Added GraphArea::CreateNewStateStorage() protected method to be able to implement custom state storage logic for GraphArea
+ - Made StateStorage class extensible by adding virtual modifiers to methods
+
+RELEASE 2.3.4
+DETAILED CHANGELOG:
+ - Further improvements to printing logic. GraphArea::PrintDialog() method now takes print DPI as the first parameter and always fit content int page.
+
+RELEASE 2.3.3
 DETAILED CHANGELOG:
  - Exposed internal PrintHelper class with new CalculateEstimatedDPI() method which can calculate DPI required for image export based on specified criterias
  - Fixed arrows display issue when printing 

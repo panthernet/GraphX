@@ -15,12 +15,14 @@ namespace GraphX.Controls
     public static class PrintHelper
     {
         /// <summary>
-        /// Default image resolution
+        /// Gets WPF default DPI
         /// </summary>
         public const double DEFAULT_DPI = 96d;
 
-        //Set pixelformat of image.
-        private static readonly PixelFormat PixelFormat = PixelFormats.Pbgra32;
+        /// <summary>
+        /// Gets or sets the pixel format of an exported image
+        /// </summary>
+        public static PixelFormat PixelFormat = PixelFormats.Pbgra32;
 
         /// <summary>
         /// Helper method which calculates estimated image DPI based on the input criterias
@@ -130,15 +132,39 @@ namespace GraphX.Controls
 
 
 
-        public static void ShowPrintPreview(Visual surface, string description = "")
+        public static void PrintVisualDialog(Visual surface, string description = "", bool compat = false)
         {
             try
             {
+                //apply layout rounding
+                var isCtrl = surface is Control;
+                bool oldLR = false;
+                double oldWidth = 0;
+                double oldHeight = 0;
+                if (isCtrl && compat)
+                {
+                    var ctrl = (Control) surface;
+                    oldLR = ctrl.UseLayoutRounding;
+                    if (oldLR != true) ctrl.UseLayoutRounding = true;
+
+                    oldWidth = ctrl.Width;
+                    oldHeight = ctrl.Height;
+                    ctrl.Width = ctrl.ActualWidth;
+                    ctrl.Height = ctrl.ActualHeight;
+                }
+
                 var printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {
                     printDialog.PrintVisual(surface, description);
                 }
+                if (isCtrl && compat)
+                {
+                    var ctrl = (Control)surface;
+                    ctrl.UseLayoutRounding = oldLR;
+                    ctrl.Width = oldWidth;
+                    ctrl.Height = oldHeight;
+                }            
             }
             catch (Exception)
             {
@@ -147,7 +173,7 @@ namespace GraphX.Controls
         }
 
 
-        public static void PrintExtended(GraphAreaBase visual, string description, int margin = 0, bool fitPage = false)
+        public static void PrintToFit(GraphAreaBase visual, string description, int margin = 0)
         {
             var pd = new PrintDialog();
             if (pd.ShowDialog() == true)
@@ -160,23 +186,16 @@ namespace GraphX.Controls
                 var capabilities = pd.PrintQueue.GetPrintCapabilities(pd.PrintTicket);
 
                 //get scale of the print wrt to screen of WPF visual
-                var scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / (visual.ActualWidth + margin), capabilities.PageImageableArea.ExtentHeight /
-                               (visual.ActualHeight + margin));
+                var scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / visual.ActualWidth, capabilities.PageImageableArea.ExtentHeight /
+                               visual.ActualHeight);
 
                 //Transform the Visual to scale
                 var group = new TransformGroup();
-                if (fitPage)
-                    group.Children.Add(new ScaleTransform(scale, scale));
+                group.Children.Add(new ScaleTransform(scale, scale));
                 visual.LayoutTransform = group;
+                visual.InvalidateArrange();
+                visual.UpdateLayout();
 
-                if (fitPage)
-                {
-                    //get the size of the printer page
-                    var sz = new System.Windows.Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
-                    //update the layout of the visual to the printer page size.
-                    visual.Measure(sz);
-                    visual.Arrange(new Rect(new System.Windows.Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
-                }
                 //now print the visual to printer to fit on the one page.
                 pd.PrintVisual(visual, description);
 
@@ -186,7 +205,35 @@ namespace GraphX.Controls
             }
         }
 
-       /* /// <summary>
+        public static void PrintWithDPI(GraphAreaBase visual, string description, double dpi, int margin = 0)
+        {
+            var pd = new PrintDialog();
+            if (pd.ShowDialog() == true)
+            {
+                visual.SetPrintMode(true, true, margin);
+                //store original scale
+                var originalScale = visual.LayoutTransform;
+                //get scale from DPI
+                var scale = dpi/DEFAULT_DPI;
+                //Transform the Visual to scale
+                var group = new TransformGroup();
+                group.Children.Add(new ScaleTransform(scale, scale));
+                visual.LayoutTransform = group;
+                //update visual
+                visual.InvalidateArrange();
+                visual.UpdateLayout();
+
+                //now print the visual to printer to fit on the one page.
+                pd.PrintVisual(visual, description);
+                //apply the original transform.
+                visual.LayoutTransform = originalScale;
+                visual.SetPrintMode(false, true, margin);
+            }
+        }
+
+        #region OTHER
+
+        /* /// <summary>
         /// experimental method, not working
         /// </summary>
         /// <param name="controlToPrint"></param>
@@ -233,7 +280,7 @@ namespace GraphX.Controls
         }
         */
 
-        public static Bitmap RenderTargetBitmapToBitmap(RenderTargetBitmap source)
+        private static Bitmap RenderTargetBitmapToBitmap(RenderTargetBitmap source)
         {
             using (MemoryStream outStream = new MemoryStream())
             {
@@ -249,7 +296,7 @@ namespace GraphX.Controls
             }
         }
 
-        public static RenderTargetBitmap RenderTargetBitmap(GraphAreaBase surface, bool useZoomControlSurface, double imgdpi)
+        private static RenderTargetBitmap RenderTargetBitmap(GraphAreaBase surface, bool useZoomControlSurface, double imgdpi)
         {
             UIElement vis = surface;
             if (useZoomControlSurface)
@@ -282,7 +329,7 @@ namespace GraphX.Controls
 
         }
 
-
+        #endregion
 
     }
 }

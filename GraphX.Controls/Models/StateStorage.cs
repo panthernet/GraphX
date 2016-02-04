@@ -44,7 +44,7 @@ namespace GraphX.Controls.Models
         /// </summary>
         /// <param name="id">New unique state id</param>
         /// <param name="description">Optional state description</param>
-        public void SaveState(string id, string description = "")
+        public virtual void SaveState(string id, string description = "")
         {
             _states.Add(id, GenerateGraphState(id, description));
         }
@@ -54,14 +54,14 @@ namespace GraphX.Controls.Models
         /// </summary>
         /// <param name="id">State id</param>
         /// <param name="description">Optional state description</param>
-        public void SaveOrUpdateState(string id, string description = "")
+        public virtual void SaveOrUpdateState(string id, string description = "")
         {
             if (ContainsState(id))
                 _states[id] = GenerateGraphState(id, description);
             else SaveState(id, description);
         }
 
-        private GraphState<TVertex, TEdge, TGraph> GenerateGraphState(string id, string description = "")
+        protected virtual GraphState<TVertex, TEdge, TGraph> GenerateGraphState(string id, string description = "")
         {
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
@@ -72,10 +72,25 @@ namespace GraphX.Controls.Models
         }
 
         /// <summary>
+        /// Import specified state to the StateStorage
+        /// </summary>
+        /// <param name="key">State key</param>
+        /// <param name="state">State object</param>
+        public virtual void ImportState(string key, GraphState<TVertex, TEdge, TGraph> state)
+        {
+            if (ContainsState(key))
+                throw new GX_ConsistencyException(string.Format("Graph state {0} already exist in state storage", key));
+
+            //if(!unsafeImport && (_area.LogicCore == null || _area.LogicCore.Graph == null || _area.LogicCore.Graph != state.Graph))
+           //     throw new GX_ConsistencyException("Can't validate that imported graph state belong to the target area Graph! You can try to import the state with unsafeImport parameter set to True.");
+            _states.Add(key, state);
+        }
+
+        /// <summary>
         /// Load previously saved state into layout
         /// </summary>
         /// <param name="id">Unique state id</param>
-        public void LoadState(string id)
+        public virtual void LoadState(string id)
         {
             if (_area.LogicCore == null)
                 throw new GX_InvalidDataException("GraphArea.LogicCore -> Not initialized!");
@@ -118,7 +133,7 @@ namespace GraphX.Controls.Models
         /// Remove state by id
         /// </summary>
         /// <param name="id">Unique state id</param>
-        public void RemoveState(string id)
+        public virtual void RemoveState(string id)
         {
             if (_states.ContainsKey(id))
                 _states.Remove(id);
@@ -127,7 +142,7 @@ namespace GraphX.Controls.Models
         /// <summary>
         /// Get all states from the storage
         /// </summary>
-        public Dictionary<string, GraphState<TVertex, TEdge, TGraph>> GetStates()
+        public virtual Dictionary<string, GraphState<TVertex, TEdge, TGraph>> GetStates()
         {
             return _states;
         }
@@ -136,12 +151,12 @@ namespace GraphX.Controls.Models
         /// Get all states from the storage
         /// </summary>
         /// <param name="id">Unique state id</param>
-        public GraphState<TVertex, TEdge, TGraph> GetState(string id)
+        public virtual GraphState<TVertex, TEdge, TGraph> GetState(string id)
         {
             return ContainsState(id) ? _states[id] : null;
         }
     
-        public void Dispose()
+        public virtual void Dispose()
         {
             _states.ForEach(a=> a.Value.Dispose());
             _states.Clear();

@@ -210,10 +210,22 @@ namespace GraphX.Controls
         }
 
         #region StateStorage
+
+        private StateStorage<TVertex, TEdge, TGraph> _stateStorage;
         /// <summary>
         /// Provides methods for saving and loading graph layout states
         /// </summary>
-        public StateStorage<TVertex, TEdge, TGraph> StateStorage { get; private set; }
+        public StateStorage<TVertex, TEdge, TGraph> StateStorage
+        {
+            get
+            {
+                if (_stateStorage == null && !IsDisposed)
+                    CreateNewStateStorage();
+                return _stateStorage;
+            }
+            private set { _stateStorage = value; }
+        }
+
         #endregion
 
         readonly Dictionary<TEdge, EdgeControl> _edgeslist = new Dictionary<TEdge, EdgeControl>();
@@ -255,7 +267,6 @@ namespace GraphX.Controls
                 Transitions = new TransitionCollection { new ContentThemeTransition() };
 #endif
                 ControlFactory = new GraphControlFactory(this);
-                StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
             }
             else
             {
@@ -1961,12 +1972,12 @@ namespace GraphX.Controls
         /// <summary>
         /// Print whole visual graph
         /// </summary>
-        /// <param name="fitPage">Fit to configured print page</param>
+        /// <param name="dpi">Optional print DPI</param>
         /// <param name="description">Optional header description</param>
         /// <param name="margin">Optional side margin</param>
-        public virtual void PrintDialog(bool fitPage, string description = "", int margin = 0)
+        public virtual void PrintDialog(string description = "", int margin = 0)
         {
-            PrintHelper.PrintExtended(this, description, margin, fitPage);
+            PrintHelper.PrintToFit(this, description, margin);
         }
 #endif
         /// <summary>
@@ -2042,22 +2053,29 @@ namespace GraphX.Controls
                 if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
                     vis = ((IZoomControl)frameworkElement.Parent).PresenterVisual;
             }
-            PrintHelper.ShowPrintPreview(vis, description);
+            PrintHelper.PrintVisualDialog(vis, description);
 #endif
         }
 
         #endregion
 
         #region IDisposable
+
+        /// <summary>
+        /// Gets if object has been disposed and can't be used anymore
+        /// </summary>
+        public bool IsDisposed { get; private set; }
+
         public void Dispose()
         {
 #if WPF
             CancelRelayout(); // In case some asynchronouse relayout is active
 #endif
-            if (StateStorage != null)
+            IsDisposed = true;
+            if (_stateStorage != null)
             {
-                StateStorage.Dispose();
-                StateStorage = null;
+                _stateStorage.Dispose();
+                _stateStorage = null;
             }
             if (LogicCore != null)
             {
@@ -2087,15 +2105,21 @@ namespace GraphX.Controls
             RemoveAllVertices();
             if (removeCustomObjects)
                 base.Children.Clear();
-            StateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
+            CreateNewStateStorage();
 
             if (clearLogicCore && LogicCore != null)
                 LogicCore.Clear();
 
             if (clearLogicCore || clearStates)
-                if (StateStorage != null)
-                    StateStorage.Dispose();
+                if (_stateStorage != null)
+                    _stateStorage.Dispose();
         }
+
+        protected virtual void CreateNewStateStorage()
+        {
+            _stateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
+        }
+
         #endregion
 
         #region MoveTo routines

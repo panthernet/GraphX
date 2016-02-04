@@ -4,7 +4,7 @@ using System.Reflection;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("panthernet dev works")]
 [assembly: AssemblyProduct("GraphX for .NET")]
-[assembly: AssemblyCopyright("Copyright www.panthernet.ru ©  2015")]
+[assembly: AssemblyCopyright("Copyright www.panthernet.ru ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
