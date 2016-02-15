@@ -795,6 +795,9 @@ namespace GraphX.Controls
                 routePoints.Insert(0, p1);
                 routePoints.Add(p2);
 
+                if (externalRoutingPoints == null && routedEdge.RoutingPoints != null)
+                    routedEdge.RoutingPoints = routePoints.ToArray().ToGraphX();
+
                 if (RootArea.EdgeCurvingEnabled)
                 {
                     var oPolyLineSegment = GeometryHelper.GetCurveThroughPoints(routePoints.ToArray(), 0.5, RootArea.EdgeCurvingTolerance);

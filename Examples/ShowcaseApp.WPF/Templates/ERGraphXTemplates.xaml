@@ -16,7 +16,7 @@
         <Setter Property="Template">
 			<Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                    <Image Source="{Binding ImageId, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToImage}}" Margin="3" Width="40" Stretch="UniformToFill"/>
+                    <Image Source="{Binding ImageId, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToImage}}" Margin="0" Width="40" Stretch="UniformToFill"/>
                 </ControlTemplate>
 			</Setter.Value>
 		</Setter>

@@ -291,17 +291,24 @@ namespace ShowcaseApp.WPF.Pages
         {
             gg_Area.ClearLayout();
             var mult = 25;
-            if (gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.LinLog)
-                mult = 45;
-            var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
-            graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
-            if (gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.EfficientSugiyama || gg_Area.LogicCore.DefaultLayoutAlgorithm == LayoutAlgorithmTypeEnum.Sugiyama)
+            GraphExample graph;
+            switch (gg_Area.LogicCore.DefaultLayoutAlgorithm)
             {
-                var vlist = graph.Vertices.ToList();
-                graph.AddEdge(new DataEdge(vlist[0], vlist[1]));
-                graph.AddEdge(new DataEdge(vlist[0], vlist[2]));
-
+                case LayoutAlgorithmTypeEnum.LinLog:
+                    mult = 45;
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    break;
+                case LayoutAlgorithmTypeEnum.EfficientSugiyama:
+                case LayoutAlgorithmTypeEnum.Sugiyama:
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    //graph = ShowcaseHelper.GenerateSugiDataGraph();
+                    break;
+                default:
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    break;
             }
+            //add self loop
+            graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
 
 
             //assign graph again as we need to update Graph param inside and i have no independent examples

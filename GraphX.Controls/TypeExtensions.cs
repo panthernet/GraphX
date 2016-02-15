@@ -119,6 +119,15 @@ namespace GraphX.Controls
             return list;
         }
 
+        public static Measure.Point[] ToGraphX(this Point[] points)
+        {
+            if (points == null) return null;
+            var list = new Measure.Point[points.Length];
+            for (int i = 0; i < points.Length; i++)
+                list[i] = points[i].ToGraphX();
+            return list;
+        }
+
         public static Size Size(this Rect rect)
         {
             return new Size(rect.Width, rect.Height);
