@@ -181,7 +181,7 @@ namespace GraphX.Controls
                 double aspectX = availableSize.Width/displayPanelSize.Width;
                 double aspectY = availableSize.Height/displayPanelSize.Height;
                 double scale = (aspectX < aspectY) ? aspectX : aspectY;
-                displayPanelSize = new Size(displayPanelSize.Width*scale, displayPanelSize.Height*scale);
+                displayPanelSize = new Size(Math.Max(0, displayPanelSize.Width * scale), Math.Max(0, displayPanelSize.Height * scale));
             }
 
             return displayPanelSize;
