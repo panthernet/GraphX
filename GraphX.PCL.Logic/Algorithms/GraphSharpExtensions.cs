@@ -317,5 +317,24 @@ where TEdge : IEdge<TVertex>
 
             return newGraph;
         }
+
+        public static TGraph CopyToGraph<TGraph, TVertex, TEdge>(this TGraph graph, bool includeEmpty = true)
+            where TVertex : class, IGraphXVertex
+            where TEdge : class, IGraphXEdge<TVertex>
+            where TGraph : IMutableBidirectionalGraph<TVertex, TEdge>, new()
+        {
+            var newGraph = new TGraph();
+
+            //copy the vertices
+            if (!includeEmpty)
+                newGraph.AddVerticesAndEdgeRange(graph.Edges);
+            else
+            {
+                newGraph.AddVertexRange(graph.Vertices);
+                newGraph.AddEdgeRange(graph.Edges);
+            }
+
+            return newGraph;
+        }
     }
 }

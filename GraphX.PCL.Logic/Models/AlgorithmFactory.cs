@@ -13,7 +13,7 @@ namespace GraphX.PCL.Logic.Models
     public sealed class AlgorithmFactory<TVertex, TEdge, TGraph> : IAlgorithmFactory<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>, new()
     {
         #region Layout factory
         /// <summary>
@@ -28,14 +28,14 @@ namespace GraphX.PCL.Logic.Models
         {
             if (iGraph == null) return null;
             if (parameters == null) parameters = CreateLayoutParameters(newAlgorithmType);
-            var graph = (TGraph)(object)iGraph.CopyToBidirectionalGraph();
-            /*var dic = new Dictionary<TVertex, Point>();
-            if (Positions != null)
+            var graph = iGraph.CopyToGraph<TGraph, TVertex, TEdge>();
+
+            var tGraph = (IMutableBidirectionalGraph<TVertex, TEdge>) graph;
+            if (tGraph != null)
             {
-                dic = Positions.Where(a => a.Key.SkipProcessing == ProcessingOptionEnum.Freeze).ToDictionary(a=> a.Key, a=> a.Value);
-            }*/
-            graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
-            graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
+                tGraph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
+                tGraph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);                
+            }
 
             switch (newAlgorithmType)
             {

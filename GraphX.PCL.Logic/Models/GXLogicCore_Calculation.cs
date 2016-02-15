@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
@@ -13,7 +14,7 @@ namespace GraphX.PCL.Logic.Models
     public partial class GXLogicCore<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>, new()
     {
         /// <summary>
         /// Gets if current algorithms set needs vertices sizes
@@ -117,7 +118,9 @@ namespace GraphX.PCL.Logic.Models
             
             if (AlgorithmStorage.Layout != null)
             {
+                var t = DateTime.Now;
                 AlgorithmStorage.Layout.Compute(cancellationToken);
+                Debug.WriteLine("layout:" +(t - DateTime.Now));
                 resultCoords = AlgorithmStorage.Layout.VertexPositions;
             }//get default coordinates if using Custom layout
             else resultCoords = _vertexPosSource;
@@ -129,7 +132,9 @@ namespace GraphX.PCL.Logic.Models
                 rectangles = GetVertexSizeRectangles(resultCoords, _vertexSizes, true);
 
                 AlgorithmStorage.OverlapRemoval.Rectangles = rectangles;
+                var t = DateTime.Now;
                 AlgorithmStorage.OverlapRemoval.Compute(cancellationToken);
+                Debug.WriteLine("Overlap: "+(t - DateTime.Now));
                 resultCoords = new Dictionary<TVertex, Point>();
                 foreach (var res in AlgorithmStorage.OverlapRemoval.Rectangles)
                     resultCoords.Add(res.Key, new Point(res.Value.Left, res.Value.Top));
@@ -147,7 +152,9 @@ namespace GraphX.PCL.Logic.Models
 
                 AlgorithmStorage.EdgeRouting.VertexPositions = resultCoords;
                 AlgorithmStorage.EdgeRouting.VertexSizes = rectangles;
+                var t = DateTime.Now;
                 AlgorithmStorage.EdgeRouting.Compute(cancellationToken);
+                Debug.WriteLine("ER: " + (t - DateTime.Now));
                 if (AlgorithmStorage.EdgeRouting.EdgeRoutes != null)
                     foreach (var item in AlgorithmStorage.EdgeRouting.EdgeRoutes)
                         item.Key.RoutingPoints = item.Value;

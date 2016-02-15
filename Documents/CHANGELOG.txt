@@ -4,6 +4,7 @@ DETAILED CHANGELOG:
  - Added GraphArea::IsDisposed property that indicated that GraphArea object has been disposed and shouldn't be used anymore
  - Added GraphArea::CreateNewStateStorage() protected method to be able to implement custom state storage logic for GraphArea
  - Made StateStorage class extensible by adding virtual modifiers to methods
+ - Improved algorithm factory logic to avoid graph type cast exceptions in some class declaration cases
 
 RELEASE 2.3.4
 DETAILED CHANGELOG:

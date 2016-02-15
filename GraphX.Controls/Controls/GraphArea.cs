@@ -872,7 +872,7 @@ namespace GraphX.Controls
             localLogicCore.Graph.Edges.ForEach(a => a.RoutingPoints = null);
 
             var resultCoords = localLogicCore.Compute(cancellationToken);
-
+            var t = DateTime.Now;
 #if WPF
             RunOnDispatcherThread(() =>
 #elif METRO
@@ -912,6 +912,8 @@ namespace GraphX.Controls
 #if WPF
                 SetCurrentValue(LogicCoreProperty, localLogicCore);
                 UpdateLayout(); //update all changes
+                Debug.WriteLine("VIS: " + (t - DateTime.Now));
+
             });
 #elif METRO
                     MeasureOverride(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));

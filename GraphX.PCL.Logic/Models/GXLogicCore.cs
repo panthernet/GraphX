@@ -12,7 +12,7 @@ namespace GraphX.PCL.Logic.Models
     public partial class GXLogicCore<TVertex, TEdge, TGraph>: IGXLogicCore<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>, new()
     {
         #region Properties
         #region AlgoithmFactory
