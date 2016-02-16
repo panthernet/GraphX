@@ -594,7 +594,7 @@ namespace GraphX.Controls
                 // adjust the viewport from the coordinate space of the Content element
                 // to the coordinate space of the view finder display panel
                 var scale = _viewFinderDisplay.Scale;// *_viewboxFactor;
-                _viewFinderDisplay.ViewportRect = new Rect(viewport.Left * scale, viewport.Top * scale, viewport.Width * scale, viewport.Height * scale);
+                _viewFinderDisplay.ViewportRect = new Rect(viewport.Left * scale, viewport.Top * scale, Math.Max(0.0, viewport.Width * scale), Math.Max(0.0, viewport.Height * scale));
             }
         }
 
@@ -621,12 +621,12 @@ namespace GraphX.Controls
             if (viewFinderSize.Width > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Height, 0d))
             {
                 // update height to accomodate width, while keeping a ratio equal to the actual content
-                viewFinderSize = new Size(viewFinderSize.Width, contentSize.Height * viewFinderSize.Width / contentSize.Width);
+                viewFinderSize = new Size(viewFinderSize.Width, Math.Max(0, contentSize.Height * viewFinderSize.Width / contentSize.Width));
             }
             else if (viewFinderSize.Height > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Width, 0d))
             {
                 // update width to accomodate height, while keeping a ratio equal to the actual content
-                viewFinderSize = new Size(contentSize.Width * viewFinderSize.Height / contentSize.Height, viewFinderSize.Width);
+                viewFinderSize = new Size(Math.Max(0, contentSize.Width * viewFinderSize.Height / contentSize.Height), viewFinderSize.Width);
             }
 
             // determine the scale of the view finder display panel
@@ -642,7 +642,7 @@ namespace GraphX.Controls
 
             // set the ContentBounds and Scale properties on the view finder display panel
             _viewFinderDisplay.Scale = scale;
-            _viewFinderDisplay.ContentBounds = new Rect(new Size(vbWidth, vbHeight));
+            _viewFinderDisplay.ContentBounds = new Rect(new Size(Math.Max(0, vbWidth), Math.Max(0, vbHeight)));
         }
 
         private void UpdateViewboxFactor()

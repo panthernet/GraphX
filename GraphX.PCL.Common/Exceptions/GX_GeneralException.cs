@@ -8,5 +8,10 @@ namespace GraphX.PCL.Common.Exceptions
             : base(text)
         {
         }
-    }
+
+		public GX_GeneralException(string text, Exception innerException)
+			: base(text, innerException)
+		{
+		}
+	}
 }

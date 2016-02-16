@@ -616,7 +616,7 @@ namespace GraphX.Controls
             }
             catch (Exception ex)
             {
-                throw new GX_GeneralException(ex.Message + ". Probably you have an error in edge template.");
+                throw new GX_GeneralException(ex.Message + ". Probably you have an error in edge template.", ex);
             }
         }
 
