@@ -3,7 +3,9 @@ DETAILED CHANGELOG:
  - Added StateStorage::ImportState() method to allow state import/export logic between several graphs
  - Added GraphArea::IsDisposed property that indicated that GraphArea object has been disposed and shouldn't be used anymore
  - Added GraphArea::CreateNewStateStorage() protected method to be able to implement custom state storage logic for GraphArea
+ - Added ParameterizedLayoutAlgorithmBase::EnsureUniqueRandomInitialPositions property that enables unique random positions generation for layout algorithms. False by default, True for LinLog algorithm.
  - Fixed edge label positioning, now it is more accurate for pathed edges
+ - Fixed LinLog negative energy issue (thanks to Katya)
  - Made StateStorage class extensible by adding virtual modifiers to methods
  - Improved algorithm factory logic to avoid graph type cast exceptions in some class declaration cases
 
