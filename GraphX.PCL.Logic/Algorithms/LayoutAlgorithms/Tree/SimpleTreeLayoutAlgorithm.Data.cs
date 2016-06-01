@@ -7,7 +7,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         where TEdge : IEdge<TVertex>
         where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
-        class Layer
+        protected class Layer
         {
             public double Size;
             public double NextPosition;
@@ -23,7 +23,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         }
 
-        class VertexData
+       protected class VertexData
         {
             public TVertex Parent;
             public double Translate;

@@ -14,10 +14,12 @@ namespace GraphX.PCL.Logic.Algorithms
         /// </summary>
         /// <typeparam name="TVertex">Vertex data type</typeparam>
         /// <typeparam name="TEdge">Edge data type</typeparam>
+        /// <typeparam name="TGraph"></typeparam>
         /// <param name="graph">Graph</param>
         /// <param name="vertex">Vertex</param>
         public static IEnumerable<TEdge> GetAllEdges<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> graph, TVertex vertex)
-            where TEdge : IEdge<TVertex>
+            where TVertex : class, IGraphXVertex
+            where TEdge : class, IGraphXEdge<TVertex>
         {
             var result = new List<TEdge>();
             IEnumerable<TEdge> edges;

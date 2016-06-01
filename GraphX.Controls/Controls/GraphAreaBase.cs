@@ -34,7 +34,7 @@ namespace GraphX
         /// <summary>
         /// Automaticaly assign unique Id (if missing) for vertex and edge data classes provided as Graph in GenerateGraph() method or by Addvertex() or AddEdge() methods
         /// </summary>
-        public bool AutoAssignMissingDataId { get; set; }
+        public bool AutoAssignMissingDataId { get; set; } = true;
 
         /// <summary>
         /// Action that will take place when LogicCore property is changed. Default: None.
@@ -57,7 +57,6 @@ namespace GraphX
 
         protected GraphAreaBase()
         {
-            AutoAssignMissingDataId = true;
             LogicCoreChangeAction = LogicCoreChangedAction.None;
         }
 
@@ -595,11 +594,8 @@ namespace GraphX
 
             var minPoint = new Point(double.PositiveInfinity, double.PositiveInfinity);
             var maxPoint = new Point(double.NegativeInfinity, double.NegativeInfinity);
-#if WPF
-            foreach (UIElement child in InternalChildren)
-#elif METRO
+
             foreach (UIElement child in Children)
-#endif            
             {
                 var x = GetX(child);
                 var y = GetY(child);

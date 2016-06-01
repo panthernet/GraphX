@@ -1476,7 +1476,7 @@ namespace GraphX.Controls
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            RemoveAllEdges();
+            RemoveAllEdges(); 
 
             AutoresolveEdgeIds();
 

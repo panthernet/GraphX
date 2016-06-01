@@ -52,10 +52,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         {
         }
 
-        protected override TParam DefaultParameters
-        {
-            get { return new TParam(); }
-        }
+        protected override TParam DefaultParameters => new TParam();
     }
 
 	/// <typeparam name="TVertex">Type of the vertices.</typeparam>

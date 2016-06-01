@@ -108,6 +108,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\..\GraphX.METRO.Controls\GraphX.METRO.Controls.csproj">
+      <Project>{66f33708-c1c7-4385-8235-7201784d184c}</Project>
+      <Name>GraphX.METRO.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
       <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
       <Name>GraphX.PCL.Common</Name>
@@ -115,10 +119,6 @@
     <ProjectReference Include="..\..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
       <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
       <Name>GraphX.PCL.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GraphX.METRO.Controls\GraphX.METRO.Controls.csproj">
-      <Project>{66f33708-c1c7-4385-8235-7201784d184c}</Project>
-      <Name>GraphX.METRO.Controls</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
