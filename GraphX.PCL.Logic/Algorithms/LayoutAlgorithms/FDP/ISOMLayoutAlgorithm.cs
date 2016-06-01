@@ -51,7 +51,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 		{
             if (VisitedGraph.VertexCount == 1)
             {
-                VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
+                if(!VertexPositions.ContainsKey(VisitedGraph.Vertices.First()))
+                    VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
                 return;
             }
 

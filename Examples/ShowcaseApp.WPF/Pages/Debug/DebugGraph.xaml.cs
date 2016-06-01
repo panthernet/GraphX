@@ -158,15 +158,15 @@ namespace ShowcaseApp.WPF.Pages
         void butVCP_Click(object sender, RoutedEventArgs e)
         {
             CreateNewArea();
-            dg_Area.VertexList.Values.ToList().ForEach(a=> a.SetConnectionPointsVisibility(true));
-            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(4, false);
+            //dg_Area.VertexList.Values.ToList().ForEach(a=> a.SetConnectionPointsVisibility(true));
+            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(1, false);
             var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
-            var edge = new DataEdge(vlist[0], vlist[1]) { SourceConnectionPointId = 1, TargetConnectionPointId = 1 };
-            dg_Area.LogicCore.Graph.AddEdge(edge);
-            edge = new DataEdge(vlist[0], vlist[2]) { SourceConnectionPointId = 3, TargetConnectionPointId = 1 };
-            dg_Area.LogicCore.Graph.AddEdge(edge);
+            //var edge = new DataEdge(vlist[0], vlist[1]) { SourceConnectionPointId = 1, TargetConnectionPointId = 1 };
+           // dg_Area.LogicCore.Graph.AddEdge(edge);
+           // edge = new DataEdge(vlist[0], vlist[2]) { SourceConnectionPointId = 3, TargetConnectionPointId = 1 };
+          //  dg_Area.LogicCore.Graph.AddEdge(edge);
 
-            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.KK;
+            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.ISOM;
             dg_Area.LogicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
             dg_Area.LogicCore.DefaultOverlapRemovalAlgorithmParams = dg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
             ((OverlapRemovalParameters)dg_Area.LogicCore.DefaultOverlapRemovalAlgorithmParams).HorizontalGap = 50;
@@ -175,13 +175,14 @@ namespace ShowcaseApp.WPF.Pages
 
             dg_Area.GenerateGraph(true);
 
-            var vertex = dg_Area.VertexList[edge.Target];
-            var vcp = vertex.VertexConnectionPointsList.First();
-            var newVcp = new StaticVertexConnectionPoint {Id = 5};
-            ((StackPanel)((Border) vcp.GetParent()).Parent).Children.Add(newVcp);
-            edge.TargetConnectionPointId = 5;
-            vertex.VertexConnectionPointsList.Add(newVcp);
-            dg_Area.EdgesList[edge].UpdateEdge();
+            dg_Area.RelayoutGraph(true);
+           // var vertex = dg_Area.VertexList[edge.Target];
+          //  var vcp = vertex.VertexConnectionPointsList.First();
+         //   var newVcp = new StaticVertexConnectionPoint {Id = 5};
+         //   ((StackPanel)((Border) vcp.GetParent()).Parent).Children.Add(newVcp);
+         //   edge.TargetConnectionPointId = 5;
+         //   vertex.VertexConnectionPointsList.Add(newVcp);
+         //   dg_Area.EdgesList[edge].UpdateEdge();
             //dg_Area.UpdateAllEdges(true);
         }
 
