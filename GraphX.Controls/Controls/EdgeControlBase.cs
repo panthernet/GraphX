@@ -644,7 +644,7 @@ namespace GraphX.Controls
             var pt =
                 new Point(
                     sourcePos.X + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Width),
-                    sourcePos.Y + SelfLoopIndicatorOffset.X - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Height));
+                    sourcePos.Y + SelfLoopIndicatorOffset.Y - (hasNoTemplate ? SelfLoopIndicatorRadius : SelfLoopIndicator.DesiredSize.Height));
 
             //if we has no self looped edge template defined we'll use default built-in indicator
             if (hasNoTemplate)
