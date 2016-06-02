@@ -27,7 +27,7 @@ namespace GraphX.Controls
         #region Background Property
 
         public static readonly DependencyProperty BackgroundProperty =
-            DependencyProperty.Register("Background", typeof (Brush), typeof (ViewFinderDisplay),
+            DependencyProperty.Register(nameof(Background), typeof (Brush), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0xC0, 0xFF, 0xFF, 0xFF)), FrameworkPropertyMetadataOptions.AffectsRender));
 
         public Brush Background
@@ -41,7 +41,7 @@ namespace GraphX.Controls
         #region ContentBounds Property
 
         private static readonly DependencyPropertyKey ContentBoundsPropertyKey =
-            DependencyProperty.RegisterReadOnly("ContentBounds", typeof (Rect), typeof (ViewFinderDisplay),
+            DependencyProperty.RegisterReadOnly(nameof(ContentBounds), typeof (Rect), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(Rect.Empty, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
 
         public static readonly DependencyProperty ContentBoundsProperty = ContentBoundsPropertyKey.DependencyProperty;
@@ -57,7 +57,7 @@ namespace GraphX.Controls
         #region ShadowBrush Property
 
         public static readonly DependencyProperty ShadowBrushProperty =
-            DependencyProperty.Register("ShadowBrush", typeof (Brush), typeof (ViewFinderDisplay),
+            DependencyProperty.Register(nameof(ShadowBrush), typeof (Brush), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(new SolidColorBrush(Color.FromArgb(0x80, 0xFF, 0xFF, 0xFF)), FrameworkPropertyMetadataOptions.AffectsRender));
 
         public Brush ShadowBrush
@@ -71,7 +71,7 @@ namespace GraphX.Controls
         #region ViewportBrush Property
 
         public static readonly DependencyProperty ViewportBrushProperty =
-            DependencyProperty.Register("ViewportBrush", typeof (Brush), typeof (ViewFinderDisplay),
+            DependencyProperty.Register(nameof(ViewportBrush), typeof (Brush), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(Brushes.Transparent, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public Brush ViewportBrush
@@ -85,7 +85,7 @@ namespace GraphX.Controls
         #region ViewportPen Property
 
         public static readonly DependencyProperty ViewportPenProperty =
-            DependencyProperty.Register("ViewportPen", typeof (Pen), typeof (ViewFinderDisplay),
+            DependencyProperty.Register(nameof(ViewportPen), typeof (Pen), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(new Pen(new SolidColorBrush(Color.FromArgb(0x80, 0x00, 0x00, 0x00)), 1d), FrameworkPropertyMetadataOptions.AffectsRender));
 
         public Pen ViewportPen
@@ -99,7 +99,7 @@ namespace GraphX.Controls
         #region ViewportRect Property
 
         public static readonly DependencyProperty ViewportRectProperty =
-            DependencyProperty.Register("ViewportRect", typeof (Rect), typeof (ViewFinderDisplay),
+            DependencyProperty.Register(nameof(ViewportRect), typeof (Rect), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata(Rect.Empty, FrameworkPropertyMetadataOptions.AffectsRender));
 
         public Rect ViewportRect
@@ -113,7 +113,7 @@ namespace GraphX.Controls
         #region VisualBrush Property
 
         private static readonly DependencyPropertyKey VisualBrushPropertyKey =
-            DependencyProperty.RegisterReadOnly("VisualBrush", typeof (VisualBrush), typeof (ViewFinderDisplay),
+            DependencyProperty.RegisterReadOnly(nameof(VisualBrush), typeof (VisualBrush), typeof (ViewFinderDisplay),
                 new FrameworkPropertyMetadata((VisualBrush) null));
 
         public static readonly DependencyProperty VisualBrushProperty = VisualBrushPropertyKey.DependencyProperty;
@@ -128,10 +128,7 @@ namespace GraphX.Controls
 
         #region AvailableSize Internal Property
 
-        internal Size AvailableSize
-        {
-            get { return _availableSize; }
-        }
+        internal Size AvailableSize => _availableSize;
 
         private Size _availableSize = Size.Empty;
 

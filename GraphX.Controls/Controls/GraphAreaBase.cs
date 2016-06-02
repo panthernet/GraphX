@@ -46,7 +46,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty LogicCoreChangeActionProperty =
-            DependencyProperty.Register("LogicCoreChangeAction", typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
+            DependencyProperty.Register(nameof(LogicCoreChangeAction), typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
 
 #if WPF
         /// <summary>
@@ -174,6 +174,7 @@ namespace GraphX
         }
 
         #region DP - ExternalSettings
+        // todo: ExternalSettings or ExternalSettingsOnly?
         public static readonly DependencyProperty ExternalSettingsProperty = DependencyProperty.Register("ExternalSettingsOnly", typeof(object),
                                         typeof(GraphAreaBase), new PropertyMetadata(null));
         /// <summary>
@@ -198,7 +199,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty MoveAnimationProperty =
-            DependencyProperty.Register("MoveAnimation", typeof(MoveAnimationBase), typeof(GraphAreaBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(MoveAnimation), typeof(MoveAnimationBase), typeof(GraphAreaBase), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets vertex and edge controls delete animation
@@ -210,7 +211,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty DeleteAnimationProperty =
-            DependencyProperty.Register("DeleteAnimation", typeof(IOneWayControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null, DeleteAnimationPropertyChanged));
+            DependencyProperty.Register(nameof(DeleteAnimation), typeof(IOneWayControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null, DeleteAnimationPropertyChanged));
 
         private static void DeleteAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -228,8 +229,7 @@ namespace GraphX
 
         static void GraphAreaBase_Completed(object sender, ControlEventArgs e)
         {
-            if (e.Control == null || e.Control.RootArea == null) return;
-            e.Control.RootArea.RemoveAnimatedControl(e.Control, e.RemoveDataObject);
+            e.Control?.RootArea?.RemoveAnimatedControl(e.Control, e.RemoveDataObject);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace GraphX
         }
 
         public static readonly DependencyProperty MouseOverAnimationProperty =
-            DependencyProperty.Register("MouseOverAnimation", typeof(IBidirectionalControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(MouseOverAnimation), typeof(IBidirectionalControlAnimation), typeof(GraphAreaBase), new PropertyMetadata(null));
 
         #endregion
 
@@ -269,8 +269,7 @@ namespace GraphX
 
         protected void OnContentSizeChanged(Rect oldSize, Rect newSize)
         {
-            if (ContentSizeChanged != null)
-                ContentSizeChanged(this, new ContentSizeChangedEventArgs(oldSize, newSize));
+            ContentSizeChanged?.Invoke(this, new ContentSizeChangedEventArgs(oldSize, newSize));
         }
 
         /// <summary>
@@ -280,10 +279,9 @@ namespace GraphX
 
         internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (EdgeSelected != null)
-                EdgeSelected(this, new EdgeSelectedEventArgs(ec, e
+            EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
                     ));
 #endif
@@ -297,8 +295,7 @@ namespace GraphX
 #if WPF
         internal virtual void OnVertexDoubleClick(VertexControl vc, MouseButtonEventArgs e)
         {
-            if (VertexDoubleClick != null)
-                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
+            VertexDoubleClick?.Invoke(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
         }
 #elif METRO
         internal virtual void OnVertexDoubleClick(VertexControl vc, PointerRoutedEventArgs e)
@@ -315,10 +312,9 @@ namespace GraphX
 
         internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (VertexSelected != null)
-                VertexSelected(this, new VertexSelectedEventArgs(vc, e
+            VertexSelected?.Invoke(this, new VertexSelectedEventArgs(vc, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
                     ));
 #endif
@@ -331,14 +327,14 @@ namespace GraphX
 
         internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (VertexMouseUp != null)
-                VertexMouseUp(this, new VertexSelectedEventArgs(vc, e
+            VertexMouseUp?.Invoke(this, new VertexSelectedEventArgs(vc, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
                     ));
 #endif
         }
+
         /// <summary>
         /// Fires when mouse is over the vertex control
         /// </summary>
@@ -346,15 +342,13 @@ namespace GraphX
 
         internal virtual void OnVertexMouseEnter(VertexControl vc, MouseEventArgs e)
         {
-            if (VertexMouseEnter != null)
-                VertexMouseEnter(this, new VertexSelectedEventArgs(vc, e
+            VertexMouseEnter?.Invoke(this, new VertexSelectedEventArgs(vc, e
 #if WPF
-                    , Keyboard.Modifiers));
+                , Keyboard.Modifiers));
 #elif METRO
                     ));
 #endif
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateVertexForward(vc);
+            MouseOverAnimation?.AnimateVertexForward(vc);
         }
 
         /// <summary>
@@ -364,8 +358,7 @@ namespace GraphX
 
         internal virtual void OnVertexMouseMove(VertexControl vc, MouseEventArgs e)
         {
-            if (VertexMouseMove != null)
-                VertexMouseMove(this, new VertexMovedEventArgs(vc, e));
+            VertexMouseMove?.Invoke(this, new VertexMovedEventArgs(vc, e));
         }
 
         /// <summary>
@@ -375,15 +368,13 @@ namespace GraphX
 
         internal virtual void OnVertexMouseLeave(VertexControl vc, MouseEventArgs e)
         {
-            if (VertexMouseLeave != null)
-                VertexMouseLeave(this, new VertexSelectedEventArgs(vc, e
+            VertexMouseLeave?.Invoke(this, new VertexSelectedEventArgs(vc, e
 #if WPF
-                    , Keyboard.Modifiers));
+                , Keyboard.Modifiers));
 #elif METRO
 ));
 #endif
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateVertexBackward(vc);
+            MouseOverAnimation?.AnimateVertexBackward(vc);
         }
 
         /// <summary>
@@ -393,8 +384,7 @@ namespace GraphX
 
         protected virtual void OnLayoutCalculationFinished()
         {
-            if (LayoutCalculationFinished != null)
-                LayoutCalculationFinished(this, null);
+            LayoutCalculationFinished?.Invoke(this, null);
         }
 
         /// <summary>
@@ -404,8 +394,7 @@ namespace GraphX
 
         protected virtual void OnOverlapRemovalCalculationFinished()
         {
-            if (OverlapRemovalCalculationFinished != null)
-                OverlapRemovalCalculationFinished(this, null);
+            OverlapRemovalCalculationFinished?.Invoke(this, null);
         }
 
         /// <summary>
@@ -415,8 +404,7 @@ namespace GraphX
 
         protected virtual void OnEdgeRoutingCalculationFinished()
         {
-            if (EdgeRoutingCalculationFinished != null)
-                EdgeRoutingCalculationFinished(this, null);
+            EdgeRoutingCalculationFinished?.Invoke(this, null);
         }
 
         /// <summary>
@@ -426,8 +414,7 @@ namespace GraphX
 
         protected virtual void OnRelayoutFinished()
         {
-            if (RelayoutFinished != null)
-                RelayoutFinished(this, null);
+            RelayoutFinished?.Invoke(this, null);
         }
 
         /// <summary>
@@ -437,29 +424,26 @@ namespace GraphX
 
         protected virtual void OnGenerateGraphFinished()
         {
-            if (GenerateGraphFinished != null)
-                GenerateGraphFinished(this, null);
+            GenerateGraphFinished?.Invoke(this, null);
         }
 
         public event EdgeSelectedEventHandler EdgeDoubleClick;
         internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (EdgeDoubleClick != null)
-                EdgeDoubleClick(this, new EdgeSelectedEventArgs(edgeControl, e
+            EdgeDoubleClick?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
                     ));
-#endif                    
+#endif
         }
 
         public event EdgeSelectedEventHandler EdgeMouseMove;
         internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (EdgeMouseMove != null)
-                EdgeMouseMove(this, new EdgeSelectedEventArgs(edgeControl, e
+            EdgeMouseMove?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
 ));
 #endif
@@ -468,29 +452,25 @@ namespace GraphX
         public event EdgeSelectedEventHandler EdgeMouseEnter;
         internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (EdgeMouseEnter != null)
-                EdgeMouseEnter(this, new EdgeSelectedEventArgs(edgeControl, e
+            EdgeMouseEnter?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
 ));
 #endif
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateEdgeForward(edgeControl);
+            MouseOverAnimation?.AnimateEdgeForward(edgeControl);
         }
 
         public event EdgeSelectedEventHandler EdgeMouseLeave;
         internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            if (EdgeMouseLeave != null)
-                EdgeMouseLeave(this, new EdgeSelectedEventArgs(edgeControl, e
+            EdgeMouseLeave?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
 #if WPF
-                    , keys));
+                , keys));
 #elif METRO
 ));
 #endif
-            if (MouseOverAnimation != null)
-                MouseOverAnimation.AnimateEdgeBackward(edgeControl);
+            MouseOverAnimation?.AnimateEdgeBackward(edgeControl);
         }
 
         #endregion
@@ -568,7 +548,7 @@ namespace GraphX
         /// Gets the size of the GraphArea taking into account positions of the children
         /// This is the main size pointer. Don't use DesiredSize or ActualWidth props as they are simulated.
         /// </summary>
-        public Rect ContentSize { get { return new Rect(_topLeft, _bottomRight); } }
+        public Rect ContentSize => new Rect(_topLeft, _bottomRight);
 
         /// <summary>
         /// Translation of the GraphArea object
@@ -615,15 +595,13 @@ namespace GraphX
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {
                         var routingInfo = ec.Edge as IRoutingInfo;
-                        if (routingInfo != null) {
-                            var rps = routingInfo.RoutingPoints;
-                            if (rps != null)
+                        var rps = routingInfo?.RoutingPoints;
+                        if (rps != null)
+                        {
+                            foreach (var item in rps)
                             {
-                                foreach (var item in rps)
-                                {
-                                    minPoint = new Point(Math.Min(minPoint.X, item.X), Math.Min(minPoint.Y, item.Y));
-                                    maxPoint = new Point(Math.Max(maxPoint.X, item.X), Math.Max(maxPoint.Y, item.Y));
-                                }
+                                minPoint = new Point(Math.Min(minPoint.X, item.X), Math.Min(minPoint.Y, item.Y));
+                                maxPoint = new Point(Math.Max(maxPoint.X, item.X), Math.Max(maxPoint.Y, item.Y));
                             }
                         }
                     }

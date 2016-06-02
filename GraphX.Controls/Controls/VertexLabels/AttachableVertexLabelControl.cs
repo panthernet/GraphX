@@ -26,7 +26,7 @@ namespace GraphX.Controls
         /// </summary>
         public VertexControl AttachNode { get { return (VertexControl)GetValue(AttachNodeProperty); } private set { SetValue(AttachNodeProperty, value); OnPropertyChanged("AttachNode"); } }
 
-        public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(VertexControl), typeof(AttachableVertexLabelControl), 
+        public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register(nameof(AttachNode), typeof(VertexControl), typeof(AttachableVertexLabelControl), 
             new PropertyMetadata(null));
 
 #if WPF
@@ -146,7 +146,7 @@ namespace GraphX.Controls
         protected virtual void OnPropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

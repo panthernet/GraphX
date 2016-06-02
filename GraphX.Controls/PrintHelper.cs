@@ -75,7 +75,7 @@ namespace GraphX.Controls
                 else
                 {
                     var frameworkElement = surface.Parent as FrameworkElement;
-                    if (frameworkElement != null && frameworkElement.Parent is IZoomControl)
+                    if (frameworkElement?.Parent is IZoomControl)
                         vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
                 }
             }

@@ -11,7 +11,7 @@ namespace GraphX.Controls.Models
         public VertexSelectedEventArgs(VertexControl vc, MouseEventArgs e, ModifierKeys keys)
         {
             VertexControl = vc;
-            MouseArgs = e is MouseButtonEventArgs ? (MouseButtonEventArgs)e : null;
+            MouseArgs = e as MouseButtonEventArgs;
             Modifiers = keys;
         }
     }
