@@ -7,6 +7,7 @@ DETAILED CHANGELOG:
  - Fixed edge label positioning, now it is more accurate for pathed edges
  - Fixed LinLog negative energy issue (thanks to Katya)
  - Fixed one vertex ISOM algorithm exception (thanks to jorgensigvardsson)
+ - Fixed external alg vertex sizes grab logic (thanks to ValentinMarinov)
  - Made StateStorage class extensible by adding virtual modifiers to methods
  - Improved algorithm factory logic to avoid graph type cast exceptions in some class declaration cases
 

@@ -715,7 +715,7 @@ namespace GraphX.Controls
             //go through the vertex presenters and get the actual layoutpositions
             foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
             {
-                vertexSizes[vc.Key] = new Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+                vertexSizes[vc.Key] = new Size(vc.Value.DesiredSize.Width, vc.Value.DesiredSize.Height);
             }
             return vertexSizes;
         }
@@ -731,7 +731,7 @@ namespace GraphX.Controls
             //go through the vertex presenters and get the actual layoutpositions
             foreach (var vc in VertexList.Where(vc => ((IGraphXVertex)vc.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude))
             {
-                vertexSizes[vc.Key] = new Size(vc.Value.ActualWidth, vc.Value.ActualHeight);
+                vertexSizes[vc.Key] = new Size(vc.Value.DesiredSize.Width, vc.Value.DesiredSize.Height);
                 vertexPositions[vc.Key] = vc.Value.GetPositionGraphX();
             }
             return vertexSizes;
