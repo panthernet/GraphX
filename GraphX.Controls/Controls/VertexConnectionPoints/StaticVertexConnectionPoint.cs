@@ -24,7 +24,7 @@ namespace GraphX.Controls
 
 
         public static readonly DependencyProperty ShapeProperty =
-            DependencyProperty.Register("Shape", 
+            DependencyProperty.Register(nameof(Shape), 
                           typeof(VertexShape), 
                           typeof(StaticVertexConnectionPoint), 
                           new PropertyMetadata(VertexShape.Circle));
@@ -82,7 +82,7 @@ namespace GraphX.Controls
         #endregion
 
         private VertexControl _vertexControl;
-        protected VertexControl VertexControl { get { return _vertexControl ?? (_vertexControl = GetVertexControl(GetParent())); } }
+        protected VertexControl VertexControl => _vertexControl ?? (_vertexControl = GetVertexControl(GetParent()));
 
         public StaticVertexConnectionPoint()
         {

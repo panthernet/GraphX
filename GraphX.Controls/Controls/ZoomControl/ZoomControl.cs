@@ -111,19 +111,13 @@ namespace GraphX.Controls
         #region Viewport Property
 
         private static readonly DependencyPropertyKey ViewportPropertyKey =
-          DependencyProperty.RegisterReadOnly("Viewport", typeof(Rect), typeof(ZoomControl),
+          DependencyProperty.RegisterReadOnly(nameof(Viewport), typeof(Rect), typeof(ZoomControl),
             new FrameworkPropertyMetadata(Rect.Empty,
               OnViewportChanged));
 
         public static readonly DependencyProperty ViewportProperty = ViewportPropertyKey.DependencyProperty;
 
-        public Rect Viewport
-        {
-            get
-            {
-                return (Rect)GetValue(ViewportProperty);
-            }
-        }
+        public Rect Viewport => (Rect)GetValue(ViewportProperty);
 
         private static void OnViewportChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
@@ -139,18 +133,12 @@ namespace GraphX.Controls
         #region ViewFinder Property
 
         private static readonly DependencyPropertyKey ViewFinderPropertyKey =
-          DependencyProperty.RegisterReadOnly("ViewFinder", typeof(FrameworkElement), typeof(ZoomControl),
+          DependencyProperty.RegisterReadOnly(nameof(ViewFinder), typeof(FrameworkElement), typeof(ZoomControl),
             new FrameworkPropertyMetadata(null));
 
         public static readonly DependencyProperty ViewFinderProperty = ViewFinderPropertyKey.DependencyProperty;
 
-        public FrameworkElement ViewFinder
-        {
-            get
-            {
-                return (FrameworkElement)GetValue(ViewFinderProperty);
-            }
-        }
+        public FrameworkElement ViewFinder => (FrameworkElement)GetValue(ViewFinderProperty);
 
         #endregion
 
@@ -680,8 +668,7 @@ namespace GraphX.Controls
 
         private void OnAreaSelected(Rect selection)
         {
-            if (AreaSelected != null)
-                AreaSelected(this, new AreaSelectedEventArgs(selection));
+            AreaSelected?.Invoke(this, new AreaSelectedEventArgs(selection));
         }
 
         private const string PART_PRESENTER = "PART_Presenter";
@@ -691,7 +678,7 @@ namespace GraphX.Controls
                                         new PropertyMetadata(Visibility.Visible));
 
         public static readonly DependencyProperty AnimationLengthProperty =
-            DependencyProperty.Register("AnimationLength", typeof(TimeSpan), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(AnimationLength), typeof(TimeSpan), typeof(ZoomControl),
                                         new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
         public static readonly DependencyProperty MaximumZoomStepProperty =
@@ -699,13 +686,13 @@ namespace GraphX.Controls
                                         new PropertyMetadata(5.0));
 
         public static readonly DependencyProperty MaxZoomProperty =
-            DependencyProperty.Register("MaxZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(100.0));
+            DependencyProperty.Register(nameof(MaxZoom), typeof(double), typeof(ZoomControl), new PropertyMetadata(100.0));
 
         public static readonly DependencyProperty MinZoomProperty =
-            DependencyProperty.Register("MinZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(0.01));
+            DependencyProperty.Register(nameof(MinZoom), typeof(double), typeof(ZoomControl), new PropertyMetadata(0.01));
 
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("Mode", typeof(ZoomControlModes), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(Mode), typeof(ZoomControlModes), typeof(ZoomControl),
                                         new PropertyMetadata(ZoomControlModes.Custom, Mode_PropertyChanged));
 
         private static void Mode_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -728,16 +715,16 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty ModifierModeProperty =
-            DependencyProperty.Register("ModifierMode", typeof(ZoomViewModifierMode), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ModifierMode), typeof(ZoomViewModifierMode), typeof(ZoomControl),
                                         new PropertyMetadata(ZoomViewModifierMode.None));
 
         #region TranslateX TranslateY
         public static readonly DependencyProperty TranslateXProperty =
-            DependencyProperty.Register("TranslateX", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(TranslateX), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.0, TranslateX_PropertyChanged, TranslateX_Coerce));
 
         public static readonly DependencyProperty TranslateYProperty =
-            DependencyProperty.Register("TranslateY", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(TranslateY), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.0, TranslateY_PropertyChanged, TranslateY_Coerce));
 
         private static object TranslateX_Coerce(DependencyObject d, object basevalue)
@@ -770,8 +757,8 @@ namespace GraphX.Controls
             zc._translateTransform.X = (double)e.NewValue;
             if (!zc._isZooming)
                 zc.Mode = ZoomControlModes.Custom;
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
         }
 
         private static void TranslateY_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -782,44 +769,44 @@ namespace GraphX.Controls
             zc._translateTransform.Y = (double)e.NewValue;
             if (!zc._isZooming)
                 zc.Mode = ZoomControlModes.Custom;
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
 
         }
 
         #endregion
 
         public static readonly DependencyProperty ZoomBoxBackgroundProperty =
-            DependencyProperty.Register("ZoomBoxBackground", typeof(Brush), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBackground), typeof(Brush), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderBrushProperty =
-            DependencyProperty.Register("ZoomBoxBorderBrush", typeof(Brush), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBorderBrush), typeof(Brush), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderThicknessProperty =
-            DependencyProperty.Register("ZoomBoxBorderThickness", typeof(Thickness), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBorderThickness), typeof(Thickness), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxOpacityProperty =
-            DependencyProperty.Register("ZoomBoxOpacity", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxOpacity), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.5));
 
 
         public static readonly DependencyProperty ZoomBoxProperty =
-            DependencyProperty.Register("ZoomBox", typeof(Rect), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBox), typeof(Rect), typeof(ZoomControl),
                                         new PropertyMetadata(new Rect()));
 
         public static readonly DependencyProperty ZoomSensitivityProperty =
-            DependencyProperty.Register("ZoomSensitivity", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomSensitivity), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(100.0));
 
         #region Zoom
         public static readonly DependencyProperty ZoomProperty =
-            DependencyProperty.Register("Zoom", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(Zoom), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(1.0, Zoom_PropertyChanged));
 
         private static void Zoom_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -840,9 +827,9 @@ namespace GraphX.Controls
                 zc.TranslateY *= delta;
                 zc.Mode = ZoomControlModes.Custom;
             }
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
-            zc.OnPropertyChanged("Zoom");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
+            zc.OnPropertyChanged(nameof(Zoom));
             zc.UpdateViewport();
             zc.HookAfterZoomChanging();
         }
@@ -898,10 +885,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets origo (area center) position
         /// </summary>
-        public Point OrigoPosition
-        {
-            get { return new Point(ActualWidth / 2, ActualHeight / 2); }
-        }
+        public Point OrigoPosition => new Point(ActualWidth / 2, ActualHeight / 2);
 
         /// <summary>
         /// Gets or sets translation value for X property
@@ -999,32 +983,18 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets content object as UIElement
         /// </summary>
-        public UIElement ContentVisual
-        {
-            get
-            {
-                return Content as UIElement;
-            }
-        }
+        public UIElement ContentVisual => Content as UIElement;
+
         /// <summary>
         /// Gets content as ITrackableContent like GraphArea
         /// </summary>
-        public ITrackableContent TrackableContent
-        {
-            get
-            {
-                return Content as ITrackableContent;
-            }
-        }
+        public ITrackableContent TrackableContent => Content as ITrackableContent;
 
         bool _isga;
         /// <summary>
         /// Is loaded content represents ITrackableContent object
         /// </summary>
-        public bool IsContentTrackable
-        {
-            get { return _isga; }
-        }
+        public bool IsContentTrackable => _isga;
 
 
         public ZoomContentPresenter Presenter
@@ -1047,10 +1017,7 @@ namespace GraphX.Controls
             }
         }
 
-        public UIElement PresenterVisual
-        {
-            get { return Presenter; }
-        }
+        public UIElement PresenterVisual => Presenter;
 
         /// <summary>
         /// Gets or sets the active modifier mode.
@@ -1336,8 +1303,7 @@ namespace GraphX.Controls
 
         private void OnZoomAnimationCompleted()
         {
-            if (ZoomAnimationCompleted != null)
-                ZoomAnimationCompleted(this, EventArgs.Empty);
+            ZoomAnimationCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
@@ -1581,8 +1547,7 @@ namespace GraphX.Controls
 
             if (DesignerProperties.GetIsInDesignMode(this))
             {
-                if (ViewFinder != null)
-                    ViewFinder.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+                ViewFinder?.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
                 return;
             }
 
@@ -1616,8 +1581,7 @@ namespace GraphX.Controls
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 

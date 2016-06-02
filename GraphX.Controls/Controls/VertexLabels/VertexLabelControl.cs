@@ -27,7 +27,7 @@ namespace GraphX.Controls
         internal Rect LastKnownRectSize;
 
 
-        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
+        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register(nameof(Angle),
                                                                                        typeof(double),
                                                                                        typeof(VertexLabelControl),
                                                                                        new PropertyMetadata(0.0, AngleChanged));
@@ -57,7 +57,7 @@ namespace GraphX.Controls
             set { SetValue(AngleProperty, value); }
         }
 
-        public static readonly DependencyProperty LabelPositionProperty = DependencyProperty.Register("LabelPosition",
+        public static readonly DependencyProperty LabelPositionProperty = DependencyProperty.Register(nameof(LabelPosition),
                                                                 typeof(Point),
                                                                 typeof(VertexLabelControl),
                                                                 new PropertyMetadata(new Point()));
@@ -71,7 +71,7 @@ namespace GraphX.Controls
             set { SetValue(LabelPositionProperty, value); }
         }
 
-        public static readonly DependencyProperty LabelPositionModeProperty = DependencyProperty.Register("LabelPositionMode",
+        public static readonly DependencyProperty LabelPositionModeProperty = DependencyProperty.Register(nameof(LabelPositionMode),
                                                                         typeof(VertexLabelPositionMode),
                                                                         typeof(VertexLabelControl),
                                                                         new PropertyMetadata(VertexLabelPositionMode.Sides));
@@ -85,7 +85,7 @@ namespace GraphX.Controls
         }
 
 
-        public static readonly DependencyProperty LabelPositionSideProperty = DependencyProperty.Register("LabelPositionSide",
+        public static readonly DependencyProperty LabelPositionSideProperty = DependencyProperty.Register(nameof(LabelPositionSide),
                                                                                 typeof(VertexLabelPositionSide),
                                                                                 typeof(VertexLabelControl),
                                                                                 new PropertyMetadata(VertexLabelPositionSide.BottomRight));

@@ -77,8 +77,7 @@ namespace GraphX.Controls.Animations
 
         private void OnCompleted(IGraphControl target, bool removeDataObject)
         {
-            if (Completed != null)
-                Completed(this, new ControlEventArgs(target, removeDataObject));
+            Completed?.Invoke(this, new ControlEventArgs(target, removeDataObject));
         }
     }
 }

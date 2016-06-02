@@ -68,7 +68,7 @@ namespace GraphX.Controls
         public ControlDrawOrder ControlsDrawOrder { get; set; }
 
         public static readonly DependencyProperty LogicCoreProperty =
-            DependencyProperty.Register("LogicCore", typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
+            DependencyProperty.Register(nameof(LogicCore), typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
 
         private static
 #if METRO 
@@ -77,7 +77,7 @@ namespace GraphX.Controls
  void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var graph = d as GraphArea<TVertex, TEdge, TGraph>;
-            if (graph == null || graph.Parent == null) return;
+            if (graph?.Parent == null) return;
             switch (graph.LogicCoreChangeAction)
             {
 #if WPF
@@ -154,19 +154,19 @@ namespace GraphX.Controls
         /// <summary>
         /// Link to LogicCore. Gets if edge routing is used.
         /// </summary>
-        internal override bool IsEdgeRoutingEnabled { get { return LogicCore != null && LogicCore.IsEdgeRoutingEnabled; } }
+        internal override bool IsEdgeRoutingEnabled => LogicCore != null && LogicCore.IsEdgeRoutingEnabled;
         /// <summary>
         /// Link to LogicCore. Gets if parallel edges are enabled.
         /// </summary>
-        internal override bool EnableParallelEdges { get { return LogicCore != null && LogicCore.EnableParallelEdges; } }
+        internal override bool EnableParallelEdges => LogicCore != null && LogicCore.EnableParallelEdges;
         /// <summary>
         /// Link to LogicCore. Gets if edge curving is used.
         /// </summary>
-        internal override bool EdgeCurvingEnabled { get { return LogicCore != null && LogicCore.EdgeCurvingEnabled; } }
+        internal override bool EdgeCurvingEnabled => LogicCore != null && LogicCore.EdgeCurvingEnabled;
         /// <summary>
         /// Link to LogicCore. Gets if edge curving tolerance.
         /// </summary>
-        internal override double EdgeCurvingTolerance { get { return LogicCore == null ? 0 : LogicCore.EdgeCurvingTolerance; } }
+        internal override double EdgeCurvingTolerance => LogicCore?.EdgeCurvingTolerance ?? 0;
 
         /// <summary>
         /// Add custom control for 
@@ -234,17 +234,12 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets edge controls read only collection. To modify collection use AddEdge() RemoveEdge() methods.
         /// </summary>
-        public IDictionary<TEdge, EdgeControl> EdgesList
-        {
-            get { return _edgeslist; }
-        }
+        public IDictionary<TEdge, EdgeControl> EdgesList => _edgeslist;
+
         /// <summary>
         /// Gets vertex controls read only collection. To modify collection use AddVertex() RemoveVertex() methods.
         /// </summary>
-        public IDictionary<TVertex, VertexControl> VertexList
-        {
-            get { return _vertexlist; }
-        }
+        public IDictionary<TVertex, VertexControl> VertexList => _vertexlist;
 
         #endregion
 
@@ -337,7 +332,7 @@ namespace GraphX.Controls
         /// <param name="removeVerticesFromDataGraph">Also remove vertices from data graph if possible. Default value is False.</param>
         public void RemoveAllVertices(bool removeVerticesFromDataGraph = false)
         {
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
+            var hasStorage = LogicCore?.AlgorithmStorage != null;
             foreach (var item in _vertexlist)
             {
                 RemoveVertexInternal(item.Key, false, removeVerticesFromDataGraph);
@@ -352,7 +347,7 @@ namespace GraphX.Controls
         /// <param name="removeEdgesFromDataGraph">Also remove edges from data graph if possible. Default value is False.</param>
         public void RemoveAllEdges(bool removeEdgesFromDataGraph = false)
         {
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null;
+            var hasStorage = LogicCore?.AlgorithmStorage != null;
             foreach (var item in _edgeslist)
             {
                 if (hasStorage && (item.Key.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgesFromDataGraph)) LogicCore.AlgorithmStorage.RemoveSingleEdge(item.Key);
@@ -369,7 +364,7 @@ namespace GraphX.Controls
         public void RemoveVertex(TVertex vertexData, bool removeVertexFromDataGraph = false)
         {
             RemoveVertexInternal(vertexData, true, removeVertexFromDataGraph);
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && (vertexData.SkipProcessing != ProcessingOptionEnum.Exclude || removeVertexFromDataGraph);
+            var hasStorage = LogicCore?.AlgorithmStorage != null && (vertexData.SkipProcessing != ProcessingOptionEnum.Exclude || removeVertexFromDataGraph);
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleVertex(vertexData);
         }
 
@@ -412,7 +407,7 @@ namespace GraphX.Controls
                 ctrl.DetachLabel();
             }
             Children.Remove(ctrl);
-            if (removeVertexFromDataGraph && LogicCore != null && LogicCore.Graph != null && LogicCore.Graph.ContainsVertex(ctrl.Vertex as TVertex))
+            if (removeVertexFromDataGraph && LogicCore?.Graph != null && LogicCore.Graph.ContainsVertex(ctrl.Vertex as TVertex))
                 LogicCore.Graph.RemoveVertex(ctrl.Vertex as TVertex);
             ctrl.Clean();
         }
@@ -425,7 +420,7 @@ namespace GraphX.Controls
         public void RemoveEdge(TEdge edgeData, bool removeEdgeFromDataGraph = false)
         {
             RemoveEdgeInternal(edgeData, true);
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && (edgeData.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgeFromDataGraph);
+            var hasStorage = LogicCore?.AlgorithmStorage != null && (edgeData.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgeFromDataGraph);
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleEdge(edgeData);
         }
 
@@ -449,7 +444,7 @@ namespace GraphX.Controls
                 ctrl.DetachLabel();
             }
             Children.Remove(ctrl);
-            if (removeEdgeFromDataGraph && LogicCore != null && LogicCore.Graph != null && LogicCore.Graph.ContainsEdge(ctrl.Edge as TEdge))
+            if (removeEdgeFromDataGraph && LogicCore?.Graph != null && LogicCore.Graph.ContainsEdge(ctrl.Edge as TEdge))
                 LogicCore.Graph.RemoveEdge(ctrl.Edge as TEdge);
             ctrl.Clean();
         }
@@ -493,7 +488,7 @@ namespace GraphX.Controls
                 ReapplySingleVertexVisualProperties(vertexControl);
             if (generateLabel && VertexLabelFactory != null)
                 GenerateVertexLabel(vertexControl);
-            var hasStorage = LogicCore != null && LogicCore.AlgorithmStorage != null && vertexData.SkipProcessing != ProcessingOptionEnum.Exclude;
+            var hasStorage = LogicCore?.AlgorithmStorage != null && vertexData.SkipProcessing != ProcessingOptionEnum.Exclude;
             if (hasStorage)
             {
                 var pos = vertexControl.GetPositionGraphX(true);
@@ -511,7 +506,7 @@ namespace GraphX.Controls
         /// <param name="generateLabel">Generate vertex label for this control using VertexLabelFactory</param>
         public void AddVertexAndData(TVertex vertexData, VertexControl vertexControl, bool generateLabel = false)
         {
-            if (LogicCore == null || LogicCore.Graph == null)
+            if (LogicCore?.Graph == null)
                 throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data vertex!");
             LogicCore.Graph.AddVertex(vertexData);
             AddVertex(vertexData, vertexControl, generateLabel);
@@ -552,7 +547,7 @@ namespace GraphX.Controls
         /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
         public void AddEdgeAndData(TEdge edgeData, EdgeControl edgeControl, bool generateLabel = false)
         {
-            if (LogicCore == null || LogicCore.Graph == null)
+            if (LogicCore?.Graph == null)
                 throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data edge!");
             LogicCore.Graph.AddEdge(edgeData);
             AddEdge(edgeData, edgeControl, generateLabel);
@@ -596,7 +591,7 @@ namespace GraphX.Controls
         /// <param name="generateLabel">Generate edge label for this control using EdgeLabelFactory</param>
         public void InsertEdgeAndData(TEdge edgeData, EdgeControl edgeControl, int num = 0, bool generateLabel = false)
         {
-            if (LogicCore == null || LogicCore.Graph == null)
+            if (LogicCore?.Graph == null)
                 throw new GX_InvalidDataException("LogicCore or its graph hasn't been assigned. Can't add data edge!");
             LogicCore.Graph.AddEdge(edgeData);
             InsertEdge(edgeData, edgeControl, num, generateLabel);
@@ -1772,14 +1767,14 @@ namespace GraphX.Controls
                 {
                     IEnumerable<TEdge> inEdges;
                     LogicCore.Graph.TryGetInEdges(vc.Vertex as TVertex, out inEdges);
-                    edgesInList = inEdges == null ? null : inEdges.ToList();
+                    edgesInList = inEdges?.ToList();
                 }
 
                 if (edgesType == EdgesType.Out || edgesType == EdgesType.All)
                 {
                     IEnumerable<TEdge> outEdges;
                     LogicCore.Graph.TryGetOutEdges(vc.Vertex as TVertex, out outEdges);
-                    edgesOutList = outEdges == null ? null : outEdges.ToList();
+                    edgesOutList = outEdges?.ToList();
                 }
 
                 if (resultType == GraphControlType.Edge || resultType == GraphControlType.VertexAndEdge)
@@ -1798,7 +1793,7 @@ namespace GraphX.Controls
                 return list;
             }
             var ec = ctrl as EdgeControl;
-            if (ctrl == null || ec == null) return list;
+            if (ec == null) return list;
             var edge = (TEdge)ec.Edge;
             if (resultType == GraphControlType.Edge) return list;
             if (_vertexlist.ContainsKey(edge.Target)) list.Add(_vertexlist[edge.Target]);
@@ -2113,8 +2108,9 @@ namespace GraphX.Controls
                 LogicCore.Clear();
 
             if (clearLogicCore || clearStates)
-                if (_stateStorage != null)
-                    _stateStorage.Dispose();
+            {
+                _stateStorage?.Dispose();
+            }
         }
 
         protected virtual void CreateNewStateStorage()
@@ -2168,9 +2164,9 @@ namespace GraphX.Controls
                 var vResult = result as VertexControl;
                 var eResult = result as EdgeControl;
                 UIElement element = null;
-                if (vResult != null && vResult.VertexLabelControl != null)
+                if (vResult?.VertexLabelControl != null)
                     element = (UIElement)vResult.VertexLabelControl;
-                if (eResult != null && eResult.EdgeLabelControl != null)
+                if (eResult?.EdgeLabelControl != null)
                     element = (UIElement)eResult.EdgeLabelControl;
                 if (element != null && base.Children.Contains(element))
                 {

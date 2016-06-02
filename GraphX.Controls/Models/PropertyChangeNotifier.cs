@@ -25,9 +25,9 @@ namespace GraphX.Controls.Models
         public PropertyChangeNotifier(DependencyObject propertySource, PropertyPath property)
         {
             if (null == propertySource)
-                throw new ArgumentNullException("propertySource");
+                throw new ArgumentNullException(nameof(propertySource));
             if (null == property)
-                throw new ArgumentNullException("property");
+                throw new ArgumentNullException(nameof(property));
             _propertySource = new WeakReference(propertySource);
             var binding = new Binding
             {
@@ -65,14 +65,13 @@ namespace GraphX.Controls.Models
         /// <summary>
         /// Identifies the <see cref="Value"/> dependency property
         /// </summary>
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value",
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value),
         typeof(object), typeof(PropertyChangeNotifier), new FrameworkPropertyMetadata(null, OnPropertyChanged));
 
         private static void OnPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var notifier = (PropertyChangeNotifier)d;
-            if (null != notifier.ValueChanged)
-                notifier.ValueChanged(notifier, EventArgs.Empty);
+            notifier.ValueChanged?.Invoke(notifier, EventArgs.Empty);
         }
 
         /// <summary>

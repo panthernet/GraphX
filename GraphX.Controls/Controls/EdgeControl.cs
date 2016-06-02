@@ -31,7 +31,7 @@ namespace GraphX.Controls
     {
         #region Dependency Properties
 
-        public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double),
+        public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register(nameof(StrokeThickness), typeof(double),
                                                                                               typeof(EdgeControl),
                                                                                               new PropertyMetadata(5.0));
 
@@ -46,7 +46,7 @@ namespace GraphX.Controls
        }
 
 
-       private static readonly DependencyProperty IsSelfLoopedProperty = DependencyProperty.Register("IsSelfLooped", typeof(bool), typeof(EdgeControl), new PropertyMetadata(false));
+       private static readonly DependencyProperty IsSelfLoopedProperty = DependencyProperty.Register(nameof(IsSelfLooped), typeof(bool), typeof(EdgeControl), new PropertyMetadata(false));
 
        private bool IsSelfLoopedInternal { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
        /// <summary>
@@ -63,8 +63,7 @@ namespace GraphX.Controls
         public event EdgeLabelEventHandler LabelMouseDown;
         protected void OnLabelMouseDown(MouseButtonEventArgs mArgs, ModifierKeys keys)
         {
-            if (LabelMouseDown != null)
-                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
+            LabelMouseDown?.Invoke(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
         }
 
         protected override void OnEdgeLabelUpdated()
@@ -88,10 +87,8 @@ namespace GraphX.Controls
         public override void Clean()
         {
             //TODO rename to _sourceWatcher _targetWatcher
-            if (_sourceWatcher != null)
-                _sourceWatcher.Dispose();
-            if (_targetWatcher != null)
-                _targetWatcher.Dispose();
+            _sourceWatcher?.Dispose();
+            _targetWatcher?.Dispose();
             if (Source != null)
                 Source.PositionChanged -= source_PositionChanged;
             if (Target != null)
@@ -122,8 +119,7 @@ namespace GraphX.Controls
                 EdgePointerForTarget.Dispose();
                 EdgePointerForTarget = null;
             }
-            if (EventOptions != null)
-                EventOptions.Clean();
+            EventOptions?.Clean();
         }
         #endregion
 

@@ -99,8 +99,7 @@ namespace GraphX.Controls.Animations
         /// </summary>
         protected void OnCompleted()
         {
-            if (Completed != null)
-                Completed.Invoke(this, null);
+            Completed?.Invoke(this, null);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace GraphX.Controls
             set;// { SetValue(OffsetProperty, value); }
         }
 
-        public static readonly DependencyProperty NeedRotationProperty = DependencyProperty.Register("NeedRotation",
+        public static readonly DependencyProperty NeedRotationProperty = DependencyProperty.Register(nameof(NeedRotation),
                                                                                        typeof(bool),
                                                                                        typeof(EdgeControl),
                                                                                        new PropertyMetadata(true));
@@ -83,7 +83,7 @@ namespace GraphX.Controls
         #endregion
 
         private EdgeControl _edgeControl;
-        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent())); } }
+        protected EdgeControl EdgeControl => _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent()));
 
         public DefaultEdgePointer()
         {

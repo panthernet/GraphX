@@ -23,8 +23,7 @@ namespace GraphX.Controls
                     return;
 
                 _contentSize = value;
-                if (ContentSizeChanged != null)
-                    ContentSizeChanged(this, _contentSize);
+                ContentSizeChanged?.Invoke(this, _contentSize);
             }
         }
 
