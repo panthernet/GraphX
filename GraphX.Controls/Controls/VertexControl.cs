@@ -197,7 +197,7 @@ namespace GraphX.Controls
 
         #region Click Event
 
-        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VertexControl));
+        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VertexControl));
         public event RoutedEventHandler Click
         {
             add { AddHandler(ClickEvent, value); }
@@ -239,7 +239,7 @@ namespace GraphX.Controls
             public event Changed ChangeDetected;
 
             public static readonly DependencyProperty MonitorForChangeProperty =
-                DependencyProperty.Register("MonitorForChange", typeof(object), typeof(ChangeMonitor), new PropertyMetadata(null, MonitoredPropertyChanged));
+                DependencyProperty.Register(nameof(MonitorForChange), typeof(object), typeof(ChangeMonitor), new PropertyMetadata(null, MonitoredPropertyChanged));
 
             public object MonitorForChange
             {
@@ -254,11 +254,9 @@ namespace GraphX.Controls
                 {
                     return;
                 }
+
                 var changeDetected = cm.ChangeDetected;
-                if (changeDetected != null)
-                {
-                    changeDetected(cm, new EventArgs());
-                }
+                changeDetected?.Invoke(cm, new EventArgs());
             }
         }
 

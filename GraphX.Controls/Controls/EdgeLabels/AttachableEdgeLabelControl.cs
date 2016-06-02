@@ -24,7 +24,7 @@ namespace GraphX.Controls
         /// </summary>
         public EdgeControl AttachNode { get { return (EdgeControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
 
-        public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register("AttachNode", typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
+        public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register(nameof(AttachNode), typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
             new PropertyMetadata(null));
 
         

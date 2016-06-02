@@ -75,10 +75,10 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty RootCanvasProperty =
-            DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(EdgeControlBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(RootArea), typeof(GraphAreaBase), typeof(EdgeControlBase), new PropertyMetadata(null));
 
 
-        public static readonly DependencyProperty SelfLoopIndicatorRadiusProperty = DependencyProperty.Register("SelfLoopIndicatorRadius",
+        public static readonly DependencyProperty SelfLoopIndicatorRadiusProperty = DependencyProperty.Register(nameof(SelfLoopIndicatorRadius),
                                                                                        typeof(double),
                                                                                        typeof(EdgeControlBase),
                                                                                        new PropertyMetadata(5d));
@@ -90,7 +90,7 @@ namespace GraphX.Controls
             set { SetValue(SelfLoopIndicatorRadiusProperty, value); }
         }
 
-        public static readonly DependencyProperty SelfLoopIndicatorOffsetProperty = DependencyProperty.Register("SelfLoopIndicatorOffset",
+        public static readonly DependencyProperty SelfLoopIndicatorOffsetProperty = DependencyProperty.Register(nameof(SelfLoopIndicatorOffset),
                                                                                typeof(Point),
                                                                                typeof(EdgeControlBase),
                                                                                new PropertyMetadata(new Point()));
@@ -103,7 +103,7 @@ namespace GraphX.Controls
             set { SetValue(SelfLoopIndicatorOffsetProperty, value); }
         }
 
-        public static readonly DependencyProperty ShowSelfLoopIndicatorProperty = DependencyProperty.Register("ShowSelfLoopIndicator",
+        public static readonly DependencyProperty ShowSelfLoopIndicatorProperty = DependencyProperty.Register(nameof(ShowSelfLoopIndicator),
                                                                        typeof(bool),
                                                                        typeof(EdgeControlBase),
                                                                        new PropertyMetadata(true));
@@ -117,7 +117,7 @@ namespace GraphX.Controls
         }
 
 
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source",
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source),
                                                                                                typeof(VertexControl),
                                                                                                typeof(EdgeControlBase),
                                                                                                new PropertyMetadata(null, OnSourceChangedInternal));
@@ -128,7 +128,7 @@ namespace GraphX.Controls
             if(ctrl != null) ctrl.OnSourceChanged(d, e);
         }
 
-        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register("Target",
+        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target),
                                                                                                typeof(VertexControl),
                                                                                                typeof(EdgeControlBase),
                                                                                                new PropertyMetadata(null, OnTargetChangedInternal));
@@ -140,7 +140,7 @@ namespace GraphX.Controls
         }
 
 
-        public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register("Edge", typeof(object),
+        public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register(nameof(Edge), typeof(object),
                                                                                              typeof(EdgeControlBase),
                                                                                              new PropertyMetadata(null));
 
@@ -154,7 +154,7 @@ namespace GraphX.Controls
         {
             get
             {
-                return EdgeLabelControl != null ? EdgeLabelControl.Angle : _labelAngle;
+                return EdgeLabelControl?.Angle ?? _labelAngle;
             }
             set
             {
@@ -165,7 +165,7 @@ namespace GraphX.Controls
 
         #region DashStyle
 
-        public static readonly DependencyProperty DashStyleProperty = DependencyProperty.Register("DashStyle",
+        public static readonly DependencyProperty DashStyleProperty = DependencyProperty.Register(nameof(DashStyle),
                                                                                        typeof(EdgeDashStyle),
                                                                                        typeof(EdgeControlBase),
                                                                                        new PropertyMetadata(EdgeDashStyle.Solid, dashstyle_changed));
@@ -466,8 +466,7 @@ namespace GraphX.Controls
 
         internal virtual void InvalidateChildren()
         {
-            if (EdgeLabelControl != null)
-                EdgeLabelControl.UpdateLayout();
+            EdgeLabelControl?.UpdateLayout();
             if (LinePathObject != null)
             {
                 var pos = Source.GetPosition();
@@ -478,10 +477,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets if Template has been loaded and edge can operate at 100%
         /// </summary>
-        public bool IsTemplateLoaded
-        {
-            get { return LinePathObject != null; }
-        }
+        public bool IsTemplateLoaded => LinePathObject != null;
 
         protected virtual void OnEdgeLabelUpdated() { }
 
@@ -511,7 +507,7 @@ namespace GraphX.Controls
             if(SelfLoopIndicator != null)
                 SelfLoopIndicator.LayoutUpdated += (sender, args) =>
                 {
-                    if (SelfLoopIndicator != null) SelfLoopIndicator.Arrange(_selfLoopedEdgeLastKnownRect);
+                    SelfLoopIndicator?.Arrange(_selfLoopedEdgeLastKnownRect);
                 };
             var x = this.ShowLabel;
             MeasureChild(EdgePointerForSource as UIElement);
@@ -530,8 +526,7 @@ namespace GraphX.Controls
         /// <param name="child">Child UIElement</param>
         protected void MeasureChild(UIElement child)
         {
-            if (child == null) return;
-            child.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            child?.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
         }
 
         #region public PrepareEdgePath()
@@ -599,7 +594,7 @@ namespace GraphX.Controls
         /// <summary>
         ///Gets is looped edge indicator template available. Used to pass some heavy cycle checks.
         /// </summary>
-        protected bool HasSelfLoopedEdgeTemplate { get { return SelfLoopIndicator != null; } }
+        protected bool HasSelfLoopedEdgeTemplate => SelfLoopIndicator != null;
 
         /// <summary>
         /// Update SLE data such as template, edge pointers visibility
@@ -610,8 +605,8 @@ namespace GraphX.Controls
             if (IsSelfLooped)
             {
                 //hide edge pointers
-                if (EdgePointerForSource != null) EdgePointerForSource.Hide();
-                if (EdgePointerForTarget != null) EdgePointerForTarget.Hide();
+                EdgePointerForSource?.Hide();
+                EdgePointerForTarget?.Hide();
 
                 //return if we don't need to show edge loops
                 if (!ShowSelfLoopIndicator) return;

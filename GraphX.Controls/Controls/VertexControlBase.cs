@@ -26,8 +26,7 @@ namespace GraphX.Controls
 
         protected void OnPositionChanged(Point offset, Point pos)
         {
-            if (PositionChanged != null)
-                PositionChanged.Invoke(this, new VertexPositionEventArgs(offset, pos, this));
+            PositionChanged?.Invoke(this, new VertexPositionEventArgs(offset, pos, this));
         }
 
         protected VertexControlBase()
@@ -86,7 +85,7 @@ namespace GraphX.Controls
         {
             get
             {
-                return VertexLabelControl != null ? VertexLabelControl.Angle : _labelAngle;
+                return VertexLabelControl?.Angle ?? _labelAngle;
             }
             set
             {
@@ -97,7 +96,7 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty VertexShapeProperty =
-            DependencyProperty.Register("VertexShape", typeof(VertexShape), typeof(VertexControlBase), new PropertyMetadata(VertexShape.Rectangle));
+            DependencyProperty.Register(nameof(VertexShape), typeof(VertexShape), typeof(VertexControlBase), new PropertyMetadata(VertexShape.Rectangle));
 
         /// <summary>
         /// Gets or sets actual shape form of vertex control (affects mostly math calculations such edges connectors)
@@ -118,7 +117,7 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty VertexProperty =
-            DependencyProperty.Register("Vertex", typeof(object), typeof(VertexControlBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Vertex), typeof(object), typeof(VertexControlBase), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets vertex control parent GraphArea object (don't need to be set manualy)
@@ -130,10 +129,10 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty RootCanvasProperty =
-            DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(VertexControlBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(RootArea), typeof(GraphAreaBase), typeof(VertexControlBase), new PropertyMetadata(null));
 
         public static readonly DependencyProperty ShowLabelProperty =
-            DependencyProperty.Register("ShowLabel", typeof(bool), typeof(VertexControlBase), new PropertyMetadata(false, ShowLabelChanged));
+            DependencyProperty.Register(nameof(ShowLabel), typeof(bool), typeof(VertexControlBase), new PropertyMetadata(false, ShowLabelChanged));
 
         private static void ShowLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -208,7 +207,7 @@ namespace GraphX.Controls
         public IVertexConnectionPoint GetConnectionPointById(int id, bool runUpdate = false)
         {
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
-            if (result != null) result.Update();
+            result?.Update();
             return result;
         }
 

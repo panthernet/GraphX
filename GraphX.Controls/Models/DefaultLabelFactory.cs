@@ -20,8 +20,7 @@ namespace GraphX.Controls.Models
         {
             var label = new TLabel();
             var aLabel = label as IAttachableControl<TCtrl>;
-            if(aLabel != null)
-                aLabel.Attach(control);
+            aLabel?.Attach(control);
             return label;
         }
     }
