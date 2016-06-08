@@ -319,6 +319,7 @@
     <Compile Include="Models\FileServiceProviderMETRO.cs" />
     <Compile Include="Models\ModifierKeys.cs" />
     <Compile Include="Models\MouseButtonEventArgs.cs" />
+    <Compile Include="Models\VertexClickedEventArgs.cs" />
     <Compile Include="Models\VertexMovedEventArgs.cs" />
     <Compile Include="Models\VertexSelectedEventArgs.cs" />
     <Compile Include="Models\XamlTypes\ViewModelBase.cs" />
