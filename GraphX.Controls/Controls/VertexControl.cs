@@ -171,8 +171,7 @@ namespace GraphX.Controls
                 RootArea.OnVertexMouseUp(this, e, Keyboard.Modifiers);
                 if (_clickTrack)
                 {
-                    RaiseEvent(new RoutedEventArgs(ClickEvent, this));
-                    RootArea.OnVertexClicked(this, e, Keyboard.Modifiers);
+                    RaiseClick();
                 }
             }
             _clickTrack = false;
@@ -203,6 +202,12 @@ namespace GraphX.Controls
         {
             add { AddHandler(ClickEvent, value); }
             remove { RemoveHandler(ClickEvent, value); }
+        }
+
+        // This method raises the PageNavigation event
+        private void RaiseClick()
+        {
+            RaiseEvent(new RoutedEventArgs(ClickEvent, this));
         }
 
         #endregion

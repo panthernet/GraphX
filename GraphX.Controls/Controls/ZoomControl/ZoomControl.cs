@@ -681,9 +681,6 @@ namespace GraphX.Controls
             DependencyProperty.Register(nameof(AnimationLength), typeof(TimeSpan), typeof(ZoomControl),
                                         new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
-        public static readonly DependencyProperty IsDragSelectByDefaultProperty =
-            DependencyProperty.Register(nameof(IsDragSelectByDefaultProperty), typeof(bool), typeof(ZoomControl), new PropertyMetadata(false));
-
         public static readonly DependencyProperty MaximumZoomStepProperty =
             DependencyProperty.Register("MaximumZoomValueValue", typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(5.0));
@@ -930,15 +927,6 @@ namespace GraphX.Controls
         {
             get { return (TimeSpan)GetValue(AnimationLengthProperty); }
             set { SetValue(AnimationLengthProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the value indicating whether to drag select without keyboard modifiers to the mouse button.
-        /// </summary>
-        public bool IsDragSelectByDefault
-        {
-            get { return (bool)GetValue(IsDragSelectByDefaultProperty); }
-            set { SetValue(IsDragSelectByDefaultProperty, value); }
         }
 
         /// <summary>
@@ -1279,17 +1267,7 @@ namespace GraphX.Controls
             {
                 case ModifierKeys.None:
                     if (!isPreview)
-                    {
-                        if (IsDragSelectByDefault)
-                        {
-                            _startedAsAreaSelection = true;
-                            ModifierMode = ZoomViewModifierMode.ZoomBox;
-                        }
-                        else
-                        {
-                            ModifierMode = ZoomViewModifierMode.Pan;
-                        }
-                    }
+                        ModifierMode = ZoomViewModifierMode.Pan;
                     break;
                 case ModifierKeys.Alt | ModifierKeys.Control:
                     _startedAsAreaSelection = true;
