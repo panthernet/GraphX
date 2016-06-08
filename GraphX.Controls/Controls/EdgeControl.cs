@@ -384,7 +384,7 @@ namespace GraphX.Controls
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseMove(this, null, Keyboard.Modifiers);
-            e.Handled = true;
+            // e.Handled = true;
         }
 
         void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)

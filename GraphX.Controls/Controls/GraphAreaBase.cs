@@ -321,6 +321,21 @@ namespace GraphX
         }
 
         /// <summary>
+        /// Fires when vertex is clicked
+        /// </summary>
+        public event VertexClickedEventHandler VertexClicked;
+
+        internal virtual void OnVertexClicked(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            VertexClicked?.Invoke(this, new VertexClickedEventArgs(vc, e
+#if WPF
+                , keys));
+#elif METRO
+                    ));
+#endif
+        }
+
+        /// <summary>
         /// Fires when mouse up on vertex
         /// </summary>
         public event VertexSelectedEventHandler VertexMouseUp;
