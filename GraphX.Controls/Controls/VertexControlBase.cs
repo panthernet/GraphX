@@ -15,6 +15,7 @@ using GraphX.PCL.Common.Enums;
 namespace GraphX.Controls
 {
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
+    [TemplatePart(Name = "PART_vcproot", Type = typeof(Panel))]
     public abstract class VertexControlBase : Control, IGraphControl
     {
         protected internal IVertexLabelControl VertexLabelControl;
@@ -65,7 +66,7 @@ namespace GraphX.Controls
             });
         }
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// List of found vertex connection points
@@ -146,9 +147,9 @@ namespace GraphX.Controls
             get { return (bool)GetValue(ShowLabelProperty); }
             set { SetValue(ShowLabelProperty, value); }
         }
-        #endregion
+#endregion
 
-        #region Position methods
+#region Position methods
 
         /// <summary>
         /// Set attached coordinates X and Y
@@ -188,7 +189,7 @@ namespace GraphX.Controls
             return round ? new Measure.Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Measure.Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Get vertex center position

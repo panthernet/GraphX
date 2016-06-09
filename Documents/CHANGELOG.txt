@@ -4,6 +4,7 @@ DETAILED CHANGELOG:
  - Added GraphArea::IsDisposed property that indicated that GraphArea object has been disposed and shouldn't be used anymore
  - Added GraphArea::CreateNewStateStorage() protected method to be able to implement custom state storage logic for GraphArea
  - Added ParameterizedLayoutAlgorithmBase::EnsureUniqueRandomInitialPositions property that enables unique random positions generation for layout algorithms. False by default, True for LinLog algorithm.
+ - Added VertexControl::VCPRoot property whcih represents the VCP root container for easier runtime VCP management. To be able to use it you have to define PART_vcproot template element as Panel descendant.
  - Fixed edge label positioning, now it is more accurate for pathed edges
  - Fixed LinLog negative energy issue (thanks to Katya)
  - Fixed one vertex ISOM algorithm exception (thanks to jorgensigvardsson)

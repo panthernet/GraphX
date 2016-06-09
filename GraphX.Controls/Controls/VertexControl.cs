@@ -4,11 +4,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Controls;
 #elif METRO
 using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
 using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Controls;
 #endif
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
@@ -30,6 +32,7 @@ namespace GraphX.Controls
     [TemplateVisualState(GroupName = "CommonStates", Name = "PointerLeave")]
     [TemplateVisualState(GroupName = "CommonStates", Name = "Disabled")]
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
+    [TemplatePart(Name = "PART_vcproot", Type = typeof(Panel))]
     public class VertexControl: VertexControlBase
     {
 #if WPF
@@ -356,6 +359,12 @@ namespace GraphX.Controls
         }
 #endif
 
+
+        /// <summary>
+        /// Gets the root element which hosts VCPs so you can add them at runtime. Requires Panel-descendant template item defined named PART_vcproot.
+        /// </summary>
+        public Panel VCPRoot { get; protected set; }
+
 #if WPF
         public 
 #elif METRO
@@ -367,6 +376,8 @@ namespace GraphX.Controls
 
             if (Template == null) return;
             VertexLabelControl = VertexLabelControl ?? FindDescendant<IVertexLabelControl>("PART_vertexLabel");
+
+            VCPRoot = VCPRoot ?? FindDescendant<Panel>("PART_vcproot");
 
             if (VertexLabelControl != null)
             {
@@ -380,7 +391,7 @@ namespace GraphX.Controls
                 throw new GX_InvalidDataException("Vertex connection points in VertexControl template must have unique Id!");
         }
 
-        #region Events handling
+#region Events handling
 
 		
 
@@ -404,7 +415,7 @@ namespace GraphX.Controls
                 RootArea.OnVertexMouseMove(this, e);
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Cleans all potential memory-holding code
