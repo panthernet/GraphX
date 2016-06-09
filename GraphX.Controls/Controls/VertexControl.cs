@@ -150,6 +150,7 @@ namespace GraphX.Controls
                     UpdatePositionTraceState();
                     break;
             }
+            MouseUp -= VertexControl_MouseUp;
             MouseUp += VertexControl_MouseUp;
         }
 
@@ -179,7 +180,7 @@ namespace GraphX.Controls
             e.Handled = true;
         }
 
-                void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnVertexDoubleClick(this, e);

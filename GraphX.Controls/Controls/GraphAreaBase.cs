@@ -273,21 +273,6 @@ namespace GraphX
         }
 
         /// <summary>
-        /// Fires when edge is selected
-        /// </summary>
-        public event EdgeSelectedEventHandler EdgeSelected;
-
-        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
-        {
-            EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e
-#if WPF
-                , keys));
-#elif METRO
-                    ));
-#endif
-        }
-
-        /// <summary>
         /// Fires when vertex is double clicked
         /// </summary>
         public event VertexSelectedEventHandler VertexDoubleClick;
@@ -320,6 +305,7 @@ namespace GraphX
 #endif
         }
 
+#if WPF
         /// <summary>
         /// Fires when vertex is clicked
         /// </summary>
@@ -328,12 +314,9 @@ namespace GraphX
         internal virtual void OnVertexClicked(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
             VertexClicked?.Invoke(this, new VertexClickedEventArgs(vc, e
-#if WPF
                 , keys));
-#elif METRO
-                    ));
-#endif
         }
+#endif
 
         /// <summary>
         /// Fires when mouse up on vertex
@@ -441,6 +424,34 @@ namespace GraphX
         {
             GenerateGraphFinished?.Invoke(this, null);
         }
+
+        /// <summary>
+        /// Fires when edge is selected
+        /// </summary>
+        public event EdgeSelectedEventHandler EdgeSelected;
+
+        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e
+#if WPF
+                , keys));
+#elif METRO
+                    ));
+#endif
+        }
+
+#if WPF
+        /// <summary>
+        /// Fires when edge is clicked
+        /// </summary>
+        public event EdgeClickedEventHandler EdgeClicked;
+
+        internal virtual void OnEdgeClicked(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        {
+            EdgeClicked?.Invoke(this, new EdgeClickedEventArgs(ec, e
+                , keys));
+        }
+#endif
 
         public event EdgeSelectedEventHandler EdgeDoubleClick;
         internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
