@@ -1,9 +1,16 @@
 ﻿WIP 2.3.5
+FEATURES HIGHLIGHT:
+ - Added new awesome vertex snapping feature on vertex drag. Many thanks to perturbare for this wonderful contibution! The feature is implemented around DragBehaviour class 
+ and is represented in several new settings allowing the drag to be perform around some sort of virtual snap grid. Please read the comment for the DragBehaviour class for detailed info.
+
 DETAILED CHANGELOG:
+ - Added Universal Windows Application support and example project
  - Added StateStorage::ImportState() method to allow state import/export logic between several graphs
  - Added GraphArea::IsDisposed property that indicated that GraphArea object has been disposed and shouldn't be used anymore
  - Added GraphArea::CreateNewStateStorage() protected method to be able to implement custom state storage logic for GraphArea
  - Added ParameterizedLayoutAlgorithmBase::EnsureUniqueRandomInitialPositions property that enables unique random positions generation for layout algorithms. False by default, True for LinLog algorithm.
+ - Added VertexControl::VCPRoot property whcih represents the VCP root container for easier runtime VCP management. To be able to use it you have to define PART_vcproot template element as Panel descendant.
+ - Added new awesome vertex snapping feature on vertex drag (thanks to perturbare)
  - Fixed edge label positioning, now it is more accurate for pathed edges
  - Fixed LinLog negative energy issue (thanks to Katya)
  - Fixed one vertex ISOM algorithm exception (thanks to jorgensigvardsson)

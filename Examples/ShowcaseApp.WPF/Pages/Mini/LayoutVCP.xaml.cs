@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using GraphX.Controls;
 using GraphX.PCL.Common.Enums;
 using ShowcaseApp.WPF.Models;
 

@@ -164,6 +164,7 @@
     <Compile Include="Models\PropertyChangeNotifier.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
+    <Compile Include="Models\ControlClickedEventArgs.cs" />
     <Compile Include="Models\VertexEventOptions.cs" />
     <Compile Include="Models\DefaultLabelFactory.cs" />
     <Compile Include="Models\VertexMovedEventArgs.cs" />
