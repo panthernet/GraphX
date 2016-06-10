@@ -30,26 +30,29 @@ namespace GraphX.Controls
     /// 
     /// For edges to be updated as a vertex is moved, set UpdateEdgesOnMove to true for the object being dragged.
     /// 
-    /// Snapping is controlled by setting the IsSnappingPredicate property on the primary drag object. The predicate is called with each movement of the
-    /// mouse/pointer and the primary drag object is passed in. If snapping should be performed, the predicate must return true. To skip snapping logic,
-    /// the predicate must return false. If no predicate is set, the default behavior is to snap while a shift key alone is pressed.
+    /// Snapping is turned on or off by the GlobalIsSnappingPredicate or by the IsSnappingPredicate property on the primary drag object. The predicate is
+    /// called with each movement of the mouse/pointer and the primary drag object is passed in. If snapping should be performed, the predicate must return
+    /// true. To skip snapping logic, the predicate must return false. If no predicate is set using the IsSnappingPredicate, the  GlobalIsSnappingPredicate
+    /// is used. The default behavior is to snap while a shift key alone is pressed.
     /// 
     /// When dragging a group of objects and using snapping, there is an additional refinement that can be used for the snapping behavior of the individual
     /// objects in the group. The individual objects can move the exact same amount as the primary object when it snaps, or they can snap individually, with
-    /// the snap calculation being performed for each one. The behavior is controlled for the entire group by setting the IsIndividualSnappingPredicate
-    /// ON THE PRIMARY DRAG OBJECT.  The default behavior is to move all dragged objects by the same offset as the primary drag object.
+    /// the snap calculation being performed for each one. The behavior is controlled for the entire group by the GlobalIsSnappingIndividuallyPredicate or
+    /// the IsIndividualSnappingPredicate property setting ON THE PRIMARY DRAG OBJECT. The default behavior is to move all dragged objects by the same offset
+    /// as the primary drag object.
     /// 
-    /// Snapping calculations are performed by the functions set on the primary drag object using the XSnapModifier and YSnapModifier properties. These
-    /// functions are called for each movement and provided the GraphAreaBase, object being moved, and the pre-snapped x or y value. The passed in parameters
-    /// are intended to provide an opportunity to find elements within the graph area and do things like snap to center aligned, snap to left aligned, etc.
-    /// The default behavior is to simply round the value to the nearest 10.
+    /// Snapping calculations are performed by the functions set on the primary drag object using the GlobalXSnapModifier or XSnapModifier property and the
+    /// GlobalYSnapModifier or YSnapModifier propery. These functions are called for each movement and provided the GraphAreaBase, object being moved, and
+    /// the pre-snapped x or y value. The passed in parameters are intended to provide an opportunity to find elements within the graph area and do things
+    /// like snap to center aligned, snap to left aligned, etc. The default behavior is to simply round the value to the nearest 10.
     /// </summary>
     public static class DragBehaviour
     {
         public delegate double SnapModifierFunc(GraphAreaBase area, DependencyObject obj, double val);
 
-        #region Default Snapping Predicates
-        private static readonly Predicate<DependencyObject> DefaultIsSnapping = obj =>
+        #region Built-in snapping behavior
+
+        private static readonly Predicate<DependencyObject> _builtinIsSnappingPredicate = obj =>
         {
 #if WPF
             return System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift;
@@ -58,9 +61,115 @@ namespace GraphX.Controls
 #endif
         };
 
-        private static readonly Predicate<DependencyObject> DefaultIsIndividualSnapping = obj => false;
+        private static readonly Predicate<DependencyObject> _builtinIsIndividualSnappingPredicate = obj => false;
 
-        private static readonly SnapModifierFunc DefaultSnapModifier = (area, obj, val) => Math.Round(val * 0.1) * 10.0;
+        private static readonly SnapModifierFunc _builtinSnapModifier = (area, obj, val) => Math.Round(val * 0.1) * 10.0;
+
+        #endregion
+
+        #region Global snapping behavior management
+
+        private static Predicate<DependencyObject> _globalIsSnappingPredicate = _builtinIsSnappingPredicate;
+
+        /// <summary>
+        /// Gets or sets the predicate used to determine whether to snap an object. The global predicate is used whenever the
+        /// primary dragged object does not have a different predicate set using the IsSnappingPredicate attached property.
+        /// </summary>
+        /// <remarks>
+        /// Setting to null will restore the built in behavior, but it is recommended to track the preceding value and restore that.
+        /// </remarks>
+        public static Predicate<DependencyObject> GlobalIsSnappingPredicate
+        {
+            get { return _globalIsSnappingPredicate; }
+            set
+            {
+                if (value == null)
+                {
+                    _globalIsSnappingPredicate = _builtinIsSnappingPredicate;
+                }
+                else
+                {
+                    _globalIsSnappingPredicate = value;
+                }
+            }
+        }
+
+
+        private static Predicate<DependencyObject> _globalIsIndividualSnappingPredicate = _builtinIsIndividualSnappingPredicate;
+
+        /// <summary>
+        /// Gets or sets the predicate used to determine whether to perform individual snapping on a group of dragged objects.
+        /// The global predicate is used whenever the primary dragged object does not have a different predicate set using the
+        /// IsIndividualSnappingPredicate attached property.
+        /// </summary>
+        /// <remarks>
+        /// Setting to null will restore the built in behavior, but it is recommended to track the preceding value and restore that.
+        /// </remarks>
+        public static Predicate<DependencyObject> GlobalIsIndividualSnappingPredicate
+        {
+            get { return _globalIsIndividualSnappingPredicate; }
+            set
+            {
+                if (value == null)
+                {
+                    _globalIsIndividualSnappingPredicate = _builtinIsIndividualSnappingPredicate;
+                }
+                else
+                {
+                    _globalIsIndividualSnappingPredicate = value;
+                }
+            }
+        }
+
+        private static SnapModifierFunc _globalXSnapModifier = _builtinSnapModifier;
+
+        /// <summary>
+        /// Gets or sets the X value modifier to use when snapping an object. The global modifier is used whenever the
+        /// primary dragged object does not have a different modifier set using the XSnapModifier attached property.
+        /// </summary>
+        /// <remarks>
+        /// Setting to null will restore the built in behavior, but it is recommended to track the preceding value and restore that.
+        /// </remarks>
+        public static SnapModifierFunc GlobalXSnapModifier
+        {
+            get { return _globalXSnapModifier; }
+            set
+            {
+                if (value == null)
+                {
+                    _globalXSnapModifier = _builtinSnapModifier;
+                }
+                else
+                {
+                    _globalXSnapModifier = value;
+                }
+            }
+        }
+
+        private static SnapModifierFunc _globalYSnapModifier = _builtinSnapModifier;
+
+        /// <summary>
+        /// Gets or sets the Y value modifier to use when snapping an object. The global modifier is used whenever the
+        /// primary dragged object does not have a different modifier set using the YSnapModifier attached property.
+        /// </summary>
+        /// <remarks>
+        /// Setting to null will restore the built in behavior, but it is recommended to track the preceding value and restore that.
+        /// </remarks>
+        public static SnapModifierFunc GlobalYSnapModifier
+        {
+            get { return _globalYSnapModifier; }
+            set
+            {
+                if (value == null)
+                {
+                    _globalYSnapModifier = _builtinSnapModifier;
+                }
+                else
+                {
+                    _globalYSnapModifier = value;
+                }
+            }
+        }
 
         #endregion
 
@@ -69,16 +178,16 @@ namespace GraphX.Controls
         public static readonly DependencyProperty UpdateEdgesOnMoveProperty = DependencyProperty.RegisterAttached("UpdateEdgesOnMove", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsTaggedProperty = DependencyProperty.RegisterAttached("IsTagged", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsDraggingProperty = DependencyProperty.RegisterAttached("IsDragging", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
-        public static readonly DependencyProperty IsSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(DefaultIsSnapping));
-        public static readonly DependencyProperty IsIndividualSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsIndividualSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(DefaultIsIndividualSnapping));
+        public static readonly DependencyProperty IsSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(new Predicate<DependencyObject>(obj => { return _globalIsSnappingPredicate(obj); })));
+        public static readonly DependencyProperty IsIndividualSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsIndividualSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(new Predicate<DependencyObject>(obj => { return _globalIsIndividualSnappingPredicate(obj); })));
         /// <summary>
         /// Snap feature modifier delegate for X axis
         /// </summary>
-        public static readonly DependencyProperty XSnapModifierProperty = DependencyProperty.RegisterAttached("XSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(DefaultSnapModifier));
+        public static readonly DependencyProperty XSnapModifierProperty = DependencyProperty.RegisterAttached("XSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(new SnapModifierFunc((area, obj, val) => _globalXSnapModifier(area, obj, val))));
         /// <summary>
         /// Snap feature modifier delegate for Y axis
         /// </summary>
-        public static readonly DependencyProperty YSnapModifierProperty = DependencyProperty.RegisterAttached("YSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(DefaultSnapModifier));
+        public static readonly DependencyProperty YSnapModifierProperty = DependencyProperty.RegisterAttached("YSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(new SnapModifierFunc((area, obj, val) => _globalYSnapModifier(area, obj, val))));
 
         private static readonly DependencyProperty OriginalXProperty = DependencyProperty.RegisterAttached("OriginalX", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));
         private static readonly DependencyProperty OriginalYProperty = DependencyProperty.RegisterAttached("OriginalY", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));

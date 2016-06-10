@@ -55,6 +55,34 @@ namespace ShowcaseApp.WPF.Pages
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;
             dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;*/
             dg_Area.SetVerticesDrag(true, true);
+
+            Loaded += DynamicGraph_Loaded;
+            Unloaded += DynamicGraph_Unloaded;
+        }
+
+        private bool loaded = false;
+        private Predicate<DependencyObject> _originalGlobalIsSnapping = null;
+        private Predicate<DependencyObject> _originalGlobalIsSnappingIndividually = null;
+
+        private void DynamicGraph_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (loaded)
+                return;
+            loaded = true;
+
+            _originalGlobalIsSnapping = DragBehaviour.GlobalIsSnappingPredicate;
+            _originalGlobalIsSnappingIndividually = DragBehaviour.GlobalIsIndividualSnappingPredicate;
+
+            DragBehaviour.GlobalIsSnappingPredicate = IsSnapping;
+            DragBehaviour.GlobalIsIndividualSnappingPredicate = IsSnappingIndividually;
+        }
+
+        private void DynamicGraph_Unloaded(object sender, RoutedEventArgs e)
+        {
+            loaded = false;
+
+            DragBehaviour.GlobalIsSnappingPredicate = _originalGlobalIsSnapping;
+            DragBehaviour.GlobalIsIndividualSnappingPredicate = _originalGlobalIsSnappingIndividually;
         }
 
         void MoveAnimation_Completed(object sender, EventArgs e)
@@ -332,15 +360,15 @@ namespace ShowcaseApp.WPF.Pages
             {
                 HighlightBehaviour.SetHighlighted(vc, false);
                 DragBehaviour.SetIsTagged(vc, false);
-                vc.ClearValue(DragBehaviour.IsSnappingPredicateProperty);
-                vc.ClearValue(DragBehaviour.IsIndividualSnappingPredicateProperty);
+                vc.ClearValue(DragBehaviour.XSnapModifierProperty);
+                vc.ClearValue(DragBehaviour.YSnapModifierProperty);
             }
             else
             {
                 HighlightBehaviour.SetHighlighted(vc, true);
                 DragBehaviour.SetIsTagged(vc, true);
-                DragBehaviour.SetIsSnappingPredicate(vc, IsSnapping);
-                DragBehaviour.SetIsIndividualSnappingPredicate(vc, IsSnappingIndividually);
+                DragBehaviour.SetXSnapModifier(vc, ExaggeratedSnappingXModifier);
+                DragBehaviour.SetYSnapModifier(vc, ExaggeratedSnappingYModifier);
             }
         }
 
@@ -352,6 +380,24 @@ namespace ShowcaseApp.WPF.Pages
         private bool IsSnappingIndividually(DependencyObject obj)
         {
             return dg_snapIndividually.IsChecked ?? false;
+        }
+
+        private double ExaggeratedSnappingXModifier(GraphAreaBase area, DependencyObject obj, double val)
+        {
+            if (dg_snapExaggerate.IsChecked ?? false)
+            {
+                return System.Math.Round(val * 0.01) * 100.0;
+            }
+            return DragBehaviour.GlobalXSnapModifier(area, obj, val);
+        }
+
+        private double ExaggeratedSnappingYModifier(GraphAreaBase area, DependencyObject obj, double val)
+        {
+            if (dg_snapExaggerate.IsChecked ?? false)
+            {
+                return System.Math.Round(val * 0.01) * 100.0;
+            }
+            return DragBehaviour.GlobalYSnapModifier(area, obj, val);
         }
     }
 }
