@@ -59,6 +59,8 @@
             <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="Commands" FontWeight="Bold" />
             <Button Content="Test" DockPanel.Dock="Top" Name="dg_test" Visibility="Collapsed"/>
             <Button Margin="3" Content="Find random vertex" DockPanel.Dock="Top" Name="dg_findrandom" Height="25" Click="dg_findrandom_Click"/>
+            <CheckBox DockPanel.Dock="Top" Name="dg_snap" Content="Snap tagged items"/>
+            <CheckBox DockPanel.Dock="Top" Name="dg_snapIndividually" Content="Snap individually" IsEnabled="{Binding ElementName=dg_snap, Path=IsChecked}"/>
             <!--<Button Visibility="Collapsed" Margin="3" Height="25" Content="Enter edge drawing mode!" Name="dg_butdraw" Click="dg_butdraw_Click" DockPanel.Dock="Top"/>-->
 
             <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="Darg Area" FontWeight="Bold" />

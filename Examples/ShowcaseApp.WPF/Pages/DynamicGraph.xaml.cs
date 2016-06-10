@@ -326,19 +326,32 @@ namespace ShowcaseApp.WPF.Pages
         /// Select vertex by setting its tag and highlight value
         /// </summary>
         /// <param name="vc">VertexControl object</param>
-        private static void SelectVertex(DependencyObject vc)
+        private void SelectVertex(DependencyObject vc)
         {
             if (DragBehaviour.GetIsTagged(vc))
             {
                 HighlightBehaviour.SetHighlighted(vc, false);
                 DragBehaviour.SetIsTagged(vc, false);
+                vc.ClearValue(DragBehaviour.IsSnappingPredicateProperty);
+                vc.ClearValue(DragBehaviour.IsIndividualSnappingPredicateProperty);
             }
             else
             {
                 HighlightBehaviour.SetHighlighted(vc, true);
                 DragBehaviour.SetIsTagged(vc, true);
+                DragBehaviour.SetIsSnappingPredicate(vc, IsSnapping);
+                DragBehaviour.SetIsIndividualSnappingPredicate(vc, IsSnappingIndividually);
             }
         }
 
+        private bool IsSnapping(DependencyObject obj)
+        {
+            return dg_snap.IsChecked ?? false;
+        }
+
+        private bool IsSnappingIndividually(DependencyObject obj)
+        {
+            return dg_snapIndividually.IsChecked ?? false;
+        }
     }
 }
