@@ -231,13 +231,24 @@ namespace GraphX.Controls
         private VertexControl _oldTarget;
         #endregion
 
+        private bool _clickTrack;
+        private Point _clickTrackPoint;
+
         internal void UpdateEventhandling(EventType typ)
         {
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled) MouseDown += GraphEdge_MouseDown;
-                    else MouseDown -= GraphEdge_MouseDown;
+                    if (EventOptions.MouseClickEnabled)
+                    {
+                        MouseDown += EdgeControl_MouseDown;
+                        PreviewMouseMove += EdgeControl_PreviewMouseMove;
+                    }
+                    else
+                    {
+                        MouseDown -= EdgeControl_MouseDown;
+                        PreviewMouseMove -= EdgeControl_PreviewMouseMove;
+                    }
                     break;
                 case EventType.MouseDoubleClick:
                     if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
@@ -257,6 +268,8 @@ namespace GraphX.Controls
                     else MouseMove -= EdgeControl_MouseMove;
                     break;
             }
+            MouseUp -= EdgeControl_MouseUp;
+            MouseUp += EdgeControl_MouseUp;
         }
 #elif METRO
         #region Position tracing
@@ -302,8 +315,8 @@ namespace GraphX.Controls
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled) PointerPressed += GraphEdge_MouseDown;
-                    else PointerPressed -= GraphEdge_MouseDown;
+                    if (EventOptions.MouseClickEnabled) PointerPressed += EdgeControl_MouseDown;
+                    else PointerPressed -= EdgeControl_MouseDown;
                     break;
                 case EventType.MouseDoubleClick:
                     //if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
@@ -366,6 +379,33 @@ namespace GraphX.Controls
 
         #region Event handlers
 
+#if WPF
+        void EdgeControl_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_clickTrack)
+                return;
+
+            var curPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
+
+            if (curPoint != _clickTrackPoint)
+                _clickTrack = false;
+        }
+
+        void EdgeControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+            {
+                if (_clickTrack)
+                {
+                    RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+                    RootArea.OnEdgeClicked(this, e, Keyboard.Modifiers);
+                }
+            }
+            _clickTrack = false;
+            e.Handled = true;
+        }
+#endif
+
         void EdgeControl_MouseLeave(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
@@ -384,23 +424,38 @@ namespace GraphX.Controls
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseMove(this, null, Keyboard.Modifiers);
-            e.Handled = true;
+            // e.Handled = true;
         }
 
         void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeDoubleClick(this, e, Keyboard.Modifiers);
-            e.Handled = true;
+            //e.Handled = true;
         }
 
-        void GraphEdge_MouseDown(object sender, MouseButtonEventArgs e)
+        void EdgeControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeSelected(this, e, Keyboard.Modifiers);
+#if WPF
+            _clickTrack = true;
+            _clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
+#endif
             e.Handled = true;
         }
 
+        #endregion
+
+        #region Click Event
+#if WPF
+        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(EdgeControl));
+        public event RoutedEventHandler Click
+        {
+            add { AddHandler(ClickEvent, value); }
+            remove { RemoveHandler(ClickEvent, value); }
+        }
+#endif
         #endregion
 
         public override void Dispose()

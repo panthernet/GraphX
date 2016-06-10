@@ -153,6 +153,7 @@ namespace GraphX.Controls
                     UpdatePositionTraceState();
                     break;
             }
+            MouseUp -= VertexControl_MouseUp;
             MouseUp += VertexControl_MouseUp;
         }
 
@@ -174,14 +175,15 @@ namespace GraphX.Controls
                 RootArea.OnVertexMouseUp(this, e, Keyboard.Modifiers);
                 if (_clickTrack)
                 {
-                    RaiseClick();
+                    RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+                    RootArea.OnVertexClicked(this, e, Keyboard.Modifiers);
                 }
             }
             _clickTrack = false;
             e.Handled = true;
         }
 
-                void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        void VertexControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnVertexDoubleClick(this, e);
@@ -205,12 +207,6 @@ namespace GraphX.Controls
         {
             add { AddHandler(ClickEvent, value); }
             remove { RemoveHandler(ClickEvent, value); }
-        }
-
-        // This method raises the PageNavigation event
-        private void RaiseClick()
-        {
-            RaiseEvent(new RoutedEventArgs(ClickEvent, this));
         }
 
         #endregion
