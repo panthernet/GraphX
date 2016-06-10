@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 #if WPF
 using System.Windows;
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.Foundation;
+using System.Linq;
 #endif
 using GraphX.PCL.Common.Exceptions;
 
@@ -49,7 +49,7 @@ namespace GraphX.Controls
         public delegate double SnapModifierFunc(GraphAreaBase area, DependencyObject obj, double val);
 
         #region Default Snapping Predicates
-        private static Predicate<DependencyObject> DefaultIsSnapping = (obj) =>
+        private static readonly Predicate<DependencyObject> DefaultIsSnapping = obj =>
         {
 #if WPF
             return System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift;
@@ -58,15 +58,9 @@ namespace GraphX.Controls
 #endif
         };
 
-        private static Predicate<DependencyObject> DefaultIsIndividualSnapping = (obj) =>
-        {
-            return false;
-        };
+        private static readonly Predicate<DependencyObject> DefaultIsIndividualSnapping = obj => false;
 
-        private static SnapModifierFunc DefaultSnapModifier = (area, obj, val) =>
-        {
-            return System.Math.Round(val * 0.1) * 10.0;
-        };
+        private static readonly SnapModifierFunc DefaultSnapModifier = (area, obj, val) => Math.Round(val * 0.1) * 10.0;
 
         #endregion
 
@@ -77,7 +71,13 @@ namespace GraphX.Controls
         public static readonly DependencyProperty IsDraggingProperty = DependencyProperty.RegisterAttached("IsDragging", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(DefaultIsSnapping));
         public static readonly DependencyProperty IsIndividualSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsIndividualSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(DefaultIsIndividualSnapping));
+        /// <summary>
+        /// Snap feature modifier delegate for X axis
+        /// </summary>
         public static readonly DependencyProperty XSnapModifierProperty = DependencyProperty.RegisterAttached("XSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(DefaultSnapModifier));
+        /// <summary>
+        /// Snap feature modifier delegate for Y axis
+        /// </summary>
         public static readonly DependencyProperty YSnapModifierProperty = DependencyProperty.RegisterAttached("YSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(DefaultSnapModifier));
 
         private static readonly DependencyProperty OriginalXProperty = DependencyProperty.RegisterAttached("OriginalX", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));
@@ -394,14 +394,12 @@ namespace GraphX.Controls
                 // When the dragged item is a tagged item, we could be dragging a group of objects. If the dragged object is a vertex, it's
                 // automatically the primary object of the drag. If the dragged object is an edge, prefer the source vertex, but accept the
                 // target vertex as the primary object of the drag and start with that.
-                VertexControl primaryDragVertex = obj as VertexControl;
+                var primaryDragVertex = obj as VertexControl;
                 if (primaryDragVertex == null)
                 {
-                    EdgeControl ec = obj as EdgeControl;
+                    var ec = obj as EdgeControl;
                     if (ec != null)
-                    {
                         primaryDragVertex = ec.Source ?? ec.Target;
-                    }
 
                     if (primaryDragVertex == null)
                     {
@@ -421,7 +419,7 @@ namespace GraphX.Controls
                 }
 
                 foreach (var item in area.GetAllVertexControls())
-                    if (item != primaryDragVertex && GetIsTagged(item))
+                    if (!ReferenceEquals(item, primaryDragVertex) && GetIsTagged(item))
                         UpdateCoordinates(area, item, horizontalChange, verticalChange, individualSnapXMod, individualSnapYMod);
             }
             else UpdateCoordinates(area, obj, horizontalChange, verticalChange, snapXMod, snapYMod);
@@ -479,7 +477,7 @@ namespace GraphX.Controls
             if (area != null)
             {
 #if WPF
-                var pos = e.GetPosition(area as IInputElement);
+                var pos = e.GetPosition(area);
 #elif METRO
                 var pos = e.GetCurrentPoint(area as UIElement).Position;
 #endif
@@ -493,17 +491,11 @@ namespace GraphX.Controls
             GraphAreaBase area = null;
 
             if (obj is VertexControl)
-            {
                 area = ((VertexControl)obj).RootArea;
-            }
             else if (obj is EdgeControl)
-            {
                 area = ((EdgeControl)obj).RootArea;
-            }
             else if (obj is DependencyObject)
-            {
                 area = VisualTreeHelperEx.FindAncestorByType((DependencyObject)obj, typeof(GraphAreaBase), false) as GraphAreaBase;
-            }
 
             return area;
         }
