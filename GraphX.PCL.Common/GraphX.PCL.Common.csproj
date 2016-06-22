@@ -75,6 +75,7 @@
     <Compile Include="Interfaces\IAlgorithmStorage.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />
     <Compile Include="Interfaces\IEdgeRoutingParameters.cs" />
+    <Compile Include="Interfaces\IGraphFIlter.cs" />
     <Compile Include="Interfaces\ILayoutEdgeRouting.cs" />
     <Compile Include="Interfaces\IExternalEdgeRouting.cs" />
     <Compile Include="Interfaces\IExternalLayout.cs" />

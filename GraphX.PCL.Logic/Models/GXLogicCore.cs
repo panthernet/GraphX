@@ -5,7 +5,9 @@ using GraphX.Measure;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Logic.Algorithms;
 using QuickGraph;
+using QuickGraph.Algorithms;
 
 namespace GraphX.PCL.Logic.Models
 {
@@ -114,16 +116,75 @@ namespace GraphX.PCL.Logic.Models
         public bool AsyncAlgorithmCompute { get; set; }
 
         /// <summary>
+        /// Gets is graph has been filtered or not
+        /// </summary>
+        public bool IsFiltered { get; protected set; }
+
+        public bool IsFilterRemoved { get; set; }
+
+        /// <summary>
         /// Clear LogicCore data
         /// </summary>
         /// <param name="clearStorages">Also clear storages data</param>
         public void Clear(bool clearStorages = true)
         {
-            if(Graph != null)
-                Graph.Clear();
+            _graph?.Clear();
+            OriginalGraph?.Clear();
             if (clearStorages)
                 CreateNewAlgorithmStorage(null, null, null);
         }
+
+        /// <summary>
+        /// Execute filters on the current logic core graph. Can be undone by PopFilters() or can be made permanent by ApplyFilters().
+        /// </summary>
+        public void PushFilters()
+        {
+            int i = 0;
+            IsFilterRemoved = false;
+            //remember original graph if we're about to start filtering
+            if (Filters.Count > 0 && !IsFiltered)
+                OriginalGraph = Graph.CopyToGraph<TGraph, TVertex, TEdge>();
+            //reset graph if we remove filtering
+            else if(Filters.Count == 0 && IsFiltered)
+                PopFilters();
+            while (Filters.Count > 0)
+            {
+                //start applying filter on original graph copy on the 1st pass and then on Graph property each other pass
+                Graph = Filters.Dequeue().ProcessFilter( i==0 ? OriginalGraph.CopyToGraph<TGraph, TVertex, TEdge>() : Graph);
+                i++;
+                IsFiltered = true;
+            }
+        }
+
+        /// <summary>
+        /// Assign filtered graph to original one making current filter output permanent and unrevertable
+        /// </summary>
+        public void ApplyFilters()
+        {
+            if (!IsFiltered) return;
+            OriginalGraph = Graph;
+            Filters.Clear();
+            IsFilterRemoved = true;
+            IsFiltered = false;
+        }
+
+        /// <summary>
+        /// Restores original graph to the state before any filters were applied
+        /// </summary>
+        public void PopFilters()
+        {
+            if (!IsFiltered) return;
+            Filters.Clear();
+            Graph = OriginalGraph;
+            IsFilterRemoved = true;
+            IsFiltered = false;        
+        }
+
+        /// <summary>
+        /// Represents graph filters queue (FIFO)
+        /// </summary>
+        public Queue<IGraphFilter<TVertex, TEdge, TGraph>> Filters { get; set; } =
+            new Queue<IGraphFilter<TVertex, TEdge, TGraph>>();
 
         /// <summary>
         /// Create default params if algorithm was changed and default params property is null
@@ -163,10 +224,20 @@ namespace GraphX.PCL.Logic.Models
         /// </summary>
         public double EdgeCurvingTolerance { get; set; }
 
+        private TGraph _graph;
         /// <summary>
-        /// Gets or sets main graph object
+        /// Gets or sets main graph object. Updating this property also updates OriginalGraph property.
         /// </summary>
-        public virtual TGraph Graph { get; set; }
+        public TGraph Graph
+        {
+            get { return _graph; }
+            set { _graph = value; }
+        }
+
+        /// <summary>
+        /// Gets unmodified graph before any filters has been applied
+        /// </summary>
+        public TGraph OriginalGraph { get; protected set; }
 
         /// <summary>
         /// Gets or sets if parallel edges are enabled. All edges between the same nodes will be separated by ParallelEdgeDistance value.
@@ -216,8 +287,7 @@ namespace GraphX.PCL.Logic.Models
             ExternalOverlapRemovalAlgorithm = null;
             AlgorithmFactory = null;
             AlgorithmStorage = null;
-            if(_vertexPosSource != null)
-                _vertexPosSource.Clear();
+            _vertexPosSource?.Clear();
         }
 
 
@@ -284,7 +354,7 @@ namespace GraphX.PCL.Logic.Models
             if (vertexSizes == null || positions == null)
                 throw new GX_InvalidDataException("GetVertexSizeRectangles() -> Vertex sizes or positions not set!");
             var rectangles = new Dictionary<TVertex, Rect>();
-            foreach (var vertex in Graph.Vertices.Where(a => a.SkipProcessing != ProcessingOptionEnum.Exclude))
+            foreach (var vertex in _graph.Vertices.Where(a => a.SkipProcessing != ProcessingOptionEnum.Exclude))
             {
                 Point position; Size size;
                 if (!positions.TryGetValue(vertex, out position) || !vertexSizes.TryGetValue(vertex, out size)) continue;

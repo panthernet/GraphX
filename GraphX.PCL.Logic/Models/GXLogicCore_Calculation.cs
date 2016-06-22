@@ -60,7 +60,7 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="vertexPositions">Vertices positions</param>
         public IExternalLayout<TVertex, TEdge> GenerateLayoutAlgorithm(Dictionary<TVertex, Size>  vertexSizes, IDictionary<TVertex, Point> vertexPositions)
         {
-            var alg = ExternalLayoutAlgorithm ?? AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, Graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
+            var alg = ExternalLayoutAlgorithm ?? AlgorithmFactory.CreateLayoutAlgorithm(DefaultLayoutAlgorithm, _graph, vertexPositions, vertexSizes, DefaultLayoutAlgorithmParams);
             if (alg != null && alg.NeedVertexSizes) alg.VertexSizes = vertexSizes;
             return alg;
         }
@@ -75,7 +75,7 @@ namespace GraphX.PCL.Logic.Models
         {
             if (ExternalEdgeRoutingAlgorithm == null && DefaultEdgeRoutingAlgorithm != EdgeRoutingAlgorithmTypeEnum.None)
             {
-                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(desiredSize), Graph, vertexPositions, rectangles, DefaultEdgeRoutingAlgorithmParams);
+                return AlgorithmFactory.CreateEdgeRoutingAlgorithm(DefaultEdgeRoutingAlgorithm, new Rect(desiredSize), _graph, vertexPositions, rectangles, DefaultEdgeRoutingAlgorithmParams);
             }
             return ExternalEdgeRoutingAlgorithm;
         }
@@ -94,10 +94,10 @@ namespace GraphX.PCL.Logic.Models
             if (dataVertex == null) return;
             var list = new List<TEdge>();
             IEnumerable<TEdge> edges;
-            Graph.TryGetInEdges(dataVertex, out edges);
+            _graph.TryGetInEdges(dataVertex, out edges);
             if(edges != null)
                 list.AddRange(edges);
-            Graph.TryGetOutEdges(dataVertex, out edges);
+            _graph.TryGetOutEdges(dataVertex, out edges);
             if(edges != null)
                 list.AddRange(edges);
 
@@ -110,7 +110,7 @@ namespace GraphX.PCL.Logic.Models
 
         public IDictionary<TVertex, Point> Compute(CancellationToken cancellationToken)
         {
-            if (Graph == null)
+            if (_graph == null)
                 throw new GX_InvalidDataException("LogicCore -> Graph property not set!");
 
             IDictionary<TVertex, Point> resultCoords;

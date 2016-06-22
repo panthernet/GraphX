@@ -819,6 +819,12 @@ namespace GraphX.Controls
         private Task _layoutTask;
         private CancellationTokenSource _layoutCancellationSource;
 
+        /// <summary>
+        /// Gets or sets if visual graph should be updated if graph is filtered. 
+        /// Remove all visuals with no keys in data graph and add all visuals that has keys in data graph.
+        /// Default value is True.
+        /// </summary>
+        public bool EnableVisualsRenewOnFiltering{ get; set; } = true;
 
 #if WPF
         protected virtual void _relayoutGraph(CancellationToken cancellationToken)
@@ -840,6 +846,39 @@ namespace GraphX.Controls
 #endif
             {
                 if (LogicCore == null) return;
+
+                //add missing visuals and remove old ones if graph is filtered to reflect filtering
+                if (EnableVisualsRenewOnFiltering && (LogicCore.IsFiltered || LogicCore.IsFilterRemoved))
+                {
+                    //remove edge if it has been removed from data graph
+                    _edgeslist.Keys.ToList().ForEach(a =>
+                    {
+                        if (!LogicCore.Graph.Edges.Contains(a))
+                            RemoveEdge(a);
+                    });
+                    //remove vertex if it has been removed from data graph
+                    _vertexlist.Keys.ToList().ForEach(a =>
+                    {
+                        if (!LogicCore.Graph.Vertices.Contains(a))
+                            RemoveVertex(a);
+                    });
+
+                    LogicCore.Graph.Vertices.ForEach(v =>
+                    {
+                        if(!_vertexlist.ContainsKey(v))
+                            AddVertex(v, ControlFactory.CreateVertexControl(v));
+                    });
+
+                    LogicCore.Graph.Edges.ForEach(e =>
+                    {
+                        if (!_edgeslist.ContainsKey(e))
+                        {
+                            var source = _vertexlist[e.Source];
+                            var target = _vertexlist[e.Target];
+                            AddEdge(e, ControlFactory.CreateEdgeControl(source, target, e));
+                        }
+                    });
+                }
 
                 UpdateLayout(); //update layout so we can get actual control sizes
 
@@ -940,6 +979,7 @@ namespace GraphX.Controls
 #if WPF
         public virtual void RelayoutGraph(bool generateAllEdges = false)
         {
+            LogicCore.PushFilters();
             _relayoutGraphMain(generateAllEdges);
         }
 
@@ -984,7 +1024,10 @@ namespace GraphX.Controls
                 if (EnableVisualPropsRecovery) ReapplyVertexVisualProperties();
                 OnGenerateGraphFinished();
             }
-            else OnRelayoutFinished();
+            else
+            {
+                OnRelayoutFinished();
+            }
         }
 
 #elif METRO
@@ -995,6 +1038,7 @@ namespace GraphX.Controls
 
         public Task RelayoutGraphAsync(CancellationToken cancellationToken, bool generateAllEdges = false)
         {
+            LogicCore.PushFilters();
             return _relayoutGraphMainAsync(cancellationToken, generateAllEdges, standalone: true);
         }
 
@@ -1149,6 +1193,12 @@ namespace GraphX.Controls
 
         public virtual Task GenerateGraphAsync(TGraph graph, CancellationToken cancellationToken, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
+            if (LogicCore.Graph == null)
+                throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
+
+            LogicCore.PushFilters();   
             if (AutoAssignMissingDataId)
                 AutoresolveIds(false, graph);
             if (!LogicCore.IsCustomLayout)
@@ -1163,10 +1213,7 @@ namespace GraphX.Controls
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
         public virtual Task GenerateGraphAsync(bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
-            if (LogicCore == null)
-                throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
-            if (LogicCore.Graph == null)
-                throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
+
             return GenerateGraphAsync(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 #elif WPF
@@ -1178,6 +1225,11 @@ namespace GraphX.Controls
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
         public virtual void GenerateGraph(TGraph graph, bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
+            if (LogicCore == null)
+                throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
+            if (LogicCore.Graph == null)
+                throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
+            LogicCore.PushFilters();
             if (AutoAssignMissingDataId)
                 AutoresolveIds(false, graph);
             if (!LogicCore.IsCustomLayout)
@@ -1192,10 +1244,6 @@ namespace GraphX.Controls
         /// <param name="dataContextToDataItem">Sets visual edge and vertex controls DataContext property to vertex data item of the control (Allows prop binding in xaml templates)</param>
         public virtual void GenerateGraph(bool generateAllEdges = true, bool dataContextToDataItem = true)
         {
-            if (LogicCore == null)
-                throw new GX_InvalidDataException("LogicCore -> Not initialized! (Is NULL)");
-            if (LogicCore.Graph == null)
-                throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
             GenerateGraph(LogicCore.Graph, generateAllEdges, dataContextToDataItem);
         }
 #endif

@@ -198,17 +198,17 @@ namespace ShowcaseApp.WPF.Pages
         void butGeneral_Click(object sender, RoutedEventArgs e)
         {
             CreateNewArea();
-            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(5, false);
+            dg_Area.LogicCore.Graph = ShowcaseHelper.GenerateDataGraph(2, false);
             dg_Area.LogicCore.Graph.Vertices.First().IsBlue = true;
             var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
-            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[1]) { ArrowTarget = true});
-            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[2]) { ArrowTarget = true });
-            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[3]) { ArrowTarget = true });
-            dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[4]) { ArrowTarget = true });
+            //dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[1]) { ArrowTarget = true});
+            //dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[2]) { ArrowTarget = true });
+            //dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[3]) { ArrowTarget = true });
+            //dg_Area.LogicCore.Graph.AddEdge(new DataEdge(vlist[0], vlist[4]) { ArrowTarget = true });
             
             
             dg_Area.LogicCore.EdgeCurvingEnabled = true;
-            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
+            dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.EfficientSugiyama;
             dg_Area.SetVerticesMathShape(VertexShape.Ellipse);
             dg_Area.GenerateGraph(true);
             

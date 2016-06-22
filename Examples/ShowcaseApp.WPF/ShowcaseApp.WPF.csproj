@@ -125,6 +125,7 @@
     <Compile Include="ExampleModels\ExampleExternalLayoutAlgorithm.cs" />
     <Compile Include="ExampleModels\ExampleExternalOverlapRemovalAlgorithm.cs" />
     <Compile Include="ExampleModels\ExampleMoveAnimation.cs" />
+    <Compile Include="ExampleModels\Filters\BlueVertexFilter.cs" />
     <Compile Include="ExampleModels\GraphAreaExample.cs" />
     <Compile Include="ExampleModels\GraphExample.cs" />
     <Compile Include="ExampleModels\LogicCoreExample.cs" />
@@ -174,6 +175,11 @@
     <Page Include="Controls\MiniContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Mini\DataFiltering.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Page Include="Pages\Mini\EdgesParallel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -243,6 +249,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Templates\MiniFeatures.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\Mini\LayoutDataFiltering.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -318,6 +328,10 @@
     </Compile>
     <Compile Include="Controls\MiniContentPage.xaml.cs">
       <DependentUpon>MiniContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Mini\DataFiltering.xaml.cs">
+      <DependentUpon>DataFiltering.xaml</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\Mini\EdgesParallel.xaml.cs">
       <DependentUpon>EdgesParallel.xaml</DependentUpon>

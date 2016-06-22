@@ -2,6 +2,9 @@
 FEATURES HIGHLIGHT:
  - Added new awesome vertex snapping feature on vertex drag. Many thanks to perturbare for this wonderful contibution! The feature is implemented around DragBehaviour class 
  and is represented in several new settings allowing the drag to be perform around some sort of virtual snap grid. Please read the comment for the DragBehaviour class for detailed info.
+ - Added new feature & example preview in showcase app: graph data filtering. This feature allows you to filter the graph prior to layout generation or relayout based on the pipeline of 
+ LogicCore::Filters that are processed sequentially. These filters can modify graph using custom logic. The output graph will be available for interaction along with the copy of the original 
+ graph. User then may choose if he wish to revert graph to the original state or apply filter results permanently.
 
 DETAILED CHANGELOG:
  - Added Universal Windows Application support and example project
@@ -11,6 +14,9 @@ DETAILED CHANGELOG:
  - Added ParameterizedLayoutAlgorithmBase::EnsureUniqueRandomInitialPositions property that enables unique random positions generation for layout algorithms. False by default, True for LinLog algorithm.
  - Added VertexControl::VCPRoot property whcih represents the VCP root container for easier runtime VCP management. To be able to use it you have to define PART_vcproot template element as Panel descendant.
  - Added new awesome vertex snapping feature on vertex drag (thanks to perturbare)
+ - Added GraphArea::EnableVisualsCleanupOnRelayout property which is True by default. Specifies if visual graph should be cleaned up on relayout
+ - Added methods LogicCore::PushFilters(), LogicCore::ApplyFilters() and LogicCore::PopFilters along with LogicCore::Filters property which implements graph data filtering feature
+ - Added LogicCore::IsFiltered property to identify graph filtering state. If graph is filtered the filter results can be applied or popped back.
  - Fixed edge label positioning, now it is more accurate for pathed edges
  - Fixed LinLog negative energy issue (thanks to Katya)
  - Fixed one vertex ISOM algorithm exception (thanks to jorgensigvardsson)
