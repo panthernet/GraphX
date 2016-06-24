@@ -1162,6 +1162,7 @@ namespace GraphX.Controls
 
             e.Handled = true;
             MouseWheelAction(e);
+			_clickTrack = false;
         }
 
         private void MouseWheelAction(MouseWheelEventArgs e)
@@ -1187,7 +1188,14 @@ namespace GraphX.Controls
 
         private void ZoomControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            switch (ModifierMode)
+			if (_clickTrack)
+			{
+				RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+				_clickTrack = false;
+				e.Handled = true;
+			}
+
+			switch (ModifierMode)
             {
                 case ZoomViewModifierMode.None:
                     return;
@@ -1218,7 +1226,15 @@ namespace GraphX.Controls
 
         private void ZoomControl_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            switch (ModifierMode)
+			if (_clickTrack)
+			{
+				var curPoint = Mouse.GetPosition(this);
+
+				if (curPoint != _mouseDownPos)
+					_clickTrack = false;
+			}
+
+			switch (ModifierMode)
             {
                 case ZoomViewModifierMode.None:
                     return;
@@ -1256,7 +1272,8 @@ namespace GraphX.Controls
             e.Handled = false;
         }
 
-        private bool _startedAsAreaSelection;
+		private bool _clickTrack;
+		private bool _startedAsAreaSelection;
         private void OnMouseDown(MouseButtonEventArgs e, bool isPreview)
         {
             if (ModifierMode != ZoomViewModifierMode.None)
@@ -1296,19 +1313,29 @@ namespace GraphX.Controls
                     return;
             }
 
-            if (ModifierMode == ZoomViewModifierMode.None)
+			_clickTrack = true;
+			_mouseDownPos = e.GetPosition(this);
+
+			if (ModifierMode == ZoomViewModifierMode.None)
                 return;
 
-            _mouseDownPos = e.GetPosition(this);
             _startTranslate = new Vector(TranslateX, TranslateY);
             Mouse.Capture(this);
             PreviewMouseMove += ZoomControl_PreviewMouseMove;
         }
-        #endregion
 
-        #region Animation
+		public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ZoomControl));
+		public event RoutedEventHandler Click
+		{
+			add { AddHandler(ClickEvent, value); }
+			remove { RemoveHandler(ClickEvent, value); }
+		}
 
-        public event EventHandler ZoomAnimationCompleted;
+		#endregion
+
+		#region Animation
+
+		public event EventHandler ZoomAnimationCompleted;
 
         private void OnZoomAnimationCompleted()
         {
