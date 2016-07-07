@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 

@@ -5,7 +5,7 @@ using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
 using QuickGraph.Algorithms.ShortestPath;
 
-namespace GraphX.PCL.Logic.Algorithms
+namespace GraphX.PCL.Common
 {
     public static class GraphXExtensions
     {

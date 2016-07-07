@@ -7,9 +7,9 @@ using System.Windows.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
-using GraphX.PCL.Logic.Helpers;
 #endif
 using GraphX.Controls.Models;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 
 namespace GraphX.Controls

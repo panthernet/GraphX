@@ -65,7 +65,6 @@
     <Compile Include="Algorithms\EdgeRouting\SimpleER\SimpleEdgeRouting.cs" />
     <Compile Include="Algorithms\EdgeRouting\SimpleER\SimpleERParameters.cs" />
     <Compile Include="Algorithms\GraphHideHelper.cs" />
-    <Compile Include="Algorithms\GraphSharpExtensions.cs" />
     <Compile Include="Algorithms\HierarchicalGraph.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Algorithms\IHierarchicalBidirectionalGraph.cs" />
@@ -156,7 +155,6 @@
     <Compile Include="Algorithms\WrappedVertex.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ThreadingHelper.cs" />
-    <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Models\AlgorithmFactory.cs" />
     <Compile Include="Models\AlgorithmStorage.cs" />
     <Compile Include="Models\GXLogicCore.cs" />

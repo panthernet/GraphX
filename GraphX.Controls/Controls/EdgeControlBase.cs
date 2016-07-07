@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using GraphX.Controls.Models;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Logic.Helpers;
 #if WPF 
 using System.Windows.Controls;
 using System.Windows.Input;

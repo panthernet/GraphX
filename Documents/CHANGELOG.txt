@@ -24,6 +24,8 @@ DETAILED CHANGELOG:
  - Fixed external alg vertex sizes grab logic (thanks to ValentinMarinov)
  - Made StateStorage class extensible by adding virtual modifiers to methods
  - Improved algorithm factory logic to avoid graph type cast exceptions in some class declaration cases
+ - Moved code extensions to GraphX.PCL.Common library thus eliminating the need for GraphX.PCL.Logic for *.Controls libraries 
+
 
 RELEASE 2.3.4
 DETAILED CHANGELOG:

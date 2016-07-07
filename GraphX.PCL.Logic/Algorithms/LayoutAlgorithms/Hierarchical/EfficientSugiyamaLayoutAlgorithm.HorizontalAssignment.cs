@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms

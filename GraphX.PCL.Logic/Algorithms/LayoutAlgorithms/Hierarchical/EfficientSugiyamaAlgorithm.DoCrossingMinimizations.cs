@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using GraphX.PCL.Common;
 using QuickGraph;
 
 namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms

@@ -4,13 +4,10 @@ using System.Diagnostics;
 #if WPF
 using System.ComponentModel;
 using Microsoft.Win32;
-using System.Drawing;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Threading;
 using Point = System.Windows.Point;
 using USize = System.Windows.Size;
-using GraphX.PCL.Logic.Helpers;
 using Brushes = System.Windows.Media.Brushes;
 #elif METRO
 using Point = Windows.Foundation.Point;
@@ -29,8 +26,7 @@ using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Common.Models;
 using GraphX.Controls.Models;
-using GraphX.PCL.Logic.Algorithms;
-using GraphX.PCL.Logic.Helpers;
+using GraphX.PCL.Common;
 using QuickGraph;
 using Rect = GraphX.Measure.Rect;
 using Size = GraphX.Measure.Size;

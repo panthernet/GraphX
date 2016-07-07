@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Logic.Algorithms;

@@ -71,6 +71,7 @@
     <Compile Include="Exceptions\GX_ObjectNotFoundException.cs" />
     <Compile Include="Exceptions\GX_SerializationException.cs" />
     <Compile Include="Helpers\CommonExtensions.cs" />
+    <Compile Include="Helpers\GraphSharpExtensions.cs" />
     <Compile Include="Interfaces\IAlgorithmParameters.cs" />
     <Compile Include="Interfaces\IAlgorithmStorage.cs" />
     <Compile Include="Interfaces\ICloneable.cs" />

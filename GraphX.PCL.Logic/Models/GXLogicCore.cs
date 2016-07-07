@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Logic.Algorithms;
 using QuickGraph;
-using QuickGraph.Algorithms;
 
 namespace GraphX.PCL.Logic.Models
 {
