@@ -18,6 +18,7 @@ DETAILED CHANGELOG:
  - Added GraphArea::EnableVisualsRenewOnFiltering property which is True by default. Specifies if visual graph should be updated up on relayout method call.
  - Added methods LogicCore::PushFilters(), LogicCore::ApplyFilters() and LogicCore::PopFilters along with LogicCore::Filters property which implements graph data filtering feature
  - Added LogicCore::IsFiltered property to identify graph filtering state. If graph is filtered the filter results can be applied or popped back.
+ - Fixed Avalon Dock interaction which caused strange exception by skipping ZooomControl viewfinder unnecessary refresh pass in some cases
  - Fixed edge label positioning, now it is more accurate for pathed edges
  - Fixed LinLog negative energy issue (thanks to Katya)
  - Fixed one vertex ISOM algorithm exception (thanks to jorgensigvardsson)

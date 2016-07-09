@@ -199,7 +199,7 @@ namespace GraphX.Controls
         void _viewFinderDisplay_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             //needed to overcome the case when viewbox was hidden by default so no size were calculated
-            if (_viewFinderDisplay.Visibility != Visibility.Collapsed)
+            if (_viewFinderDisplay.Visibility != Visibility.Collapsed && (bool)e.NewValue)
             {
                 _viewFinderDisplay.InvalidateMeasure();
                 _viewFinderDisplay.UpdateLayout();
