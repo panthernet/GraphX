@@ -34,6 +34,9 @@ Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms
     * Windows Phone 8/10 (WIP, only logic core is available)
 	* Xamarin (WIP, only logic core is available)
     
+   Requires following studio version:
+    * Visual Studio 2015 Express or above due to C#6.0 compliance
+
   Features:
 
     Performance oriented, isolated library design optimized for:
