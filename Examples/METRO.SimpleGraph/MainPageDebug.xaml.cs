@@ -163,7 +163,7 @@ namespace METRO.SimpleGraph
             }
         }
 
-        async void MainPage_Loaded(object sender, RoutedEventArgs e)
+        void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             InitialSetup();
             GraphAreaExample_Setup();
