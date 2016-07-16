@@ -163,7 +163,10 @@ namespace ShowcaseApp.WPF.Pages
             var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
             var edge = new DataEdge(vlist[0], vlist[1]) { SourceConnectionPointId = 1, TargetConnectionPointId = 1 };
             dg_Area.LogicCore.Graph.AddEdge(edge);
-
+            edge = new DataEdge(vlist[0], vlist[0]) { SourceConnectionPointId = 1, TargetConnectionPointId = 1 };
+            dg_Area.LogicCore.Graph.AddEdge(edge);
+           
+                
 
             dg_Area.LogicCore.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.ISOM;
             dg_Area.LogicCore.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;

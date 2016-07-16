@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
 using GraphX.Controls.Models;
-using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
 #if WPF 
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using SysRect = System.Windows.Rect;
 #elif METRO
+using GraphX.PCL.Common;
 using GraphX.Measure;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -124,8 +123,7 @@ namespace GraphX.Controls
 
         private static void OnSourceChangedInternal(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ctrl = d as EdgeControlBase;
-            if(ctrl != null) ctrl.OnSourceChanged(d, e);
+            (d as EdgeControlBase)?.OnSourceChanged(d, e);
         }
 
         public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target),
@@ -135,8 +133,7 @@ namespace GraphX.Controls
 
         private static void OnTargetChangedInternal(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ctrl = d as EdgeControlBase;
-            if (ctrl != null) ctrl.OnTargetChanged(d, e);
+            (d as EdgeControlBase)?.OnTargetChanged(d, e);
         }
 
 
@@ -213,12 +210,11 @@ namespace GraphX.Controls
         }
         #endregion
 
-        private bool _canbeparallel = true;
         /// <summary>
         /// Gets or sets if this edge can be paralellized if GraphArea.EnableParallelEdges is true.
         /// If not it will be drawn by default.
         /// </summary>
-        public bool CanBeParallel { get { return _canbeparallel; } set { _canbeparallel = value; } }
+        public bool CanBeParallel { get; set; } = true;
 
         protected EdgeControlBase()
         {
@@ -267,10 +263,7 @@ namespace GraphX.Controls
 
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var ec = (d as EdgeControlBase);
-            if (ec == null) return;
-
-            ec.UpdateEdge();
+            (d as EdgeControlBase)?.UpdateEdge();
         }
         /// <summary>
         /// Show edge label.Default value is False.
@@ -313,7 +306,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Geometry object that represents visual edge path. Applied in OnApplyTemplate and OnRender.
         /// </summary>
-        protected Geometry _linegeometry;
+        protected Geometry Linegeometry;
 
         /// <summary>
         /// Templated Path object to operate with routed path
@@ -382,8 +375,7 @@ namespace GraphX.Controls
         /// </summary>
         public void DetachLabel()
         {
-            if (EdgeLabelControl is IAttachableControl<EdgeControl>)
-                ((IAttachableControl<EdgeControl>)EdgeLabelControl).Detach();
+            (EdgeLabelControl as IAttachableControl<EdgeControl>)?.Detach();
             EdgeLabelControl = null;
         }
 
@@ -445,7 +437,7 @@ namespace GraphX.Controls
         public PathGeometry GetEdgePathManually()
         {
             if (!ManualDrawing) return null;
-            return _linegeometry as PathGeometry;
+            return Linegeometry as PathGeometry;
         }
 
         /// <summary>
@@ -454,7 +446,7 @@ namespace GraphX.Controls
         public void SetEdgePathManually(PathGeometry geo)
         {
             if (!ManualDrawing) return;
-            _linegeometry = geo;
+            Linegeometry = geo;
             UpdateEdge();
         }
         #endregion
@@ -493,7 +485,7 @@ namespace GraphX.Controls
 
             LinePathObject = GetTemplatePart("PART_edgePath") as Path;
             if (LinePathObject == null) throw new GX_ObjectNotFoundException("EdgeControlBase Template -> Edge template must contain 'PART_edgePath' Path object to draw route points!");
-            LinePathObject.Data = _linegeometry;
+            LinePathObject.Data = Linegeometry;
             if (this.FindDescendantByName("PART_edgeArrowPath") != null)
                 throw new GX_ObsoleteException("PART_edgeArrowPath is obsolete! Please use new DefaultEdgePointer object in your EdgeControlBase template!");
 
@@ -509,7 +501,7 @@ namespace GraphX.Controls
                 {
                     SelfLoopIndicator?.Arrange(_selfLoopedEdgeLastKnownRect);
                 };
-            var x = this.ShowLabel;
+           // var x = ShowLabel;
             MeasureChild(EdgePointerForSource as UIElement);
             MeasureChild(EdgePointerForTarget as UIElement);
             MeasureChild(SelfLoopIndicator);
@@ -556,7 +548,7 @@ namespace GraphX.Controls
                 ApplyTemplate();
             PrepareEdgePath(true, null, updateLabel);
             if (LinePathObject == null) return;
-            LinePathObject.Data = _linegeometry;
+            LinePathObject.Data = Linegeometry;
             LinePathObject.StrokeDashArray = StrokeDashArray;
         }
 
@@ -613,8 +605,8 @@ namespace GraphX.Controls
 
                 //pregenerate built-in indicator geometry if template PART is absent
                 if (!HasSelfLoopedEdgeTemplate)
-                    _linegeometry = new EllipseGeometry();
-                else SelfLoopIndicator.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
+                    Linegeometry = new EllipseGeometry();
+                else SelfLoopIndicator.SetCurrentValue(VisibilityProperty, Visibility.Visible);
             }
             else
             {
@@ -622,7 +614,7 @@ namespace GraphX.Controls
                 //if (_edgePointerForTarget != null && ShowArrows) _edgePointerForTarget.Show();
 
                 if (HasSelfLoopedEdgeTemplate)
-                    SelfLoopIndicator.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+                    SelfLoopIndicator.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
             }
         }
 
@@ -644,7 +636,7 @@ namespace GraphX.Controls
             //if we has no self looped edge template defined we'll use default built-in indicator
             if (hasNoTemplate)
             {
-                var geometry = _linegeometry as EllipseGeometry;
+                //var geometry = Linegeometry as EllipseGeometry;
                 //TODO
                 //geometry.Center = pt;
                 //geometry.RadiusX = SelfLoopIndicatorRadius;
@@ -744,7 +736,7 @@ namespace GraphX.Controls
             Point p2;
 
             //calculate edge source (p1) and target (p2) endpoints based on different settings
-            if (gEdge != null && gEdge.SourceConnectionPointId.HasValue)
+            if (gEdge?.SourceConnectionPointId != null)
             {
                 var sourceCp = Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
                 if (sourceCp == null)
@@ -759,7 +751,7 @@ namespace GraphX.Controls
             else
                 p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new SysRect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
 
-            if (gEdge != null && gEdge.TargetConnectionPointId.HasValue)
+            if (gEdge?.TargetConnectionPointId != null)
             {
                 var targetCp = Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
                 if (targetCp == null)
@@ -777,7 +769,7 @@ namespace GraphX.Controls
             SourceConnectionPoint = p1;
             TargetConnectionPoint = p2;
 
-            _linegeometry = new PathGeometry(); 
+            Linegeometry = new PathGeometry(); 
             PathFigure lineFigure;
 
             //if we have route and route consist of 2 or more points
@@ -841,10 +833,10 @@ namespace GraphX.Controls
 
                 lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };            
             }
-            ((PathGeometry)_linegeometry).Figures.Add(lineFigure);
+            ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
 #if WPF
             GeometryHelper.TryFreeze(lineFigure);
-            GeometryHelper.TryFreeze(_linegeometry);
+            GeometryHelper.TryFreeze(Linegeometry);
 #endif
             if (ShowLabel && EdgeLabelControl != null && _updateLabelPosition && updateLabel)
                 EdgeLabelControl.UpdatePosition();
