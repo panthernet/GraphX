@@ -41,6 +41,11 @@ namespace GraphX.Controls
 
         #region Properties & Fields
 
+        /// <summary>
+        /// Gets or sets if edge pointer should be hidden when source and target vertices are overlapped making the 0 length edge 
+        /// </summary>
+        public bool HideEdgePointerOnVertexOverlap { get; set; } = true;
+
         public abstract bool IsSelfLooped { get; protected set; }
         public abstract void Dispose();
         public abstract void Clean();
@@ -845,6 +850,12 @@ namespace GraphX.Controls
         private Point UpdateSourceEpData(Point from, Point to)
         {
             var dir = MathHelper.GetDirection(from, to);
+            if (from == to)
+            {
+                if (HideEdgePointerOnVertexOverlap) EdgePointerForSource.Hide();
+                else dir = new Vector(0, 0);
+            }
+            else EdgePointerForSource.Show();
             var result = EdgePointerForSource.Update(from, dir, EdgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
             return EdgePointerForSource.Visibility == Visibility.Visible ? result : new Point();
         }
@@ -852,6 +863,12 @@ namespace GraphX.Controls
         private Point UpdateTargetEpData(Point from, Point to)
         {
             var dir = MathHelper.GetDirection(from, to);
+            if (from == to)
+            {
+                if (HideEdgePointerOnVertexOverlap) EdgePointerForTarget.Hide();
+                else dir = new Vector(0, 0);
+            }
+            else EdgePointerForTarget.Show();
             var result =  EdgePointerForTarget.Update(from, dir, EdgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
             return EdgePointerForTarget.Visibility == Visibility.Visible ? result : new Point();
         }

@@ -117,9 +117,18 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="algorithmType">Layout algorithm type</param>
         public bool NeedSizes(LayoutAlgorithmTypeEnum algorithmType)
         {
-            return (algorithmType == LayoutAlgorithmTypeEnum.Tree) /*|| (algorithmType == LayoutAlgorithmTypeEnum.BalloonTree)*/ || (algorithmType == LayoutAlgorithmTypeEnum.Circular) ||
-                (algorithmType == LayoutAlgorithmTypeEnum.EfficientSugiyama) || (algorithmType == LayoutAlgorithmTypeEnum.Sugiyama)
-                 || (algorithmType == LayoutAlgorithmTypeEnum.CompoundFDP);
+            switch (algorithmType)
+            {
+                case LayoutAlgorithmTypeEnum.Tree:
+                case LayoutAlgorithmTypeEnum.Circular:
+                case LayoutAlgorithmTypeEnum.EfficientSugiyama:
+                case LayoutAlgorithmTypeEnum.Sugiyama:
+                case LayoutAlgorithmTypeEnum.CompoundFDP:
+                case LayoutAlgorithmTypeEnum.SimpleRandom:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>

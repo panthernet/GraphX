@@ -175,7 +175,7 @@ namespace GraphX.Controls
             SetValue(ViewFinderPropertyKey, Template.FindName("ViewFinder", this) as FrameworkElement);
 
             // locate the view finder display panel
-            _viewFinderDisplay = VisualTreeHelperEx.FindDescendantByType(this, typeof(ViewFinderDisplay)) as ViewFinderDisplay;
+            _viewFinderDisplay = VisualTreeHelperEx.FindDescendantByType(this, typeof(ViewFinderDisplay), false) as ViewFinderDisplay;
 
             // if a ViewFinder was specified but no display panel is present, throw an exception
             if (ViewFinder != null && _viewFinderDisplay == null)
