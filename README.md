@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/0utwfykra5dl0g55?svg=true)](https://ci.appveyor.com/project/panthernet/graphx)
-
 **GraphX for .NET (Core Branch)**
 http://www.panthernet.ru 
 
