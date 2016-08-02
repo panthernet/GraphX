@@ -9,20 +9,18 @@ GraphX for .NET is an advanced open-source graph visualization library that supp
 
 Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms, UWA, Xamarin or METRO technologies.
 
-  Library depends on:
+Library depends on:
 - QuickGraph
   
-  Library uses partial code from:
+Library uses partial code from:
+* Graph#
+* WPFExtensions
+* NodeXL
+* Extended WPF Toolkit
   
-    * Graph#
-    * WPFExtensions
-    * NodeXL
-    * Extended WPF Toolkit
-  
-  Library showcase uses:
-
-    * YAXLib
-	* ModernUI
+Library showcase uses:
+* YAXLib
+  * ModernUI
 	
   Library supports following platforms:
   
