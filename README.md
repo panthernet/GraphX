@@ -11,7 +11,7 @@ Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms
 
   Library depends on:
   
-    * QuickGraph
+    - QuickGraph
   
   Library uses partial code from:
   
