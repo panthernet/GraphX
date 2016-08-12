@@ -344,12 +344,11 @@ namespace GraphX.PCL.Logic.Models
         /// <summary>
         /// Get visual vertex size rectangles (can be used by some algorithms)
         /// </summary>
-        /// <param name="positions">Vertex positions collection (auto filled if null)</param>
-        /// <param name="vertexSizes">Vertex sizes collection (auto filled if null)</param>
-        /// <param name="getCenterPoints">True if you want center points returned instead of top-left (needed by overlap removal algo)</param>
-        public Dictionary<TVertex, Rect> GetVertexSizeRectangles(IDictionary<TVertex, Point> positions = null, Dictionary<TVertex, Size> vertexSizes = null, bool getCenterPoints = false)
+        /// <param name="positions">Vertex positions collection</param>
+        /// <param name="vertexSizes">Vertex sizes collection</param>
+        /// <param name="getCenterPoints">True if you want center points returned instead of top-left (needed by overlap removal algo). Default value is False.</param>
+        public Dictionary<TVertex, Rect> GetVertexSizeRectangles(IDictionary<TVertex, Point> positions, Dictionary<TVertex, Size> vertexSizes, bool getCenterPoints = false)
         {
-
             if (vertexSizes == null || positions == null)
                 throw new GX_InvalidDataException("GetVertexSizeRectangles() -> Vertex sizes or positions not set!");
             var rectangles = new Dictionary<TVertex, Rect>();

@@ -89,7 +89,7 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="vertexSize">Vertex size</param>
         public void ComputeEdgeRoutesByVertex(TVertex dataVertex, Point? vertexPosition = null, Size? vertexSize = null)
         {
-            if (AlgorithmStorage == null || AlgorithmStorage.EdgeRouting == null)
+            if (AlgorithmStorage?.EdgeRouting == null)
                 throw new GX_InvalidDataException("GXC: Algorithm storage is not initialized!");
             if (dataVertex == null) return;
             var list = new List<TEdge>();
@@ -146,9 +146,9 @@ namespace GraphX.PCL.Logic.Models
             {
                     //var size = Parent is ZoomControl ? (Parent as ZoomControl).Presenter.ContentSize : DesiredSize;
                 AlgorithmStorage.EdgeRouting.AreaRectangle = CalculateContentRectangle(resultCoords);// new Rect(TopLeft.X, TopLeft.Y, size.Width, size.Height);
-               // if(_vertexSizes == null)
-               //     _vertexSizes = 
-                rectangles = GetVertexSizeRectangles(resultCoords, _vertexSizes);
+                
+                //improve perf by reusing OR data if possible
+                rectangles = AlgorithmStorage?.OverlapRemoval?.Rectangles?.ToDictionary(a=> a.Key, a=> a.Value) ?? GetVertexSizeRectangles(resultCoords, _vertexSizes);
 
                 AlgorithmStorage.EdgeRouting.VertexPositions = resultCoords;
                 AlgorithmStorage.EdgeRouting.VertexSizes = rectangles;
@@ -160,7 +160,7 @@ namespace GraphX.PCL.Logic.Models
                         item.Key.RoutingPoints = item.Value;
             }
 
-            if (algEr != null && algEr.EdgeRoutes != null)
+            if (algEr?.EdgeRoutes != null)
             {
                 foreach (var item in algEr.EdgeRoutes)
                     item.Key.RoutingPoints = item.Value;
