@@ -29,6 +29,7 @@ DETAILED CHANGELOG:
  - Made StateStorage class extensible by adding virtual modifiers to methods
  - Improved algorithm factory logic to avoid graph type cast exceptions in some class declaration cases
  - Moved code extensions to GraphX.PCL.Common library thus eliminating the need for GraphX.PCL.Logic for *.Controls libraries 
+ - Removed GraphArea::EnableWinFormsHostingMode property as it is not needed any more. The WF checks has been automated.
 
 
 RELEASE 2.3.4

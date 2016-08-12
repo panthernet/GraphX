@@ -1057,7 +1057,7 @@ namespace GraphX.Controls
 #if WPF
         private void RunOnDispatcherThread(Action action)
         {
-            var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
+            var dispatcher = Application.Current?.Dispatcher ?? Dispatcher;
             if (dispatcher.CheckAccess())
                 action(); // On UI thread already, so make a direct call
             else
@@ -1077,7 +1077,7 @@ namespace GraphX.Controls
 
         private T RunOnDispatcherThread<T>(Func<T> expr)
         {
-            var dispatcher = EnableWinFormsHostingMode ? Dispatcher : Application.Current.Dispatcher;
+            var dispatcher = Application.Current?.Dispatcher ?? Dispatcher;
             if (dispatcher.CheckAccess())
                 return expr();
 

@@ -48,13 +48,6 @@ namespace GraphX
         public static readonly DependencyProperty LogicCoreChangeActionProperty =
             DependencyProperty.Register(nameof(LogicCoreChangeAction), typeof(LogicCoreChangedAction), typeof(GraphAreaBase), new PropertyMetadata(LogicCoreChangedAction.None));
 
-#if WPF
-        /// <summary>
-        /// Gets or sets special mode for WinForms interoperability
-        /// </summary>
-        public bool EnableWinFormsHostingMode { get; set; }
-#endif
-
         protected GraphAreaBase()
         {
             LogicCoreChangeAction = LogicCoreChangedAction.None;

@@ -18,6 +18,22 @@
     }
 
     /// <summary>
+    /// Core GraphX edge data interface
+    /// </summary>
+    public interface IGraphXEdge : IGraphXCommonEdge, IWeightedEdge<IGraphXVertex>
+    {
+        /// <summary>
+        /// Gets or sets source vertex
+        /// </summary>
+        new IGraphXVertex Source { get; set; }
+        /// <summary>
+        /// Gets or sets target vertex
+        /// </summary>
+        new IGraphXVertex Target { get; set; }
+
+    }
+
+    /// <summary>
     /// Core edge data interface
     /// </summary>
     public interface IGraphXCommonEdge: IIdentifiableGraphDataObject, IRoutingInfo
