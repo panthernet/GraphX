@@ -18,10 +18,11 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         public SimpleEdgeRouting(TGraph graph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null)
             : base(graph, vertexPositions, vertexSizes, parameters)
         {
-            if (parameters is SimpleERParameters)
+            var erParameters = parameters as SimpleERParameters;
+            if (erParameters != null)
             {
-                drawback_distance = (parameters as SimpleERParameters).BackStep;
-                side_distance = (parameters as SimpleERParameters).SideStep;
+                drawback_distance = erParameters.BackStep;
+                side_distance = erParameters.SideStep;
             }
         }
 
