@@ -2,19 +2,32 @@
 
 namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 {
+	/// <summary>
+	/// Base class for edge routing parameters
+	/// </summary>
 	public class EdgeRoutingParameters : IEdgeRoutingParameters
 	{
+		/// <summary>
+		/// Clone parameters
+		/// </summary>
+		/// <returns></returns>
 		public object Clone()
 		{
-			return this.MemberwiseClone();
+			return MemberwiseClone();
 		}
 
-		protected void NotifyChanged( string propertyName )
+        /// <summary>
+        /// Calls OnPropertyChange event notification
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected void NotifyChanged( string propertyName )
 		{
-			if ( PropertyChanged != null )
-				PropertyChanged( this, new System.ComponentModel.PropertyChangedEventArgs( propertyName ) );
+		    PropertyChanged?.Invoke( this, new System.ComponentModel.PropertyChangedEventArgs( propertyName ) );
 		}
 
-		public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+	    /// <summary>
+	    /// PropertyChange event notification
+	    /// </summary>
+	    protected event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
 	}
 }

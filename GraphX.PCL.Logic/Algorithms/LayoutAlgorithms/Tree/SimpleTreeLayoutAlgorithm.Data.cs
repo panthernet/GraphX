@@ -23,6 +23,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         }
 
+       /// <summary>
+       /// Vertex data class
+       /// </summary>
        protected class VertexData
         {
             public TVertex Parent;

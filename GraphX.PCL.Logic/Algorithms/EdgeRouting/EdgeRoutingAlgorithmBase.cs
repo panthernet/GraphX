@@ -14,7 +14,15 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 	{
         protected IEdgeRoutingParameters Parameters;
         protected TGraph Graph;
+
+        /// <summary>
+        /// Gets or sets visual vertices sizes (autofilled before Compute() call)
+        /// </summary>
         public IDictionary<TVertex, Rect> VertexSizes { get; set; }
+
+        /// <summary>
+        /// Gets or sets visual vertices positions (autofilled before Compute() call)
+        /// </summary>
         public IDictionary<TVertex, Point> VertexPositions { get; set; }
 
 		/// <summary>
@@ -26,6 +34,13 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 			private set;
 		}
 
+        /// <summary>
+        /// Base class for edge routing algorithms
+        /// </summary>
+        /// <param name="graph">Graph</param>
+        /// <param name="vertexPositions">Vertex positions dictionary</param>
+        /// <param name="vertexSizes">Vertex sizes dictionary</param>
+        /// <param name="parameters">Algorithm parameters</param>
         protected EdgeRoutingAlgorithmBase(TGraph graph,  IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null) 
 		{
             Graph = graph;
@@ -36,18 +51,33 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
 		}
 
         /// <summary>
+        /// Returns algorithm parameters as specified type
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        public T GetParameters<T>()
+            where T: class
+        {
+            return Parameters as T;
+        }
+
+        /// <summary>
         /// Run algorithm calculation
         /// </summary>
-        public virtual void Compute(CancellationToken cancellationToken)
-        {
-        }
+        public abstract void Compute(CancellationToken cancellationToken);
 
-        public virtual Point[] ComputeSingle(TEdge edge)
-        {
-            return null;
-        }
+        /// <summary>
+        /// Compute edge routing for single edge
+        /// </summary>
+        /// <param name="edge">Supplied edge data</param>
+        public abstract Point[] ComputeSingle(TEdge edge);
 
 
+        /// <summary>
+        /// Update data stored in algorithm for specified vertex
+        /// </summary>
+        /// <param name="vertex">Data vertex</param>
+        /// <param name="position">Vertex position</param>
+        /// <param name="size">Vertex size</param>
         public virtual void UpdateVertexData(TVertex vertex, Point position, Rect size)
         {
             VertexPositions[vertex] = position;
@@ -59,6 +89,9 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         /// </summary>
         public Rect AreaRectangle { get; set; }
 
+        /// <summary>
+        /// Dispose resources
+        /// </summary>
         public void Dispose()
         {
             Graph = null;
