@@ -1,10 +1,13 @@
 **GraphX for .NET (Core Branch)**
 http://www.panthernet.org 
+
 For **GraphX for .NET PRO version** please visit http://wwww.graphx.pro
+
 
 **What Is This?**
 
 GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
+
 
 
 **Any Requirements?**
@@ -18,7 +21,8 @@ Due to C#6.0 compliance GraphX requires **Visual Studio 2015 Comunity Edition** 
   
 And library showcase uses:
 * YAXLib
-  * ModernUI
+* ModernUI
+
 
 
 **How Flexible It Is?**
@@ -31,6 +35,7 @@ Our library supports following platforms:
 * Microsoft Silverlight 5 (WIP, only logic core is available)
 * Windows Phone 8/10 (WIP, only logic core is available)
 * Xamarin (WIP, only logic core is available)
+
 
 
 **What Exactly I Can Do With It?**
@@ -71,7 +76,7 @@ Our library supports following platforms:
   * Vertex connection points (VCP) allows to implement customizable edge-to-vertex connections
   * Vertex snap-to-grid feature while dragging vertex or group of vertices
 
-* And at last some additiona features to note:
+* And at last some additional features to note:
   * Built in enchanced zoom control with minimap and zooming features:
     * Support for area selection of the vertices
     * Support for area zooming and smooth animations
