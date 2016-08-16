@@ -1,44 +1,48 @@
 **GraphX for .NET (Core Branch)**
-http://www.panthernet.ru 
+http://www.panthernet.org 
+For **GraphX for .NET PRO version** please visit http://wwww.graphx.pro
 
-Project Description
+**What Is This?**
 
-GraphX for .NET is an advanced open-source graph visualization library that supports different layout algorithms and highly customizable features. It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
+GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
 
-Main GraphX libraries can be used in both C# and VB for .NET using WPF, WinForms, UWA, Xamarin or METRO technologies.
 
-Library depends on:
-- QuickGraph
-  
-Library uses partial code from:
+**Any Requirements?**
+
+Due to C#6.0 compliance GraphX requires **Visual Studio 2015 Comunity Edition** or above.
+**QuickGraphPCL** nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from:
 * Graph#
 * WPFExtensions
 * NodeXL
 * Extended WPF Toolkit
   
-Library showcase uses:
+And library showcase uses:
 * YAXLib
   * ModernUI
-	
-Library supports following platforms:
+
+
+**How Flexible It Is?**
+
+We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
+Our library supports following platforms:
 * Windows Desktop (WPF & WinForms on Windows XP SP3 using .NET4.0)
-* Universal Windows Application (UWA)
-* Windows Metro 8.1
+* Universal Windows Application (UWA) using .NET 4.5
+* Windows Metro 8.1 using .NET 4.5
 * Microsoft Silverlight 5 (WIP, only logic core is available)
 * Windows Phone 8/10 (WIP, only logic core is available)
 * Xamarin (WIP, only logic core is available)
 
-Requires following studio version: **Visual Studio 2015 Express or above due to C#6.0 compliance**
 
-Features:
-* Performance oriented, isolated library design optimized for:
+**What Exactly I Can Do With It?**
+
+* GraphX is a performance oriented library coded with modular design in mind optimized for:
   * Large amount of templated graph vertices rendering
-  * Isolated visual and logic libraries design and modular coding approach
+  * Isolated visual and logic libraries design and modular coding approach for better extensibility
   * Constantly improving MVVM support
-  * .NET multiplatform support	
+  * .NET multiplatform support
   * Multiple layout algorithms ( FR, KK, ISOM, LinLog, Simple Tree, Simple Circle, Sugiyama, CompoundFDP, FSA/FSAOneWay overlap removal) and for grouped graph layout algorithm
 
-* Common features:
+* In general it can do almost everything you need to layout and display any graph you want, in particular it provide following features:
   * Ability to create and plug-in custom external layout, overlap removal and edge routing algorithms
   * Enhanced edge pointer customization capabilities allowing to easily create and apply custom edge pointers
   * Customizable control highlighting using behaviour logic
@@ -49,7 +53,7 @@ Features:
   * Async algorithm computation support
   * Rich usability documentation and sample projects
 
-* Advanced graph edges features:
+* It supports following edge related features:
   * Support for parametrized edge routing algorithms (SimpleER, EdgeBundling, PathFinder)
   * Support for dynamic and/or single edge routing calculation (for ex. for dragged vertex)
   * Edges curving (smoothing) technique that can be applied to any ER algorithm
@@ -58,7 +62,7 @@ Features:
   * Optional self-looped edges visualization support
   * Optional parallel edges visualization support between vertices
 
-* Advanced graph vertex features:
+* Advanced graph vertex features are as follows:
   * Easy vertex drag and highlight support including on-the-fly edge routing updates
   * Filtering feature provides selective vertex rendering leaving supplied graph untouched
   * Customizable vertex labels support that allows to set text, position and angle
@@ -67,9 +71,9 @@ Features:
   * Vertex connection points (VCP) allows to implement customizable edge-to-vertex connections
   * Vertex snap-to-grid feature while dragging vertex or group of vertices
 
-* Additional Features:
+* And at last some additiona features to note:
   * Built in enchanced zoom control with minimap and zooming features:
     * Support for area selection of the vertices
     * Support for area zooming and smooth animations
   * Design-time visual preview for all controls
-  * Many example projects
+  * Many well commented example projects
