@@ -1,4 +1,8 @@
-﻿using System.Windows;
+﻿#if WPF
+using System.Windows;
+#else
+using Windows.Foundation;
+#endif
 
 namespace GraphX.Controls
 {

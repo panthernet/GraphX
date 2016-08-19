@@ -175,6 +175,9 @@
     <Compile Include="..\GraphX.Controls\Controls\GraphAreaBase.cs">
       <Link>Controls\GraphAreaBase.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\IGraphAreaBase.cs">
+      <Link>Controls\IGraphAreaBase.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\ControlDrawOrder.cs">
       <Link>Controls\Misc\ControlDrawOrder.cs</Link>
     </Compile>
