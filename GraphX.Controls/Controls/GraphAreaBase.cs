@@ -22,7 +22,7 @@ using GraphX.Controls.Models;
 
 namespace GraphX
 {
-    public abstract class GraphAreaBase : Canvas, ITrackableContent
+    public abstract class GraphAreaBase : Canvas, ITrackableContent, IGraphAreaBase
     {
         /// <summary>
         /// Gets or Sets if GraphArea is in print mode when its size is recalculated on each Measure pass

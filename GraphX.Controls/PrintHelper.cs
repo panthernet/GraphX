@@ -61,26 +61,25 @@ namespace GraphX.Controls
         /// <param name="imgdpi">Optional image DPI parameter</param>
         /// <param name="imgQuality">Optional image quality parameter (for some formats like JPEG)</param>
         /// <param name="itype"></param>
-        public static void ExportToImage(GraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
+        public static void ExportToImage(IGraphAreaBase surface, Uri path, ImageType itype, bool useZoomControlSurface = false, double imgdpi = DEFAULT_DPI, int imgQuality = 100)
         {
             if (!useZoomControlSurface)
                 surface.SetPrintMode(true, true, 100);
             //Create a render bitmap and push the surface to it
-            UIElement vis = surface;
+            var vis = surface as UIElement;
             if (useZoomControlSurface)
             {
-                var zoomControl = surface.Parent as IZoomControl;
+                var canvas = (surface as Canvas);
+                var zoomControl = canvas.Parent as IZoomControl;
                 if (zoomControl != null)
                     vis = zoomControl.PresenterVisual;
                 else
                 {
-                    var frameworkElement = surface.Parent as FrameworkElement;
+                    var frameworkElement = canvas.Parent as FrameworkElement;
                     if (frameworkElement?.Parent is IZoomControl)
                         vis = ((IZoomControl) frameworkElement.Parent).PresenterVisual;
                 }
             }
-
-
 
             var renderBitmap =
                     new RenderTargetBitmap(
@@ -173,12 +172,13 @@ namespace GraphX.Controls
         }
 
 
-        public static void PrintToFit(GraphAreaBase visual, string description, int margin = 0)
+        public static void PrintToFit(IGraphAreaBase ga, string description, int margin = 0)
         {
+            var visual = ga as Canvas;
             var pd = new PrintDialog();
             if (pd.ShowDialog() == true)
             {
-                visual.SetPrintMode(true, true, margin);
+                ga.SetPrintMode(true, true, margin);
 
                 //store original scale
                 var originalScale = visual.LayoutTransform;
@@ -201,16 +201,17 @@ namespace GraphX.Controls
 
                 //apply the original transform.
                 visual.LayoutTransform = originalScale;
-                visual.SetPrintMode(false, true, margin);
+                ga.SetPrintMode(false, true, margin);
             }
         }
 
-        public static void PrintWithDPI(GraphAreaBase visual, string description, double dpi, int margin = 0)
+        public static void PrintWithDPI(IGraphAreaBase ga, string description, double dpi, int margin = 0)
         {
+            var visual = ga as Canvas;
             var pd = new PrintDialog();
             if (pd.ShowDialog() == true)
             {
-                visual.SetPrintMode(true, true, margin);
+                ga.SetPrintMode(true, true, margin);
                 //store original scale
                 var originalScale = visual.LayoutTransform;
                 //get scale from DPI
@@ -227,9 +228,11 @@ namespace GraphX.Controls
                 pd.PrintVisual(visual, description);
                 //apply the original transform.
                 visual.LayoutTransform = originalScale;
-                visual.SetPrintMode(false, true, margin);
+                ga.SetPrintMode(false, true, margin);
             }
         }
+
+
 
         #region OTHER
 

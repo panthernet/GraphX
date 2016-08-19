@@ -109,6 +109,7 @@
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\EdgeControlBase.cs" />
     <Compile Include="Controls\EdgeLabels\AttachableEdgeLabelControl.cs" />
+    <Compile Include="Controls\IGraphAreaBase.cs" />
     <Compile Include="Controls\Misc\ControlDrawOrder.cs" />
     <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />
     <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />

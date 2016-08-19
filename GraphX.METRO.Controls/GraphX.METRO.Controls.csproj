@@ -340,7 +340,7 @@
     <Content Include="Images\help_black.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GRaphX.METRO.Controls.pfx" />
+    <None Include="GraphX.METRO.Controls.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -358,7 +358,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>GRaphX.METRO.Controls.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>GraphX.METRO.Controls.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

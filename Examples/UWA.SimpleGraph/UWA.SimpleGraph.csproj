@@ -137,7 +137,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="UWA.SimpleGraph_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\METRO.SimpleGraph\Assets\Logo.png">
