@@ -1,6 +1,7 @@
 ﻿WIP 2.3.6
 DETAILED CHANGELOG:
-
++ Fixed ZoomControl dynamic content switch to corectly refresh viewfinder
++ Some class refactoring
 
 RELEASE 2.3.5
 FEATURES HIGHLIGHT:
