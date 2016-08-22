@@ -189,6 +189,11 @@ namespace GraphX.Controls
                 //rem due to fail in template bg binding //_viewFinderDisplay.Background = this.Background;
 
                 // hook up event handlers for dragging and resizing the viewport
+                _viewFinderDisplay.MouseMove -= ViewFinderDisplayMouseMove;
+                _viewFinderDisplay.MouseLeftButtonDown -= ViewFinderDisplayBeginCapture;
+                _viewFinderDisplay.MouseLeftButtonUp -= ViewFinderDisplayEndCapture;
+                _viewFinderDisplay.IsVisibleChanged -= _viewFinderDisplay_IsVisibleChanged;
+
                 _viewFinderDisplay.MouseMove += ViewFinderDisplayMouseMove;
                 _viewFinderDisplay.MouseLeftButtonDown += ViewFinderDisplayBeginCapture;
                 _viewFinderDisplay.MouseLeftButtonUp += ViewFinderDisplayEndCapture;
@@ -654,7 +659,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Use Ctrl key to zoom with mouse wheel or without it
         /// </summary>
-        public bool UseCtrlForMouseWheel { get; set; }
+        public bool UseCtrlForMouseWheel { get; set; } = true;
 
         /// <summary>
         /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area.
@@ -942,7 +947,7 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Minimum zoom distance (Zoom out)
+        /// Minimum zoom distance (Zoom out). Default value is 0.01
         /// </summary>
         public double MinZoom
         {
@@ -951,7 +956,7 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Maximum zoom distance (Zoom in)
+        /// Maximum zoom distance (Zoom in). DEfault value is 100
         /// </summary>
         public double MaxZoom
         {
@@ -1066,11 +1071,8 @@ namespace GraphX.Controls
 
         public ZoomControl()
         {
-           // ClipToBounds = true;
             if (DesignerProperties.GetIsInDesignMode(this))
-            {
-                //Mode = ZoomControlModes.Fill;
-                //Zoom = 0.5;             
+            {           
             }
             else
             {
@@ -1078,7 +1080,6 @@ namespace GraphX.Controls
                 PreviewMouseDown += ZoomControl_PreviewMouseDown;
                 MouseDown += ZoomControl_MouseDown;
                 MouseUp += ZoomControl_MouseUp;
-                UseCtrlForMouseWheel = true;
 
                 AddHandler(SizeChangedEvent, new SizeChangedEventHandler(OnSizeChanged), true);
 
@@ -1092,16 +1093,9 @@ namespace GraphX.Controls
                 BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control, 
                     (sender, args) => MouseWheelAction(-120, OrigoPosition));
 
-                this.PreviewKeyDown += ZoomControl_PreviewKeyDown;
-
-                Loaded += ZoomControl_Loaded;
             }
         }
 
-        void ZoomControl_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            
-        }
 
         protected void BindCommand(RoutedUICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute = null)
         {
@@ -1116,12 +1110,6 @@ namespace GraphX.Controls
             InputBindings.Add(new KeyBinding(command, key, modifier));
         }
 
-
-        void ZoomControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            //FakeZoom();
-        }
-
         #region ContentChanged
         protected override void OnContentChanged(object oldContent, object newContent)
         {
@@ -1131,8 +1119,6 @@ namespace GraphX.Controls
             if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
             if (newContent != null)
             {
-                UpdateViewFinderDisplayContentBounds();
-                UpdateViewport();
                 var newc = newContent as ITrackableContent;
                 if (newc != null)
                 {
@@ -1140,8 +1126,12 @@ namespace GraphX.Controls
                     newc.ContentSizeChanged += Content_ContentSizeChanged;
                 }
                 else _isga = false;
+                if(Template != null)
+                    OnApplyTemplate();
+                UpdateViewFinderDisplayContentBounds();
+                UpdateViewport();
             }
-                
+
             base.OnContentChanged(oldContent, newContent);
         }
 
@@ -1569,7 +1559,7 @@ namespace GraphX.Controls
 
             if (DesignerProperties.GetIsInDesignMode(this))
             {
-                ViewFinder?.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+                ViewFinder?.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 return;
             }
 
@@ -1577,27 +1567,26 @@ namespace GraphX.Controls
             Presenter = GetTemplateChild(PART_PRESENTER) as ZoomContentPresenter;
             if (Presenter != null)
             {
-                Presenter.SizeChanged += (s, a) =>
-                                             {
-                                                 //UpdateViewFinderDisplayContentBounds();
-                                                 UpdateViewport();
-                                                 if (Mode == ZoomControlModes.Fill)
-                                                     DoZoomToFill();
-                                             };
-                Presenter.ContentSizeChanged += (s, a) =>
-                {
-                    //UpdateViewFinderDisplayContentBounds();
-                    if (Mode == ZoomControlModes.Fill)
-                    {
-                        DoZoomToFill();
-                        //IsAnimationDisabled = false;
-                    }
-                };
+                Presenter.SizeChanged -= Presenter_SizeChanged;
+                Presenter.ContentSizeChanged -= Presenter_ContentSizeChanged;
+                Presenter.SizeChanged += Presenter_SizeChanged;
+                Presenter.ContentSizeChanged += Presenter_ContentSizeChanged;
             }
             if (Mode == ZoomControlModes.Fill)
-            {
                 DoZoomToFill();
-            }
+        }
+
+        private void Presenter_ContentSizeChanged(object sender, Size newSize)
+        {
+            if (Mode == ZoomControlModes.Fill)
+                DoZoomToFill();
+        }
+
+        private void Presenter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateViewport();
+            if (Mode == ZoomControlModes.Fill)
+                DoZoomToFill();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

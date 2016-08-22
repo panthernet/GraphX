@@ -76,23 +76,58 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
                 if ((Parameters.Direction == LayoutDirection.TopToBottom ||  Parameters.Direction == LayoutDirection.BottomToTop) && sourcePosition.X != targetPosition.X)
                 {
-                    _edgeRoutingPoints[edge] =
-                        new[]
-                        {
-                            new Point(0, 0),
-                            new Point(targetPosition.X + targetSize.Width / 2, sourcePosition.Y + sourceSize.Height / 2),
-                            new Point(0, 0)
-                        };
+                    var pt = new Point(targetPosition.X + targetSize.Width/2, sourcePosition.Y + sourceSize.Height/2);
+                    var src = new Point(sourcePosition.X + sourceSize.Width/2, sourcePosition.Y + sourceSize.Height/2);
+                    
+                    if (Parameters.Direction == LayoutDirection.TopToBottom)
+                    {
+                        var pt2 = new Point(targetPosition.X + targetSize.Width/2, targetPosition.Y);
+                        _edgeRoutingPoints[edge] =
+                            new[]
+                            {
+                                src,
+                                pt,
+                                pt2
+                            };
+                    }
+                    else
+                    {
+                        var pt2 = new Point(targetPosition.X + targetSize.Width / 2, targetPosition.Y + targetSize.Height / 2);
+                        _edgeRoutingPoints[edge] =
+                            new[]
+                            {
+                                src,
+                                pt,
+                                pt2
+                            };
+                    }
                 }
                 else if ((Parameters.Direction == LayoutDirection.LeftToRight || Parameters.Direction == LayoutDirection.RightToLeft) && sourcePosition.Y != targetPosition.Y)
                 {
-                    _edgeRoutingPoints[edge] =
-                        new[]
-                        {
-                            new Point(0, 0),
-                            new Point(sourcePosition.X + sourceSize.Width/2, targetPosition.Y + targetSize.Height/2),
-                            new Point(0, 0)
-                        };
+                    var src = new Point(sourcePosition.X + sourceSize.Width / 2, sourcePosition.Y + sourceSize.Height/2);
+                    var pt = new Point(sourcePosition.X + sourceSize.Width/2, targetPosition.Y + targetSize.Height/2);
+                    if (Parameters.Direction == LayoutDirection.LeftToRight)
+                    {
+                        var pt2 = new Point(targetPosition.X, targetPosition.Y + targetSize.Height / 2);
+                        _edgeRoutingPoints[edge] =
+                            new[]
+                            {
+                                src,
+                                pt,
+                                pt2
+                            };
+                    }
+                    else
+                    {
+                        var pt2 = new Point(targetPosition.X + targetSize.Width, targetPosition.Y + targetSize.Height / 2);
+                        _edgeRoutingPoints[edge] =
+                            new[]
+                            {
+                                src,
+                                pt,
+                                pt2
+                            };
+                    }
                 }
                 else _edgeRoutingPoints[edge] = null;
             }

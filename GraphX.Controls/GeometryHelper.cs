@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using GraphX.PCL.Common.Enums;
 #if WPF
@@ -107,6 +108,12 @@ namespace GraphX.Controls
             return oPolyLineSegment;
         }
 
+        public static IList<Point> GetCurvePointsThroughPoints(Point[] points, double tension, double tolerance)
+        {
+            return GetCurveThroughPoints(points, tension, tolerance).Points;
+        }
+
+
         private static void AddPointsToPolyLineSegment(PolyLineSegment oPolyLineSegment, Point oPoint0, Point oPoint1, Point oPoint2, Point oPoint3, double dTension, double dTolerance)
         {
             Debug.Assert(oPolyLineSegment != null);
@@ -175,6 +182,8 @@ namespace GraphX.Controls
             return oPathFigure;
         }
 
+
+
         public static PathGeometry GetPathGeometryFromPathSegments(Point oStartPoint, bool bPathFigureIsFilled, params PathSegment[] aoPathSegments)
         {
             Debug.Assert(aoPathSegments != null);
@@ -232,6 +241,21 @@ namespace GraphX.Controls
                     return GetEdgeEndpointOnRectangle(source, sourceSize, target);
             }
         }
+
+     /*   public static Point GetEdgeEndpoint2(Point endPoint, Rect bounds, Point startPoint, VertexShape vertexShape, double angle)
+        {
+            Rect b;
+            if (angle == 0)
+                b = bounds;
+            else
+            {
+                b = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                var matrix = GetRotatedMatrix(bounds.Center(), MathHelper.RadiansToDegrees(angle));
+                b.Transform(matrix);
+            }
+
+            return GetEdgeEndpoint(endPoint, b, startPoint, vertexShape);
+        }*/
 
         public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, double dVertexARadius, Point oVertexBLocation)
         {
@@ -579,5 +603,7 @@ namespace GraphX.Controls
 
             return (oPathGeometry);
         }
+
+
     }
 }

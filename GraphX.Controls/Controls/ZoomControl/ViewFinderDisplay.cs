@@ -128,21 +128,13 @@ namespace GraphX.Controls
 
         #region AvailableSize Internal Property
 
-        internal Size AvailableSize => _availableSize;
-
-        private Size _availableSize = Size.Empty;
+        internal Size AvailableSize { get; private set; } = Size.Empty;
 
         #endregion
 
         #region Scale Internal Property
 
-        internal double Scale
-        {
-            get { return _scale; }
-            set { _scale = value; }
-        }
-
-        private double _scale = 1d;
+        internal double Scale { get; set; } = 1d;
 
         #endregion
 
@@ -162,7 +154,7 @@ namespace GraphX.Controls
             // as a surface for the view finder's VisualBrush.
 
             // store the available size for use by the Zoombox control
-            _availableSize = availableSize;
+            AvailableSize = availableSize;
 
             // Simulate size-to-content for the display panel by ensuring a width and height
             // based on the content bounds. Otherwise, the display panel may have no size, since it doesn't 

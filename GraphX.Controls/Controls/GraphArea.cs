@@ -159,7 +159,7 @@ namespace GraphX.Controls
         /// </summary>
         internal override bool EdgeCurvingEnabled => LogicCore != null && LogicCore.EdgeCurvingEnabled;
         /// <summary>
-        /// Link to LogicCore. Gets if edge curving tolerance.
+        /// Link to LogicCore. Gets edge curving tolerance.
         /// </summary>
         internal override double EdgeCurvingTolerance => LogicCore?.EdgeCurvingTolerance ?? 0;
 
