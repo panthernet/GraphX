@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
@@ -36,7 +34,7 @@ namespace ShowcaseApp.WPF.Pages
             dgLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             dgLogic.EdgeCurvingEnabled = true;
 
-            zoomCtrl.IsAnimationDisabled = true;
+            zoomCtrl.IsAnimationEnabled = false;
             ZoomControl.SetViewFinderVisibility(zoomCtrl, Visibility.Visible);
             zoomCtrl.Zoom = 2;
             zoomCtrl.MinZoom = .5;
@@ -61,12 +59,19 @@ namespace ShowcaseApp.WPF.Pages
         {
              if(args.MouseArgs.LeftButton == MouseButtonState.Pressed)            
              {
-                 if (_opMode == EditorOperationMode.Edit)
-                    CreateEdgeControl(args.VertexControl);
-                 else if(_opMode == EditorOperationMode.Delete)
-                     SafeRemoveVertex(args.VertexControl);
-                 else if (_opMode == EditorOperationMode.Select && args.Modifiers == ModifierKeys.Control)
-                     SelectVertex(args.VertexControl);
+                 switch (_opMode)
+                 {
+                     case EditorOperationMode.Edit:
+                         CreateEdgeControl(args.VertexControl);
+                         break;
+                     case EditorOperationMode.Delete:
+                         SafeRemoveVertex(args.VertexControl);
+                         break;
+                     default:
+                         if (_opMode == EditorOperationMode.Select && args.Modifiers == ModifierKeys.Control)
+                             SelectVertex(args.VertexControl);
+                         break;
+                 }
              }
         }
 

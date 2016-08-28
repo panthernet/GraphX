@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 #if WPF
 using System.Windows;
@@ -19,6 +20,25 @@ namespace GraphX.Controls
     public abstract class VertexControlBase : Control, IGraphControl
     {
         protected internal IVertexLabelControl VertexLabelControl;
+        /// <summary>
+        /// Fires when new label is attached to VertexControl
+        /// </summary>
+        public event EventHandler<EventArgs> LabelAttached;
+
+        protected void OnLabelAttached()
+        {
+            LabelAttached?.Invoke(this, null);
+        }
+
+        /// <summary>
+        /// Fires when new label is detached from VertexControl
+        /// </summary>
+        public event EventHandler<EventArgs> LabelDetached;
+
+        protected void OnLabelDetached()
+        {
+            LabelDetached?.Invoke(this, null);
+        }
 
         /// <summary>
         /// Fires when IsPositionTraceEnabled property set and object changes its coordinates.
@@ -219,6 +239,7 @@ namespace GraphX.Controls
         public void AttachLabel(IVertexLabelControl ctrl)
         {
             VertexLabelControl = ctrl;
+            OnLabelAttached();
         }
 
         /// <summary>
@@ -229,6 +250,7 @@ namespace GraphX.Controls
             if(VertexLabelControl is IAttachableControl<VertexControl>)
                 ((IAttachableControl<VertexControl>)VertexLabelControl).Detach();
             VertexLabelControl = null;
+            OnLabelDetached();
         }
 
         /// <summary>

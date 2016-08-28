@@ -100,8 +100,8 @@ namespace GraphX.Controls
 
         private void changeMonitor_ChangeDetected(object source, EventArgs args)
         {
-            if(ShowLabel && VertexLabelControl != null)
-                VertexLabelControl.UpdatePosition();
+            if(ShowLabel)
+                VertexLabelControl?.UpdatePosition();
             OnPositionChanged(new Point(), GetPosition());
         }
 

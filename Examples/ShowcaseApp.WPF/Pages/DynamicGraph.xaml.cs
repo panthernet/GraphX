@@ -50,7 +50,7 @@ namespace ShowcaseApp.WPF.Pages
             dg_zoomctrl.PreviewDrop += dg_Area_Drop;
             dg_zoomctrl.DragEnter += dg_Area_DragEnter;
 
-            dg_zoomctrl.IsAnimationDisabled = true;
+            dg_zoomctrl.IsAnimationEnabled = false;
            /* dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;
             dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;*/

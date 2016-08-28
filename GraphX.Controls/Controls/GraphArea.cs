@@ -1553,20 +1553,22 @@ namespace GraphX.Controls
         /// Update parallel edges information. Only needed to be run when edges has been added manualy and has to track parallel ones.
         /// Essentialy refreshes EdgeControl::IsParallel property
         /// </summary>
-        public virtual void UpdateParallelEdgesData()
+        /// <param name="edgeList">Optonal parameter. Specifies initial list of edges. If null then all edges are parsed. Default value is Null.</param>
+        public virtual void UpdateParallelEdgesData(Dictionary<TEdge, EdgeControl> edgeList = null)
         {
-            var usedIds = _edgeslist.Count > 20 ? new HashSet<long>() as ICollection<long> : new List<long>();
+            edgeList = edgeList ?? _edgeslist;
+            var usedIds = edgeList.Count > 20 ? new HashSet<long>() as ICollection<long> : new List<long>();
 
             //clear IsParallel flag
-            EdgesList.Values.ForEach(a => a.IsParallel = false);
+            edgeList.Values.ForEach(a => a.IsParallel = false);
 
-            foreach (var item in EdgesList)
+            foreach (var item in edgeList)
             {
                 if (usedIds.Contains(item.Key.ID) || !item.Value.CanBeParallel) continue;
                 var list = new List<EdgeControl> { item.Value };
                 //that list will contain checks for edges that goes form target to source
                 var cList = new List<bool> { false };
-                foreach (var edge in EdgesList)
+                foreach (var edge in edgeList)
                 {
                     //skip the same edge
                     if (item.Key.ID == edge.Key.ID) continue;
@@ -1863,13 +1865,13 @@ namespace GraphX.Controls
             var dlist = new List<GraphSerializationData>();
             foreach (var item in VertexList) //ALWAYS serialize vertices first
             {
-                dlist.Add(new GraphSerializationData { Position = item.Value.GetPositionGraphX(), Data = item.Key });
+                dlist.Add(new GraphSerializationData { Position = item.Value.GetPositionGraphX(), Data = item.Key, IsVisible = item.Value.Visibility == Visibility.Visible, HasLabel = item.Value.VertexLabelControl != null});
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("ExtractSerializationData() -> All vertex datas must have positive unique ID!");
             }
             foreach (var item in EdgesList)
             {
                 // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
-                dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key });
+                dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key, IsVisible = item.Value.Visibility == Visibility.Visible, HasLabel = item.Value.EdgeLabelControl != null });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("ExtractSerializationData() -> All edge datas must have positive unique ID!");
             }
             return dlist;
@@ -1897,10 +1899,13 @@ namespace GraphX.Controls
             {
                 var vertexdata = item.Data as TVertex;
                 var ctrl = ControlFactory.CreateVertexControl(vertexdata);
+                ctrl.Visibility = item.IsVisible ? Visibility.Visible : Visibility.Collapsed;
                 ctrl.SetPosition(item.Position.X, item.Position.Y);
                 AddVertex(vertexdata, ctrl);
                 LogicCore.Graph.AddVertex(vertexdata);
                 ctrl.ApplyTemplate();
+                if (item.HasLabel)
+                    GenerateVertexLabel(ctrl);
             }
             var elist = data.Where(a => a.Data is TEdge);
 
@@ -1916,9 +1921,11 @@ namespace GraphX.Controls
 
                 if (datasource == null || datatarget == null)
                     throw new GX_SerializationException("DeserializeFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
-                var ecc = ControlFactory.CreateEdgeControl(_vertexlist[datasource], _vertexlist[datatarget], edgedata);
+                var ecc = ControlFactory.CreateEdgeControl(_vertexlist[datasource], _vertexlist[datatarget], edgedata, false, true, item.IsVisible ? Visibility.Visible : Visibility.Collapsed);
                 InsertEdge(edgedata, ecc);
                 LogicCore.Graph.AddEdge(edgedata);
+                if (item.HasLabel)
+                    GenerateEdgeLabel(ecc);
             }
 
             if (AutoAssignMissingDataId)

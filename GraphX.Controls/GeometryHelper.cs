@@ -225,14 +225,14 @@ namespace GraphX.Controls
             return false;
         }
 #endif
-        public static Point GetEdgeEndpoint(Point source, Rect sourceSize, Point target, VertexShape shape)
+        public static Point GetEdgeEndpoint(Point source, Rect sourceSize, Point target, VertexShape shape, double angle = 0)
         {
             switch (shape)
             {
                 case VertexShape.Circle:
-                    return GetEdgeEndpointOnCircle(source, Math.Max(sourceSize.Height, sourceSize.Width) * .5, target);
+                    return GetEdgeEndpointOnCircle(source, Math.Max(sourceSize.Height, sourceSize.Width) * .5, target, angle);
                 case VertexShape.Ellipse:
-                    return GetEdgeEndpointOnEllipse(source, sourceSize.Width*.5, sourceSize.Height*.5, target);
+                    return GetEdgeEndpointOnEllipse(source, sourceSize.Width*.5, sourceSize.Height*.5, target, angle);
                 case VertexShape.Diamond:
                     return GetEdgeEndpointOnDiamond(source, sourceSize.Width * .5, target);
                 case VertexShape.Triangle:
@@ -257,29 +257,37 @@ namespace GraphX.Controls
             return GetEdgeEndpoint(endPoint, b, startPoint, vertexShape);
         }*/
 
-        public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, double dVertexARadius, Point oVertexBLocation)
+        public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, double dVertexARadius, Point oVertexBLocation, double angle = 0)
         {
             Debug.Assert(dVertexARadius >= 0);
 
             var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
-
-            return new Point(
+            var pt =  new Point(
                 oVertexALocation.X + (dVertexARadius * Math.Cos(dEdgeAngle)),
                 oVertexALocation.Y - (dVertexARadius * Math.Sin(dEdgeAngle))
                 );
+            return pt;
         }
 
-        public static Point GetEdgeEndpointOnEllipse(Point oVertexALocation, double dVertexARadiusWidth, double dVertexARadiusHeight, Point oVertexBLocation)
+        public static Point GetEdgeEndpointOnEllipse(Point oVertexALocation, double dVertexARadiusWidth, double dVertexARadiusHeight, Point oVertexBLocation, double angle = 0)
         {
             Debug.Assert(dVertexARadiusWidth >= 0);
             Debug.Assert(dVertexARadiusHeight >= 0);
 
-            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
+            var sourcePoint = oVertexALocation;
+            var targetPoint = oVertexBLocation;
 
-            return new Point(
-                oVertexALocation.X + (dVertexARadiusWidth * Math.Cos(dEdgeAngle)),
-                oVertexALocation.Y - (dVertexARadiusHeight * Math.Sin(dEdgeAngle))
+            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(sourcePoint, targetPoint);
+            if (angle != 0)
+                dEdgeAngle = (MathHelper.ToDegrees(dEdgeAngle) + angle).ToRadians();
+
+            var pt =  new Point(
+                sourcePoint.X + (dVertexARadiusWidth * Math.Cos(dEdgeAngle)),
+                sourcePoint.Y - (dVertexARadiusHeight * Math.Sin(dEdgeAngle))
                 );
+            if (angle != 0)
+                pt = MathHelper.RotatePoint(pt, oVertexALocation, angle);
+            return pt;
         }
 
 

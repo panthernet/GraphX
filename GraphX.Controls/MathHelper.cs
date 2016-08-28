@@ -18,6 +18,11 @@ namespace GraphX.Controls
         {
             return MathHelper.ToDegrees(value);
         }
+
+        public static double ToRadians(this double value)
+        {
+            return value*Math.PI/180;
+        }
     }
 
     public static class MathHelper
@@ -243,14 +248,14 @@ namespace GraphX.Controls
             return r1 < r2 ? a : b;
         }
 
-        public static Double GetAngleBetweenPointsRadians(Point point1, Point point2)
+        public static double GetAngleBetweenPointsRadians(Point point1, Point point2)
         {
-            return (Math.Atan2(point1.Y - point2.Y, point2.X - point1.X));
+            return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);
         }
 
-        public static Double RadiansToDegrees(Double radians)
+        public static double RadiansToDegrees(double radians)
         {
-            return ((radians * 360.0) / (2.0 * Math.PI));
+            return radians * 180.0 / Math.PI;
         }
     }
 }

@@ -14,6 +14,7 @@ namespace GraphX.Controls
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZoomContentPresenter))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged
     {
+        private const string PART_PRESENTER = "PART_Presenter";
 
         #region Viewfinder (minimap)
 
@@ -651,18 +652,19 @@ namespace GraphX.Controls
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets if animation should be disabled
-        /// </summary>
-        public bool IsAnimationDisabled { get; set; }
 
         /// <summary>
-        /// Use Ctrl key to zoom with mouse wheel or without it
+        /// Gets or sets if zoom animation is enabled. Default value is True.
+        /// </summary>
+        public virtual bool IsAnimationEnabled { get; set; } = true;
+
+        /// <summary>
+        /// Use Ctrl key to zoom with mouse wheel or without it. Default value is True.
         /// </summary>
         public bool UseCtrlForMouseWheel { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area.
+        /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area. Default value is Positional.
         /// </summary>
         public MouseWheelZoomingMode MouseWheelZoomingMode { get; set; }
 
@@ -676,11 +678,6 @@ namespace GraphX.Controls
             AreaSelected?.Invoke(this, new AreaSelectedEventArgs(selection));
         }
 
-        private const string PART_PRESENTER = "PART_Presenter";
-
-        public static readonly DependencyProperty HideZoomProperty =
-            DependencyProperty.Register("HideZoom", typeof(Visibility), typeof(ZoomControl),
-                                        new PropertyMetadata(Visibility.Visible));
 
         public static readonly DependencyProperty AnimationLengthProperty =
             DependencyProperty.Register(nameof(AnimationLength), typeof(TimeSpan), typeof(ZoomControl),
@@ -689,8 +686,8 @@ namespace GraphX.Controls
         public static readonly DependencyProperty IsDragSelectByDefaultProperty =
             DependencyProperty.Register(nameof(IsDragSelectByDefaultProperty), typeof(bool), typeof(ZoomControl), new PropertyMetadata(false));
 
-        public static readonly DependencyProperty MaximumZoomStepProperty =
-            DependencyProperty.Register("MaximumZoomValueValue", typeof(double), typeof(ZoomControl),
+        public static readonly DependencyProperty ZoomStepProperty =
+            DependencyProperty.Register(nameof(ZoomStep), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(5.0));
 
         public static readonly DependencyProperty MaxZoomProperty =
@@ -965,18 +962,18 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Maximum value for zoom step (how fast the zoom can do)
+        /// Gets or sets zoom step value (how fast the zoom can do). Default value is 5.
         /// </summary>
-        public double MaximumZoomStep
+        public virtual double ZoomStep
         {
-            get { return (double)GetValue(MaximumZoomStepProperty); }
-            set { SetValue(MaximumZoomStepProperty, value); }
+            get { return (double)GetValue(ZoomStepProperty); }
+            set { SetValue(ZoomStepProperty, value); }
         }
 
         /// <summary>
-        /// Gets or sets zoom sensitivity. Lower the value - smoother the zoom.
+        /// Gets or sets zoom sensitivity. Lower the value - smoother the zoom. Default value is 100.
         /// </summary>
-        public double ZoomSensitivity
+        public virtual double ZoomSensitivity
         {
             get { return (double)GetValue(ZoomSensitivityProperty); }
             set { SetValue(ZoomSensitivityProperty, value); }
@@ -1181,7 +1178,7 @@ namespace GraphX.Controls
         {
             var origoPosition = OrigoPosition;
             DoZoom(
-                Math.Max(1 / MaximumZoomStep, Math.Min(MaximumZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
+                Math.Max(1 / ZoomStep, Math.Min(ZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
                 delta < 0 ? -1 : 1,
                 origoPosition,
                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
@@ -1322,7 +1319,15 @@ namespace GraphX.Controls
         {
             if (targetZoom == 0d && double.IsNaN(transformX) && double.IsNaN(transformY)) return;
             _isZooming = isZooming;
-            var duration = !IsAnimationDisabled ? new Duration(AnimationLength) : new Duration(new TimeSpan(0,0,0,0,100));
+            if (!IsAnimationEnabled)
+            {
+                SetCurrentValue(TranslateXProperty, transformX);
+                SetCurrentValue(TranslateYProperty, transformY);
+                SetCurrentValue(ZoomProperty, targetZoom);
+                ZoomCompleted(this, null);
+                return;
+            }
+            var duration = new Duration(AnimationLength);
             var value = (double)GetValue(TranslateXProperty);
             if (double.IsNaN(value) || double.IsInfinity(value)) SetValue(TranslateXProperty, 0d);
             value = (double)GetValue(TranslateYProperty);

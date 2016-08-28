@@ -32,10 +32,7 @@ namespace GraphX.PCL.Common.Models
         /// <summary>
         /// Returns true if Source vertex equals Target vertex
         /// </summary>
-        public bool IsSelfLoop
-        {
-            get { return Source.Equals(Target); }
-        }
+        public bool IsSelfLoop => Source.Equals(Target);
 
         /// <summary>
         /// Optional parameter to bind edge to static vertex connection point

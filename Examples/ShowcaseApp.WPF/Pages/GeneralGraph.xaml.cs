@@ -6,6 +6,7 @@ using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
 using GraphX.Controls.Models;
+using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using Microsoft.Win32;
 using QuickGraph;
@@ -55,8 +56,8 @@ namespace ShowcaseApp.WPF.Pages
 
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
 
-            gg_zoomctrl.IsAnimationDisabled = false;
-            gg_zoomctrl.MaximumZoomStep = 2;
+            gg_zoomctrl.IsAnimationEnabled = true;
+            gg_zoomctrl.ZoomStep = 2;
 
             Loaded += GG_Loaded;
         }
@@ -252,6 +253,16 @@ namespace ShowcaseApp.WPF.Pages
         private void gg_eralgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             gg_Area.LogicCore.DefaultEdgeRoutingAlgorithm = (EdgeRoutingAlgorithmTypeEnum)gg_eralgo.SelectedItem;
+            if ((EdgeRoutingAlgorithmTypeEnum) gg_eralgo.SelectedItem == EdgeRoutingAlgorithmTypeEnum.Bundling)
+            {
+                BundleEdgeRoutingParameters prm = new BundleEdgeRoutingParameters();
+                gg_Area.LogicCore.DefaultEdgeRoutingAlgorithmParams = prm;
+                prm.Iterations = 200;
+                prm.SpringConstant = 5;
+                prm.Threshold = .1f;
+                gg_Area.LogicCore.EdgeCurvingEnabled = true;
+            }else 
+                gg_Area.LogicCore.EdgeCurvingEnabled = false;
         }
 
         private void gg_useExternalERAlgo_Checked(object sender, RoutedEventArgs e)

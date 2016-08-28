@@ -44,7 +44,7 @@ namespace ShowcaseApp.WPF.Pages
             cbDebugMode.SelectionChanged += cbDebugMode_SelectionChanged;
             dg_zoomctrl.PropertyChanged += dg_zoomctrl_PropertyChanged;
             CreateNewArea();
-            dg_zoomctrl.MaximumZoomStep = 100;
+            dg_zoomctrl.ZoomStep = 100;
         }
 
         void butGroupedGraph_Click(object sender, RoutedEventArgs e)
