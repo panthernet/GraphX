@@ -175,9 +175,6 @@
     <Compile Include="..\GraphX.Controls\Controls\GraphAreaBase.cs">
       <Link>Controls\GraphAreaBase.cs</Link>
     </Compile>
-    <Compile Include="..\GraphX.Controls\Controls\IGraphAreaBase.cs">
-      <Link>Controls\IGraphAreaBase.cs</Link>
-    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\ControlDrawOrder.cs">
       <Link>Controls\Misc\ControlDrawOrder.cs</Link>
     </Compile>
@@ -192,6 +189,9 @@
     </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphArea.cs">
       <Link>Controls\Misc\IGraphArea.cs</Link>
+    </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphAreaBase.cs">
+      <Link>Controls\Misc\IGraphAreaBase.cs</Link>
     </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphControl.cs">
       <Link>Controls\Misc\IGraphControl.cs</Link>
@@ -241,8 +241,8 @@
     <Compile Include="..\GraphX.Controls\Models\AnimationFactory.cs">
       <Link>Models\AnimationFactory.cs</Link>
     </Compile>
-    <Compile Include="..\GraphX.Controls\Models\ContentSizeChangedEventArgs.cs">
-      <Link>Models\ContentSizeChangedEventArgs.cs</Link>
+    <Compile Include="..\GraphX.Controls\Models\ContentSizeChangedEventHandler.cs">
+      <Link>Models\ContentSizeChangedEventHandler.cs</Link>
     </Compile>
     <Compile Include="..\GraphX.Controls\Models\ControlEventArgs.cs">
       <Link>Models\ControlEventArgs.cs</Link>
@@ -289,10 +289,6 @@
     <Compile Include="..\GraphX.Controls\TypeExtensions.cs">
       <Link>TypeExtensions.cs</Link>
     </Compile>
-    <Compile Include="Controls\EdgeControl_.cs" />
-    <Compile Include="Controls\GraphArea_.cs" />
-    <Compile Include="Controls\GraphAreaBase_.cs" />
-    <Compile Include="Controls\VertexControl_.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
@@ -348,10 +344,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="QuickGraph">
-      <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>
+      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="QuickGraph.Graphviz">
-      <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
+      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

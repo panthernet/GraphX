@@ -42,13 +42,16 @@ namespace GraphX.Controls
 
         #endregion
 
-        #region Fit Command
+        #region ResetZoom Command
 
-        public static RoutedUICommand Fit = new RoutedUICommand("Fit Content within Bounds", "FitToBounds", typeof(ZoomControl));
-
-        private void FitToBounds(object sender, ExecutedRoutedEventArgs e)
+        public static RoutedUICommand ResetZoom = new RoutedUICommand("Reset zoom", "ResetZoom", typeof(ZoomControl));
+        /// <summary>
+        /// Executes when ResetZoom command is fired and resets the Zoom value to default one. Override to reset to custom zoom value.
+        /// Default Zoom value is 1.
+        /// </summary>
+        protected virtual void ExecuteResetZoom(object sender, ExecutedRoutedEventArgs e)
         {
-            
+            Zoom = 1d;
         }
 
         #endregion
@@ -1051,8 +1054,12 @@ namespace GraphX.Controls
             set { SetValue(ModeProperty, value); }
         }
 
-        protected RoutedUICommand CommandZoomIn = new RoutedUICommand("Zoom In", "ZoomIn", typeof(ZoomControl));
-        protected RoutedUICommand CommandZoomOut = new RoutedUICommand("Zoom Out", "ZoomOut", typeof(ZoomControl));
+        public RoutedUICommand CommandZoomIn = new RoutedUICommand("Zoom In", "ZoomIn", typeof(ZoomControl));
+        public RoutedUICommand CommandZoomOut = new RoutedUICommand("Zoom Out", "ZoomOut", typeof(ZoomControl));
+        public RoutedUICommand CommandPanLeft = new RoutedUICommand("Pan Left", "PanLeft", typeof(ZoomControl));
+        public RoutedUICommand CommandPanRight = new RoutedUICommand("Pan Right", "PanRight", typeof(ZoomControl));
+        public RoutedUICommand CommandPanTop = new RoutedUICommand("Pan Top", "PanTop", typeof(ZoomControl));
+        public RoutedUICommand CommandPanBottom = new RoutedUICommand("Pan Bottom", "PanBottom", typeof(ZoomControl));
 
         #endregion
 
@@ -1060,6 +1067,11 @@ namespace GraphX.Controls
         protected virtual void HookBeforeZoomChanging() { }
         protected virtual void HookAfterZoomChanging() { }
         #endregion
+
+        /// <summary>
+        /// Gets or sets manual pan sensivity in points when using keys to pan zoomed content. Default value is 10.
+        /// </summary>
+        public double ManualPanSensivity { get; set; } = 10d;
 
         static ZoomControl()
         {
@@ -1083,16 +1095,21 @@ namespace GraphX.Controls
                 BindCommand(Refocus, RefocusView, CanRefocusView);
                 BindCommand(Center, CenterContent);
                 BindCommand(Fill, FillToBounds);
-                BindCommand(Fit, FitToBounds);
-
-                BindKey(CommandZoomIn, Key.Up, ModifierKeys.Control, 
-                    (sender, args) => MouseWheelAction(120, OrigoPosition));
-                BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control, 
-                    (sender, args) => MouseWheelAction(-120, OrigoPosition));
-
+                BindCommand(ResetZoom, ExecuteResetZoom);
+                BindCommand(CommandZoomIn, (sender, args) => MouseWheelAction(ZoomSensitivity, OrigoPosition));
+                BindCommand(CommandZoomOut, (sender, args) => MouseWheelAction(-ZoomSensitivity, OrigoPosition));
+                BindCommand(CommandPanLeft, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(ManualPanSensivity, 0)));
+                BindCommand(CommandPanRight, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(-ManualPanSensivity, 0)));
+                BindCommand(CommandPanTop, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(0, ManualPanSensivity)));
+                BindCommand(CommandPanBottom, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(0, -ManualPanSensivity)));
+                BindKey(CommandPanLeft, Key.Left, ModifierKeys.None);
+                BindKey(CommandPanRight, Key.Right, ModifierKeys.None);
+                BindKey(CommandPanTop, Key.Up, ModifierKeys.None);
+                BindKey(CommandPanBottom, Key.Down, ModifierKeys.None);
+                BindKey(CommandZoomIn, Key.Up, ModifierKeys.Control);
+                BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control);
             }
         }
-
 
         protected void BindCommand(RoutedUICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute = null)
         {
@@ -1100,10 +1117,22 @@ namespace GraphX.Controls
             CommandBindings.Add(binding);
         }
 
-        protected void BindKey(RoutedUICommand command, Key key, ModifierKeys modifier, ExecutedRoutedEventHandler execute)
+        /// <summary>
+        /// Resets all key bindings for the control
+        /// </summary>
+        public void ResetKeyBindings()
         {
-            var binding = new CommandBinding(command, execute);
-            CommandBindings.Add(binding);
+            InputBindings.Clear();
+        }
+
+        /// <summary>
+        /// Binds specified key to command
+        /// </summary>
+        /// <param name="command">Command to execute on key press</param>
+        /// <param name="key">Key</param>
+        /// <param name="modifier">Key modifier</param>
+        public void BindKey(RoutedUICommand command, Key key, ModifierKeys modifier)
+        {
             InputBindings.Add(new KeyBinding(command, key, modifier));
         }
 
@@ -1173,9 +1202,9 @@ namespace GraphX.Controls
         /// <summary>
         /// Defines action on mousewheel
         /// </summary>
-        /// <param name="delta"></param>
-        /// <param name="mousePosition"></param>
-        protected virtual void MouseWheelAction(int delta, Point mousePosition)
+        /// <param name="delta">Delta from mousewheel args</param>
+        /// <param name="mousePosition">Mouse position</param>
+        protected virtual void MouseWheelAction(double delta, Point mousePosition)
         {
             var origoPosition = OrigoPosition;
             DoZoom(
@@ -1224,6 +1253,14 @@ namespace GraphX.Controls
             ReleaseMouseCapture();
         }
 
+        protected virtual void PanAction(Vector initialPoint, Vector diff)
+        {
+            var translate = initialPoint + diff;
+            TranslateX = translate.X;
+            TranslateY = translate.Y;
+            UpdateViewport();
+        }
+
         private void ZoomControl_PreviewMouseMove(object sender, MouseEventArgs e)
         {
 			if (_clickTrack)
@@ -1239,10 +1276,7 @@ namespace GraphX.Controls
                 case ZoomViewModifierMode.None:
                     return;
                 case ZoomViewModifierMode.Pan:
-                    var translate = _startTranslate + (e.GetPosition(this) - _mouseDownPos);
-                    TranslateX = translate.X;
-                    TranslateY = translate.Y;
-                    UpdateViewport();
+                    PanAction(_startTranslate, e.GetPosition(this) - _mouseDownPos);
                     break;
                 case ZoomViewModifierMode.ZoomIn:
                     break;
@@ -1403,18 +1437,6 @@ namespace GraphX.Controls
         }
 
         #endregion
-
-        /// <summary>
-        /// Zoom to rectangle area (MAY BE DEPRECATED). Use ZoomToContent method instead.
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="setDelta"></param>
-        public void ZoomTo(Rect rect, bool setDelta = false)
-        {
-            ZoomToInternal(rect, setDelta);
-            UpdateViewFinderDisplayContentBounds();
-            UpdateViewport();
-        }
 
         /// <summary>
         /// Zoom to rectangle area of the content

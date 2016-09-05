@@ -5,6 +5,4 @@ namespace GraphX.Controls.Models
 #if WPF
     public delegate void VertexClickedEventHandler(object sender, VertexClickedEventArgs args);
 #endif
-
-    public delegate void ContentSizeChangedEventHandler(object sender, ContentSizeChangedEventArgs e);
 }

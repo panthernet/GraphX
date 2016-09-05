@@ -110,7 +110,7 @@
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\EdgeControlBase.cs" />
     <Compile Include="Controls\EdgeLabels\AttachableEdgeLabelControl.cs" />
-    <Compile Include="Controls\IGraphAreaBase.cs" />
+    <Compile Include="Controls\Misc\IGraphAreaBase.cs" />
     <Compile Include="Controls\Misc\ControlDrawOrder.cs" />
     <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />
     <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />
@@ -118,6 +118,7 @@
     <Compile Include="Controls\EdgePointers\DefaultEdgePointer.cs" />
     <Compile Include="Controls\VertexControlBase.cs" />
     <Compile Include="Controls\VertexLabels\AttachableVertexLabelControl.cs" />
+    <Compile Include="Models\ContentSizeChangedEventHandler.cs" />
     <Compile Include="Models\Interfaces\IAttachableControl.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="ExceptionExtensions.cs" />
@@ -150,7 +151,6 @@
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Models\AnimationFactory.cs" />
-    <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
     <Compile Include="Models\ControlEventArgs.cs" />
     <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />

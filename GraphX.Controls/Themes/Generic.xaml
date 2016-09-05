@@ -313,7 +313,7 @@
                                             Orientation="Horizontal"
                                             IsEnabled="True"
                                             />
-                                    <Button IsEnabled="False" x:Name="FitButton" Command="graphx:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button IsEnabled="False" x:Name="FitButton" Command="graphx:ZoomControl.ResetZoom" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FitContentGlyph}" Margin="2"/>
                                     </Button>
                                     <Button x:Name="FillButton" Command="graphx:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">

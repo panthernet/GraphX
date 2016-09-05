@@ -31,7 +31,7 @@ namespace GraphX.Controls
         /// <param name="imgdpi">Desired DPI</param>
         /// <param name="dpiStep">DPI decrease step while estimating</param>
         /// <param name="estPixelCount">Pixel quantity threshold</param>
-        public static double CalculateEstimatedDPI(GraphAreaBase vis, double imgdpi, double dpiStep, int estPixelCount)
+        public static double CalculateEstimatedDPI(IGraphAreaBase vis, double imgdpi, double dpiStep, int estPixelCount)
         {
             bool result = false;
             double currentDPI = imgdpi;
@@ -299,7 +299,7 @@ namespace GraphX.Controls
             }
         }
 
-        private static RenderTargetBitmap RenderTargetBitmap(GraphAreaBase surface, bool useZoomControlSurface, double imgdpi)
+      /*  private static RenderTargetBitmap RenderTargetBitmap(IGraphAreaBase surface, bool useZoomControlSurface, double imgdpi)
         {
             UIElement vis = surface;
             if (useZoomControlSurface)
@@ -331,7 +331,7 @@ namespace GraphX.Controls
             return renderBitmap;
 
         }
-
+        */
         #endregion
 
     }

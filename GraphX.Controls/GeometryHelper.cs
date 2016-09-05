@@ -225,6 +225,14 @@ namespace GraphX.Controls
             return false;
         }
 #endif
+        /// <summary>
+        /// Returns edge endpoint based on vertex math shape and rotation angle
+        /// </summary>
+        /// <param name="source">Vertex position</param>
+        /// <param name="sourceSize">Vertex bounds</param>
+        /// <param name="target">Opposing point of the edge</param>
+        /// <param name="shape">Vertex math shape</param>
+        /// <param name="angle">Vertex rotaion angle</param>
         public static Point GetEdgeEndpoint(Point source, Rect sourceSize, Point target, VertexShape shape, double angle = 0)
         {
             switch (shape)
@@ -238,30 +246,16 @@ namespace GraphX.Controls
                 case VertexShape.Triangle:
                     return GetEdgeEndpointOnTriangle(source, sourceSize.Width * .5, target);
                 default:
-                    return GetEdgeEndpointOnRectangle(source, sourceSize, target);
+                    return GetEdgeEndpointOnRectangle(source, sourceSize, target, angle);
             }
         }
 
-     /*   public static Point GetEdgeEndpoint2(Point endPoint, Rect bounds, Point startPoint, VertexShape vertexShape, double angle)
-        {
-            Rect b;
-            if (angle == 0)
-                b = bounds;
-            else
-            {
-                b = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-                var matrix = GetRotatedMatrix(bounds.Center(), MathHelper.RadiansToDegrees(angle));
-                b.Transform(matrix);
-            }
-
-            return GetEdgeEndpoint(endPoint, b, startPoint, vertexShape);
-        }*/
 
         public static Point GetEdgeEndpointOnCircle(Point oVertexALocation, double dVertexARadius, Point oVertexBLocation, double angle = 0)
         {
             Debug.Assert(dVertexARadius >= 0);
 
-            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(oVertexALocation, oVertexBLocation);
+            var dEdgeAngle = MathHelper.GetAngleBetweenPoints(oVertexALocation, oVertexBLocation);
             var pt =  new Point(
                 oVertexALocation.X + (dVertexARadius * Math.Cos(dEdgeAngle)),
                 oVertexALocation.Y - (dVertexARadius * Math.Sin(dEdgeAngle))
@@ -277,9 +271,9 @@ namespace GraphX.Controls
             var sourcePoint = oVertexALocation;
             var targetPoint = oVertexBLocation;
 
-            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(sourcePoint, targetPoint);
+            var dEdgeAngle = MathHelper.GetAngleBetweenPoints(sourcePoint, targetPoint);
             if (angle != 0)
-                dEdgeAngle = (MathHelper.ToDegrees(dEdgeAngle) + angle).ToRadians();
+                dEdgeAngle = (dEdgeAngle.ToDegrees() + angle).ToRadians();
 
             var pt =  new Point(
                 sourcePoint.X + (dVertexARadiusWidth * Math.Cos(dEdgeAngle)),
@@ -300,10 +294,10 @@ namespace GraphX.Controls
             // side containing the endpoint is vertical and to the right of the
             // vertex location.
 
-            var dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(
+            var dEdgeAngle = MathHelper.GetAngleBetweenPoints(
                 oVertexLocation, otherEndpoint);
 
-            var dEdgeAngleDegrees = MathHelper.RadiansToDegrees(dEdgeAngle);
+            var dEdgeAngleDegrees = dEdgeAngle.ToDegrees();
 
             double dAngleToRotateDegrees;
 
@@ -380,78 +374,18 @@ namespace GraphX.Controls
             //
         }
 
-        public static Point GetEdgeEndpointOnRectangle(Point oVertexALocation, Rect oVertexARectangle, Point oVertexBLocation)
+        public static Point GetEdgeEndpointOnRectangle(Point sourcePos, Rect sourceBounds, Point targetPos, double angle = 0)
         {
-           /* if (oVertexALocation == oVertexBLocation)
-                return oVertexALocation;
+            var tgt_pt = targetPos;
+            if (angle != 0)
+                tgt_pt = MathHelper.RotatePoint(targetPos, sourceBounds.Center(), -angle);
 
-            Double dVertexAX = oVertexALocation.X;
-            Double dVertexAY = oVertexALocation.Y;
+            var leftSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.BottomLeft().ToVector());
+            var bottomSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.BottomLeft().ToVector(), sourceBounds.BottomRight().ToVector());
+            var rightSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopRight().ToVector(), sourceBounds.BottomRight().ToVector());
+            var topSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.TopRight().ToVector());
 
-            Double dVertexBX = oVertexBLocation.X;
-            Double dVertexBY = oVertexBLocation.Y;
-
-            Double dHalfVertexARectangleWidth = oVertexARectangle.Width / 2.0;
-            Double dHalfVertexARectangleHeight = oVertexARectangle.Height / 2.0;
-
-            // Get the angle between vertex A and vertex B.
-
-            Double dEdgeAngle = MathHelper.GetAngleBetweenPointsRadians(
-                oVertexALocation, oVertexBLocation);
-
-            // Get the angle that defines the aspect ratio of vertex A's rectangle.
-
-            Double dAspectAngle = Math.Atan2(
-                dHalfVertexARectangleHeight, dHalfVertexARectangleWidth);
-
-            if (dEdgeAngle >= -dAspectAngle && dEdgeAngle < dAspectAngle)
-            {
-                // For a square, this is -45 degrees to 45 degrees.
-                Debug.Assert(dVertexBX != dVertexAX);
-                return new Point(
-                    dVertexAX + dHalfVertexARectangleWidth,
-                    dVertexAY + dHalfVertexARectangleWidth *
-                        ((dVertexBY - dVertexAY) / (dVertexBX - dVertexAX))
-                    );
-            }
-
-            if (dEdgeAngle >= dAspectAngle && dEdgeAngle < Math.PI - dAspectAngle)
-            {
-                // For a square, this is 45 degrees to 135 degrees.
-                //Debug.Assert(dVertexBY != dVertexAY);
-                return new Point(
-                    dVertexAX + dHalfVertexARectangleHeight *
-                        ((dVertexBX - dVertexAX) / (dVertexAY - dVertexBY)),
-                    dVertexAY - dHalfVertexARectangleHeight
-                    );
-            }
-
-            if (dEdgeAngle < -dAspectAngle && dEdgeAngle >= -Math.PI + dAspectAngle)
-            {
-                // For a square, this is -45 degrees to -135 degrees.
-                Debug.Assert(dVertexBY != dVertexAY);
-                return new Point(
-                    dVertexAX + dHalfVertexARectangleHeight *
-                        ((dVertexBX - dVertexAX) / (dVertexBY - dVertexAY)),
-                    dVertexAY + dHalfVertexARectangleHeight
-                    );
-            }
-
-            // For a square, this is 135 degrees to 180 degrees and -135 degrees to
-            // -180 degrees.
-            Debug.Assert(dVertexAX != dVertexBX);
-            return new Point(
-                dVertexAX - dHalfVertexARectangleWidth,
-                dVertexAY + dHalfVertexARectangleWidth *
-                    ((dVertexBY - dVertexAY) / (dVertexAX - dVertexBX))
-                );*/
-
-            var leftSide = Intersects(new Vector(oVertexALocation.X, oVertexALocation.Y), new Vector(oVertexBLocation.X, oVertexBLocation.Y), new Vector(oVertexARectangle.X, oVertexARectangle.Y), new Vector(oVertexARectangle.X, oVertexARectangle.Y + oVertexARectangle.Height));
-            var bottomSide = Intersects(new Vector(oVertexALocation.X, oVertexALocation.Y), new Vector(oVertexBLocation.X, oVertexBLocation.Y), new Vector(oVertexARectangle.X, oVertexARectangle.Y + oVertexARectangle.Height), new Vector(oVertexARectangle.X + oVertexARectangle.Width, oVertexARectangle.Y + oVertexARectangle.Height));
-            var rightSide = Intersects(new Vector(oVertexALocation.X, oVertexALocation.Y), new Vector(oVertexBLocation.X, oVertexBLocation.Y), new Vector(oVertexARectangle.X + oVertexARectangle.Width, oVertexARectangle.Y), new Vector(oVertexARectangle.X + oVertexARectangle.Width, oVertexARectangle.Y + oVertexARectangle.Height));
-            var topSide = Intersects(new Vector(oVertexALocation.X, oVertexALocation.Y), new Vector(oVertexBLocation.X, oVertexBLocation.Y), new Vector(oVertexARectangle.X, oVertexARectangle.Y), new Vector(oVertexARectangle.X + oVertexARectangle.Width, oVertexARectangle.Y));
-
-            var pt = new Point(oVertexALocation.X, oVertexALocation.Y);
+            var pt = new Point(sourcePos.X, sourcePos.Y);
 
             // Get the rectangle side where intersection of the proposed Edge path occurred.
             if (leftSide != null)
@@ -463,6 +397,8 @@ namespace GraphX.Controls
             else if (topSide != null)
                 pt = new Point(topSide.Value.X, topSide.Value.Y);
 
+            if ((leftSide != null || bottomSide != null || rightSide != null || topSide != null) && angle != 0)
+                pt = MathHelper.RotatePoint(pt, sourceBounds.Center(),  angle);
             return pt;
         }
 
@@ -496,7 +432,7 @@ namespace GraphX.Controls
             // was determined experimentally.
 
             //const Double WidthFactor = 1.5;
-            var dArrowAngle = customAngle == 0.1 ? MathHelper.GetAngleBetweenPointsRadians(start, end) : customAngle;
+            var dArrowAngle = customAngle == 0.1 ? MathHelper.GetAngleBetweenPoints(start, end) : customAngle;
             var dArrowTipX = oArrowTipLocation.X;
             var dArrowTipY = oArrowTipLocation.Y;
             const double dArrowWidth = 3.0; //TODO dynamic width
@@ -533,7 +469,7 @@ namespace GraphX.Controls
             };
 
             var oMatrix = GetRotatedMatrix(oArrowTipLocation,
-                -MathHelper.RadiansToDegrees(dArrowAngle));
+                -dArrowAngle.ToDegrees());
 #if WPF
             oMatrix.Transform(aoPoints);
 #elif METRO
@@ -544,6 +480,11 @@ namespace GraphX.Controls
             return GetPathFigureFromPoints(aoPoints[0], aoPoints[1], aoPoints[2]);
         }
 
+        /// <summary>
+        /// Returns matrix rotated around specified point by angle in degrees
+        /// </summary>
+        /// <param name="centerOfRotation">Rotation center</param>
+        /// <param name="angleToRotateDegrees">Angle in degrees</param>
         public static Matrix GetRotatedMatrix(Point centerOfRotation, double angleToRotateDegrees)
         {
             var oMatrix = Matrix.Identity;

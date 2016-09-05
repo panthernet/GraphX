@@ -17,4 +17,6 @@ namespace GraphX.Controls.Models
             NewSize = newSize;
         }
     }
+
+    public delegate void ContentSizeChangedEventHandler(object sender, ContentSizeChangedEventArgs e);
 }
