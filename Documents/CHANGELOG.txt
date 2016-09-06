@@ -1,16 +1,16 @@
-﻿WIP 2.3.6
+﻿RELEASE 2.3.6
 DETAILED CHANGELOG:
-+ Added edge endpoint calculation for rotated vertex that use ellipse, circle and rectangle math shape
-+ Added VertexControl::LabelAttached and LabelDetached events which fires when new label is attached to VertexControl or detached from it
-+ Added new parameter to GraphArea::UpdateParallelEdgesData(Dictionary<TEdge, EdgeControl> edgeList) to be able to specify edges list to parse for parallelization instead of full edge list parse
-+ Added support for object visbility and attachable labels to GraphX serialization data
-+ Added ZoomControl::ResetKeyBindings() method to clear all (incl default) set key bindings
-+ Fixed ZoomControl dynamic content switch to corectly refresh viewfinder
-+ Improved ZoomControl handling with disabled animation
-+ Renamed ZoomControl::IsAnimationDisabled to IsAnimationEnabled and changed the logic according the modification
-+ Renamed ZoomControl::MaximumZoomStep to ZoomStep and updated description
-+ Implemented easy ZoomControl key bindings with BindKey() method and exposed base commands for zoom and pan actions to be able to bind keys for them 
-+ Some class refactoring
+- Added edge endpoint calculation for rotated vertex that use ellipse, circle and rectangle math shape
+- Added VertexControl::LabelAttached and LabelDetached events which fires when new label is attached to VertexControl or detached from it
+- Added new parameter to GraphArea::UpdateParallelEdgesData(Dictionary<TEdge, EdgeControl> edgeList) to be able to specify edges list to parse for parallelization instead of full edge list parse
+- Added support for object visbility and attachable labels to GraphX serialization data
+- Added ZoomControl::ResetKeyBindings() method to clear all (incl default) set key bindings
+- Fixed ZoomControl dynamic content switch to corectly refresh viewfinder
+- Improved ZoomControl handling with disabled animation
+- Renamed ZoomControl::IsAnimationDisabled to IsAnimationEnabled and changed the logic according the modification
+- Renamed ZoomControl::MaximumZoomStep to ZoomStep and updated description
+- Implemented easy ZoomControl key bindings with BindKey() method and exposed base commands for zoom and pan actions to be able to bind keys for them 
+- Some class refactoring
 
 RELEASE 2.3.5
 FEATURES HIGHLIGHT:
