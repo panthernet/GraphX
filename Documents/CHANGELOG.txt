@@ -1,4 +1,7 @@
-﻿RELEASE 2.3.6
+﻿WIP 2.3.7
+- Fixed SimpleTreeLayout vertex sizes supplement
+
+RELEASE 2.3.6
 DETAILED CHANGELOG:
 - Added edge endpoint calculation for rotated vertex that use ellipse, circle and rectangle math shape
 - Added VertexControl::LabelAttached and LabelDetached events which fires when new label is attached to VertexControl or detached from it
