@@ -1435,6 +1435,21 @@ namespace GraphX.Controls
             }
         }
 
+        private bool? _edgesDragEnabled;
+        /// <summary>
+        /// Sets drag mode for all edges
+        /// </summary>
+        /// <param name="isEnabled">Is drag mode enabled</param>
+        public void SetEdgesDrag(bool isEnabled)
+        {
+            _edgesDragEnabled = isEnabled;
+
+            foreach (var item in EdgesList)
+            {
+                DragBehaviour.SetIsDragEnabled(item.Value, isEnabled);
+            }
+        }
+
         private VertexShape? _svVertexShape;// = VertexShape.Rectangle;
         /// <summary>
         /// Sets math shape for all vertices
