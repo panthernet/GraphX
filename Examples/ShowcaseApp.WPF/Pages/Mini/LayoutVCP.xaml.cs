@@ -99,6 +99,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
             //settings
             graphArea.SetVerticesDrag(true, true);
+            graphArea.SetEdgesDrag(true);
 
             zoomControl.ZoomToFill();
         }

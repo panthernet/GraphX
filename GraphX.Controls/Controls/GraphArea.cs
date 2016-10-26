@@ -302,9 +302,10 @@ namespace GraphX.Controls
         /// Returns first vertex that is found under specified coordinates
         /// </summary>
         /// <param name="position">GraphArea coordinate space position</param>
-        public virtual VertexControl GetVertexControlAt(Point position)
+        public override VertexControl GetVertexControlAt(Point position)
         {
             Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
+
             return VertexList.Values.FirstOrDefault(a =>
             {
                 var pos = a.GetPosition();
@@ -1326,6 +1327,7 @@ namespace GraphX.Controls
 
         protected void ReapplySingleEdgeVisualProperties(EdgeControl item)
         {
+            if (this._edgesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, this._edgesDragEnabled.Value);
             if (_svEdgeDashStyle != null) item.DashStyle = _svEdgeDashStyle.Value;
             if (_svShowEdgeArrows != null) item.SetCurrentValue(EdgeControlBase.ShowArrowsProperty, _svShowEdgeArrows.Value);
             if (_svShowEdgeLabels != null) item.ShowLabel = _svShowEdgeLabels.Value;

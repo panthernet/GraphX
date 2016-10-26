@@ -4,7 +4,8 @@ using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-#if WPF 
+using System.Windows.Input;
+#if WPF
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media;
@@ -470,8 +471,8 @@ namespace GraphX.Controls
             EdgeLabelControl?.UpdateLayout();
             if (LinePathObject != null)
             {
-                var pos = Source.GetPosition();
-                Source.SetPosition(pos.X, pos.Y);
+                var pos = this.Source.GetPosition();
+                this.Source.SetPosition(pos.X, pos.Y);
             }
         }
 
@@ -654,6 +655,204 @@ namespace GraphX.Controls
             else _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
         }
 
+        public virtual void PrepareEdgePathFromMousePointer(bool useCurrentCoords = false)
+        {
+            //do not calculate invisible edges
+            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && ManualDrawing || !IsTemplateLoaded) return;
+
+            //get the size of the source
+            var sourceSize = new Size
+            {
+                Width = this.Source.ActualWidth,
+                Height = this.Source.ActualHeight
+            };
+
+            var sourcePos = new Point
+            {
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)) + sourceSize.Width * .5,
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source)) + sourceSize.Height * .5
+            };
+
+            var targetSize = new Size
+            {
+                Width = SystemParameters.CursorWidth,
+                Height = SystemParameters.CursorHeight
+            };
+
+            var targetPos = new Point
+            {
+                X = Mouse.GetPosition(this.RootArea).X + sourceSize.Width * .1,
+                Y = Mouse.GetPosition(this.RootArea).Y + sourceSize.Height * .1
+            };
+
+            var routedEdge = this.Edge as IRoutingInfo;
+
+            if (routedEdge == null)
+                throw new GX_InvalidDataException("Edge must implement IRoutingInfo interface");
+
+            //get the route informations
+            var routeInformation = routedEdge.RoutingPoints;
+
+            // Get the TopLeft position of the Source Vertex.
+            var sourcePos1 = new Point
+            {
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)),
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source))
+            };
+            // Get the TopLeft position of the Target Vertex.
+            var targetPos1 = new Point
+            {
+                X = Mouse.GetPosition(this.RootArea).X + sourceSize.Width,
+                Y = Mouse.GetPosition(this.RootArea).Y + sourceSize.Height
+            };
+
+            var hasEpSource = EdgePointerForSource != null;
+            var hasEpTarget = EdgePointerForTarget != null;
+
+            //if self looped edge
+            if (IsSelfLooped)
+            {
+                PrepareSelfLoopedEdge(sourcePos1);
+                return;
+            }
+
+            //check if we have some edge route data
+            var hasRouteInfo = routeInformation != null && routeInformation.Length > 1;
+
+            var gEdge = Edge as IGraphXCommonEdge;
+            Point p1;
+            Point p2;
+
+            //calculate edge source (p1) and target (p2) endpoints based on different settings
+            if (gEdge?.SourceConnectionPointId != null)
+            {
+                var sourceCp = this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
+                if (sourceCp == null)
+                {
+                    throw new GX_ObjectNotFoundException(string.Format("Can't find source vertex VCP by edge source connection point Id({1}) : {0}", this.Source, gEdge.SourceConnectionPointId));
+                }
+                if (sourceCp.Shape == VertexShape.None) p1 = sourceCp.RectangularSize.Center();
+                else
+                {
+                    var targetCpPos = hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos);
+                    p1 = GeometryHelper.GetEdgeEndpoint(sourceCp.RectangularSize.Center(), sourceCp.RectangularSize, targetCpPos, sourceCp.Shape);
+                }
+            }
+            else
+                p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new SysRect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), this.Source.VertexShape);
+
+            //if (gEdge?.TargetConnectionPointId != null)
+            //{
+            //    //var targetCp = this.Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
+            //    //if (targetCp == null)
+            //    //    throw new GX_ObjectNotFoundException(string.Format("Can't find target vertex VCP by edge target connection point Id({1}) : {0}", this.Target, gEdge.TargetConnectionPointId));
+            //    //if (targetCp.Shape == VertexShape.None) p2 = targetCp.RectangularSize.Center();
+            //    //else
+            //    //{
+            //    //    var sourceCpPos = gEdge.SourceConnectionPointId.HasValue ? this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true).RectangularSize.Center() : hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos);
+            //    //    p2 = GeometryHelper.GetEdgeEndpoint(targetCp.RectangularSize.Center(), targetCp.RectangularSize, sourceCpPos, targetCp.Shape);
+            //    //}
+            //}
+            //else
+                p2 = GeometryHelper.GetEdgeEndpoint(
+                    targetPos, new SysRect(targetPos, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), VertexShape.None);
+
+            SourceConnectionPoint = p1;
+            TargetConnectionPoint = p2;
+
+            Linegeometry = new PathGeometry();
+            PathFigure lineFigure = new PathFigure();
+
+            //if we have route and route consist of 2 or more points
+            if (RootArea != null && hasRouteInfo)
+            {
+//                //replace start and end points with accurate ones
+//                var routePoints = routeInformation.ToWindows().ToList();
+//                routePoints.Remove(routePoints.First());
+//                routePoints.Remove(routePoints.Last());
+//                routePoints.Insert(0, p1);
+//                routePoints.Add(p2);
+
+//                if (externalRoutingPoints == null && routedEdge.RoutingPoints != null)
+//                    routedEdge.RoutingPoints = routePoints.ToArray().ToGraphX();
+
+//                if (RootArea.EdgeCurvingEnabled)
+//                {
+//                    var oPolyLineSegment = GeometryHelper.GetCurveThroughPoints(routePoints.ToArray(), 0.5, RootArea.EdgeCurvingTolerance);
+
+//                    if (hasEpTarget)
+//                    {
+//                        UpdateTargetEpData(oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 1], oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2]);
+//                        oPolyLineSegment.Points.RemoveAt(oPolyLineSegment.Points.Count - 1);
+//                    }
+//                    if (hasEpSource)
+//                    {
+//                        UpdateSourceEpData(oPolyLineSegment.Points.First(), oPolyLineSegment.Points[1]);
+//                        oPolyLineSegment.Points.RemoveAt(0);
+//                    }
+
+//                    lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
+//#if WPF
+//                    //freeze and create resulting geometry
+//                    GeometryHelper.TryFreeze(oPolyLineSegment);
+//#endif
+//                }
+//                else
+//                {
+//                    if (hasEpSource)
+//                        routePoints[0] = routePoints[0].Subtract(UpdateSourceEpData(routePoints.First(), routePoints[1]));
+//                    if (hasEpTarget)
+//                        routePoints[routePoints.Count - 1] = routePoints[routePoints.Count - 1].Subtract(UpdateTargetEpData(p2, routePoints[routePoints.Count - 2]));
+
+//                    // Reverse the path if specified.
+//                    if (gEdge.ReversePath)
+//                        routePoints.Reverse();
+
+//                    var pcol = new PointCollection();
+//                    routePoints.ForEach(a => pcol.Add(a));
+
+//                    lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
+//                }
+            }
+            else // no route defined
+            {
+                bool remainHidden = false;
+                //check for hide only if prop is not 0
+                if (HideEdgePointerByEdgeLength != 0d)
+                {
+                    if (MathHelper.GetDistanceBetweenPoints(p1, p2) <= HideEdgePointerByEdgeLength)
+                    {
+                        EdgePointerForSource?.Hide();
+                        EdgePointerForTarget?.Hide();
+                        remainHidden = true;
+                    }
+                    else
+                    {
+                        EdgePointerForSource?.Show();
+                        EdgePointerForTarget?.Show();
+                    }
+                }
+
+                if (hasEpSource)
+                    p1 = p1.Subtract(UpdateSourceEpData(p1, p2, remainHidden));
+                if (hasEpTarget)
+                    p2 = p2.Subtract(UpdateTargetEpData(p2, p1, remainHidden));
+
+                lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
+            }
+            ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
+#if WPF
+            GeometryHelper.TryFreeze(lineFigure);
+            GeometryHelper.TryFreeze(Linegeometry);
+#endif
+            if (ShowLabel && EdgeLabelControl != null && _updateLabelPosition)
+                EdgeLabelControl.UpdatePosition();
+
+            if (LinePathObject == null) return;
+            LinePathObject.Data = Linegeometry;
+            LinePathObject.StrokeDashArray = StrokeDashArray;
+        }
+
         /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
         /// </summary>
@@ -663,29 +862,29 @@ namespace GraphX.Controls
         public virtual void PrepareEdgePath(bool useCurrentCoords = false, Measure.Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
-            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && Source == null || Target == null || ManualDrawing || !IsTemplateLoaded) return;
+            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && this.Source == null || this.Target == null || ManualDrawing || !IsTemplateLoaded) return;
 
             #region Get the inputs
             //get the size of the source
             var sourceSize = new Size
             {
-                Width = Source.ActualWidth,
-                Height = Source.ActualHeight
+                Width = this.Source.ActualWidth,
+                Height = this.Source.ActualHeight
             };
             if (CustomHelper.IsInDesignMode(this)) sourceSize = new Size(80, 20);
 
             //get the position center of the source
             var sourcePos = new Point
             {
-                X = (useCurrentCoords ? GraphAreaBase.GetX(Source) : GraphAreaBase.GetFinalX(Source)) + sourceSize.Width * .5,
-                Y = (useCurrentCoords ? GraphAreaBase.GetY(Source) : GraphAreaBase.GetFinalY(Source)) + sourceSize.Height * .5
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)) + sourceSize.Width * .5,
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source)) + sourceSize.Height * .5
             };
 
             //get the size of the target
             var targetSize = new Size
             {
-                Width = Target.ActualWidth,
-                Height = Target.ActualHeight
+                Width = this.Target.ActualWidth,
+                Height = this.Target.ActualHeight
             };
             if (CustomHelper.IsInDesignMode(this))
                 targetSize = new Size(80, 20);
@@ -693,8 +892,8 @@ namespace GraphX.Controls
             //get the position center of the target
             var targetPos = new Point
             {
-                X = (useCurrentCoords ? GraphAreaBase.GetX(Target) : GraphAreaBase.GetFinalX(Target)) + targetSize.Width * .5,
-                Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target)) + targetSize.Height * .5
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Target) : GraphAreaBase.GetFinalX(this.Target)) + targetSize.Width * .5,
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Target) : GraphAreaBase.GetFinalY(this.Target)) + targetSize.Height * .5
             };
 
             var routedEdge = Edge as IRoutingInfo;
@@ -707,14 +906,14 @@ namespace GraphX.Controls
             // Get the TopLeft position of the Source Vertex.
             var sourcePos1 = new Point
             {
-                X = (useCurrentCoords ? GraphAreaBase.GetX(Source) : GraphAreaBase.GetFinalX(Source)),
-                Y = (useCurrentCoords ? GraphAreaBase.GetY(Source) : GraphAreaBase.GetFinalY(Source))
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)),
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source))
             };
             // Get the TopLeft position of the Target Vertex.
             var targetPos1 = new Point
             {
-                X = (useCurrentCoords ? GraphAreaBase.GetX(Target) : GraphAreaBase.GetFinalX(Target)),
-                Y = (useCurrentCoords ? GraphAreaBase.GetY(Target) : GraphAreaBase.GetFinalY(Target))
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Target) : GraphAreaBase.GetFinalX(this.Target)),
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Target) : GraphAreaBase.GetFinalY(this.Target))
             };
 
             var hasEpSource = EdgePointerForSource != null;
@@ -734,8 +933,8 @@ namespace GraphX.Controls
             //calculate source and target edge attach points
             if (RootArea != null && !hasRouteInfo && RootArea.EnableParallelEdges && ParallelEdgeOffset != 0)
             {
-                sourcePos = GetParallelOffset(Source, Target, ParallelEdgeOffset);
-                targetPos = GetParallelOffset(Target, Source, -ParallelEdgeOffset);
+                sourcePos = GetParallelOffset(this.Source, this.Target, ParallelEdgeOffset);
+                targetPos = GetParallelOffset(this.Target, this.Source, -ParallelEdgeOffset);
             }
 
             /* Rectangular shapes implementation by bleibold */
@@ -747,33 +946,33 @@ namespace GraphX.Controls
             //calculate edge source (p1) and target (p2) endpoints based on different settings
             if (gEdge?.SourceConnectionPointId != null)
             {
-                var sourceCp = Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
+                var sourceCp = this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
                 if (sourceCp == null)
-                    throw new GX_ObjectNotFoundException(string.Format("Can't find source vertex VCP by edge source connection point Id({1}) : {0}", Source, gEdge.SourceConnectionPointId));
+                    throw new GX_ObjectNotFoundException(string.Format("Can't find source vertex VCP by edge source connection point Id({1}) : {0}", this.Source, gEdge.SourceConnectionPointId));
                 if (sourceCp.Shape == VertexShape.None) p1 = sourceCp.RectangularSize.Center();
                 else
                 {
-                    var targetCpPos = gEdge.TargetConnectionPointId.HasValue ? Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true).RectangularSize.Center() : (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos));
+                    var targetCpPos = gEdge.TargetConnectionPointId.HasValue ? this.Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true).RectangularSize.Center() : (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos));
                     p1 = GeometryHelper.GetEdgeEndpoint(sourceCp.RectangularSize.Center(), sourceCp.RectangularSize, targetCpPos, sourceCp.Shape);
                 }
             }
             else
-                p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new SysRect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), Source.VertexShape);
+                p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new SysRect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), this.Source.VertexShape);
 
             if (gEdge?.TargetConnectionPointId != null)
             {
-                var targetCp = Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
+                var targetCp = this.Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
                 if (targetCp == null)
-                    throw new GX_ObjectNotFoundException(string.Format("Can't find target vertex VCP by edge target connection point Id({1}) : {0}", Target, gEdge.TargetConnectionPointId));
+                    throw new GX_ObjectNotFoundException(string.Format("Can't find target vertex VCP by edge target connection point Id({1}) : {0}", this.Target, gEdge.TargetConnectionPointId));
                 if (targetCp.Shape == VertexShape.None) p2 = targetCp.RectangularSize.Center();
                 else
                 {
-                    var sourceCpPos = gEdge.SourceConnectionPointId.HasValue ? Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true).RectangularSize.Center() : hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos);
+                    var sourceCpPos = gEdge.SourceConnectionPointId.HasValue ? this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true).RectangularSize.Center() : hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos);
                     p2 = GeometryHelper.GetEdgeEndpoint(targetCp.RectangularSize.Center(), targetCp.RectangularSize, sourceCpPos, targetCp.Shape);
                 }
             }
             else
-                p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new SysRect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), Target.VertexShape);
+                p2 = GeometryHelper.GetEdgeEndpoint(targetPos, new SysRect(targetPos1, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), this.Target.VertexShape);
 
             SourceConnectionPoint = p1;
             TargetConnectionPoint = p2;

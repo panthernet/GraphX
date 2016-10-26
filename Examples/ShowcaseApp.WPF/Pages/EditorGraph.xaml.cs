@@ -138,6 +138,7 @@ namespace ShowcaseApp.WPF.Pages
                 _opMode = EditorOperationMode.Select;
                 ClearEditMode();
                 graphArea.SetVerticesDrag(true, true);
+                graphArea.SetEdgesDrag(true);
                 return;
             }
         }

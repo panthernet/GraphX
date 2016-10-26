@@ -510,6 +510,8 @@ namespace GraphX
         /// <returns></returns>
         public abstract VertexControl[] GetAllVertexControls();
 
+        public abstract VertexControl GetVertexControlAt(Point position);
+
         // INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY
         internal abstract bool IsEdgeRoutingEnabled { get; }
         internal abstract bool EnableParallelEdges { get; }

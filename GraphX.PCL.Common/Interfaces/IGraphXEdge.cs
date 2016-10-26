@@ -45,11 +45,11 @@
         /// <summary>
         /// Optional parameter to bind edge to static vertex connection point
         /// </summary>
-        int? SourceConnectionPointId { get; }
+        int? SourceConnectionPointId { get; set; }
         /// <summary>
         /// Optional parameter to bind edge to static vertex connection point
         /// </summary>
-        int? TargetConnectionPointId { get; }
+        int? TargetConnectionPointId { get; set; }
     
 		/// <summary>
 		/// Reverse the calculated routing path points.

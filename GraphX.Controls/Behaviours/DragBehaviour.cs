@@ -9,6 +9,8 @@ using Windows.Foundation;
 using System.Linq;
 #endif
 using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 
 namespace GraphX.Controls
 {
@@ -341,8 +343,16 @@ namespace GraphX.Controls
             {
                 //register the event handlers
 #if WPF
-                element.MouseLeftButtonDown += OnDragStarted;
-                element.PreviewMouseLeftButtonUp += OnDragFinished;
+                if (element.GetType() == typeof(VertexControl))
+                {
+                    element.MouseLeftButtonDown += OnVertexDragStarted;
+                    element.PreviewMouseLeftButtonUp += OnVertexDragFinished;
+                }
+                else if (element.GetType() == typeof(EdgeControl))
+                {
+                    element.MouseLeftButtonDown += OnEdgeDrageStarted;
+                    element.PreviewMouseLeftButtonUp += OnEdgeDragFinished;
+                }
 #elif METRO
                 element.PointerPressed += OnDragStarted;
                 element.PointerReleased += OnDragFinished;
@@ -352,8 +362,16 @@ namespace GraphX.Controls
             {
                 //unregister the event handlers
 #if WPF
-                element.MouseLeftButtonDown -= OnDragStarted;
-                element.PreviewMouseLeftButtonUp -= OnDragFinished;
+                if (element.GetType() == typeof(VertexControl))
+                {
+                    element.MouseLeftButtonDown -= OnVertexDragStarted;
+                    element.PreviewMouseLeftButtonUp -= OnVertexDragFinished;
+                }
+                else if (element.GetType() == typeof(EdgeControl))
+                {
+                    element.MouseLeftButtonDown -= OnEdgeDrageStarted;
+                    element.PreviewMouseLeftButtonUp -= OnEdgeDragFinished;
+                }
 #elif METRO
                 element.PointerPressed -= OnDragStarted;
                 element.PointerReleased -= OnDragFinished;
@@ -362,8 +380,100 @@ namespace GraphX.Controls
         }
         #endregion
 
+        private static void OnEdgeDrageStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DependencyObject obj = sender as DependencyObject;
+
+            SetIsDragging(obj, true);
+
+            //var area = GetAreaFromObject(obj);
+            //var pos = GetPositionInArea(area, e);
+            //SetOriginalMouseX(obj, pos.X);
+            //SetOriginalMouseY(obj, pos.Y);
+
+            // Save starting position of all tagged elements
+            //if (GetIsTagged(obj))
+            //{
+            //    foreach (var item in area.ed)
+            //        if (GetIsTagged(item))
+            //        {
+            //            SetOriginalX(item, GraphAreaBase.GetFinalX(item));
+            //            SetOriginalY(item, GraphAreaBase.GetFinalY(item));
+            //        }
+            //}
+
+            var element = obj as IInputElement;
+            if (element != null)
+            {
+                element.CaptureMouse();
+                element.MouseMove -= OnEdgeDragging;
+                element.MouseMove += OnEdgeDragging;
+            }
+            else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
+
+            e.Handled = false;
+        }
+
+        private static void OnEdgeDragging(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var obj = sender as DependencyObject;
+            if (!GetIsDragging(obj))
+                return;
+
+            EdgeControl edgeControl = sender as EdgeControl;
+
+            edgeControl.PrepareEdgePathFromMousePointer();
+
+            e.Handled = true;
+        }
+
+        private static void OnEdgeDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            EdgeControl edgeControl = sender as EdgeControl;
+
+            if (edgeControl == null) return;
+
+            GraphAreaBase graphAreaBase = edgeControl.RootArea;
+
+            VertexControl vertexControl = graphAreaBase.GetVertexControlAt(e.GetPosition(graphAreaBase));
+
+            edgeControl.Target = vertexControl;
+
+            if (vertexControl.VertexConnectionPointsList.Count > 0)
+            {
+                IVertexConnectionPoint vertexConnectionPoint = vertexControl.GetConnectionPointAt(e.GetPosition(graphAreaBase));
+
+                var edge = edgeControl.Edge as IGraphXCommonEdge;
+
+                if (vertexConnectionPoint != null)
+                {
+                    edge.TargetConnectionPointId = vertexConnectionPoint.Id;
+                }
+                else
+                {
+                    edge.TargetConnectionPointId = null;
+                }
+            }
+
+            edgeControl.UpdateEdge();
+
+            var obj = (DependencyObject)sender;
+            SetIsDragging(obj, false);
+            //obj.ClearValue(OriginalMouseXProperty);
+            //obj.ClearValue(OriginalMouseYProperty);
+            //obj.ClearValue(OriginalXProperty);
+            //obj.ClearValue(OriginalYProperty);
+
+            var element = sender as IInputElement;
+            if (element != null)
+            {
+                element.MouseMove -= OnVertexDragging;
+                element.ReleaseMouseCapture();
+            }
+        }
+
 #if WPF
-        private static void OnDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OnVertexDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
 #elif METRO
         private static void OnDragStarted( object sender, PointerRoutedEventArgs e )
 #endif
@@ -399,8 +509,8 @@ namespace GraphX.Controls
             if (element != null)
             {
                 element.CaptureMouse();
-                element.MouseMove -= OnDragging;
-                element.MouseMove += OnDragging;
+                element.MouseMove -= OnVertexDragging;
+                element.MouseMove += OnVertexDragging;
             }
             //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
             e.Handled = false;
@@ -416,7 +526,7 @@ namespace GraphX.Controls
         }
 
 #if WPF
-        private static void OnDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private static void OnVertexDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
 #elif METRO
         private static void OnDragFinished( object sender, PointerRoutedEventArgs e )
 #endif
@@ -445,7 +555,7 @@ namespace GraphX.Controls
             var element = sender as IInputElement;
             if (element != null)
             {
-                element.MouseMove -= OnDragging;
+                element.MouseMove -= OnVertexDragging;
                 element.ReleaseMouseCapture();
             }
 #elif METRO
@@ -459,7 +569,7 @@ namespace GraphX.Controls
         }
 
 #if WPF
-        private static void OnDragging(object sender, System.Windows.Input.MouseEventArgs e)
+        private static void OnVertexDragging(object sender, System.Windows.Input.MouseEventArgs e)
 #elif METRO
         private static void OnDragging( object sender, PointerRoutedEventArgs e )
 #endif
