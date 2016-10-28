@@ -437,38 +437,41 @@ namespace GraphX.Controls
 
             VertexControl vertexControl = graphAreaBase.GetVertexControlAt(e.GetPosition(graphAreaBase));
 
-            edgeControl.Target = vertexControl;
-
-            if (vertexControl.VertexConnectionPointsList.Count > 0)
+            if (vertexControl != null)
             {
-                IVertexConnectionPoint vertexConnectionPoint = vertexControl.GetConnectionPointAt(e.GetPosition(graphAreaBase));
+                edgeControl.Target = vertexControl;
 
-                var edge = edgeControl.Edge as IGraphXCommonEdge;
-
-                if (vertexConnectionPoint != null)
+                if (vertexControl.VertexConnectionPointsList.Count > 0)
                 {
-                    edge.TargetConnectionPointId = vertexConnectionPoint.Id;
+                    IVertexConnectionPoint vertexConnectionPoint = vertexControl.GetConnectionPointAt(e.GetPosition(graphAreaBase));
+
+                    var edge = edgeControl.Edge as IGraphXCommonEdge;
+
+                    if (vertexConnectionPoint != null)
+                    {
+                        edge.TargetConnectionPointId = vertexConnectionPoint.Id;
+                    }
+                    else
+                    {
+                        edge.TargetConnectionPointId = null;
+                    }
                 }
-                else
+
+                edgeControl.UpdateEdge();
+
+                var obj = (DependencyObject)sender;
+                SetIsDragging(obj, false);
+                //obj.ClearValue(OriginalMouseXProperty);
+                //obj.ClearValue(OriginalMouseYProperty);
+                //obj.ClearValue(OriginalXProperty);
+                //obj.ClearValue(OriginalYProperty);
+
+                var element = sender as IInputElement;
+                if (element != null)
                 {
-                    edge.TargetConnectionPointId = null;
+                    element.MouseMove -= OnVertexDragging;
+                    element.ReleaseMouseCapture();
                 }
-            }
-
-            edgeControl.UpdateEdge();
-
-            var obj = (DependencyObject)sender;
-            SetIsDragging(obj, false);
-            //obj.ClearValue(OriginalMouseXProperty);
-            //obj.ClearValue(OriginalMouseYProperty);
-            //obj.ClearValue(OriginalXProperty);
-            //obj.ClearValue(OriginalYProperty);
-
-            var element = sender as IInputElement;
-            if (element != null)
-            {
-                element.MouseMove -= OnVertexDragging;
-                element.ReleaseMouseCapture();
             }
         }
 

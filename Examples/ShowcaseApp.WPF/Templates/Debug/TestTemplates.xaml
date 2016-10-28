@@ -1,42 +1,53 @@
-﻿<ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="http://schemas.panthernet.ru/graphx/">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="http://schemas.panthernet.ru/graphx/">
 
     <!--<Style TargetType="{x:Type local:GraphAreaExample}">
         <Setter Property="Background" Value="LightGray"/>
-    </Style>-->    
+    </Style>-->
 
-    <Style TargetType="controls:StaticVertexConnectionPoint" x:Shared="False">
-        <Setter Property="Shape" Value="Circle"/>
-        <Setter Property="Padding" Value="0"/>
+    <Style x:Shared="False" TargetType="controls:StaticVertexConnectionPoint">
+        <Setter Property="Shape" Value="Circle" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="Content">
             <Setter.Value>
-                <Path Stroke="Black" Data="M 38,0.791664C 58.5496,0.791664 75.2083,17.4504 75.2083,38C 75.2083,58.5496 58.5496,75.2083 38,75.2083C 17.4504,75.2083 0.791662,58.5496 0.791662,38C 0.791662,17.4504 17.4504,0.791664 38,0.791664 Z M 38,5.54166C 20.0738,5.54166 5.54167,20.0738 5.54167,38C 5.54167,55.9262 20.0738,70.4583 38,70.4583C 55.9262,70.4583 70.4583,55.9262 70.4583,38C 70.4583,20.0738 55.9262,5.54166 38,5.54166 Z "
-                      Width="10" Height="10" Stretch="Uniform" StrokeThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Path Width="10"
+                      Height="10"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Data="M 38,0.791664C 58.5496,0.791664 75.2083,17.4504 75.2083,38C 75.2083,58.5496 58.5496,75.2083 38,75.2083C 17.4504,75.2083 0.791662,58.5496 0.791662,38C 0.791662,17.4504 17.4504,0.791664 38,0.791664 Z M 38,5.54166C 20.0738,5.54166 5.54167,20.0738 5.54167,38C 5.54167,55.9262 20.0738,70.4583 38,70.4583C 55.9262,70.4583 70.4583,55.9262 70.4583,38C 70.4583,20.0738 55.9262,5.54166 38,5.54166 Z "
+                      Stretch="Uniform"
+                      Stroke="Black"
+                      StrokeThickness="1" />
             </Setter.Value>
         </Setter>
     </Style>
-    
-    
+
+
     <Style TargetType="{x:Type controls:VertexControl}">
-        <Setter Property="Background" Value="Yellow"/>
+        <Setter Property="Background" Value="Yellow" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Name="bb"  Background="{TemplateBinding Background}" Grid.Column="1"
-                            BorderBrush="{TemplateBinding BorderBrush}" Width="20" Height="20" BorderThickness="1">
-                        </Border>
-                        <StackPanel Orientation="Vertical" Grid.Column="0" Name="PART_vcproot">
-                            <Border Padding="0" Margin="2,2,0,2">
-                                <controls:StaticVertexConnectionPoint Id="1"/>
+                        <StackPanel Name="PART_vcproot"
+                                    Grid.Column="0"
+                                    Orientation="Vertical">
+                            <Border Margin="2,2,0,2" Padding="0">
+                                <controls:StaticVertexConnectionPoint Id="1" />
                             </Border>
                         </StackPanel>
+                        <Border Name="bb"
+                                Grid.Column="1"
+                                Width="20"
+                                Height="20"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -44,11 +55,13 @@
         <Style.Triggers>
             <DataTrigger Binding="{Binding IsBlue}" Value="True">
                 <DataTrigger.Setters>
-                    <Setter Property="Background" Value="Blue"/>
+                    <Setter Property="Background" Value="Blue" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-                                <Ellipse Width="50" Height="50" Fill="{TemplateBinding Background}"/>
+                                <Ellipse Width="50"
+                                         Height="50"
+                                         Fill="{TemplateBinding Background}" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -59,71 +72,89 @@
 
 
     <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverter" Inverted="True" />
-    <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverterNot" Inverted="True" Not="True"/>
-    
+    <controls:VisibilityToBoolConverter x:Key="VisibilityToBoolConverterNot"
+                                        Inverted="True"
+                                        Not="True" />
+
     <Style TargetType="{x:Type controls:EdgeControl}">
-        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Foreground" Value="Black" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:EdgeControl}">
                     <Grid>
-                        <Path Stroke="{TemplateBinding Foreground}"
-                              StrokeThickness="1"
-                              x:Name="PART_edgePath"/>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForSource"  Visibility="{Binding ArrowTarget, Converter={StaticResource VisibilityToBoolConverterNot}}">
-                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7" />
+                        <Path x:Name="PART_edgePath"
+                              Stroke="{TemplateBinding Foreground}"
+                              StrokeThickness="1" />
+                        <controls:DefaultEdgePointer x:Name="PART_EdgePointerForSource"
+                                                     NeedRotation="true"
+                                                     Visibility="{Binding ArrowTarget,
+                                                                          Converter={StaticResource VisibilityToBoolConverterNot}}">
+                            <Path Width="7"
+                                  Height="7"
+                                  Data="M0,0.5 L1,1 1,0"
+                                  Fill="Black"
+                                  Stretch="Uniform" />
                         </controls:DefaultEdgePointer>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" Visibility="{Binding ArrowTarget, Converter={StaticResource VisibilityToBoolConverter}}">
-                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="7" Height="7"/>
+                        <controls:DefaultEdgePointer x:Name="PART_EdgePointerForTarget"
+                                                     NeedRotation="true"
+                                                     Visibility="{Binding ArrowTarget,
+                                                                          Converter={StaticResource VisibilityToBoolConverter}}">
+                            <Path Width="7"
+                                  Height="7"
+                                  Data="M0,0.5 L1,1 1,0"
+                                  Fill="Black"
+                                  Stretch="Uniform" />
                         </controls:DefaultEdgePointer>
-                       <!-- <Path x:Name="PART_SelfLoopedEdge" 
-                              Width="10" 
-                              Height="10" 
-                              Stretch="Uniform" 
-                              Fill="{TemplateBinding Foreground}" 
-                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>
--->
+                        <!-- <Path x:Name="PART_SelfLoopedEdge"
+                              Width="10"
+                              Height="10"
+                              Stretch="Uniform"
+                              Fill="{TemplateBinding Foreground}"
+                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>                        -->
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <!-- REGION EDGE LABLE CONTROL -->
+    <!--  REGION EDGE LABLE CONTROL  -->
     <Style TargetType="{x:Type controls:EdgeLabelControl}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:EdgeLabelControl}">
                     <Grid>
-                        <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
-                            <ContentPresenter Margin="3"/>
+                        <Border Background="White"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                            <ContentPresenter Margin="3" />
                         </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
-        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False" />
     </Style>
-    <!-- ENDREGION -->
+    <!--  ENDREGION  -->
 
-    <!-- REGION VERTEX LABEL CONTROL -->
+    <!--  REGION VERTEX LABEL CONTROL  -->
     <Style TargetType="controls:VertexLabelControl">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="LabelPositionMode" Value="Sides"/>
-        <Setter Property="LabelPositionSide" Value="BottomRight"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="LabelPositionMode" Value="Sides" />
+        <Setter Property="LabelPositionSide" Value="BottomRight" />
 
-        <!-- Custom label template body -->
+        <!--  Custom label template body  -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls:VertexLabelControl">
                     <Grid>
-                        <ContentPresenter Margin="3"/>
+                        <ContentPresenter Margin="3" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    <!-- ENDREGION -->
+    <!--  ENDREGION  -->
 </ResourceDictionary>

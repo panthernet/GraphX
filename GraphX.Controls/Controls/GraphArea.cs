@@ -66,8 +66,8 @@ namespace GraphX.Controls
             DependencyProperty.Register(nameof(LogicCore), typeof(IGXLogicCore<TVertex, TEdge, TGraph>), typeof(GraphArea<TVertex, TEdge, TGraph>), new PropertyMetadata(null, logic_core_changed));
 
         private static
-#if METRO 
-            async 
+#if METRO
+            async
 #endif
  void logic_core_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -164,7 +164,7 @@ namespace GraphX.Controls
         internal override double EdgeCurvingTolerance => LogicCore?.EdgeCurvingTolerance ?? 0;
 
         /// <summary>
-        /// Add custom control for 
+        /// Add custom control for
         /// </summary>
         /// <param name="control"></param>
         public virtual void AddCustomChildControl(UIElement control)
@@ -699,7 +699,7 @@ namespace GraphX.Controls
         /// </summary>
         public Dictionary<TVertex, Size> GetVertexSizes()
         {
-            //measure if needed and get all vertex sizes            
+            //measure if needed and get all vertex sizes
             Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
             var vertexSizes = new Dictionary<TVertex, Size>(_vertexlist.Count(a => ((IGraphXVertex)a.Value.Vertex).SkipProcessing != ProcessingOptionEnum.Exclude));
             //go through the vertex presenters and get the actual layoutpositions
@@ -815,7 +815,7 @@ namespace GraphX.Controls
         private CancellationTokenSource _layoutCancellationSource;
 
         /// <summary>
-        /// Gets or sets if visual graph should be updated if graph is filtered. 
+        /// Gets or sets if visual graph should be updated if graph is filtered.
         /// Remove all visuals with no keys in data graph and add all visuals that has keys in data graph.
         /// Default value is True.
         /// </summary>
@@ -897,7 +897,7 @@ namespace GraphX.Controls
             if (!localLogicCore.GenerateAlgorithmStorage(vertexSizes, vertexPositions))
                 return;
 
-            //clear routing info                
+            //clear routing info
             localLogicCore.Graph.Edges.ForEach(a => a.RoutingPoints = null);
 
             var resultCoords = localLogicCore.Compute(cancellationToken);
@@ -972,7 +972,7 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="generateAllEdges">Generate all available edges for graph</param>
 #if WPF
-        public virtual void RelayoutGraph(bool generateAllEdges = false)
+        public override void RelayoutGraph(bool generateAllEdges = false)
         {
             LogicCore.PushFilters();
             _relayoutGraphMain(generateAllEdges);
@@ -1193,7 +1193,7 @@ namespace GraphX.Controls
             if (LogicCore.Graph == null)
                 throw new InvalidDataException("GraphArea.GenerateGraph() -> LogicCore.Graph property is null while trying to generate graph!");
 
-            LogicCore.PushFilters();   
+            LogicCore.PushFilters();
             if (AutoAssignMissingDataId)
                 AutoresolveIds(false, graph);
             if (!LogicCore.IsCustomLayout)
@@ -1532,7 +1532,7 @@ namespace GraphX.Controls
         {
             if (LogicCore == null)
                 throw new GX_InvalidDataException("LogicCore -> Not initialized!");
-            RemoveAllEdges(); 
+            RemoveAllEdges();
 
             AutoresolveEdgeIds();
 
@@ -1802,7 +1802,7 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Get controls related to specified control 
+        /// Get controls related to specified control
         /// </summary>
         /// <param name="ctrl">Original control</param>
         /// <param name="resultType">Type of resulting related controls</param>
@@ -1983,7 +1983,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Export current graph layout into the JPEG image file. layout will be saved in full size.
         /// </summary>
-        /// <param name="quality">Optional image quality parameter</param>   
+        /// <param name="quality">Optional image quality parameter</param>
         public virtual void ExportAsJpeg(int quality = 100)
         {
             ExportAsImageDialog(ImageType.JPEG, true, PrintHelper.DEFAULT_DPI, quality);
@@ -1995,7 +1995,7 @@ namespace GraphX.Controls
         /// <param name="itype">Image format</param>
         /// <param name="dpi">Optional image DPI parameter</param>
         /// <param name="useZoomControlSurface">Use zoom control parent surface to render bitmap (only visible zoom content will be exported)</param>
-        /// <param name="quality">Optional image quality parameter (for JPEG)</param>   
+        /// <param name="quality">Optional image quality parameter (for JPEG)</param>
         public virtual void ExportAsImageDialog(ImageType itype, bool useZoomControlSurface = false, double dpi = PrintHelper.DEFAULT_DPI, int quality = 100)
         {
 #if WPF
@@ -2047,7 +2047,7 @@ namespace GraphX.Controls
         }
 #endif
         /// <summary>
-        /// Sets GraphArea into printing mode when its size will be recalculated on each measuer and child controls will be arranged accordingly. 
+        /// Sets GraphArea into printing mode when its size will be recalculated on each measuer and child controls will be arranged accordingly.
         /// Use with caution. Can spoil normal work while active but is essential to set before printing or grabbing an image.
         /// </summary>
         /// <param name="value">True or False</param>
@@ -2185,7 +2185,7 @@ namespace GraphX.Controls
 
         protected virtual void CreateNewStateStorage()
         {
-            _stateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);            
+            _stateStorage = new StateStorage<TVertex, TEdge, TGraph>(this);
         }
 
         #endregion

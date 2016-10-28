@@ -512,6 +512,8 @@ namespace GraphX
 
         public abstract VertexControl GetVertexControlAt(Point position);
 
+        public abstract void RelayoutGraph(bool generateAllEdges = false);
+
         // INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY
         internal abstract bool IsEdgeRoutingEnabled { get; }
         internal abstract bool EnableParallelEdges { get; }
@@ -520,20 +522,20 @@ namespace GraphX
 
 
         /// <summary>
-        /// Get controls related to specified control 
+        /// Get controls related to specified control
         /// </summary>
         /// <param name="ctrl">Original control</param>
         /// <param name="resultType">Type of resulting related controls</param>
         /// <param name="edgesType">Optional edge controls type</param>
         public abstract List<IGraphControl> GetRelatedControls(IGraphControl ctrl, GraphControlType resultType = GraphControlType.VertexAndEdge, EdgesType edgesType = EdgesType.Out);
         /// <summary>
-        /// Get vertex controls related to specified control 
+        /// Get vertex controls related to specified control
         /// </summary>
         /// <param name="ctrl">Original control</param>
         /// <param name="edgesType">Edge types to query for vertices</param>
         public abstract List<IGraphControl> GetRelatedVertexControls(IGraphControl ctrl, EdgesType edgesType = EdgesType.All);
         /// <summary>
-        /// Get edge controls related to specified control 
+        /// Get edge controls related to specified control
         /// </summary>
         /// <param name="ctrl">Original control</param>
         /// <param name="edgesType">Edge types to query</param>
@@ -643,11 +645,11 @@ namespace GraphX
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : (IsInPrintMode ? ContentSize.Size : new Size(10, 10));
 #elif METRO
             return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
-#endif    
+#endif
         }
 
         /// <summary>
-        /// Overridden measure. It calculates a size where all of 
+        /// Overridden measure. It calculates a size where all of
         /// of the vertices are visible.
         /// </summary>
         /// <param name="constraint">The size constraint.</param>
@@ -662,7 +664,7 @@ namespace GraphX
             foreach (UIElement child in InternalChildren)
 #elif METRO
             foreach (UIElement child in Children)
-#endif    
+#endif
             {
                 //measure the child
                 child.Measure(constraint);

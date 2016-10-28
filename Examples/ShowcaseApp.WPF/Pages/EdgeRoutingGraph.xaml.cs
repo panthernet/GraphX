@@ -289,6 +289,7 @@ namespace ShowcaseApp.WPF.Pages
 
                 erg_Area.GenerateGraph(gr, true);
                 erg_Area.SetVerticesDrag(true, true);
+                erg_Area.SetEdgesDrag(true);
                 erg_zoomctrl.ZoomToFill();
 
                 return;
