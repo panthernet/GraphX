@@ -31,12 +31,8 @@ namespace GraphX.PCL.Logic.Models
             if (parameters == null) parameters = CreateLayoutParameters(newAlgorithmType);
             var graph = iGraph.CopyToGraph<TGraph, TVertex, TEdge>();
 
-            var tGraph = (IMutableBidirectionalGraph<TVertex, TEdge>) graph;
-            if (tGraph != null)
-            {
-                tGraph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
-                tGraph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);                
-            }
+            graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
+            graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {
@@ -230,18 +226,18 @@ namespace GraphX.PCL.Logic.Models
         {
             //if (Rectangles == null) return null;
             if (parameters == null) parameters = CreateEdgeRoutingParameters(newAlgorithmType);
-            IMutableBidirectionalGraph<TVertex, TEdge> graph = iGraph.CopyToBidirectionalGraph();
+			var graph = iGraph.CopyToGraph<TGraph, TVertex, TEdge>();
             graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
             graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {
                 case EdgeRoutingAlgorithmTypeEnum.SimpleER:
-                    return new SimpleEdgeRouting<TVertex, TEdge,  TGraph>((TGraph)graph, positions, rectangles, parameters);
+                    return new SimpleEdgeRouting<TVertex, TEdge,  TGraph>(graph, positions, rectangles, parameters);
                 case EdgeRoutingAlgorithmTypeEnum.Bundling:
-                    return new BundleEdgeRouting<TVertex, TEdge, TGraph>(graphArea, (TGraph)graph, positions, rectangles, parameters);
+                    return new BundleEdgeRouting<TVertex, TEdge, TGraph>(graphArea, graph, positions, rectangles, parameters);
                 case EdgeRoutingAlgorithmTypeEnum.PathFinder:
-                    return new PathFinderEdgeRouting<TVertex, TEdge, TGraph>((TGraph)graph, positions, rectangles, parameters);
+                    return new PathFinderEdgeRouting<TVertex, TEdge, TGraph>(graph, positions, rectangles, parameters);
                 default:
                     return null;
             }
