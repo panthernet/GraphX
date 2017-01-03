@@ -21,8 +21,24 @@ namespace GraphX.Controls
     /// </summary>
     public class DefaultEdgePointer: ContentControl, IEdgePointer
     {
-        #region Common part
-        internal Rect LastKnownRectSize;
+		/// <summary>
+		/// This static initializer is used to override PropertyMetadata of the Visibility property so that it
+		/// can be coerced according to the IsSuppressed property value. Suppressing an edge pointer will make
+		/// it invisible to the user without altering the underlying value of the Visibility property. Thus,
+		/// visibility can be controlled independently of other factors that may require making the pointer
+		/// invisible to the user. For example, the HideEdgePointerByEdgeLength feature of EdgeControlBase may
+		/// need to ensure the pointer is removed from view, but when the constraint is removed, it shouldn't
+		/// cause pointers to be shown that weren't shown before.
+		/// </summary>
+		static DefaultEdgePointer()
+		{
+			var oldPmd = VisibilityProperty.GetMetadata(typeof(DefaultEdgePointer).BaseType);
+			var newPmd = new PropertyMetadata(oldPmd.DefaultValue, oldPmd.PropertyChangedCallback, CoerceVisibility);
+			VisibilityProperty.OverrideMetadata(typeof(DefaultEdgePointer), newPmd);
+		}
+
+		#region Common part
+		internal Rect LastKnownRectSize;
 
 
         /*public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset",
@@ -69,7 +85,60 @@ namespace GraphX.Controls
 #endif
         }
 
-        private static EdgeControl GetEdgeControl(DependencyObject parent)
+		/// <summary>
+		/// Suppresses the pointer from view, overriding the Visibility value until unsuppressed.
+		/// </summary>
+		public void Suppress()
+		{
+			IsSuppressed = true;
+		}
+
+		/// <summary>
+		/// Removes the suppression constraint, returning to the base value of the Visibility property.
+		/// </summary>
+		public void UnSuppress()
+		{
+			IsSuppressed = false;
+		}
+
+		private static readonly DependencyPropertyKey IsSuppressedPropertyKey =
+			DependencyProperty.RegisterReadOnly("IsSuppressed", typeof(bool), typeof(DefaultEdgePointer), new PropertyMetadata(false, OnSuppressChanged));
+
+		public static readonly DependencyProperty IsSuppressedProperty = IsSuppressedPropertyKey.DependencyProperty;
+
+		/// <summary>
+		/// Gets a value indicating whether the pointer is suppressed. A suppressed pointer won't be displayed, but
+		/// suppressing does not alter the underlying Visibility property value.
+		/// </summary>
+		public bool IsSuppressed
+		{
+			get { return (bool)GetValue(IsSuppressedProperty); }
+			private set { SetValue(IsSuppressedPropertyKey, value); }
+		}
+
+		/// <summary>
+		/// When the IsSuppressed value changes, this callback triggers coercion of the Visibility property.
+		/// </summary>
+		private static void OnSuppressChanged(object source, DependencyPropertyChangedEventArgs args)
+		{
+			var dep = source as DefaultEdgePointer;
+			dep?.CoerceValue(VisibilityProperty);
+		}
+
+		/// <summary>
+		/// This coercion callback is used to alter the effective value of Visibility when pointer suppression is in effect.
+		/// When the suppression constraint is removed, the base value of Visibility becomes effective again.
+		/// </summary>
+		private static object CoerceVisibility(DependencyObject d, object baseValue)
+		{
+			var ecb = d as DefaultEdgePointer;
+			if (ecb == null || !ecb.IsSuppressed)
+				return baseValue;
+
+			return Visibility.Collapsed;
+		}
+
+		private static EdgeControl GetEdgeControl(DependencyObject parent)
         {
             while (parent != null)
             {

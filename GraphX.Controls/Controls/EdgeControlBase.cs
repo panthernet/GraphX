@@ -1054,35 +1054,35 @@ namespace GraphX.Controls
 					if (gEdge.ReversePath)
 						routePoints.Reverse();
 
-					var pcol = new PointCollection();
-					routePoints.ForEach(a => pcol.Add(a));
+                    var pcol = new PointCollection();
+                    routePoints.ForEach(a=> pcol.Add(a));
 
-					lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
-				}
-			}
-			else // no route defined
-			{
-				bool remainHidden = false;
-				//check for hide only if prop is not 0
-				if (HideEdgePointerByEdgeLength != 0d)
-				{
-					if (MathHelper.GetDistanceBetweenPoints(p1, p2) <= HideEdgePointerByEdgeLength)
-					{
-						EdgePointerForSource?.Hide();
-						EdgePointerForTarget?.Hide();
-						remainHidden = true;
-					}
-					else
-					{
-						EdgePointerForSource?.Show();
-						EdgePointerForTarget?.Show();
-					}
-				}
+                    lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
+                }
+            }
+            else // no route defined
+            {
+                bool allowUpdateEpDataToUnsuppress = true;
+                //check for hide only if prop is not 0
+                if (HideEdgePointerByEdgeLength != 0d)
+                {
+                    if (MathHelper.GetDistanceBetweenPoints(p1, p2) <= HideEdgePointerByEdgeLength)
+                    {
+                        EdgePointerForSource?.Suppress();
+                        EdgePointerForTarget?.Suppress();
+                        allowUpdateEpDataToUnsuppress = false;
+                    }
+                    else
+                    {
+                        EdgePointerForSource?.UnSuppress();
+                        EdgePointerForTarget?.UnSuppress();
+                    }
+                }
 
-				if (hasEpSource)
-					p1 = p1.Subtract(UpdateSourceEpData(p1, p2, remainHidden));
-				if (hasEpTarget)
-					p2 = p2.Subtract(UpdateTargetEpData(p2, p1, remainHidden));
+                if (hasEpSource)
+                    p1 = p1.Subtract(UpdateSourceEpData(p1, p2, allowUpdateEpDataToUnsuppress));
+                if (hasEpTarget)
+                    p2 = p2.Subtract(UpdateTargetEpData(p2, p1, allowUpdateEpDataToUnsuppress));
 
 				lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
 			}
@@ -1095,31 +1095,31 @@ namespace GraphX.Controls
 				EdgeLabelControl.UpdatePosition();
 		}
 
-		private Point UpdateSourceEpData(Point from, Point to, bool remainHidden = false)
-		{
-			var dir = MathHelper.GetDirection(from, to);
-			if (from == to)
-			{
-				if (HideEdgePointerOnVertexOverlap) EdgePointerForSource.Hide();
-				else dir = new Vector(0, 0);
-			}
-			else if (!remainHidden) EdgePointerForSource.Show();
-			var result = EdgePointerForSource.Update(from, dir, EdgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
-			return EdgePointerForSource.Visibility == Visibility.Visible ? result : new Point();
-		}
+        private Point UpdateSourceEpData(Point from, Point to, bool allowUnsuppress = true)
+        {
+            var dir = MathHelper.GetDirection(from, to);
+            if (from == to)
+            {
+                if (HideEdgePointerOnVertexOverlap) EdgePointerForSource.Suppress();
+                else dir = new Vector(0, 0);
+            }
+            else if(allowUnsuppress) EdgePointerForSource.UnSuppress();
+            var result = EdgePointerForSource.Update(from, dir, EdgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
+            return EdgePointerForSource.Visibility == Visibility.Visible ? result : new Point();
+        }
 
-		private Point UpdateTargetEpData(Point from, Point to, bool remainHidden = false)
-		{
-			var dir = MathHelper.GetDirection(from, to);
-			if (from == to)
-			{
-				if (HideEdgePointerOnVertexOverlap) EdgePointerForTarget.Hide();
-				else dir = new Vector(0, 0);
-			}
-			else if (!remainHidden) EdgePointerForTarget.Show();
-			var result = EdgePointerForTarget.Update(from, dir, EdgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
-			return EdgePointerForTarget.Visibility == Visibility.Visible ? result : new Point();
-		}
+        private Point UpdateTargetEpData(Point from, Point to, bool allowUnsuppress = true)
+        {
+            var dir = MathHelper.GetDirection(from, to);
+            if (from == to)
+            {
+                if (HideEdgePointerOnVertexOverlap) EdgePointerForTarget.Suppress();
+                else dir = new Vector(0, 0);
+            }
+            else if (allowUnsuppress) EdgePointerForTarget.UnSuppress();
+            var result =  EdgePointerForTarget.Update(from, dir, EdgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
+            return EdgePointerForTarget.Visibility == Visibility.Visible ? result : new Point();
+        }
 
 		#endregion public PrepareEdgePath()
 
