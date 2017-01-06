@@ -112,7 +112,7 @@ namespace GraphX.Controls
             var position = TranslatePoint(new Point(), VertexControl);
             var vPos = VertexControl.GetPosition();
             position = new Point(position.X + vPos.X, position.Y + vPos.Y);
-            RectangularSize = new Rect(position, DesiredSize);
+            RectangularSize = new Rect(position, new Size(ActualWidth, ActualHeight));
         }
 #elif METRO
         public DependencyObject GetParent()

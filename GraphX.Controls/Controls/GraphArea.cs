@@ -1529,11 +1529,15 @@ namespace GraphX.Controls
                 //setup path
                 if (_svShowEdgeLabels == true)
                     edgectrl.SetCurrentValue(EdgeControlBase.ShowLabelProperty, true);
-                edgectrl.PrepareEdgePath();
             }
 
             if (LogicCore.EnableParallelEdges)
                 UpdateParallelEdgesData();
+
+            foreach (var item in _edgeslist)
+            {
+                item.Value.PrepareEdgePath();
+            }
 
             GenerateEdgeLabels();
         }
@@ -1562,41 +1566,44 @@ namespace GraphX.Controls
             edgeList.Values.ForEach(a => a.IsParallel = false);
 
             // Group edges together that share the same source and target. Edges that have both a source and target connection point defined are excluded. Self
-            // looped edges are excluded. Edges marked with CanBeParallel == false are excluded.
+            // looped edges are excluded. Edges marked with CanBeParallel == false are excluded. Edges with a connection point are pushed to the end of the group
+            // and will be marked as parallel, but their offsets end up overridden during rendering.
             var edgeGroups =
                 (from edge in edgeList
                  where edge.Value.CanBeParallel && !edge.Key.IsSelfLoop && (!edge.Key.SourceConnectionPointId.HasValue || !edge.Key.TargetConnectionPointId.HasValue)
                  group edge by new Tuple<long, long>(Math.Min(edge.Key.Source.ID, edge.Key.Target.ID), Math.Max(edge.Key.Source.ID, edge.Key.Target.ID)) into edgeGroup
                  where edgeGroup.Skip(1).Any()
-                 select edgeGroup.ToList())
+                 select edgeGroup.OrderBy(e => e.Key.SourceConnectionPointId.HasValue || e.Key.TargetConnectionPointId.HasValue ? 1 : 0).ToList())
                 .ToList();
 
             foreach (var list in edgeGroups)
             {
                 var first = list[0];
 
-                //trigger to show in which side to step distance
-                bool viceversa = false;
-                //check if total number of edges is even or not
-                bool even = (list.Count % 2) == 0;
-                //get the resulting step distance for the case
-                int distance = even ? (int)(LogicCore.ParallelEdgeDistance * .5) : LogicCore.ParallelEdgeDistance;
+                // Alternate sides with each step
+                int viceversa = 1;
+                // Check if total number of edges without connection points is even or not
+                bool even = (list.TakeWhile(e => !e.Key.SourceConnectionPointId.HasValue && !e.Key.TargetConnectionPointId.HasValue).Count() % 2) == 0;
+                // For even numbers of edges, initial offset is a half step from the center
+                int initialOffset = even ? LogicCore.ParallelEdgeDistance / 2 : 0;
 
-                //leave first edge intact if we have not even edges count
-                for (int i = even ? 0 : 1; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
+                    var kvp = list[i];
+                    kvp.Value.IsParallel = true;
+
+                    var offset = viceversa * (initialOffset + LogicCore.ParallelEdgeDistance * ((i + (even ? 0 : 1)) / 2));
                     //if source to target edge
-                    if (list[i].Key.Source == first.Key.Source)
+                    if (kvp.Key.Source == first.Key.Source)
                     {
-                        list[i].Value.ParallelEdgeOffset = (viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2));
+                        kvp.Value.ParallelEdgeOffset = offset;
                     }
                     else //if target to source edge - just switch offsets
                     {
-                        list[i].Value.ParallelEdgeOffset = -((viceversa ? -distance : distance) * (1 + ((even ? i : i - 1) / 2)));
+                        kvp.Value.ParallelEdgeOffset = -offset;
                     }
                     //change trigger to opposite
-                    viceversa = !viceversa;
-                    list[i].Value.IsParallel = true;
+                    viceversa = -viceversa;
                 }
             }
         }

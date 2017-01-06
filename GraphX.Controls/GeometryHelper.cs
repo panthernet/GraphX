@@ -33,28 +33,29 @@ namespace GraphX.Controls
         /// <returns></returns>
         public static Vector? Intersects(Vector a1, Vector a2, Vector b1, Vector b2)
         {
-            var b = a2 - a1;
-            var d = b2 - b1;
-            var bDotDPerp = b.X * d.Y - b.Y * d.X;
+            var a = a2 - a1;
+            var b = b2 - b1;
+            var aDotBPerp = a.X * b.Y - a.Y * b.X;
 
-            // if b dot d == 0, it means the lines are parallel so have infinite intersection points
-            if (bDotDPerp == 0)
+            // if a dot b == 0, it means the lines are parallel so have infinite intersection points
+            if (aDotBPerp == 0)
                 return null;
 
             var c = b1 - a1;
-            var t = (c.X * d.Y - c.Y * d.X) / bDotDPerp;
-            if (t < 0 || t > 1)
-            {
-                return null;
-            }
 
-            var u = (c.X * b.Y - c.Y * b.X) / bDotDPerp;
+            // The intersection must fall within the line segment defined by the b1 and b2 endpoints.
+            var u = (c.X * a.Y - c.Y * a.X) / aDotBPerp;
             if (u < 0 || u > 1)
             {
                 return null;
             }
 
-            return a1 + t * b;
+            // The intersection point IS allowed to fall outside of the line segment defined by the a1 and a2
+            // endpoints, anywhere along the infinite line. When this is used to find the intersection of an
+            // Edge as line a and Vertex side as line b, it allows the Edge to be elongated to the intersection.
+            var t = (c.X * b.Y - c.Y * b.X) / aDotBPerp;
+
+            return a1 + t * a;
         }
 
         /// <summary>
@@ -376,30 +377,45 @@ namespace GraphX.Controls
 
         public static Point GetEdgeEndpointOnRectangle(Point sourcePos, Rect sourceBounds, Point targetPos, double angle = 0)
         {
-            var tgt_pt = targetPos;
-            if (angle != 0)
-                tgt_pt = MathHelper.RotatePoint(targetPos, sourceBounds.Center(), -angle);
+            Func<Point, double, Point> rotate = (p, a) => angle == 0.0 ? p : MathHelper.RotatePoint(p, sourceBounds.Center(), a);
 
-            var leftSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.BottomLeft().ToVector());
-            var bottomSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.BottomLeft().ToVector(), sourceBounds.BottomRight().ToVector());
-            var rightSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopRight().ToVector(), sourceBounds.BottomRight().ToVector());
-            var topSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.TopRight().ToVector());
+            var tgt_pt = rotate(targetPos, -angle);
 
-            var pt = new Point(sourcePos.X, sourcePos.Y);
+            if (tgt_pt.X <= sourcePos.X)
+            {
+                var leftSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.BottomLeft().ToVector());
+                if (leftSide.HasValue)
+                {
+                    return rotate(new Point(leftSide.Value.X, leftSide.Value.Y), angle);
+                }
+            }
+            else
+            {
+                var rightSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopRight().ToVector(), sourceBounds.BottomRight().ToVector());
+                if (rightSide.HasValue)
+                {
+                    return rotate(new Point(rightSide.Value.X, rightSide.Value.Y), angle);
+                }
+            }
 
-            // Get the rectangle side where intersection of the proposed Edge path occurred.
-            if (leftSide != null)
-                pt = new Point(leftSide.Value.X, leftSide.Value.Y);
-            else if (bottomSide != null)
-                pt = new Point(bottomSide.Value.X, bottomSide.Value.Y);
-            else if (rightSide != null)
-                pt = new Point(rightSide.Value.X, rightSide.Value.Y);
-            else if (topSide != null)
-                pt = new Point(topSide.Value.X, topSide.Value.Y);
+            if (tgt_pt.Y <= sourcePos.Y)
+            {
+                var topSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.TopLeft().ToVector(), sourceBounds.TopRight().ToVector());
+                if (topSide.HasValue)
+                {
+                    return rotate(new Point(topSide.Value.X, topSide.Value.Y), angle);
+                }
+            }
+            else
+            {
+                var bottomSide = Intersects(sourcePos.ToVector(), tgt_pt.ToVector(), sourceBounds.BottomLeft().ToVector(), sourceBounds.BottomRight().ToVector());
+                if (bottomSide.HasValue)
+                {
+                    return rotate(new Point(bottomSide.Value.X, bottomSide.Value.Y), angle);
+                }
+            }
 
-            if ((leftSide != null || bottomSide != null || rightSide != null || topSide != null) && angle != 0)
-                pt = MathHelper.RotatePoint(pt, sourceBounds.Center(),  angle);
-            return pt;
+            return rotate(new Point(sourcePos.X, sourcePos.Y), angle);
         }
 
         public static PathFigure GenerateOldArrow(Point ip1, Point ip2)
