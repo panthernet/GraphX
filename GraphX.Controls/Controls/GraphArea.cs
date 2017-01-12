@@ -1572,7 +1572,6 @@ namespace GraphX.Controls
                 (from edge in edgeList
                  where edge.Value.CanBeParallel && !edge.Key.IsSelfLoop && (!edge.Key.SourceConnectionPointId.HasValue || !edge.Key.TargetConnectionPointId.HasValue)
                  group edge by new Tuple<long, long>(Math.Min(edge.Key.Source.ID, edge.Key.Target.ID), Math.Max(edge.Key.Source.ID, edge.Key.Target.ID)) into edgeGroup
-                 where edgeGroup.Skip(1).Any()
                  select edgeGroup.OrderBy(e => e.Key.SourceConnectionPointId.HasValue || e.Key.TargetConnectionPointId.HasValue ? 1 : 0).ToList())
                 .ToList();
 
