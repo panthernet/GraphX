@@ -414,7 +414,7 @@ namespace GraphX.Controls
         /// <param name="removeEdgeFromDataGraph">Remove edge from data graph if possible. Default value is False.</param>
         public void RemoveEdge(TEdge edgeData, bool removeEdgeFromDataGraph = false)
         {
-            RemoveEdgeInternal(edgeData, true);
+            RemoveEdgeInternal(edgeData, true, removeEdgeFromDataGraph);
             var hasStorage = LogicCore?.AlgorithmStorage != null && (edgeData.SkipProcessing != ProcessingOptionEnum.Exclude || removeEdgeFromDataGraph);
             if (hasStorage) LogicCore.AlgorithmStorage.RemoveSingleEdge(edgeData);
         }
