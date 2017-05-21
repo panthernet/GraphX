@@ -1,5 +1,8 @@
 ﻿WIP 2.3.7
-- Fixed SimpleTreeLayout vertex sizes supplement
+- Added edge drag functionality to be able to reattach edge to another vertex (thanks to LaborJos)
+- Fixed SimpleTreeLayout vertex sizes supplement (thanks to edgardozoppi)
+- Fixed and improved parallel edge handling (thanks to perturbare)
+- Fixed RemoveEdge() method were not removing edges from data graph (thanks to perturbare)
 
 RELEASE 2.3.6
 DETAILED CHANGELOG:
