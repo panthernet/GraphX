@@ -24,7 +24,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         public SimpleTreeLayoutAlgorithm( TGraph visitedGraph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Size> vertexSizes, SimpleTreeLayoutParameters parameters )
             : base( visitedGraph, vertexPositions, parameters )
         {
-            VertexSizes = new Dictionary<TVertex, Size>(vertexSizes);
+            VertexSizes = VertexSizes == null ? new Dictionary<TVertex, Size>() : new Dictionary<TVertex, Size>(vertexSizes);
         }
 
         public override void Compute(CancellationToken cancellationToken)

@@ -85,7 +85,7 @@ namespace SimpleGraph
 
             //This method sets edges arrows visibility. It is also applied to all edges in Area.EdgesList. You can also set property for
             //each edge individually using property, for ex: Area.EdgesList[0].ShowArrows = true;
-            Area.ShowAllEdgesArrows(true);
+            Area.ShowAllEdgesArrows(false);
 
             //This method sets edges labels visibility. It is also applied to all edges in Area.EdgesList. You can also set property for
             //each edge individually using property, for ex: Area.EdgesList[0].ShowLabel = true;
