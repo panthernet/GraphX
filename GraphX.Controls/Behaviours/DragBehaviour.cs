@@ -1,46 +1,52 @@
 ﻿using System;
 using System.Diagnostics;
+
 #if WPF
+
 using System.Windows;
+
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Input;
 using Windows.Foundation;
 using System.Linq;
 #endif
+
 using GraphX.PCL.Common.Exceptions;
+using GraphX.PCL.Common.Interfaces;
+using GraphX.PCL.Common.Models;
 
 namespace GraphX.Controls
 {
     /// <summary>
     /// Dragging behavior of objects in a GraphX graph area is influenced using the attached properties of this class.
-    /// 
+    ///
     /// To enable dragging of an individual object, set the IsDragEnabled attached property to true on that object. When IsDragEnabled is true, the
     /// object can be used to initiate dragging.
-    /// 
+    ///
     /// To drag a group of vertices, set the IsTagged attached property to true for all of the vertices in the group. When dragging is started from
     /// one of the tagged vertices, all of the tagged ones will be move.
-    /// 
+    ///
     /// "Primary drag object" defined: Whichever object gets the mouse/pointer events is treated as the primary drag object and its attached properties take
     /// precedence for controlling drag behavior. When only one object is being dragged, it is the primary drag object. When a group of objects is tagged
     /// and being dragged together, the one getting mouse events is the primary drag object.
-    /// 
+    ///
     /// There is limited support for dragging edges. It is achieved by setting IsDragEnabled to true for the edge AND tagging the edge and the vertices
     /// it is attached to. When the user drags the edge, the drag is actually performed on the vertices.
-    /// 
+    ///
     /// For edges to be updated as a vertex is moved, set UpdateEdgesOnMove to true for the object being dragged.
-    /// 
+    ///
     /// Snapping is turned on or off by the GlobalIsSnappingPredicate or by the IsSnappingPredicate property on the primary drag object. The predicate is
     /// called with each movement of the mouse/pointer and the primary drag object is passed in. If snapping should be performed, the predicate must return
     /// true. To skip snapping logic, the predicate must return false. If no predicate is set using the IsSnappingPredicate, the  GlobalIsSnappingPredicate
     /// is used. The default behavior is to snap while a shift key alone is pressed.
-    /// 
+    ///
     /// When dragging a group of objects and using snapping, there is an additional refinement that can be used for the snapping behavior of the individual
     /// objects in the group. The individual objects can move the exact same amount as the primary object when it snaps, or they can snap individually, with
     /// the snap calculation being performed for each one. The behavior is controlled for the entire group by the GlobalIsSnappingIndividuallyPredicate or
     /// the IsIndividualSnappingPredicate property setting ON THE PRIMARY DRAG OBJECT. The default behavior is to move all dragged objects by the same offset
     /// as the primary drag object.
-    /// 
+    ///
     /// Snapping calculations are performed by the functions set on the primary drag object using the GlobalXSnapModifier or XSnapModifier property and the
     /// GlobalYSnapModifier or YSnapModifier propery. These functions are called for each movement and provided the GraphAreaBase, object being moved, and
     /// the pre-snapped x or y value. The passed in parameters are intended to provide an opportunity to find elements within the graph area and do things
@@ -65,7 +71,7 @@ namespace GraphX.Controls
 
         private static readonly SnapModifierFunc _builtinSnapModifier = (area, obj, val) => Math.Round(val * 0.1) * 10.0;
 
-        #endregion
+        #endregion Built-in snapping behavior
 
         #region Global snapping behavior management
 
@@ -93,7 +99,6 @@ namespace GraphX.Controls
                 }
             }
         }
-
 
         private static Predicate<DependencyObject> _globalIsIndividualSnappingPredicate = _builtinIsIndividualSnappingPredicate;
 
@@ -171,19 +176,22 @@ namespace GraphX.Controls
             }
         }
 
-        #endregion
+        #endregion Global snapping behavior management
 
         #region Attached DPs
+
         public static readonly DependencyProperty IsDragEnabledProperty = DependencyProperty.RegisterAttached("IsDragEnabled", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false, OnIsDragEnabledPropertyChanged));
         public static readonly DependencyProperty UpdateEdgesOnMoveProperty = DependencyProperty.RegisterAttached("UpdateEdgesOnMove", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsTaggedProperty = DependencyProperty.RegisterAttached("IsTagged", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsDraggingProperty = DependencyProperty.RegisterAttached("IsDragging", typeof(bool), typeof(DragBehaviour), new PropertyMetadata(false));
         public static readonly DependencyProperty IsSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(new Predicate<DependencyObject>(obj => { return _globalIsSnappingPredicate(obj); })));
         public static readonly DependencyProperty IsIndividualSnappingPredicateProperty = DependencyProperty.RegisterAttached("IsIndividualSnappingPredicate", typeof(Predicate<DependencyObject>), typeof(DragBehaviour), new PropertyMetadata(new Predicate<DependencyObject>(obj => { return _globalIsIndividualSnappingPredicate(obj); })));
+
         /// <summary>
         /// Snap feature modifier delegate for X axis
         /// </summary>
         public static readonly DependencyProperty XSnapModifierProperty = DependencyProperty.RegisterAttached("XSnapModifier", typeof(SnapModifierFunc), typeof(DragBehaviour), new PropertyMetadata(new SnapModifierFunc((area, obj, val) => _globalXSnapModifier(area, obj, val))));
+
         /// <summary>
         /// Snap feature modifier delegate for Y axis
         /// </summary>
@@ -193,9 +201,11 @@ namespace GraphX.Controls
         private static readonly DependencyProperty OriginalYProperty = DependencyProperty.RegisterAttached("OriginalY", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));
         private static readonly DependencyProperty OriginalMouseXProperty = DependencyProperty.RegisterAttached("OriginalMouseX", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));
         private static readonly DependencyProperty OriginalMouseYProperty = DependencyProperty.RegisterAttached("OriginalMouseY", typeof(double), typeof(DragBehaviour), new PropertyMetadata(0.0));
-        #endregion
+
+        #endregion Attached DPs
 
         #region Get/Set method for Attached Properties
+
         public static bool GetUpdateEdgesOnMove(DependencyObject obj)
         {
             return (bool)obj.GetValue(UpdateEdgesOnMoveProperty);
@@ -276,7 +286,7 @@ namespace GraphX.Controls
             obj.SetValue(YSnapModifierProperty, value);
         }
 
-        #endregion
+        #endregion Get/Set method for Attached Properties
 
         #region Get/Set methods for private Attached Properties
 
@@ -319,9 +329,11 @@ namespace GraphX.Controls
         {
             obj.SetValue(OriginalMouseYProperty, value);
         }
-        #endregion
+
+        #endregion Get/Set methods for private Attached Properties
 
         #region PropertyChanged callbacks
+
         private static void OnIsDragEnabledPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
 #if WPF
@@ -341,8 +353,16 @@ namespace GraphX.Controls
             {
                 //register the event handlers
 #if WPF
-                element.MouseLeftButtonDown += OnDragStarted;
-                element.PreviewMouseLeftButtonUp += OnDragFinished;
+                if (element.GetType() == typeof(VertexControl))
+                {
+                    element.MouseLeftButtonDown += OnVertexDragStarted;
+                    element.PreviewMouseLeftButtonUp += OnVertexDragFinished;
+                }
+                else if (element.GetType() == typeof(EdgeControl))
+                {
+                    element.MouseLeftButtonDown += OnEdgeDrageStarted;
+                    element.PreviewMouseLeftButtonUp += OnEdgeDragFinished;
+                }
 #elif METRO
                 element.PointerPressed += OnDragStarted;
                 element.PointerReleased += OnDragFinished;
@@ -352,18 +372,107 @@ namespace GraphX.Controls
             {
                 //unregister the event handlers
 #if WPF
-                element.MouseLeftButtonDown -= OnDragStarted;
-                element.PreviewMouseLeftButtonUp -= OnDragFinished;
+                if (element.GetType() == typeof(VertexControl))
+                {
+                    element.MouseLeftButtonDown -= OnVertexDragStarted;
+                    element.PreviewMouseLeftButtonUp -= OnVertexDragFinished;
+                }
+                else if (element.GetType() == typeof(EdgeControl))
+                {
+                    element.MouseLeftButtonDown -= OnEdgeDrageStarted;
+                    element.PreviewMouseLeftButtonUp -= OnEdgeDragFinished;
+                }
 #elif METRO
                 element.PointerPressed -= OnDragStarted;
                 element.PointerReleased -= OnDragFinished;
 #endif
             }
         }
-        #endregion
+
+        #endregion PropertyChanged callbacks
+
+        private static void OnEdgeDrageStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            DependencyObject obj = sender as DependencyObject;
+
+            SetIsDragging(obj, true);
+
+            var element = obj as IInputElement;
+            if (element != null)
+            {
+                element.CaptureMouse();
+                element.MouseMove -= OnEdgeDragging;
+                element.MouseMove += OnEdgeDragging;
+            }
+            else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
+
+            e.Handled = false;
+        }
+
+        private static void OnEdgeDragging(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            var obj = sender as DependencyObject;
+            if (!GetIsDragging(obj))
+                return;
+
+            EdgeControl edgeControl = sender as EdgeControl;
+
+            edgeControl.PrepareEdgePathFromMousePointer();
+
+            e.Handled = true;
+        }
+
+        private static void OnEdgeDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            EdgeControl edgeControl = sender as EdgeControl;
+
+            if (edgeControl == null) return;
+
+            GraphAreaBase graphAreaBase = edgeControl.RootArea;
+
+            VertexControl vertexControl = graphAreaBase.GetVertexControlAt(e.GetPosition(graphAreaBase));
+
+            if (vertexControl != null)
+            {
+                edgeControl.Target = vertexControl;
+
+                if (vertexControl.VertexConnectionPointsList.Count > 0)
+                {
+                    IVertexConnectionPoint vertexConnectionPoint = vertexControl.GetConnectionPointAt(e.GetPosition(graphAreaBase));
+
+                    var edge = edgeControl.Edge as IGraphXCommonEdge;
+
+                    if (vertexConnectionPoint != null)
+                    {
+                        edge.TargetConnectionPointId = vertexConnectionPoint.Id;
+                    }
+                    else
+                    {
+                        edge.TargetConnectionPointId = null;
+                    }
+                }
+
+                edgeControl.UpdateEdge();
+
+                var obj = (DependencyObject)sender;
+                SetIsDragging(obj, false);
+                //obj.ClearValue(OriginalMouseXProperty);
+                //obj.ClearValue(OriginalMouseYProperty);
+                //obj.ClearValue(OriginalXProperty);
+                //obj.ClearValue(OriginalYProperty);
+
+                var element = sender as IInputElement;
+                if (element != null)
+                {
+                    element.MouseMove -= OnVertexDragging;
+                    element.ReleaseMouseCapture();
+                }
+            }
+        }
 
 #if WPF
-        private static void OnDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        private static void OnVertexDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
 #elif METRO
         private static void OnDragStarted( object sender, PointerRoutedEventArgs e )
 #endif
@@ -399,8 +508,8 @@ namespace GraphX.Controls
             if (element != null)
             {
                 element.CaptureMouse();
-                element.MouseMove -= OnDragging;
-                element.MouseMove += OnDragging;
+                element.MouseMove -= OnVertexDragging;
+                element.MouseMove += OnVertexDragging;
             }
             //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
             e.Handled = false;
@@ -416,7 +525,8 @@ namespace GraphX.Controls
         }
 
 #if WPF
-        private static void OnDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        private static void OnVertexDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
 #elif METRO
         private static void OnDragFinished( object sender, PointerRoutedEventArgs e )
 #endif
@@ -445,7 +555,7 @@ namespace GraphX.Controls
             var element = sender as IInputElement;
             if (element != null)
             {
-                element.MouseMove -= OnDragging;
+                element.MouseMove -= OnVertexDragging;
                 element.ReleaseMouseCapture();
             }
 #elif METRO
@@ -459,7 +569,8 @@ namespace GraphX.Controls
         }
 
 #if WPF
-        private static void OnDragging(object sender, System.Windows.Input.MouseEventArgs e)
+
+        private static void OnVertexDragging(object sender, System.Windows.Input.MouseEventArgs e)
 #elif METRO
         private static void OnDragging( object sender, PointerRoutedEventArgs e )
 #endif
@@ -578,6 +689,7 @@ namespace GraphX.Controls
         }
 
 #if WPF
+
         private static Point GetPositionInArea(GraphAreaBase area, System.Windows.Input.MouseEventArgs e)
 #elif METRO
         private static Windows.Foundation.Point GetPositionInArea(GraphAreaBase area, PointerRoutedEventArgs e)

@@ -1,65 +1,76 @@
-﻿<ResourceDictionary
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:ShowcaseApp.WPF"
-    xmlns:controls="http://schemas.panthernet.ru/graphx/">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="http://schemas.panthernet.ru/graphx/"
+                    xmlns:local="clr-namespace:ShowcaseApp.WPF">
 
-    <local:ValueToImageConverter x:Key="ValueToImage"/>
-    
-    <!-- VERTEX CONTROL -->
+    <local:ValueToImageConverter x:Key="ValueToImage" />
+
+    <!--  VERTEX CONTROL  -->
     <Style TargetType="{x:Type controls:VertexControl}">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="VertexShape" Value="Circle"/>
-        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VertexShape" Value="Circle" />
+        <Setter Property="ShowLabel" Value="True" />
         <Setter Property="Template">
-			<Setter.Value>
+            <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-	
                     <Grid>
-                        <Image Source="{Binding ImageId, Converter={StaticResource ValueToImage}}" Margin="0" Width="80" Stretch="UniformToFill"/>
+                        <Image Width="80"
+                               Margin="0"
+                               Source="{Binding ImageId,
+                                                Converter={StaticResource ValueToImage}}"
+                               Stretch="UniformToFill" />
                         <!-- removed in favor of new attachable vertex label logic
                         <controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" />-->
                     </Grid>
-
                 </ControlTemplate>
-			</Setter.Value>
-		</Setter>
+            </Setter.Value>
+        </Setter>
 
-        <!-- VERTEX DRAGGING CONTROL -->
-        <Setter Property="controls:DragBehaviour.IsDragEnabled"
-                Value="True" />
-        <Setter Property="controls:DragBehaviour.UpdateEdgesOnMove"
-                Value="True" />
+        <!--  VERTEX DRAGGING CONTROL  -->
+        <Setter Property="controls:DragBehaviour.IsDragEnabled" Value="True" />
+        <Setter Property="controls:DragBehaviour.UpdateEdgesOnMove" Value="True" />
     </Style>
 
-    <controls:VisibilityToBoolConverter Inverted="True" Not="True" x:Key="BooleanToVisibility"/>
+    <controls:VisibilityToBoolConverter x:Key="BooleanToVisibility"
+                                        Inverted="True"
+                                        Not="True" />
 
-    <!-- EDGE CONTROL -->
+    <!--  EDGE CONTROL  -->
     <Style TargetType="{x:Type controls:EdgeControl}">
-        <Setter Property="SelfLoopIndicatorOffset" Value="10,10"/>
+        <Setter Property="SelfLoopIndicatorOffset" Value="10,10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:EdgeControl}">
                     <Grid>
-                        <Path Stroke="#FF976969"
+                        <Path x:Name="PART_edgePath"
+                              Stroke="#FF976969"
                               StrokeThickness="3"
-                              ToolTip="{TemplateBinding ToolTip}" 
-                              x:Name="PART_edgePath"/>
-                        <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
-                            <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="15" Height="15"/>
+                              ToolTip="{TemplateBinding ToolTip}" />
+                        <controls:DefaultEdgePointer x:Name="PART_EdgePointerForTarget" NeedRotation="true">
+                            <Path Width="15"
+                                  Height="15"
+                                  Data="M0,0.5 L1,1 1,0"
+                                  Fill="Black"
+                                  Stretch="Uniform" />
                         </controls:DefaultEdgePointer>
-                        <Path x:Name="PART_SelfLoopedEdge" 
-                              Width="10" 
-                              Height="10" 
-                              Stretch="Uniform" 
-                              Fill="Black" 
+                        <controls:DefaultEdgePointer x:Name="PART_EdgePointerForSource" NeedRotation="true">
+                            <Path Width="15"
+                                  Height="15"
+                                  Data="M2,0.5 L1,1 1,0"
+                                  Fill="Red"
+                                  Stretch="Uniform" />
+                        </controls:DefaultEdgePointer>
+                        <Path x:Name="PART_SelfLoopedEdge"
+                              Width="10"
+                              Height="10"
+                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "
+                              Fill="Black"
                               IsHitTestVisible="True"
-                              ToolTip="This vertex has some self looped edges!"
-                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>
+                              Stretch="Uniform"
+                              ToolTip="This vertex has some self looped edges!" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-	
 </ResourceDictionary>
