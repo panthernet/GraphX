@@ -4,6 +4,8 @@ using System.Linq;
 #if WPF
 using System.Windows;
 using System.Windows.Controls;
+using USize = System.Windows.Size;
+using Point = System.Windows.Point;
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -12,6 +14,7 @@ using Windows.Foundation;
 using GraphX.Controls.Models;
 using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
+using Rect = GraphX.Measure.Rect;
 
 namespace GraphX.Controls
 {
@@ -232,6 +235,17 @@ namespace GraphX.Controls
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
             result?.Update();
             return result;
+        }
+
+        public IVertexConnectionPoint GetConnectionPointAt(Point position)
+        {
+            Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
+
+            return VertexConnectionPointsList.FirstOrDefault(a =>
+            {
+                var rect = new Rect(a.RectangularSize.X, a.RectangularSize.Y, a.RectangularSize.Width, a.RectangularSize.Height);
+                return rect.Contains(position.ToGraphX());
+            });
         }
 
         /// <summary>

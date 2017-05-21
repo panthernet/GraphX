@@ -4,12 +4,16 @@ using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Exceptions;
 using GraphX.PCL.Common.Interfaces;
-#if WPF 
+using System.Windows.Input;
+
+#if WPF
+
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using SysRect = System.Windows.Rect;
+
 #elif METRO
 using GraphX.PCL.Common;
 using GraphX.Measure;
@@ -33,10 +37,10 @@ namespace GraphX.Controls
     public abstract class EdgeControlBase : Control, IGraphControl, IDisposable
     {
 #if METRO
-        void IPositionChangeNotify.OnPositionChanged()
-        {
-            //skip any actions on own position change
-        }
+		void IPositionChangeNotify.OnPositionChanged()
+		{
+			//skip any actions on own position change
+		}
 #endif
 
         #region Properties & Fields
@@ -45,14 +49,18 @@ namespace GraphX.Controls
         /// Gets or sets if edge pointer should be hidden when source and target vertices are overlapped making the 0 length edge. Default value is True.
         /// </summary>
         public bool HideEdgePointerOnVertexOverlap { get; set; } = true;
+
         /// <summary>
         /// Gets or sets the length of the edge to hide the edge pointers if less than or equal to. Default value is 0 (do not hide).
         /// </summary>
         public double HideEdgePointerByEdgeLength { get; set; } = 0.0d;
 
         public abstract bool IsSelfLooped { get; protected set; }
+
         public abstract void Dispose();
+
         public abstract void Clean();
+
         protected DoubleCollection StrokeDashArray { get; set; }
 
         /// <summary>
@@ -70,8 +78,13 @@ namespace GraphX.Controls
         /// </summary>
         private SysRect _selfLoopedEdgeLastKnownRect;
 
-        protected virtual void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-        protected virtual void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        protected virtual void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+        }
+
+        protected virtual void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+        }
 
         /// <summary>
         /// Gets or sets parent GraphArea visual
@@ -85,15 +98,16 @@ namespace GraphX.Controls
         public static readonly DependencyProperty RootCanvasProperty =
             DependencyProperty.Register(nameof(RootArea), typeof(GraphAreaBase), typeof(EdgeControlBase), new PropertyMetadata(null));
 
-
         public static readonly DependencyProperty SelfLoopIndicatorRadiusProperty = DependencyProperty.Register(nameof(SelfLoopIndicatorRadius),
                                                                                        typeof(double),
                                                                                        typeof(EdgeControlBase),
                                                                                        new PropertyMetadata(5d));
+
         /// <summary>
         /// Radius of the default self-loop indicator, which is drawn as a circle (when custom template isn't provided). Default is 20.
         /// </summary>
-        public double SelfLoopIndicatorRadius {
+        public double SelfLoopIndicatorRadius
+        {
             get { return (double)GetValue(SelfLoopIndicatorRadiusProperty); }
             set { SetValue(SelfLoopIndicatorRadiusProperty, value); }
         }
@@ -102,6 +116,7 @@ namespace GraphX.Controls
                                                                                typeof(Point),
                                                                                typeof(EdgeControlBase),
                                                                                new PropertyMetadata(new Point()));
+
         /// <summary>
         /// Offset from the left-top corner of the vertex. Useful for custom vertex shapes. Default is 10,10.
         /// </summary>
@@ -115,6 +130,7 @@ namespace GraphX.Controls
                                                                        typeof(bool),
                                                                        typeof(EdgeControlBase),
                                                                        new PropertyMetadata(true));
+
         /// <summary>
         /// Show self looped edge indicator on the vertex top-left corner. Default value is true.
         /// </summary>
@@ -123,7 +139,6 @@ namespace GraphX.Controls
             get { return (bool)GetValue(ShowSelfLoopIndicatorProperty); }
             set { SetValue(ShowSelfLoopIndicatorProperty, value); }
         }
-
 
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source),
                                                                                                typeof(VertexControl),
@@ -145,14 +160,12 @@ namespace GraphX.Controls
             (d as EdgeControlBase)?.OnTargetChanged(d, e);
         }
 
-
         public static readonly DependencyProperty EdgeProperty = DependencyProperty.Register(nameof(Edge), typeof(object),
                                                                                              typeof(EdgeControlBase),
                                                                                              new PropertyMetadata(null));
 
- 
-
         private double _labelAngle;
+
         /// <summary>
         /// Gets or sets vertex label angle
         /// </summary>
@@ -189,6 +202,7 @@ namespace GraphX.Controls
                 case EdgeDashStyle.Dash:
                     ec.StrokeDashArray = new DoubleCollection { 4.0, 2.0 };
                     break;
+
                 case EdgeDashStyle.Dot:
                     ec.StrokeDashArray = new DoubleCollection { 1.0, 2.0 };
                     break;
@@ -208,7 +222,6 @@ namespace GraphX.Controls
             ec.UpdateEdge(false);
         }
 
-
         /// <summary>
         /// Gets or sets edge dash style
         /// </summary>
@@ -217,7 +230,8 @@ namespace GraphX.Controls
             get { return (EdgeDashStyle)GetValue(DashStyleProperty); }
             set { SetValue(DashStyleProperty, value); }
         }
-        #endregion
+
+        #endregion DashStyle
 
         /// <summary>
         /// Gets or sets if this edge can be paralellized if GraphArea.EnableParallelEdges is true.
@@ -240,6 +254,7 @@ namespace GraphX.Controls
 		}
 
 		private bool _updateLabelPosition;
+
         /// <summary>
         /// Gets or sets if label position should be updated on edge update
         /// </summary>
@@ -249,6 +264,7 @@ namespace GraphX.Controls
         protected PropertyChangeNotifier _sourceWatcher;
         protected PropertyChangeNotifier _targetWatcher;
 #endif
+
         /// <summary>
         /// Gets or set if hidden edges should be updated when connected vertices positions are changed. Default value is True.
         /// </summary>
@@ -275,14 +291,15 @@ namespace GraphX.Controls
         public bool ShowArrows { get { return (bool)GetValue(ShowArrowsProperty); } set { SetValue(ShowArrowsProperty, value); } }
 
         public static readonly DependencyProperty ShowLabelProperty = DependencyProperty.Register("ShowLabel",
-                                                                               typeof (bool),
-                                                                               typeof (EdgeControlBase),
+                                                                               typeof(bool),
+                                                                               typeof(EdgeControlBase),
                                                                                new PropertyMetadata(false, showlabel_changed));
 
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             (d as EdgeControlBase)?.UpdateEdge();
         }
+
         /// <summary>
         /// Show edge label.Default value is False.
         /// </summary>
@@ -304,6 +321,7 @@ namespace GraphX.Controls
                 }
             }
         }
+
         protected bool _alignLabelsToEdges;
 
         public static readonly DependencyProperty LabelVerticalOffsetProperty = DependencyProperty.Register("LabelVerticalOffset",
@@ -332,6 +350,7 @@ namespace GraphX.Controls
         protected Path LinePathObject;
 
         private IEdgeLabelControl _edgeLabelControl;
+
         /// <summary>
         /// Templated label control to display labels
         /// </summary>
@@ -344,6 +363,7 @@ namespace GraphX.Controls
         /// Returns edge pointer for source if any
         /// </summary>
         public IEdgePointer GetEdgePointerForSource() { return EdgePointerForSource; }
+
         /// <summary>
         /// Returns edge pointer for target if any
         /// </summary>
@@ -359,6 +379,7 @@ namespace GraphX.Controls
             get { return (VertexControl)GetValue(SourceProperty); }
             set { SetValue(SourceProperty, value); }
         }
+
         /// <summary>
         /// Target visual vertex object
         /// </summary>
@@ -367,7 +388,6 @@ namespace GraphX.Controls
             get { return (VertexControl)GetValue(TargetProperty); }
             set { SetValue(TargetProperty, value); }
         }
-
 
         /// <summary>
         /// Data edge object
@@ -402,11 +422,11 @@ namespace GraphX.Controls
         /// </summary>
         public void UpdateLabel()
         {
-            if(_edgeLabelControl != null && ShowLabel)
+            if (_edgeLabelControl != null && ShowLabel)
                 UpdateLabelLayout(true);
         }
 
-        #endregion
+        #endregion Properties & Fields
 
         #region Position methods
 
@@ -446,9 +466,11 @@ namespace GraphX.Controls
         {
             return new Measure.Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
         }
-        #endregion
+
+        #endregion Position methods
 
         #region Manual path controls
+
         /// <summary>
         /// Gets current edge path geometry object
         /// </summary>
@@ -467,7 +489,8 @@ namespace GraphX.Controls
             Linegeometry = geo;
             UpdateEdge();
         }
-        #endregion
+
+        #endregion Manual path controls
 
         internal void SetVisibility(Visibility value)
         {
@@ -479,8 +502,8 @@ namespace GraphX.Controls
             EdgeLabelControl?.UpdateLayout();
             if (LinePathObject != null)
             {
-                var pos = Source.GetPosition();
-                Source.SetPosition(pos.X, pos.Y);
+                var pos = this.Source.GetPosition();
+                this.Source.SetPosition(pos.X, pos.Y);
             }
         }
 
@@ -489,12 +512,15 @@ namespace GraphX.Controls
         /// </summary>
         public bool IsTemplateLoaded => LinePathObject != null;
 
-        protected virtual void OnEdgeLabelUpdated() { }
+        protected virtual void OnEdgeLabelUpdated()
+        {
+        }
 
 #if WPF
+
         public override void OnApplyTemplate()
 #elif METRO
-        protected override void OnApplyTemplate()
+		protected override void OnApplyTemplate()
 #endif
         {
             base.OnApplyTemplate();
@@ -508,18 +534,17 @@ namespace GraphX.Controls
                 throw new GX_ObsoleteException("PART_edgeArrowPath is obsolete! Please use new DefaultEdgePointer object in your EdgeControlBase template!");
 
             EdgeLabelControl = EdgeLabelControl ?? GetTemplatePart("PART_edgeLabel") as IEdgeLabelControl;
-            
 
             EdgePointerForSource = GetTemplatePart("PART_EdgePointerForSource") as IEdgePointer;
             EdgePointerForTarget = GetTemplatePart("PART_EdgePointerForTarget") as IEdgePointer;
 
             SelfLoopIndicator = GetTemplatePart("PART_SelfLoopedEdge") as FrameworkElement;
-            if(SelfLoopIndicator != null)
+            if (SelfLoopIndicator != null)
                 SelfLoopIndicator.LayoutUpdated += (sender, args) =>
                 {
                     SelfLoopIndicator?.Arrange(_selfLoopedEdgeLastKnownRect);
                 };
-           // var x = ShowLabel;
+            // var x = ShowLabel;
             MeasureChild(EdgePointerForSource as UIElement);
             MeasureChild(EdgePointerForTarget as UIElement);
             MeasureChild(SelfLoopIndicator);
@@ -570,7 +595,6 @@ namespace GraphX.Controls
             LinePathObject.StrokeDashArray = StrokeDashArray;
         }
 
-
         internal int ParallelEdgeOffset;
 		//internal int TargetOffset;
 
@@ -592,8 +616,9 @@ namespace GraphX.Controls
 
         /// <summary>
         /// Internal value to store last calculated Source vertex connection point
-		/// </summary>
-		protected internal Point? SourceConnectionPoint;
+		    /// </summary>
+		    protected internal Point? SourceConnectionPoint;
+
         /// <summary>
         /// Internal value to store last calculated Target vertex connection point
         /// </summary>
@@ -661,6 +686,206 @@ namespace GraphX.Controls
             else _selfLoopedEdgeLastKnownRect = new SysRect(pt, SelfLoopIndicator.DesiredSize);
         }
 
+        public virtual void PrepareEdgePathFromMousePointer(bool useCurrentCoords = false)
+        {
+            //do not calculate invisible edges
+            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && ManualDrawing || !IsTemplateLoaded) return;
+
+            //get the size of the source
+            var sourceSize = new Size
+            {
+                Width = this.Source.ActualWidth,
+                Height = this.Source.ActualHeight
+            };
+
+            //get the position center of the source
+            var sourcePos = new Point
+            {
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)) + sourceSize.Width * 0.5,
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source)) + sourceSize.Height * 0.5
+            };
+
+            //get the size of the target
+            var targetSize = new Size
+            {
+                Width = SystemParameters.CursorWidth,
+                Height = SystemParameters.CursorHeight
+            };
+
+            //get the position center of the target
+            var targetPos = new Point
+            {
+                X = Mouse.GetPosition(this.RootArea).X,/* + targetSize.Width * 0.5,*/
+                Y = Mouse.GetPosition(this.RootArea).Y/* + targetSize.Height * 0.5*/
+            };
+
+            var routedEdge = this.Edge as IRoutingInfo;
+
+            if (routedEdge == null)
+                throw new GX_InvalidDataException("Edge must implement IRoutingInfo interface");
+
+            //get the route informations
+            var routeInformation = routedEdge.RoutingPoints;
+
+            // Get the TopLeft position of the Source Vertex.
+            var sourcePos1 = new Point
+            {
+                X = (useCurrentCoords ? GraphAreaBase.GetX(this.Source) : GraphAreaBase.GetFinalX(this.Source)),
+                Y = (useCurrentCoords ? GraphAreaBase.GetY(this.Source) : GraphAreaBase.GetFinalY(this.Source))
+            };
+            // Get the TopLeft position of the Target Vertex.
+            var targetPos1 = new Point
+            {
+                X = Mouse.GetPosition(this.RootArea).X,
+                Y = Mouse.GetPosition(this.RootArea).Y
+            };
+
+            var hasEpSource = EdgePointerForSource != null;
+            var hasEpTarget = EdgePointerForTarget != null;
+
+            //if self looped edge
+            if (IsSelfLooped)
+            {
+                PrepareSelfLoopedEdge(sourcePos1);
+                return;
+            }
+
+            //check if we have some edge route data
+            var hasRouteInfo = routeInformation != null && routeInformation.Length > 1;
+
+            var gEdge = Edge as IGraphXCommonEdge;
+            Point p1;
+            Point p2;
+
+            //calculate edge source (p1) and target (p2) endpoints based on different settings
+            if (gEdge?.SourceConnectionPointId != null)
+            {
+                var sourceCp = this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true);
+                if (sourceCp == null)
+                {
+                    throw new GX_ObjectNotFoundException(string.Format("Can't find source vertex VCP by edge source connection point Id({1}) : {0}", this.Source, gEdge.SourceConnectionPointId));
+                }
+                if (sourceCp.Shape == VertexShape.None) p1 = sourceCp.RectangularSize.Center();
+                else
+                {
+                    var targetCpPos = hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos);
+                    p1 = GeometryHelper.GetEdgeEndpoint(sourceCp.RectangularSize.Center(), sourceCp.RectangularSize, targetCpPos, sourceCp.Shape);
+                }
+            }
+            else
+                p1 = GeometryHelper.GetEdgeEndpoint(sourcePos, new SysRect(sourcePos1, sourceSize), (hasRouteInfo ? routeInformation[1].ToWindows() : (targetPos)), this.Source.VertexShape);
+
+            //if (gEdge?.TargetConnectionPointId != null)
+            //{
+            //    //var targetCp = this.Target.GetConnectionPointById(gEdge.TargetConnectionPointId.Value, true);
+            //    //if (targetCp == null)
+            //    //    throw new GX_ObjectNotFoundException(string.Format("Can't find target vertex VCP by edge target connection point Id({1}) : {0}", this.Target, gEdge.TargetConnectionPointId));
+            //    //if (targetCp.Shape == VertexShape.None) p2 = targetCp.RectangularSize.Center();
+            //    //else
+            //    //{
+            //    //    var sourceCpPos = gEdge.SourceConnectionPointId.HasValue ? this.Source.GetConnectionPointById(gEdge.SourceConnectionPointId.Value, true).RectangularSize.Center() : hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos);
+            //    //    p2 = GeometryHelper.GetEdgeEndpoint(targetCp.RectangularSize.Center(), targetCp.RectangularSize, sourceCpPos, targetCp.Shape);
+            //    //}
+            //}
+            //else
+            p2 = GeometryHelper.GetEdgeEndpoint(
+                targetPos, new SysRect(targetPos, targetSize), hasRouteInfo ? routeInformation[routeInformation.Length - 2].ToWindows() : (sourcePos), VertexShape.None);
+
+            SourceConnectionPoint = p1;
+            TargetConnectionPoint = p2;
+
+            Linegeometry = new PathGeometry();
+            PathFigure lineFigure = new PathFigure();
+
+            //if we have route and route consist of 2 or more points
+            if (RootArea != null && hasRouteInfo)
+            {
+                //replace start and end points with accurate ones
+                var routePoints = routeInformation.ToWindows().ToList();
+                routePoints.Clear();
+                routePoints.Add(p1);
+                routePoints.Add(p2);
+
+                if (routedEdge.RoutingPoints != null)
+                    routedEdge.RoutingPoints = routePoints.ToArray().ToGraphX();
+
+                if (RootArea.EdgeCurvingEnabled)
+                {
+                    var oPolyLineSegment = GeometryHelper.GetCurveThroughPoints(routePoints.ToArray(), 0.5, RootArea.EdgeCurvingTolerance);
+
+                    if (hasEpTarget)
+                    {
+                        UpdateTargetEpData(oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 1], oPolyLineSegment.Points[oPolyLineSegment.Points.Count - 2]);
+                        oPolyLineSegment.Points.RemoveAt(oPolyLineSegment.Points.Count - 1);
+                    }
+                    if (hasEpSource)
+                    {
+                        UpdateSourceEpData(oPolyLineSegment.Points.First(), oPolyLineSegment.Points[1]);
+                        oPolyLineSegment.Points.RemoveAt(0);
+                    }
+
+                    lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
+#if WPF
+                    //freeze and create resulting geometry
+                    GeometryHelper.TryFreeze(oPolyLineSegment);
+#endif
+                }
+                else
+                {
+                    if (hasEpSource)
+                        routePoints[0] = routePoints[0].Subtract(UpdateSourceEpData(routePoints.First(), routePoints[1]));
+                    if (hasEpTarget)
+                        routePoints[routePoints.Count - 1] = routePoints[routePoints.Count - 1].Subtract(UpdateTargetEpData(p2, routePoints[routePoints.Count - 2]));
+
+                    // Reverse the path if specified.
+                    if (gEdge.ReversePath)
+                        routePoints.Reverse();
+
+                    var pcol = new PointCollection();
+                    routePoints.ForEach(a => pcol.Add(a));
+
+                    lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
+                }
+            }
+            else // no route defined
+            {
+                bool remainHidden = false;
+                //check for hide only if prop is not 0
+                if (HideEdgePointerByEdgeLength != 0d)
+                {
+                    if (MathHelper.GetDistanceBetweenPoints(p1, p2) <= HideEdgePointerByEdgeLength)
+                    {
+                        EdgePointerForSource?.Hide();
+                        EdgePointerForTarget?.Hide();
+                        remainHidden = true;
+                    }
+                    else
+                    {
+                        EdgePointerForSource?.Show();
+                        EdgePointerForTarget?.Show();
+                    }
+                }
+
+                if (hasEpSource)
+                    p1 = p1.Subtract(UpdateSourceEpData(p1, p2, remainHidden));
+                if (hasEpTarget)
+                    p2 = p2.Subtract(UpdateTargetEpData(p2, p1, remainHidden));
+
+                lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
+            }
+            ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
+#if WPF
+            GeometryHelper.TryFreeze(lineFigure);
+            GeometryHelper.TryFreeze(Linegeometry);
+#endif
+            if (ShowLabel && EdgeLabelControl != null && _updateLabelPosition)
+                EdgeLabelControl.UpdatePosition();
+
+            if (LinePathObject == null) return;
+            LinePathObject.Data = Linegeometry;
+            LinePathObject.StrokeDashArray = StrokeDashArray;
+        }
+
         /// <summary>
         /// Create and apply edge path using calculated ER parameters stored in edge
         /// </summary>
@@ -670,7 +895,7 @@ namespace GraphX.Controls
         public virtual void PrepareEdgePath(bool useCurrentCoords = false, Measure.Point[] externalRoutingPoints = null, bool updateLabel = true)
         {
             //do not calculate invisible edges
-            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && Source == null || Target == null || ManualDrawing || !IsTemplateLoaded) return;
+            if ((Visibility != Visibility.Visible && !IsHiddenEdgesUpdated) && this.Source == null || this.Target == null || ManualDrawing || !IsTemplateLoaded) return;
 
             #region Get the inputs
             // Get the TopLeft position of the Source Vertex.
@@ -693,6 +918,7 @@ namespace GraphX.Controls
             //get the size of the target
             Size targetSize;
             if (_isInDesignMode)
+
                 targetSize = new Size(80, 20);
             else
                 targetSize = new Size(Target.ActualWidth, Target.ActualHeight);
@@ -703,9 +929,11 @@ namespace GraphX.Controls
                 sourceTopLeft.Y + sourceSize.Height * .5);
 
             //get the position center of the target
+
             var targetCenter = new Point(
                 targetTopLeft.X + targetSize.Width * .5,
                 targetTopLeft.Y + targetSize.Height * .5);
+
 
             var routedEdge = Edge as IRoutingInfo;
             if (routedEdge == null)
@@ -716,7 +944,8 @@ namespace GraphX.Controls
 
             var hasEpSource = EdgePointerForSource != null;
             var hasEpTarget = EdgePointerForTarget != null;
-            #endregion
+
+            #endregion Get the inputs
 
             //if self looped edge
             if (IsSelfLooped)
@@ -830,7 +1059,7 @@ namespace GraphX.Controls
             var p1 = SourceConnectionPoint.Value;
             var p2 = TargetConnectionPoint.Value;
 
-            Linegeometry = new PathGeometry(); 
+            Linegeometry = new PathGeometry();
             PathFigure lineFigure;
 
             //if we have route and route consist of 2 or more points
@@ -869,7 +1098,7 @@ namespace GraphX.Controls
                 }
                 else
                 {
-                    if (hasEpSource) 
+                    if (hasEpSource)
                         routePoints[0] = routePoints[0].Subtract(UpdateSourceEpData(routePoints.First(), routePoints[1]));
                     if (hasEpTarget)
                         routePoints[routePoints.Count - 1] = routePoints[routePoints.Count - 1].Subtract(UpdateTargetEpData(p2, routePoints[routePoints.Count - 2]));
@@ -879,11 +1108,10 @@ namespace GraphX.Controls
                         routePoints.Reverse();
 
                     var pcol = new PointCollection();
-                    routePoints.ForEach(a=> pcol.Add(a));
-                    
+                    routePoints.ForEach(a => pcol.Add(a));
+
                     lineFigure = new PathFigure { StartPoint = p1, Segments = new PathSegmentCollection { new PolyLineSegment { Points = pcol } }, IsClosed = false };
                 }
-
             }
             else // no route defined
             {
@@ -904,12 +1132,12 @@ namespace GraphX.Controls
                     }
                 }
 
-                if (hasEpSource) 
+                if (hasEpSource)
                     p1 = p1.Subtract(UpdateSourceEpData(p1, p2, allowUpdateEpDataToUnsuppress));
                 if (hasEpTarget)
                     p2 = p2.Subtract(UpdateTargetEpData(p2, p1, allowUpdateEpDataToUnsuppress));
 
-                lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };            
+                lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
             }
             ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
 #if WPF
@@ -928,7 +1156,7 @@ namespace GraphX.Controls
                 if (HideEdgePointerOnVertexOverlap) EdgePointerForSource.Suppress();
                 else dir = new Vector(0, 0);
             }
-            else if(allowUnsuppress) EdgePointerForSource.UnSuppress();
+            else if (allowUnsuppress) EdgePointerForSource.UnSuppress();
             var result = EdgePointerForSource.Update(from, dir, EdgePointerForSource.NeedRotation ? -MathHelper.GetAngleBetweenPoints(from, to).ToDegrees() : 0);
             return EdgePointerForSource.Visibility == Visibility.Visible ? result : new Point();
         }
@@ -942,11 +1170,11 @@ namespace GraphX.Controls
                 else dir = new Vector(0, 0);
             }
             else if (allowUnsuppress) EdgePointerForTarget.UnSuppress();
-            var result =  EdgePointerForTarget.Update(from, dir, EdgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
+            var result = EdgePointerForTarget.Update(from, dir, EdgePointerForTarget.NeedRotation ? (-MathHelper.GetAngleBetweenPoints(from, to).ToDegrees()) : 0);
             return EdgePointerForTarget.Visibility == Visibility.Visible ? result : new Point();
         }
 
-        #endregion
+        #endregion public PrepareEdgePath()
 
         /// <summary>
         /// Searches and returns template part by name if found
@@ -958,7 +1186,7 @@ namespace GraphX.Controls
 #if WPF
             return Template.FindName(name, this);
 #elif METRO
-            return this.FindDescendantByName(name);
+			return this.FindDescendantByName(name);
 #endif
         }
 
