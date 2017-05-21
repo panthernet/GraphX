@@ -1,14 +1,17 @@
 ﻿#if WPF
+
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+
 #elif METRO
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 #endif
+
 using GraphX.PCL.Common.Enums;
 
 namespace GraphX.Controls
@@ -22,11 +25,10 @@ namespace GraphX.Controls
         /// </summary>
         public int Id { get; set; }
 
-
         public static readonly DependencyProperty ShapeProperty =
-            DependencyProperty.Register(nameof(Shape), 
-                          typeof(VertexShape), 
-                          typeof(StaticVertexConnectionPoint), 
+            DependencyProperty.Register(nameof(Shape),
+                          typeof(VertexShape),
+                          typeof(StaticVertexConnectionPoint),
                           new PropertyMetadata(VertexShape.Circle));
 
         /// <summary>
@@ -38,12 +40,13 @@ namespace GraphX.Controls
             set { SetValue(ShapeProperty, value); }
         }
 
-
         private Rect _rectangularSize;
-        public Rect RectangularSize { 
-            get 
-            { 
-                if(_rectangularSize == Rect.Empty)
+
+        public Rect RectangularSize
+        {
+            get
+            {
+                if (_rectangularSize == Rect.Empty)
                     UpdateLayout();
                 return _rectangularSize;
             }
@@ -79,7 +82,7 @@ namespace GraphX.Controls
             return null;
         }
 
-        #endregion
+        #endregion Common part
 
         private VertexControl _vertexControl;
         protected VertexControl VertexControl => _vertexControl ?? (_vertexControl = GetVertexControl(GetParent()));
@@ -101,7 +104,9 @@ namespace GraphX.Controls
         {
             _vertexControl = null;
         }
+
 #if WPF
+
         public DependencyObject GetParent()
         {
             return VisualParent;
@@ -114,6 +119,7 @@ namespace GraphX.Controls
             position = new Point(position.X + vPos.X, position.Y + vPos.Y);
             RectangularSize = new Rect(position, DesiredSize);
         }
+
 #elif METRO
         public DependencyObject GetParent()
         {

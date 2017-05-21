@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+
 #if WPF
+
 using System.Windows;
 using System.Windows.Media;
 using System.ComponentModel;
+
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -49,6 +52,7 @@ namespace GraphX.Controls
             {
                 return element;
             }
+
             var childCount = VisualTreeHelper.GetChildrenCount(element);
             for (int i = 0; i < childCount; i++)
             {
@@ -66,6 +70,5 @@ namespace GraphX.Controls
             return DesignMode.DesignModeEnabled;
 #endif
         }
-
     }
 }

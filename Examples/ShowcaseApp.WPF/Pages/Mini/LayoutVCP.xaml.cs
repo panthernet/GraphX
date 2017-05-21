@@ -54,7 +54,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
         private void CbMathShapeOnChecked(object sender, RoutedEventArgs routedEventArgs)
         {
             foreach(var item in graphArea.VertexList.Values)
-                item.VertexConnectionPointsList.ForEach(a => a.Shape = cbMathShape.IsChecked == true ? VertexShape.Circle : VertexShape.None);   
+                item.VertexConnectionPointsList.ForEach(a => a.Shape = cbMathShape.IsChecked == true ? VertexShape.Circle : VertexShape.None);
             graphArea.UpdateAllEdges(true);
         }
 
@@ -85,7 +85,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
             ShowcaseHelper.AddEdge(logicCore.Graph, vList[5], vList[2], 2, 3);
 
             graphArea.LogicCore = logicCore;
-            //set positions 
+            //set positions
             var posList = new Dictionary<DataVertex, Point>()
             {
                 {vList[0], new Point(0, 0)},
@@ -99,6 +99,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
             //settings
             graphArea.SetVerticesDrag(true, true);
+            graphArea.SetEdgesDrag(true);
 
             zoomControl.ZoomToFill();
         }
