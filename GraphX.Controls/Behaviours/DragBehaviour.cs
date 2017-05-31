@@ -491,16 +491,13 @@ namespace GraphX.Controls
             SetOriginalX(obj, GraphAreaBase.GetFinalX(obj));
             SetOriginalY(obj, GraphAreaBase.GetFinalY(obj));
 
-            // Save starting position of all tagged elements
-            if (GetIsTagged(obj))
-            {
-                foreach (var item in area.GetAllVertexControls())
-                    if (GetIsTagged(item))
-                    {
-                        SetOriginalX(item, GraphAreaBase.GetFinalX(item));
-                        SetOriginalY(item, GraphAreaBase.GetFinalY(item));
-                    }
-            }
+            // Save starting position of all other tagged elements
+            foreach (var item in area.GetAllVertexControls())
+                if (!ReferenceEquals(item, obj) && GetIsTagged(item))
+                {
+                    SetOriginalX(item, GraphAreaBase.GetFinalX(item));
+                    SetOriginalY(item, GraphAreaBase.GetFinalY(item));
+                }
 
             //capture the mouse
 #if WPF
