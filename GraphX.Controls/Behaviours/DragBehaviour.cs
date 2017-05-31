@@ -353,12 +353,12 @@ namespace GraphX.Controls
             {
                 //register the event handlers
 #if WPF
-                if (element.GetType() == typeof(VertexControl))
+                if (element is VertexControl)
                 {
                     element.MouseLeftButtonDown += OnVertexDragStarted;
                     element.PreviewMouseLeftButtonUp += OnVertexDragFinished;
                 }
-                else if (element.GetType() == typeof(EdgeControl))
+                else if (element is EdgeControl)
                 {
                     element.MouseLeftButtonDown += OnEdgeDrageStarted;
                     element.PreviewMouseLeftButtonUp += OnEdgeDragFinished;
@@ -372,12 +372,12 @@ namespace GraphX.Controls
             {
                 //unregister the event handlers
 #if WPF
-                if (element.GetType() == typeof(VertexControl))
+                if (element is VertexControl)
                 {
                     element.MouseLeftButtonDown -= OnVertexDragStarted;
                     element.PreviewMouseLeftButtonUp -= OnVertexDragFinished;
                 }
-                else if (element.GetType() == typeof(EdgeControl))
+                else if (element is EdgeControl)
                 {
                     element.MouseLeftButtonDown -= OnEdgeDrageStarted;
                     element.PreviewMouseLeftButtonUp -= OnEdgeDragFinished;
