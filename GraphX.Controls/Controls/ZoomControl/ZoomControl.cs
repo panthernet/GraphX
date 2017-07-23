@@ -1240,7 +1240,7 @@ namespace GraphX.Controls
                         _startedAsAreaSelection = false;
 
                         OnAreaSelected(ToContentRectangle(ZoomBox));
-                        ZoomBox = Rect.Empty;
+                        ZoomBox = new Rect();
                     }
                     else ZoomToInternal(ZoomBox);
                     break;
