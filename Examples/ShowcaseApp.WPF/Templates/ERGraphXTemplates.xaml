@@ -1,32 +1,22 @@
 ﻿<ResourceDictionary
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="http://schemas.panthernet.ru/graphx/">
+    xmlns:controls="http://schemas.panthernet.ru/graphx/"
+    xmlns:wpf="clr-namespace:ShowcaseApp.WPF">
+    <wpf:ValueToImageConverter x:Key="ValueToImage"/>
 
-    
     <!-- VERTEX CONTROL -->
     <Style TargetType="{x:Type controls:VertexControl}">
         <Setter Property="Background" Value="#FFE3E3E3"/>
         <Setter Property="BorderThickness" Value="5,3,5,3"/>
         <Setter Property="Padding" Value="10,5,10,5"/>
         <Setter Property="BorderBrush" Value="#FF393939"/>
+        <Setter Property="VertexShape" Value="Circle"/>
         
         <Setter Property="Template">
 			<Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:VertexControl}">
-					<Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}"
-							CornerRadius="10,10,10,10"
-						Padding="{TemplateBinding Padding}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <ContentPresenter Content="{TemplateBinding Vertex}" />
-                            <Image Source="{Binding DataImage, UpdateSourceTrigger=PropertyChanged}" Margin="3" Grid.Row="1" Width="80" Stretch="UniformToFill"/>
-                        </Grid>
-                    </Border>
+                    <Image Source="{Binding ImageId, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ValueToImage}}" Margin="0" Width="40" Stretch="UniformToFill"/>
                 </ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -58,7 +48,7 @@
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="15" Height="15"/>
                         </controls:DefaultEdgePointer>
-                        <controls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <!--<controls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />-->
 
                     </Grid>
                 </ControlTemplate>
@@ -88,17 +78,16 @@
     </Style>
 	
     <!--EDGE LABLE CONTROL -->
-    <Style TargetType="{x:Type controls:EdgeLabelControl}">
+    <Style TargetType="{x:Type controls:AttachableEdgeLabelControl}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:EdgeLabelControl}">                    
-                    <Grid>
-                        <Border BorderBrush="Black" BorderThickness="1" Background="LightCoral" CornerRadius="8">
-                            <ContentPresenter Margin="3"/>
-                        </Border>
-                    </Grid>
+                <ControlTemplate TargetType="{x:Type controls:AttachableEdgeLabelControl}">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="4">
+                        <ContentPresenter Margin="3" Content="{Binding AttachNode.Edge.ToolTipText, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
     </Style>
 </ResourceDictionary>

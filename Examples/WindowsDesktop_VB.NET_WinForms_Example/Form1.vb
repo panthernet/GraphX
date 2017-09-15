@@ -23,11 +23,10 @@ Public Class Form1
     Private Function GenerateWpfVisuals() As UIElement
         _zoomctrl = New ZoomControl()
         ZoomControl.SetViewFinderVisibility(_zoomctrl, Visibility.Visible)
-        ' ENABLES WINFORMS HOSTING MODE --- >
 
         Dim logic = New GXLogicCore(Of DataVertex, DataEdge, BidirectionalGraph(Of DataVertex, DataEdge))()
         _gArea = New GraphAreaExample()
-        _gArea.EnableWinFormsHostingMode = True
+       ' _gArea.EnableWinFormsHostingMode = True
         _gArea.LogicCore = logic
 
         logic.Graph = GenerateGraph()

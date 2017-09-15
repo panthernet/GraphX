@@ -6,6 +6,7 @@ using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
 using GraphX.PCL.Logic.Models;
 using GraphX.Controls;
+using GraphX.Controls.Models;
 using QuickGraph;
 
 namespace WindowsFormsProject
@@ -31,9 +32,14 @@ namespace WindowsFormsProject
         {
             _zoomctrl = new ZoomControl();
             ZoomControl.SetViewFinderVisibility(_zoomctrl, Visibility.Visible);
-            /* ENABLES WINFORMS HOSTING MODE --- >*/
             var logic = new GXLogicCore<DataVertex, DataEdge, BidirectionalGraph<DataVertex, DataEdge>>();
-            _gArea = new GraphAreaExample() { EnableWinFormsHostingMode = true, LogicCore = logic };
+            _gArea = new GraphAreaExample
+            {
+               // EnableWinFormsHostingMode = false,
+                LogicCore = logic,
+                EdgeLabelFactory = new DefaultEdgelabelFactory()
+            };
+            _gArea.ShowAllEdgesLabels(true);
             logic.Graph = GenerateGraph();
             logic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.LinLog;
             logic.DefaultLayoutAlgorithmParams = logic.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.LinLog);

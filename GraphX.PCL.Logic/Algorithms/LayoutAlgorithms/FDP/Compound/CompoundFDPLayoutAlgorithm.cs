@@ -28,7 +28,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         private double _temperature = 0;
         //private double _temperatureDelta; //need to be initialized
         private const double TEMPERATURE_LAMBDA = 0.99;
-        private readonly System.Random _rnd = new System.Random(DateTime.Now.Millisecond);
 
         /// <summary>
         /// <para>Phase of the layout process.</para>
@@ -96,22 +95,23 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             _maxIterationCounts[1] = Parameters.Phase2Iterations;
             _maxIterationCounts[2] = Parameters.Phase3Iterations;
 
-            var _temperatureMultipliers = new double[3]
+            var temperatureMultipliers = new double[3]
                                               {
-                                                  1.0, 
+                                                  1.0,
                                                   Parameters.Phase2TemperatureInitialMultiplier,
                                                   Parameters.Phase3TemperatureInitialMultiplier
                                               };
 
-            double initialTemperature = Math.Sqrt(_compoundGraph.VertexCount) * Parameters.IdealEdgeLength;
-            double minimalTemperature = initialTemperature * 0.1;
+            var initialTemperature = Math.Sqrt(_compoundGraph.VertexCount) * Parameters.IdealEdgeLength;
+            var minimalTemperature = initialTemperature * 0.1;
             _temperature = initialTemperature;
 
             _gravityCenterCalculated = false;
 
+            var rnd = new Random(Parameters.Seed);
             for (_phase = 1; _phase <= 3; _phase++)
             {
-                _temperature = initialTemperature * _temperatureMultipliers[_phase - 1];
+                _temperature = initialTemperature * temperatureMultipliers[_phase - 1];
                 _phaseDependentRepulsionMultiplier = _phase < 2 ? 0.5 : 1.0;
                 //TODO put back the error and its threshold
                 /*double error = _errorThresholds[_phase] + 1;*/
@@ -123,8 +123,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
                     /*error = 0;*/
 
-                    ApplySpringForces();
-                    ApplyRepulsionForces(cancellationToken);
+                    ApplySpringForces(rnd);
+                    ApplyRepulsionForces(cancellationToken, rnd);
 
                     if (_phase > 1)
                     {
@@ -132,8 +132,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                         ApplyApplicationSpecificForces();
                     }
 
-                   // if (ReportOnIterationEndNeeded)
-                  //      SavePositions();
+                    // if (ReportOnIterationEndNeeded)
+                    //      SavePositions();
 
                     CalcNodePositionsAndSizes(cancellationToken);
 
@@ -217,12 +217,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             }
         }
 
-        private Vector GetSpringForce(double idealLength, Point uPos, Point vPos, Size uSize, Size vSize)
+        private Vector GetSpringForce(double idealLength, Point uPos, Point vPos, Size uSize, Size vSize, Random rnd)
         {
             var positionVector = (uPos - vPos);
             if (positionVector.Length == 0)
             {
-                var compensationVector = new Vector(_rnd.NextDouble(), _rnd.NextDouble());
+                var compensationVector = new Vector(rnd.NextDouble(), rnd.NextDouble());
                 positionVector = compensationVector * 2;
                 uPos += compensationVector;
                 vPos -= compensationVector;
@@ -233,8 +233,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             var c_u = LayoutUtil.GetClippingPoint(uSize, uPos, vPos);
             var c_v = LayoutUtil.GetClippingPoint(vSize, vPos, uPos);
 
-            Vector F = (c_u - c_v);
-            bool isSameDirection = LayoutUtil.IsSameDirection(positionVector, F);
+            var F = (c_u - c_v);
+            var isSameDirection = LayoutUtil.IsSameDirection(positionVector, F);
             double length = 0;
             if (isSameDirection)
                 length = F.Length - idealLength;
@@ -251,12 +251,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
             return Fs;
         }
 
-        private Vector GetRepulsionForce(Point uPos, Point vPos, Size uSize, Size vSize, double repulsionRange)
+        private Vector GetRepulsionForce(Point uPos, Point vPos, Size uSize, Size vSize, double repulsionRange, Random rnd)
         {
             var positionVector = (uPos - vPos);
             if (positionVector.Length == 0)
             {
-                var compensationVector = new Vector(_rnd.NextDouble(), _rnd.NextDouble());
+                var compensationVector = new Vector(rnd.NextDouble(), rnd.NextDouble());
                 positionVector = compensationVector * 2;
                 uPos += compensationVector;
                 vPos -= compensationVector;
@@ -272,7 +272,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
             if (isSameDirection && F.Length > repulsionRange)
                 return new Vector();
-            double length = Math.Max(1, F.Length);
+            var length = Math.Max(1, F.Length);
             //double length = F.LengthSquared;
             length = Math.Pow(isSameDirection ? length / (Parameters.IdealEdgeLength * 2.0) : 1 / length, 2);
             Fr = Parameters.RepulsionConstant / length * positionVector * _phaseDependentRepulsionMultiplier;
@@ -283,14 +283,14 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// Applies the attraction forces (between the end nodes
         /// of the edges).
         /// </summary>
-        private void ApplySpringForces()
+        private void ApplySpringForces(Random rnd)
         {
             foreach (var edge in VisitedGraph.Edges)
             {
                 if (!_allTreesGrown && (_removedRootTreeNodes.Contains(edge.Source) || _removedRootTreeNodes.Contains(edge.Target)))
                     continue;
                 //get the ideal edge length
-                double idealLength = Parameters.IdealEdgeLength;
+                var idealLength = Parameters.IdealEdgeLength;
                 var u = _vertexDatas[edge.Source];
                 var v = _vertexDatas[edge.Target];
                 var multiplier = (u.Level + v.Level) / 2.0 + 1;
@@ -301,7 +301,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     //multiplier = 1;
                 }
 
-                var Fs = GetSpringForce(idealLength, u.Position, v.Position, u.Size, v.Size) * multiplier;
+                var Fs = GetSpringForce(idealLength, u.Position, v.Position, u.Size, v.Size, rnd) * multiplier;
 
                 //aggregate the forces
                 if ((u.IsFixedToParent && u.MovableParent == null) ^ (v.IsFixedToParent && v.MovableParent == null))
@@ -324,10 +324,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// <summary>
         /// Applies the repulsion forces between every node-pair.
         /// </summary>
-        private void ApplyRepulsionForces(CancellationToken cancellationToken)
+        private void ApplyRepulsionForces(CancellationToken cancellationToken, Random rnd)
         {
             var repulsionRange = Parameters.IdealEdgeLength * Parameters.SeparationMultiplier;
-            for (int i = _levels.Count - 1; i >= 0; i--)
+            for (var i = _levels.Count - 1; i >= 0; i--)
             {
                 var checkedVertices = new HashSet<TVertex>();
                 foreach (var uVertex in _levels[i])
@@ -345,7 +345,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                         if (u.Parent != v.Parent)
                             continue; //the two vertex not in the same graph
 
-                        var Fr = GetRepulsionForce(u.Position, v.Position, u.Size, v.Size, repulsionRange) * Math.Pow(u.Level + 1,2);
+                        var Fr = GetRepulsionForce(u.Position, v.Position, u.Size, v.Size, repulsionRange, rnd) * Math.Pow(u.Level + 1, 2);
 
                         if (u.IsFixedToParent ^ v.IsFixedToParent)
                             Fr *= 2;
@@ -363,7 +363,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         /// </summary>
         private void ApplyGravitationForces(CancellationToken cancellationToken)
         {
-            for (int i = _levels.Count - 1; i >= 0; i--)
+            for (var i = _levels.Count - 1; i >= 0; i--)
             {
                 foreach (var uVertex in _levels[i])
                 {
@@ -376,9 +376,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     if (Fg.Length == 0)
                         continue;
 
-                    double length = Math.Max(1, Fg.Length / (Parameters.IdealEdgeLength * 2.0));
+                    var length = Math.Max(1, Fg.Length / (Parameters.IdealEdgeLength * 2.0));
                     Fg.Normalize();
-                    Fg *= Parameters.GravitationFactor * _gravityForceMagnitude * Math.Pow(u.Level + 1,2) / Math.Pow(length, 0.25);
+                    Fg *= Parameters.GravitationFactor * _gravityForceMagnitude * Math.Pow(u.Level + 1, 2) / Math.Pow(length, 0.25);
                     u.GravitationForce += Fg;
                 }
             }
@@ -393,7 +393,7 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 
         private void CalcNodePositionsAndSizes(CancellationToken cancellationToken)
         {
-            for (int i = _levels.Count - 1; i >= 0; i--)
+            for (var i = _levels.Count - 1; i >= 0; i--)
             {
                 foreach (var uVertex in _levels[i])
                 {

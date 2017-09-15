@@ -313,7 +313,7 @@
                                             Orientation="Horizontal"
                                             IsEnabled="True"
                                             />
-                                    <Button IsEnabled="False" x:Name="FitButton" Command="graphx:ZoomControl.Fit" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
+                                    <Button x:Name="FitButton" Command="graphx:ZoomControl.ResetZoom" ToolTip="Fit Content within Bounds" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
                                         <Image Source="{StaticResource FitContentGlyph}" Margin="2"/>
                                     </Button>
                                     <Button x:Name="FillButton" Command="graphx:ZoomControl.Fill" ToolTip="Fill Bounds with Content" Width="20px" Height="20px" Margin="2,0"  Style="{StaticResource TransparentButton}">
@@ -328,7 +328,8 @@
                                     <Image Source="{StaticResource CloseXDrawingImage}" Margin="2"/>
                                 </ToggleButton>
                                 <Border Grid.Row="1" BorderBrush="{StaticResource GlyphBrush}" BorderThickness="2" Background="#80FFFFFF" />
-                                <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" Background="#C0FFFFFF" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
+                                <graphx:ViewFinderDisplay Grid.Row="1" x:Name="ViewFinderDisplay" ClipToBounds="True" 
+                                                          Background="{TemplateBinding Background}" Margin="2" ShadowBrush="#80FFFFFF" ViewportBrush="Transparent" ViewportPen="{StaticResource ViewportPen}" />
                             </Grid>
                         </Border>
                         <ToggleButton Name="ShowViewFinder" IsTabStop="False" ToolTip="Show View Finder" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Height="22" Width="22"
@@ -355,14 +356,14 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ShowViewFinderGlyph" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="0" To="1" FillBehavior="HoldEnd" />
+                                        <DoubleAnimation Storyboard.TargetName="ShowViewFinderGlyph" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="0" To="1" FillBehavior="HoldEnd" Timeline.DesiredFrameRate="30" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>
                             <Trigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="ShowViewFinderGlyph" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="1" To="0" FillBehavior="HoldEnd" />
+                                        <DoubleAnimation Storyboard.TargetName="ShowViewFinderGlyph" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="1" To="0" FillBehavior="HoldEnd" Timeline.DesiredFrameRate="30" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
@@ -376,12 +377,12 @@
                         <EventTrigger RoutedEvent="ToggleButton.Checked" SourceName="ShowViewFinder">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="ViewFinder" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="0" To="1" FillBehavior="HoldEnd" />
-                                    <DoubleAnimation Storyboard.TargetName="ShowViewFinder" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="1" To="0" FillBehavior="HoldEnd" />
-                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1">
+                                    <DoubleAnimation Storyboard.TargetName="ViewFinder" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="0" To="1" FillBehavior="HoldEnd" Timeline.DesiredFrameRate="30" />
+                                    <DoubleAnimation Storyboard.TargetName="ShowViewFinder" Storyboard.TargetProperty="Opacity" DecelerationRatio="1"  Duration="0:0:0.3" From="1" To="0" FillBehavior="HoldEnd" Timeline.DesiredFrameRate="30"/>
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1" Timeline.DesiredFrameRate="30">
                                         <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,0.5" Value="1" KeyTime="00:00:00.3"/>
                                     </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1">
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleX)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1" Timeline.DesiredFrameRate="30">
                                         <SplineDoubleKeyFrame  KeySpline="0.5,0.5,0.5,0.5" Value="1" KeyTime="00:00:00.3"/>
                                     </DoubleAnimationUsingKeyFrames>
                                 </Storyboard>
@@ -390,27 +391,31 @@
                         <EventTrigger RoutedEvent="ToggleButton.Unchecked" SourceName="ShowViewFinder">
                             <BeginStoryboard>
                                 <Storyboard>
-                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1">
+                                    <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(ScaleTransform.ScaleY)" Storyboard.TargetName="LayoutScaleTransform" AccelerationRatio="1" Timeline.DesiredFrameRate="30">
                                         <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,0.5" Value="0" KeyTime="00:00:00.3"/>
                                     </DoubleAnimationUsingKeyFrames>
                                     <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
                       Storyboard.TargetProperty="(ScaleTransform.ScaleX)"
-                      Storyboard.TargetName="LayoutScaleTransform"
+                      Storyboard.TargetName="LayoutScaleTransform" Timeline.DesiredFrameRate="30"
                       AccelerationRatio="1">
                                         <SplineDoubleKeyFrame  KeySpline="0.5,0.5,0.5,0.5" Value="0"
                         KeyTime="00:00:00.3"/>
                                     </DoubleAnimationUsingKeyFrames>
-                                    <DoubleAnimation Storyboard.TargetName="ViewFinder"
+                                    <DoubleAnimation Storyboard.TargetName="ViewFinder" Timeline.DesiredFrameRate="30"
                       Storyboard.TargetProperty="Opacity"
                       DecelerationRatio="1"  Duration="0:0:0.3" From="1" To="0"
                       FillBehavior="HoldEnd" />
-                                    <DoubleAnimation Storyboard.TargetName="ShowViewFinder"
+                                    <DoubleAnimation Storyboard.TargetName="ShowViewFinder" Timeline.DesiredFrameRate="30"
                       Storyboard.TargetProperty="Opacity"
                       DecelerationRatio="1"  Duration="0:0:0.3" From="0" To="1"
                       FillBehavior="HoldEnd" />
                                 </Storyboard>
                             </BeginStoryboard>
                         </EventTrigger>
+                        <!-- Should hide view finder display to prevent excessive rendering issues -->
+                        <Trigger Property="Opacity" Value="0"  SourceName="ViewFinder">
+                            <Setter Property="Visibility" Value="Collapsed" TargetName="ViewFinderDisplay" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -539,21 +544,54 @@
 
         <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
     </Style>
+
+    <Style TargetType="{x:Type graphx:AttachableEdgeLabelControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type graphx:AttachableEdgeLabelControl}">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
+                        <ContentPresenter Margin="3" Content="{Binding AttachNode.Edge, UpdateSourceTrigger=PropertyChanged}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
+    </Style>
+
     <!-- ENDREGION -->
     
     <!-- REGION VERTEX LABEL CONTROL -->
     <Style TargetType="graphx:VertexLabelControl">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="LabelPositionMode" Value="Sides"/>
         <Setter Property="LabelPositionSide" Value="BottomRight"/>
 
-        <!-- Custom label template body -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="graphx:VertexLabelControl">
                     <Grid>
                         <ContentPresenter Margin="3"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="graphx:AttachableVertexLabelControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="LabelPositionMode" Value="Sides"/>
+        <Setter Property="LabelPositionSide" Value="Bottom"/>
+
+        <!-- Custom label template body -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="graphx:AttachableVertexLabelControl">
+                    <Grid>
+                        <Border Background="White" CornerRadius="4" Opacity=".8" Padding="0">
+                            <ContentPresenter Name="PART_container" Margin="1" Content="{Binding AttachNode.Vertex, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

@@ -9,6 +9,8 @@ using GraphX;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.EdgeRouting;
 using GraphX.Controls;
+using GraphX.Controls.Models;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 
@@ -35,6 +37,7 @@ namespace ShowcaseApp.WPF.Pages
             _logicCore = new LogicCoreExample();
             erg_Area.LogicCore = _logicCore;
             erg_Area.LogicCore.ParallelEdgeDistance = 20;
+            erg_Area.EdgeLabelFactory = new DefaultEdgelabelFactory();
 
             erg_showEdgeArrows.IsChecked = true;
             BundleEdgeRoutingParameters = (BundleEdgeRoutingParameters)_logicCore.AlgorithmFactory.CreateEdgeRoutingParameters(EdgeRoutingAlgorithmTypeEnum.Bundling);
@@ -280,11 +283,13 @@ namespace ShowcaseApp.WPF.Pages
                 }
 
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.SimpleRandom;
+                erg_Area.GetLogicCore<LogicCoreExample>().DefaultLayoutAlgorithmParams = new RandomLayoutAlgorithmParams() { Bounds = new Rect(0,0, 500, 500)};
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.FSA;
                 erg_Area.GetLogicCore<LogicCoreExample>().DefaultOverlapRemovalAlgorithmParams = erg_Area.LogicCore.AlgorithmFactory.CreateOverlapRemovalParameters(OverlapRemovalAlgorithmTypeEnum.FSA);
 
                 erg_Area.GenerateGraph(gr, true);
                 erg_Area.SetVerticesDrag(true, true);
+                erg_Area.SetEdgesDrag(true);
                 erg_zoomctrl.ZoomToFill();
 
                 return;

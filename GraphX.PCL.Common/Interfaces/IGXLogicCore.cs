@@ -28,6 +28,17 @@ namespace GraphX.PCL.Common.Interfaces
         TGraph Graph { get; set; }
 
         /// <summary>
+        /// Gets if graph data filters has been pushed
+        /// </summary>
+        bool IsFiltered { get; }
+
+        /// <summary>
+        /// System property. Till i found another solution. DO NOT TOUCH.
+        /// </summary>
+        bool IsFilterRemoved { get; }
+
+
+        /// <summary>
         /// Gets or sets if async algorithm computations are enabled
         /// </summary>
         bool AsyncAlgorithmCompute { get; set; }
@@ -177,5 +188,25 @@ namespace GraphX.PCL.Common.Interfaces
         /// </summary>
         /// <param name="clearStorages">Also clear storages data</param>
         void Clear(bool clearStorages = true);
+
+        /// <summary>
+        /// Execute filters on the current logic core graph. Can be undone by PopFilters() or can be made permanent by ApplyFilters().
+        /// </summary>
+        void PushFilters();
+
+        /// <summary>
+        /// Assign filtered graph to original one making current filter output permanent and unrevertable
+        /// </summary>
+        void ApplyFilters();
+
+        /// <summary>
+        /// Restores original graph to the state before any filters were applied
+        /// </summary>
+        void PopFilters();
+
+        /// <summary>
+        /// Represents graph filters queue (FIFO)
+        /// </summary>
+        Queue<IGraphFilter<TVertex, TEdge, TGraph>> Filters { get; }
     }
 }

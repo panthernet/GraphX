@@ -11,7 +11,7 @@
     <RootNamespace>GraphX.PCL.Logic</RootNamespace>
     <AssemblyName>GraphX.PCL.Logic</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -38,7 +38,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\GraphX.PCL.Logic.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -46,13 +47,6 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>signature.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
-      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
-      <Name>GraphX.PCL.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Documents\AIV.cs">
       <Link>Properties\AIV.cs</Link>
@@ -72,7 +66,6 @@
     <Compile Include="Algorithms\EdgeRouting\SimpleER\SimpleEdgeRouting.cs" />
     <Compile Include="Algorithms\EdgeRouting\SimpleER\SimpleERParameters.cs" />
     <Compile Include="Algorithms\GraphHideHelper.cs" />
-    <Compile Include="Algorithms\GraphSharpExtensions.cs" />
     <Compile Include="Algorithms\HierarchicalGraph.cs" />
     <Compile Include="Algorithms\IAlgorithm.cs" />
     <Compile Include="Algorithms\IHierarchicalBidirectionalGraph.cs" />
@@ -163,7 +156,6 @@
     <Compile Include="Algorithms\WrappedVertex.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\ThreadingHelper.cs" />
-    <Compile Include="Helpers\TypeExtensions.cs" />
     <Compile Include="Models\AlgorithmFactory.cs" />
     <Compile Include="Models\AlgorithmStorage.cs" />
     <Compile Include="Models\GXLogicCore.cs" />
@@ -183,6 +175,12 @@
       <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

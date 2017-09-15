@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
 using GraphX.PCL.Common.Enums;
@@ -35,32 +34,19 @@ namespace ShowcaseApp.WPF.Pages
             graphArea.VertexSelected += graphArea_VertexSelected;
             graphArea.EdgeSelected += graphArea_EdgeSelected;
             graphArea.SetVerticesMathShape(VertexShape.Circle);
-           // addVertexButton.Click += addVertexButton_Click;
-           // addEdgeButton.Click += addEdgeButton_Click;
 
             dgLogic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Custom;
             dgLogic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
             dgLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             dgLogic.EdgeCurvingEnabled = true;
-            
 
-            //graphArea.MoveAnimation = AnimationFactory.CreateMoveAnimation(MoveAnimation.Move, TimeSpan.FromSeconds(0.5));
-            //graphArea.MoveAnimation.Completed += MoveAnimation_Completed;
-            //graphArea.VertexSelected += dg_Area_VertexSelected;
-            
-            
-
-            zoomCtrl.IsAnimationDisabled = true;
+            zoomCtrl.IsAnimationEnabled = false;
             ZoomControl.SetViewFinderVisibility(zoomCtrl, Visibility.Visible);
             zoomCtrl.Zoom = 2;
             zoomCtrl.MinZoom = .5;
             zoomCtrl.MaxZoom = 50;
             zoomCtrl.ZoomSensitivity = 25;
             zoomCtrl.MouseDown += zoomCtrl_MouseDown;
-            var tb = new TextBlock() {Text = "AAAA"};
-
-
-            //zoomCtrl.ZoomToContent(new System.Windows.Rect(0,0, 500, 500));
 
             butDelete.Checked += ToolbarButton_Checked;
             butSelect.Checked += ToolbarButton_Checked;

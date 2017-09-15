@@ -1,7 +1,6 @@
-﻿using GraphX;
-using GraphX.PCL.Common.Models;
+﻿using GraphX.PCL.Common.Models;
 
-namespace SimpleGraph
+namespace SimpleGraph.Models
 {
     /* DataVertex is the data class for the vertices. It contains all custom vertex data specified by the user.
      * This class also must be derived from VertexBase that provides properties and methods mandatory for
@@ -31,7 +30,7 @@ namespace SimpleGraph
         /// Default parameterless constructor for this class
         /// (required for YAXLib serialization)
         /// </summary>
-        public DataVertex():this("")
+        public DataVertex():this(string.Empty)
         {
         }
 

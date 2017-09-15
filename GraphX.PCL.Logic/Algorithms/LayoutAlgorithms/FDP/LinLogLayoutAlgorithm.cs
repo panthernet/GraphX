@@ -15,18 +15,23 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         where TGraph : IBidirectionalGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
 	{
 		#region Constructors
-		public LinLogLayoutAlgorithm( TGraph visitedGraph )
-			: base( visitedGraph ) { }
+
+	    public LinLogLayoutAlgorithm(TGraph visitedGraph)
+	        : base(visitedGraph)
+	    {
+	        EnsureUniqueRandomInitialPositions = true;
+	    }
 
 		public LinLogLayoutAlgorithm( TGraph visitedGraph, IDictionary<TVertex, Point> positions,
 		                              LinLogLayoutParameters parameters )
 			: base( visitedGraph, positions, parameters ) 
         { 
+	        EnsureUniqueRandomInitialPositions = true;
         }
-		#endregion
+        #endregion
 
-		#region Member variables - privates
-		class LinLogVertex
+        #region Member variables - privates
+        class LinLogVertex
 		{
 			public int Index;
 			public TVertex OriginalVertex;

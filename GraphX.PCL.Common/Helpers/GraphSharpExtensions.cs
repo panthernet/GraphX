@@ -5,10 +5,55 @@ using GraphX.PCL.Common.Interfaces;
 using QuickGraph;
 using QuickGraph.Algorithms.ShortestPath;
 
-namespace GraphX.PCL.Logic.Algorithms
+namespace GraphX.PCL.Common
 {
     public static class GraphXExtensions
     {
+        /// <summary>
+        /// Get all edges associated with the vertex
+        /// </summary>
+        /// <typeparam name="TVertex">Vertex data type</typeparam>
+        /// <typeparam name="TEdge">Edge data type</typeparam>
+        /// <typeparam name="TGraph"></typeparam>
+        /// <param name="graph">Graph</param>
+        /// <param name="vertex">Vertex</param>
+        public static IEnumerable<TEdge> GetAllEdges<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> graph, TVertex vertex)
+            where TVertex : class, IGraphXVertex
+            where TEdge : class, IGraphXEdge<TVertex>
+        {
+            var result = new List<TEdge>();
+            IEnumerable<TEdge> edges;
+            graph.TryGetOutEdges(vertex, out edges);
+            if (edges != null)
+                result.AddRange(edges);
+            graph.TryGetInEdges(vertex, out edges);
+            if (edges != null)
+                result.AddRange(edges);
+            return result;
+        }
+
+        public static IEnumerable<TEdge> GetInEdges<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> graph, TVertex vertex)
+    where TEdge : IEdge<TVertex>
+        {
+            var result = new List<TEdge>();
+            IEnumerable<TEdge> edges;
+            graph.TryGetInEdges(vertex, out edges);
+            if (edges != null)
+                result.AddRange(edges);
+            return result;
+        }
+
+        public static IEnumerable<TEdge> GetOutEdges<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> graph, TVertex vertex)
+where TEdge : IEdge<TVertex>
+        {
+            var result = new List<TEdge>();
+            IEnumerable<TEdge> edges;
+            graph.TryGetOutEdges(vertex, out edges);
+            if (edges != null)
+                result.AddRange(edges);
+            return result;
+        }
+
         /// <summary>
         /// Returns with the adjacent vertices of the <code>vertex</code>.
         /// </summary>
@@ -18,9 +63,9 @@ namespace GraphX.PCL.Logic.Algorithms
         public static IEnumerable<TVertex> GetNeighbours<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> g, TVertex vertex)
             where TEdge : IEdge<TVertex>
         {
-            return ((from e in g.InEdges(vertex) select e.Source)
-                .Concat(
-                (from e in g.OutEdges(vertex) select e.Target))).Distinct();
+            return (from e in g.InEdges(vertex) select e.Source)
+                .Concat(from e in g.OutEdges(vertex) select e.Target)
+                .Distinct();
         }
 
 
@@ -29,6 +74,13 @@ namespace GraphX.PCL.Logic.Algorithms
         {
             return (from e in g.OutEdges(vertex)
                     select e.Target).Distinct();
+        }
+
+        public static IEnumerable<TVertex> GetInNeighbours<TVertex, TEdge>(this IBidirectionalGraph<TVertex, TEdge> g, TVertex vertex)
+            where TEdge : IEdge<TVertex>
+        {
+            return (from e in g.InEdges(vertex)
+                    select e.Source).Distinct();
         }
 
 
@@ -258,6 +310,25 @@ namespace GraphX.PCL.Logic.Algorithms
 
             //copy the vertices
             if(!includeEmpty)
+                newGraph.AddVerticesAndEdgeRange(graph.Edges);
+            else
+            {
+                newGraph.AddVertexRange(graph.Vertices);
+                newGraph.AddEdgeRange(graph.Edges);
+            }
+
+            return newGraph;
+        }
+
+        public static TGraph CopyToGraph<TGraph, TVertex, TEdge>(this TGraph graph, bool includeEmpty = true)
+            where TVertex : class, IGraphXVertex
+            where TEdge : class, IGraphXEdge<TVertex>
+            where TGraph : IMutableBidirectionalGraph<TVertex, TEdge>, new()
+        {
+            var newGraph = new TGraph();
+
+            //copy the vertices
+            if (!includeEmpty)
                 newGraph.AddVerticesAndEdgeRange(graph.Edges);
             else
             {

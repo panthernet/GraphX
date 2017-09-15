@@ -121,6 +121,9 @@
   <data name="CommonMiniTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Templates\Mini\CommonMiniTemplate.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="DataFilteringText" xml:space="preserve">
+    <value>In this example you can see how graph data filtering works. In GraphX you can assign many data filters in a queue that will be applied before graph layout calculation. Original graph remains intact in this case by default. When filtering is active each relayout method call will also refresh visual graph adding new visuals and removing old ones based on the data present in LogicCore.Graph. This approach allows filters to be applied dynamically and shows the results fast.</value>
+  </data>
   <data name="EdgesParallel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Pages\Mini\EdgesParallel.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

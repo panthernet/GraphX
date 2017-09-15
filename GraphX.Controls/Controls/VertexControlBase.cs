@@ -1,22 +1,47 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 #if WPF
 using System.Windows;
 using System.Windows.Controls;
+using USize = System.Windows.Size;
+using Point = System.Windows.Point;
 #elif METRO
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
 #endif
 using GraphX.Controls.Models;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
+using Rect = GraphX.Measure.Rect;
 
 namespace GraphX.Controls
 {
     [TemplatePart(Name = "PART_vertexLabel", Type = typeof(IVertexLabelControl))]
+    [TemplatePart(Name = "PART_vcproot", Type = typeof(Panel))]
     public abstract class VertexControlBase : Control, IGraphControl
     {
         protected internal IVertexLabelControl VertexLabelControl;
+        /// <summary>
+        /// Fires when new label is attached to VertexControl
+        /// </summary>
+        public event EventHandler<EventArgs> LabelAttached;
+
+        protected void OnLabelAttached()
+        {
+            LabelAttached?.Invoke(this, null);
+        }
+
+        /// <summary>
+        /// Fires when new label is detached from VertexControl
+        /// </summary>
+        public event EventHandler<EventArgs> LabelDetached;
+
+        protected void OnLabelDetached()
+        {
+            LabelDetached?.Invoke(this, null);
+        }
 
         /// <summary>
         /// Fires when IsPositionTraceEnabled property set and object changes its coordinates.
@@ -25,8 +50,7 @@ namespace GraphX.Controls
 
         protected void OnPositionChanged(Point offset, Point pos)
         {
-            if (PositionChanged != null)
-                PositionChanged.Invoke(this, new VertexPositionEventArgs(offset, pos, this));
+            PositionChanged?.Invoke(this, new VertexPositionEventArgs(offset, pos, this));
         }
 
         protected VertexControlBase()
@@ -34,7 +58,38 @@ namespace GraphX.Controls
             VertexConnectionPointsList = new List<IVertexConnectionPoint>();
         }
 
-        #region Properties
+        /// <summary>
+        /// Hides this control with all related edges
+        /// </summary>
+        public void HideWithEdges()
+        {
+            this.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
+            SetConnectionPointsVisibility(false);
+            RootArea.GetRelatedControls(this, GraphControlType.Edge, EdgesType.All).ForEach(a =>
+            {
+                //if (a is EdgeControlBase)
+               //     ((EdgeControlBase)a).SetVisibility(Visibility.Collapsed);
+               // else
+                a.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        /// <summary>
+        /// Shows this control with all related edges
+        /// </summary>
+        public void ShowWithEdges()
+        {
+            this.SetCurrentValue(VisibilityProperty, Visibility.Visible);
+            SetConnectionPointsVisibility(true);
+            RootArea.GetRelatedControls(this, GraphControlType.Edge, EdgesType.All).ForEach(a =>
+            {
+                if(a is EdgeControlBase)
+                    ((EdgeControlBase)a).SetVisibility(Visibility.Visible);
+                else a.Visibility = Visibility.Visible;
+            });
+        }
+
+#region Properties
 
         /// <summary>
         /// List of found vertex connection points
@@ -54,7 +109,7 @@ namespace GraphX.Controls
         {
             get
             {
-                return VertexLabelControl != null ? VertexLabelControl.Angle : _labelAngle;
+                return VertexLabelControl?.Angle ?? _labelAngle;
             }
             set
             {
@@ -65,7 +120,7 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty VertexShapeProperty =
-            DependencyProperty.Register("VertexShape", typeof(VertexShape), typeof(VertexControlBase), new PropertyMetadata(VertexShape.Rectangle));
+            DependencyProperty.Register(nameof(VertexShape), typeof(VertexShape), typeof(VertexControlBase), new PropertyMetadata(VertexShape.Rectangle));
 
         /// <summary>
         /// Gets or sets actual shape form of vertex control (affects mostly math calculations such edges connectors)
@@ -86,7 +141,7 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty VertexProperty =
-            DependencyProperty.Register("Vertex", typeof(object), typeof(VertexControlBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(Vertex), typeof(object), typeof(VertexControlBase), new PropertyMetadata(null));
 
         /// <summary>
         /// Gets or sets vertex control parent GraphArea object (don't need to be set manualy)
@@ -98,10 +153,10 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty RootCanvasProperty =
-            DependencyProperty.Register("RootArea", typeof(GraphAreaBase), typeof(VertexControlBase), new PropertyMetadata(null));
+            DependencyProperty.Register(nameof(RootArea), typeof(GraphAreaBase), typeof(VertexControlBase), new PropertyMetadata(null));
 
         public static readonly DependencyProperty ShowLabelProperty =
-            DependencyProperty.Register("ShowLabel", typeof(bool), typeof(VertexControlBase), new PropertyMetadata(false, ShowLabelChanged));
+            DependencyProperty.Register(nameof(ShowLabel), typeof(bool), typeof(VertexControlBase), new PropertyMetadata(false, ShowLabelChanged));
 
         private static void ShowLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -115,9 +170,9 @@ namespace GraphX.Controls
             get { return (bool)GetValue(ShowLabelProperty); }
             set { SetValue(ShowLabelProperty, value); }
         }
-        #endregion
+#endregion
 
-        #region Position methods
+#region Position methods
 
         /// <summary>
         /// Set attached coordinates X and Y
@@ -145,7 +200,9 @@ namespace GraphX.Controls
         /// <param name="round"></param>
         public Point GetPosition(bool final = false, bool round = false)
         {
-            return round ? new Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
+            return round ?
+                new Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) :
+                new Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
         }
         /// <summary>
         /// Get control position on the GraphArea panel in attached coords X and Y (GraphX type version)
@@ -157,7 +214,7 @@ namespace GraphX.Controls
             return round ? new Measure.Point(final ? (int)GraphAreaBase.GetFinalX(this) : (int)GraphAreaBase.GetX(this), final ? (int)GraphAreaBase.GetFinalY(this) : (int)GraphAreaBase.GetY(this)) : new Measure.Point(final ? GraphAreaBase.GetFinalX(this) : GraphAreaBase.GetX(this), final ? GraphAreaBase.GetFinalY(this) : GraphAreaBase.GetY(this));
         }
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Get vertex center position
@@ -176,17 +233,40 @@ namespace GraphX.Controls
         public IVertexConnectionPoint GetConnectionPointById(int id, bool runUpdate = false)
         {
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
-            if (result != null) result.Update();
+            result?.Update();
             return result;
+        }
+
+        public IVertexConnectionPoint GetConnectionPointAt(Point position)
+        {
+            Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
+
+            return VertexConnectionPointsList.FirstOrDefault(a =>
+            {
+                var rect = new Rect(a.RectangularSize.X, a.RectangularSize.Y, a.RectangularSize.Width, a.RectangularSize.Height);
+                return rect.Contains(position.ToGraphX());
+            });
         }
 
         /// <summary>
         /// Internal method. Attaches label to control
         /// </summary>
         /// <param name="ctrl">Control</param>
-        public void AttachVertexLabel(IVertexLabelControl ctrl)
+        public void AttachLabel(IVertexLabelControl ctrl)
         {
             VertexLabelControl = ctrl;
+            OnLabelAttached();
+        }
+
+        /// <summary>
+        /// Internal method. Detaches label from control.
+        /// </summary>
+        public void DetachLabel()
+        {
+            if(VertexLabelControl is IAttachableControl<VertexControl>)
+                ((IAttachableControl<VertexControl>)VertexLabelControl).Detach();
+            VertexLabelControl = null;
+            OnLabelDetached();
         }
 
         /// <summary>

@@ -1,10 +1,7 @@
-using QuickGraph;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using GraphX.PCL.Logic.Models;
+using QuickGraph;
 
-namespace SimpleGraph
+namespace SimpleGraph.Models
 {
     /// <summary>
     /// Logics core object which contains all algorithms and logic settings

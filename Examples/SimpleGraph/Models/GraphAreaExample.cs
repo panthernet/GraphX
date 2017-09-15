@@ -1,11 +1,7 @@
-using GraphX;
-using QuickGraph;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using GraphX.Controls;
+using QuickGraph;
 
-namespace SimpleGraph
+namespace SimpleGraph.Models
 {
     /// <summary>
     /// This is custom GraphArea representation using custom data types.

@@ -12,11 +12,20 @@ namespace GraphX.Controls
     public static class DoubleExtensions
     {
         /// <summary>
-        /// Convert angle value to degrees
+        /// Convert angle value from radians to degrees
         /// </summary>
         public static double ToDegrees(this double value)
         {
-            return MathHelper.ToDegrees(value);
+            return value * 180 / Math.PI;
+        }
+
+        /// <summary>
+        /// Convert angle value from degrees to radians
+        /// </summary>
+        /// <param name="value"></param>
+        public static double ToRadians(this double value)
+        {
+            return value * Math.PI / 180;
         }
     }
 
@@ -30,31 +39,34 @@ namespace GraphX.Controls
         {
             Tangent30Degrees = Math.Tan(D30_DEGREES_IN_RADIANS);
         }
-
+        /// <summary>
+        /// Returns normalized vector pointing to direction based on two points
+        /// </summary>
+        /// <param name="from">Source point</param>
+        /// <param name="to">Target point</param>
         public static Vector GetDirection(Point from, Point to)
         {
             var dir = new Vector(from.X - to.X, from.Y - to.Y);
             dir.Normalize();
             return dir;
         }
-
-
-        public static double ToDegrees(double value)
-        {
-            return value * 180 / Math.PI;
-        }
         
-        public static double GetAngleBetweenPoints(Point point1, Point point2)
-        {
-            return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);
-        }
-
+        /// <summary>
+        /// Returns distance between two specified points
+        /// </summary>
+        /// <param name="point1">Source point</param>
+        /// <param name="point2">Target point</param>
         public static double GetDistanceBetweenPoints(Point point1, Point point2)
         {
             return Math.Sqrt(Math.Pow(point2.X - point1.X, 2) + Math.Pow(point2.Y - point1.Y, 2));
         }
 
-
+        /// <summary>
+        /// Returns point rotated around the specified point in degrees angle
+        /// </summary>
+        /// <param name="pointToRotate">Source point</param>
+        /// <param name="centerPoint">Center point</param>
+        /// <param name="angleInDegrees">Angle in degrees</param>
         public static Point RotatePoint(Point pointToRotate, Point centerPoint, double angleInDegrees)
         {
             var angleInRadians = angleInDegrees * (Math.PI / 180);
@@ -73,6 +85,12 @@ namespace GraphX.Controls
             };
         }
 
+        /// <summary>
+        /// Returns True if line specified by two points intersects the rectangle
+        /// </summary>
+        /// <param name="r">Rectangle</param>
+        /// <param name="a">Line source point</param>
+        /// <param name="b">Line target point</param>
         public static bool IsIntersected(Rect r, Point a, Point b)
         {
            // var start = new Point(a.X, a.Y);
@@ -143,6 +161,13 @@ namespace GraphX.Controls
             return true;
         }
 
+        /// <summary>
+        /// Returns point of intersection between the line specified by two points and the rectangle
+        /// </summary>
+        /// <param name="r">Rectangle</param>
+        /// <param name="a">Line source point</param>
+        /// <param name="b">Line target point</param>
+        /// <param name="pt">Intersection point</param>
         public static int GetIntersectionPoint(Rect r, Point a, Point b, out Point pt)
         {
             var start = new Point(a.X, a.Y);
@@ -236,6 +261,12 @@ namespace GraphX.Controls
             return ((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
         }
 
+        /// <summary>
+        /// Returns point which is closer to the source point
+        /// </summary>
+        /// <param name="start">Source point</param>
+        /// <param name="a">Point 1</param>
+        /// <param name="b">Point 2</param>
         public static Point GetCloserPoint(Point start, Point a, Point b)
         {
             var r1 = GetDistance(start, a);
@@ -243,14 +274,28 @@ namespace GraphX.Controls
             return r1 < r2 ? a : b;
         }
 
-        public static Double GetAngleBetweenPointsRadians(Point point1, Point point2)
+        /// <summary>
+        /// Returns always positive angle between two points in radians
+        /// </summary>
+        /// <param name="point1">Source point</param>
+        /// <param name="point2">Target point</param>
+        public static double GetPositiveAngleBetweenPoints(Point point1, Point point2)
         {
-            return (Math.Atan2(point1.Y - point2.Y, point2.X - point1.X));
+           var angle =  Math.Atan2(point1.Y - point2.Y, point1.X - point2.X);
+            while (angle < 0d)
+                angle += Math.PI*2;
+            return angle;
         }
 
-        public static Double RadiansToDegrees(Double radians)
+        /// <summary>
+        /// Returns angle between two points in radians
+        /// </summary>
+        /// <param name="point1">Source point</param>
+        /// <param name="point2">Target point</param>
+        public static double GetAngleBetweenPoints(Point point1, Point point2)
         {
-            return ((radians * 360.0) / (2.0 * Math.PI));
+            return Math.Atan2(point1.Y - point2.Y, point2.X - point1.X);
         }
+
     }
 }

@@ -40,7 +40,7 @@
                             <Image Source="{Binding ImageId, Converter={StaticResource ImageConverter}}" Width="45" Stretch="Uniform" Margin="2" />
                         </Border>
 
-                        <controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" FontFamily="Comic Sans MS" />
+                        <!--<controls:VertexLabelControl x:Name="PART_vertexLabel" Content="{Binding Vertex.Text, RelativeSource={RelativeSource TemplatedParent}}" LabelPositionSide="Bottom" FontFamily="Comic Sans MS" />-->
 
                     </Grid>
                 </ControlTemplate>
@@ -64,6 +64,27 @@
 
     </Style>
 
+
+    <Style TargetType="controls:AttachableVertexLabelControl">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="LabelPositionMode" Value="Sides"/>
+        <Setter Property="LabelPositionSide" Value="Bottom"/>
+
+        <!-- Custom label template body -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:AttachableVertexLabelControl">
+                    <Grid>
+                            <TextBlock VerticalAlignment="Center" 
+                                           HorizontalAlignment="Center"
+                                           Text="{Binding AttachNode.Vertex, UpdateSourceTrigger=PropertyChanged}"
+                                           FontFamily="Comic Sans MS"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- EDGE CONTROL -->
     <Style TargetType="{x:Type controls:EdgeControl}">

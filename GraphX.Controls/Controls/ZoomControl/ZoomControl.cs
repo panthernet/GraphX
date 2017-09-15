@@ -14,6 +14,7 @@ namespace GraphX.Controls
     [TemplatePart(Name = PART_PRESENTER, Type = typeof(ZoomContentPresenter))]
     public class ZoomControl : ContentControl, IZoomControl, INotifyPropertyChanged
     {
+        private const string PART_PRESENTER = "PART_Presenter";
 
         #region Viewfinder (minimap)
 
@@ -41,13 +42,16 @@ namespace GraphX.Controls
 
         #endregion
 
-        #region Fit Command
+        #region ResetZoom Command
 
-        public static RoutedUICommand Fit = new RoutedUICommand("Fit Content within Bounds", "FitToBounds", typeof(ZoomControl));
-
-        private void FitToBounds(object sender, ExecutedRoutedEventArgs e)
+        public static RoutedUICommand ResetZoom = new RoutedUICommand("Reset zoom", "ResetZoom", typeof(ZoomControl));
+        /// <summary>
+        /// Executes when ResetZoom command is fired and resets the Zoom value to default one. Override to reset to custom zoom value.
+        /// Default Zoom value is 1.
+        /// </summary>
+        protected virtual void ExecuteResetZoom(object sender, ExecutedRoutedEventArgs e)
         {
-            
+            Zoom = 1d;
         }
 
         #endregion
@@ -111,19 +115,13 @@ namespace GraphX.Controls
         #region Viewport Property
 
         private static readonly DependencyPropertyKey ViewportPropertyKey =
-          DependencyProperty.RegisterReadOnly("Viewport", typeof(Rect), typeof(ZoomControl),
+          DependencyProperty.RegisterReadOnly(nameof(Viewport), typeof(Rect), typeof(ZoomControl),
             new FrameworkPropertyMetadata(Rect.Empty,
               OnViewportChanged));
 
         public static readonly DependencyProperty ViewportProperty = ViewportPropertyKey.DependencyProperty;
 
-        public Rect Viewport
-        {
-            get
-            {
-                return (Rect)GetValue(ViewportProperty);
-            }
-        }
+        public Rect Viewport => (Rect)GetValue(ViewportProperty);
 
         private static void OnViewportChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
@@ -139,18 +137,12 @@ namespace GraphX.Controls
         #region ViewFinder Property
 
         private static readonly DependencyPropertyKey ViewFinderPropertyKey =
-          DependencyProperty.RegisterReadOnly("ViewFinder", typeof(FrameworkElement), typeof(ZoomControl),
+          DependencyProperty.RegisterReadOnly(nameof(ViewFinder), typeof(FrameworkElement), typeof(ZoomControl),
             new FrameworkPropertyMetadata(null));
 
         public static readonly DependencyProperty ViewFinderProperty = ViewFinderPropertyKey.DependencyProperty;
 
-        public FrameworkElement ViewFinder
-        {
-            get
-            {
-                return (FrameworkElement)GetValue(ViewFinderProperty);
-            }
-        }
+        public FrameworkElement ViewFinder => (FrameworkElement)GetValue(ViewFinderProperty);
 
         #endregion
 
@@ -187,7 +179,7 @@ namespace GraphX.Controls
             SetValue(ViewFinderPropertyKey, Template.FindName("ViewFinder", this) as FrameworkElement);
 
             // locate the view finder display panel
-            _viewFinderDisplay = VisualTreeHelperEx.FindDescendantByType(this, typeof(ViewFinderDisplay)) as ViewFinderDisplay;
+            _viewFinderDisplay = VisualTreeHelperEx.FindDescendantByType(this, typeof(ViewFinderDisplay), false) as ViewFinderDisplay;
 
             // if a ViewFinder was specified but no display panel is present, throw an exception
             if (ViewFinder != null && _viewFinderDisplay == null)
@@ -198,18 +190,35 @@ namespace GraphX.Controls
             {
                 // create VisualBrush for the view finder display panel
                 CreateVisualBrushForViewFinder(Content as Visual);
-                _viewFinderDisplay.Background = this.Background;
+                //rem due to fail in template bg binding //_viewFinderDisplay.Background = this.Background;
 
                 // hook up event handlers for dragging and resizing the viewport
+                _viewFinderDisplay.MouseMove -= ViewFinderDisplayMouseMove;
+                _viewFinderDisplay.MouseLeftButtonDown -= ViewFinderDisplayBeginCapture;
+                _viewFinderDisplay.MouseLeftButtonUp -= ViewFinderDisplayEndCapture;
+                _viewFinderDisplay.IsVisibleChanged -= _viewFinderDisplay_IsVisibleChanged;
+
                 _viewFinderDisplay.MouseMove += ViewFinderDisplayMouseMove;
                 _viewFinderDisplay.MouseLeftButtonDown += ViewFinderDisplayBeginCapture;
                 _viewFinderDisplay.MouseLeftButtonUp += ViewFinderDisplayEndCapture;
+                _viewFinderDisplay.IsVisibleChanged += _viewFinderDisplay_IsVisibleChanged;
+            }
+        }
+
+        void _viewFinderDisplay_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            //needed to overcome the case when viewbox was hidden by default so no size were calculated
+            if (_viewFinderDisplay.Visibility != Visibility.Collapsed && (bool)e.NewValue)
+            {
+                _viewFinderDisplay.InvalidateMeasure();
+                _viewFinderDisplay.UpdateLayout();
+                UpdateViewFinderDisplayContentBounds();
             }
         }
 
         private void CreateVisualBrushForViewFinder(Visual visual)
         {
-            _viewFinderDisplay.VisualBrush = new VisualBrush(visual) {Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top};
+            _viewFinderDisplay.VisualBrush = new VisualBrush(visual) { Stretch = Stretch.Uniform, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top};
         }
 
         private void DetachFromVisualTree()
@@ -582,13 +591,13 @@ namespace GraphX.Controls
                 // adjust the viewport from the coordinate space of the Content element
                 // to the coordinate space of the view finder display panel
                 var scale = _viewFinderDisplay.Scale;// *_viewboxFactor;
-                _viewFinderDisplay.ViewportRect = new Rect(viewport.Left * scale, viewport.Top * scale, viewport.Width * scale, viewport.Height * scale);
+                _viewFinderDisplay.ViewportRect = new Rect(viewport.Left * scale, viewport.Top * scale, Math.Max(0.0, viewport.Width * scale), Math.Max(0.0, viewport.Height * scale));
             }
         }
 
         private void UpdateViewFinderDisplayContentBounds()
         {
-            if (ContentVisual == null || _viewFinderDisplay == null)
+            if (ContentVisual == null || _viewFinderDisplay == null || _viewFinderDisplay.Visibility == Visibility.Collapsed)
                 return;
 
             /*if (DesignerProperties.GetIsInDesignMode(this))
@@ -601,23 +610,27 @@ namespace GraphX.Controls
             
             // ensure the display panel has a size
             var contentSize = IsContentTrackable ? TrackableContent.ContentSize.Size : ContentVisual.DesiredSize;
-
+            if (contentSize.IsEmpty || double.IsInfinity(contentSize.Width))
+                contentSize = new Size(1, 1);
             var viewFinderSize = _viewFinderDisplay.AvailableSize;
+            if (viewFinderSize.IsEmpty || double.IsInfinity(viewFinderSize.Width))
+                viewFinderSize = new Size(1,1);
             if (viewFinderSize.Width > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Height, 0d))
             {
                 // update height to accomodate width, while keeping a ratio equal to the actual content
-                viewFinderSize = new Size(viewFinderSize.Width, contentSize.Height * viewFinderSize.Width / contentSize.Width);
+                viewFinderSize = new Size(viewFinderSize.Width, Math.Max(0, contentSize.Height * viewFinderSize.Width / contentSize.Width));
             }
             else if (viewFinderSize.Height > 0d && DoubleHelper.AreVirtuallyEqual(viewFinderSize.Width, 0d))
             {
                 // update width to accomodate height, while keeping a ratio equal to the actual content
-                viewFinderSize = new Size(contentSize.Width * viewFinderSize.Height / contentSize.Height, viewFinderSize.Width);
+                viewFinderSize = new Size(Math.Max(0, contentSize.Width * viewFinderSize.Height / contentSize.Height), viewFinderSize.Width);
             }
 
             // determine the scale of the view finder display panel
             var aspectX = viewFinderSize.Width / contentSize.Width;
             var aspectY = viewFinderSize.Height / contentSize.Height;
             var scale = aspectX < aspectY ? aspectX : aspectY;
+            if (double.IsInfinity(scale) || double.IsNaN(scale)) scale = 1d;
             if (DesignerProperties.GetIsInDesignMode(this)) scale = 0.8;
 
             // determine the rect of the VisualBrush
@@ -626,7 +639,7 @@ namespace GraphX.Controls
 
             // set the ContentBounds and Scale properties on the view finder display panel
             _viewFinderDisplay.Scale = scale;
-            _viewFinderDisplay.ContentBounds = new Rect(new Size(vbWidth, vbHeight));
+            _viewFinderDisplay.ContentBounds = new Rect(new Size(Math.Max(0, vbWidth), Math.Max(0, vbHeight)));
         }
 
         private void UpdateViewboxFactor()
@@ -644,17 +657,17 @@ namespace GraphX.Controls
         #region Properties
 
         /// <summary>
-        /// Gets or sets if animation should be disabled
+        /// Gets or sets if zoom animation is enabled. Default value is True.
         /// </summary>
-        public bool IsAnimationDisabled { get; set; }
+        public virtual bool IsAnimationEnabled { get; set; } = true;
 
         /// <summary>
-        /// Use Ctrl key to zoom with mouse wheel or without it
+        /// Use Ctrl key to zoom with mouse wheel or without it. Default value is True.
         /// </summary>
-        public bool UseCtrlForMouseWheel { get; set; }
+        public bool UseCtrlForMouseWheel { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area.
+        /// Gets or sets mousewheel zooming mode. Positional: depend on mouse position. Absolute: center area. Default value is Positional.
         /// </summary>
         public MouseWheelZoomingMode MouseWheelZoomingMode { get; set; }
 
@@ -665,32 +678,29 @@ namespace GraphX.Controls
 
         private void OnAreaSelected(Rect selection)
         {
-            if (AreaSelected != null)
-                AreaSelected(this, new AreaSelectedEventArgs(selection));
+            AreaSelected?.Invoke(this, new AreaSelectedEventArgs(selection));
         }
 
-        private const string PART_PRESENTER = "PART_Presenter";
-
-        public static readonly DependencyProperty HideZoomProperty =
-            DependencyProperty.Register("HideZoom", typeof(Visibility), typeof(ZoomControl),
-                                        new PropertyMetadata(Visibility.Visible));
 
         public static readonly DependencyProperty AnimationLengthProperty =
-            DependencyProperty.Register("AnimationLength", typeof(TimeSpan), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(AnimationLength), typeof(TimeSpan), typeof(ZoomControl),
                                         new PropertyMetadata(TimeSpan.FromMilliseconds(500)));
 
-        public static readonly DependencyProperty MaximumZoomStepProperty =
-            DependencyProperty.Register("MaximumZoomValueValue", typeof(double), typeof(ZoomControl),
+        public static readonly DependencyProperty IsDragSelectByDefaultProperty =
+            DependencyProperty.Register(nameof(IsDragSelectByDefaultProperty), typeof(bool), typeof(ZoomControl), new PropertyMetadata(false));
+
+        public static readonly DependencyProperty ZoomStepProperty =
+            DependencyProperty.Register(nameof(ZoomStep), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(5.0));
 
         public static readonly DependencyProperty MaxZoomProperty =
-            DependencyProperty.Register("MaxZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(100.0));
+            DependencyProperty.Register(nameof(MaxZoom), typeof(double), typeof(ZoomControl), new PropertyMetadata(100.0));
 
         public static readonly DependencyProperty MinZoomProperty =
-            DependencyProperty.Register("MinZoom", typeof(double), typeof(ZoomControl), new PropertyMetadata(0.01));
+            DependencyProperty.Register(nameof(MinZoom), typeof(double), typeof(ZoomControl), new PropertyMetadata(0.01));
 
         public static readonly DependencyProperty ModeProperty =
-            DependencyProperty.Register("Mode", typeof(ZoomControlModes), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(Mode), typeof(ZoomControlModes), typeof(ZoomControl),
                                         new PropertyMetadata(ZoomControlModes.Custom, Mode_PropertyChanged));
 
         private static void Mode_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -713,16 +723,16 @@ namespace GraphX.Controls
         }
 
         public static readonly DependencyProperty ModifierModeProperty =
-            DependencyProperty.Register("ModifierMode", typeof(ZoomViewModifierMode), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ModifierMode), typeof(ZoomViewModifierMode), typeof(ZoomControl),
                                         new PropertyMetadata(ZoomViewModifierMode.None));
 
         #region TranslateX TranslateY
         public static readonly DependencyProperty TranslateXProperty =
-            DependencyProperty.Register("TranslateX", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(TranslateX), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.0, TranslateX_PropertyChanged, TranslateX_Coerce));
 
         public static readonly DependencyProperty TranslateYProperty =
-            DependencyProperty.Register("TranslateY", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(TranslateY), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.0, TranslateY_PropertyChanged, TranslateY_Coerce));
 
         private static object TranslateX_Coerce(DependencyObject d, object basevalue)
@@ -755,8 +765,8 @@ namespace GraphX.Controls
             zc._translateTransform.X = (double)e.NewValue;
             if (!zc._isZooming)
                 zc.Mode = ZoomControlModes.Custom;
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
         }
 
         private static void TranslateY_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -767,49 +777,50 @@ namespace GraphX.Controls
             zc._translateTransform.Y = (double)e.NewValue;
             if (!zc._isZooming)
                 zc.Mode = ZoomControlModes.Custom;
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
 
         }
 
         #endregion
 
         public static readonly DependencyProperty ZoomBoxBackgroundProperty =
-            DependencyProperty.Register("ZoomBoxBackground", typeof(Brush), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBackground), typeof(Brush), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderBrushProperty =
-            DependencyProperty.Register("ZoomBoxBorderBrush", typeof(Brush), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBorderBrush), typeof(Brush), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxBorderThicknessProperty =
-            DependencyProperty.Register("ZoomBoxBorderThickness", typeof(Thickness), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxBorderThickness), typeof(Thickness), typeof(ZoomControl),
                                         new PropertyMetadata(null));
 
 
         public static readonly DependencyProperty ZoomBoxOpacityProperty =
-            DependencyProperty.Register("ZoomBoxOpacity", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBoxOpacity), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(0.5));
 
 
         public static readonly DependencyProperty ZoomBoxProperty =
-            DependencyProperty.Register("ZoomBox", typeof(Rect), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomBox), typeof(Rect), typeof(ZoomControl),
                                         new PropertyMetadata(new Rect()));
 
         public static readonly DependencyProperty ZoomSensitivityProperty =
-            DependencyProperty.Register("ZoomSensitivity", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(ZoomSensitivity), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(100.0));
 
         #region Zoom
         public static readonly DependencyProperty ZoomProperty =
-            DependencyProperty.Register("Zoom", typeof(double), typeof(ZoomControl),
+            DependencyProperty.Register(nameof(Zoom), typeof(double), typeof(ZoomControl),
                                         new PropertyMetadata(1.0, Zoom_PropertyChanged));
 
         private static void Zoom_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var zc = (ZoomControl)d;
+            zc.HookBeforeZoomChanging();
 
             if (zc._scaleTransform == null)
                 return;
@@ -824,10 +835,11 @@ namespace GraphX.Controls
                 zc.TranslateY *= delta;
                 zc.Mode = ZoomControlModes.Custom;
             }
-            zc.OnPropertyChanged("Presenter");
-            zc.Presenter.OnPropertyChanged("RenderTransform");
-            zc.OnPropertyChanged("Zoom");
+            zc.OnPropertyChanged(nameof(Presenter));
+            zc.Presenter.OnPropertyChanged(nameof(RenderTransform));
+            zc.OnPropertyChanged(nameof(Zoom));
             zc.UpdateViewport();
+            zc.HookAfterZoomChanging();
         }
         #endregion
 
@@ -881,10 +893,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets origo (area center) position
         /// </summary>
-        public Point OrigoPosition
-        {
-            get { return new Point(ActualWidth / 2, ActualHeight / 2); }
-        }
+        public Point OrigoPosition => new Point(ActualWidth / 2, ActualHeight / 2);
 
         /// <summary>
         /// Gets or sets translation value for X property
@@ -929,7 +938,16 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Minimum zoom distance (Zoom out)
+        /// Gets or sets the value indicating whether to drag select without keyboard modifiers to the mouse button.
+        /// </summary>
+        public bool IsDragSelectByDefault
+        {
+            get { return (bool)GetValue(IsDragSelectByDefaultProperty); }
+            set { SetValue(IsDragSelectByDefaultProperty, value); }
+        }
+
+        /// <summary>
+        /// Minimum zoom distance (Zoom out). Default value is 0.01
         /// </summary>
         public double MinZoom
         {
@@ -938,7 +956,7 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Maximum zoom distance (Zoom in)
+        /// Maximum zoom distance (Zoom in). DEfault value is 100
         /// </summary>
         public double MaxZoom
         {
@@ -947,18 +965,18 @@ namespace GraphX.Controls
         }
 
         /// <summary>
-        /// Maximum value for zoom step (how fast the zoom can do)
+        /// Gets or sets zoom step value (how fast the zoom can do). Default value is 5.
         /// </summary>
-        public double MaximumZoomStep
+        public virtual double ZoomStep
         {
-            get { return (double)GetValue(MaximumZoomStepProperty); }
-            set { SetValue(MaximumZoomStepProperty, value); }
+            get { return (double)GetValue(ZoomStepProperty); }
+            set { SetValue(ZoomStepProperty, value); }
         }
 
         /// <summary>
-        /// Gets or sets zoom sensitivity. Lower the value - smoother the zoom.
+        /// Gets or sets zoom sensitivity. Lower the value - smoother the zoom. Default value is 100.
         /// </summary>
-        public double ZoomSensitivity
+        public virtual double ZoomSensitivity
         {
             get { return (double)GetValue(ZoomSensitivityProperty); }
             set { SetValue(ZoomSensitivityProperty, value); }
@@ -982,32 +1000,18 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets content object as UIElement
         /// </summary>
-        public UIElement ContentVisual
-        {
-            get
-            {
-                return Content as UIElement;
-            }
-        }
+        public UIElement ContentVisual => Content as UIElement;
+
         /// <summary>
         /// Gets content as ITrackableContent like GraphArea
         /// </summary>
-        public ITrackableContent TrackableContent
-        {
-            get
-            {
-                return Content as ITrackableContent;
-            }
-        }
+        public ITrackableContent TrackableContent => Content as ITrackableContent;
 
         bool _isga;
         /// <summary>
         /// Is loaded content represents ITrackableContent object
         /// </summary>
-        public bool IsContentTrackable
-        {
-            get { return _isga; }
-        }
+        public bool IsContentTrackable => _isga;
 
 
         public ZoomContentPresenter Presenter
@@ -1030,10 +1034,7 @@ namespace GraphX.Controls
             }
         }
 
-        public UIElement PresenterVisual
-        {
-            get { return Presenter; }
-        }
+        public UIElement PresenterVisual => Presenter;
 
         /// <summary>
         /// Gets or sets the active modifier mode.
@@ -1053,10 +1054,24 @@ namespace GraphX.Controls
             set { SetValue(ModeProperty, value); }
         }
 
-        protected RoutedUICommand CommandZoomIn = new RoutedUICommand("Zoom In", "ZoomIn", typeof(ZoomControl));
-        protected RoutedUICommand CommandZoomOut = new RoutedUICommand("Zoom Out", "ZoomOut", typeof(ZoomControl));
+        public RoutedUICommand CommandZoomIn = new RoutedUICommand("Zoom In", "ZoomIn", typeof(ZoomControl));
+        public RoutedUICommand CommandZoomOut = new RoutedUICommand("Zoom Out", "ZoomOut", typeof(ZoomControl));
+        public RoutedUICommand CommandPanLeft = new RoutedUICommand("Pan Left", "PanLeft", typeof(ZoomControl));
+        public RoutedUICommand CommandPanRight = new RoutedUICommand("Pan Right", "PanRight", typeof(ZoomControl));
+        public RoutedUICommand CommandPanTop = new RoutedUICommand("Pan Top", "PanTop", typeof(ZoomControl));
+        public RoutedUICommand CommandPanBottom = new RoutedUICommand("Pan Bottom", "PanBottom", typeof(ZoomControl));
 
         #endregion
+
+        #region Hooks
+        protected virtual void HookBeforeZoomChanging() { }
+        protected virtual void HookAfterZoomChanging() { }
+        #endregion
+
+        /// <summary>
+        /// Gets or sets manual pan sensivity in points when using keys to pan zoomed content. Default value is 10.
+        /// </summary>
+        public double ManualPanSensivity { get; set; } = 10d;
 
         static ZoomControl()
         {
@@ -1066,9 +1081,7 @@ namespace GraphX.Controls
         public ZoomControl()
         {
             if (DesignerProperties.GetIsInDesignMode(this))
-            {
-                //Mode = ZoomControlModes.Fill;
-                //Zoom = 0.5;             
+            {           
             }
             else
             {
@@ -1076,29 +1089,26 @@ namespace GraphX.Controls
                 PreviewMouseDown += ZoomControl_PreviewMouseDown;
                 MouseDown += ZoomControl_MouseDown;
                 MouseUp += ZoomControl_MouseUp;
-                UseCtrlForMouseWheel = true;
 
                 AddHandler(SizeChangedEvent, new SizeChangedEventHandler(OnSizeChanged), true);
 
                 BindCommand(Refocus, RefocusView, CanRefocusView);
                 BindCommand(Center, CenterContent);
                 BindCommand(Fill, FillToBounds);
-                BindCommand(Fit, FitToBounds);
-
-                BindKey(CommandZoomIn, Key.Up, ModifierKeys.Control, 
-                    (sender, args) => MouseWheelAction(120, OrigoPosition));
-                BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control, 
-                    (sender, args) => MouseWheelAction(-120, OrigoPosition));
-
-                this.PreviewKeyDown += ZoomControl_PreviewKeyDown;
-
-                Loaded += ZoomControl_Loaded;
+                BindCommand(ResetZoom, ExecuteResetZoom);
+                BindCommand(CommandZoomIn, (sender, args) => MouseWheelAction(ZoomSensitivity, OrigoPosition));
+                BindCommand(CommandZoomOut, (sender, args) => MouseWheelAction(-ZoomSensitivity, OrigoPosition));
+                BindCommand(CommandPanLeft, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(ManualPanSensivity, 0)));
+                BindCommand(CommandPanRight, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(-ManualPanSensivity, 0)));
+                BindCommand(CommandPanTop, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(0, ManualPanSensivity)));
+                BindCommand(CommandPanBottom, (sender, args) => PanAction(new Vector(TranslateX, TranslateY), new Vector(0, -ManualPanSensivity)));
+                BindKey(CommandPanLeft, Key.Left, ModifierKeys.None);
+                BindKey(CommandPanRight, Key.Right, ModifierKeys.None);
+                BindKey(CommandPanTop, Key.Up, ModifierKeys.None);
+                BindKey(CommandPanBottom, Key.Down, ModifierKeys.None);
+                BindKey(CommandZoomIn, Key.Up, ModifierKeys.Control);
+                BindKey(CommandZoomOut, Key.Down, ModifierKeys.Control);
             }
-        }
-
-        void ZoomControl_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            
         }
 
         protected void BindCommand(RoutedUICommand command, ExecutedRoutedEventHandler execute, CanExecuteRoutedEventHandler canExecute = null)
@@ -1107,17 +1117,23 @@ namespace GraphX.Controls
             CommandBindings.Add(binding);
         }
 
-        protected void BindKey(RoutedUICommand command, Key key, ModifierKeys modifier, ExecutedRoutedEventHandler execute)
+        /// <summary>
+        /// Resets all key bindings for the control
+        /// </summary>
+        public void ResetKeyBindings()
         {
-            var binding = new CommandBinding(command, execute);
-            CommandBindings.Add(binding);
-            InputBindings.Add(new KeyBinding(command, key, modifier));
+            InputBindings.Clear();
         }
 
-
-        void ZoomControl_Loaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Binds specified key to command
+        /// </summary>
+        /// <param name="command">Command to execute on key press</param>
+        /// <param name="key">Key</param>
+        /// <param name="modifier">Key modifier</param>
+        public void BindKey(RoutedUICommand command, Key key, ModifierKeys modifier)
         {
-            //FakeZoom();
+            InputBindings.Add(new KeyBinding(command, key, modifier));
         }
 
         #region ContentChanged
@@ -1125,15 +1141,10 @@ namespace GraphX.Controls
         {
             if (DesignerProperties.GetIsInDesignMode(this)) return;
 
-            if (oldContent != null)
-            {
-                var old = oldContent as ITrackableContent;
-                if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
-            }
+            var old = oldContent as ITrackableContent;
+            if (old != null) old.ContentSizeChanged -= Content_ContentSizeChanged;
             if (newContent != null)
             {
-                UpdateViewFinderDisplayContentBounds();
-                UpdateViewport();
                 var newc = newContent as ITrackableContent;
                 if (newc != null)
                 {
@@ -1141,8 +1152,12 @@ namespace GraphX.Controls
                     newc.ContentSizeChanged += Content_ContentSizeChanged;
                 }
                 else _isga = false;
+                if(Template != null)
+                    OnApplyTemplate();
+                UpdateViewFinderDisplayContentBounds();
+                UpdateViewport();
             }
-                
+
             base.OnContentChanged(oldContent, newContent);
         }
 
@@ -1176,6 +1191,7 @@ namespace GraphX.Controls
 
             e.Handled = true;
             MouseWheelAction(e);
+			_clickTrack = false;
         }
 
         private void MouseWheelAction(MouseWheelEventArgs e)
@@ -1186,14 +1202,13 @@ namespace GraphX.Controls
         /// <summary>
         /// Defines action on mousewheel
         /// </summary>
-        /// <param name="delta"></param>
-        /// <param name="mousePosition"></param>
-        protected virtual void MouseWheelAction(int delta, Point mousePosition)
+        /// <param name="delta">Delta from mousewheel args</param>
+        /// <param name="mousePosition">Mouse position</param>
+        protected virtual void MouseWheelAction(double delta, Point mousePosition)
         {
             var origoPosition = OrigoPosition;
-
             DoZoom(
-                Math.Max(1 / MaximumZoomStep, Math.Min(MaximumZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
+                Math.Max(1 / ZoomStep, Math.Min(ZoomStep, (Math.Abs(delta) / 10000.0 * ZoomSensitivity + 1))),
                 delta < 0 ? -1 : 1,
                 origoPosition,
                 MouseWheelZoomingMode == MouseWheelZoomingMode.Absolute ? origoPosition : mousePosition,
@@ -1202,7 +1217,14 @@ namespace GraphX.Controls
 
         private void ZoomControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            switch (ModifierMode)
+			if (_clickTrack)
+			{
+				RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+				_clickTrack = false;
+				e.Handled = true;
+			}
+
+			switch (ModifierMode)
             {
                 case ZoomViewModifierMode.None:
                     return;
@@ -1218,7 +1240,7 @@ namespace GraphX.Controls
                         _startedAsAreaSelection = false;
 
                         OnAreaSelected(ToContentRectangle(ZoomBox));
-                        ZoomBox = Rect.Empty;
+                        ZoomBox = new Rect();
                     }
                     else ZoomToInternal(ZoomBox);
                     break;
@@ -1231,17 +1253,30 @@ namespace GraphX.Controls
             ReleaseMouseCapture();
         }
 
+        protected virtual void PanAction(Vector initialPoint, Vector diff)
+        {
+            var translate = initialPoint + diff;
+            TranslateX = translate.X;
+            TranslateY = translate.Y;
+            UpdateViewport();
+        }
+
         private void ZoomControl_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            switch (ModifierMode)
+			if (_clickTrack)
+			{
+				var curPoint = Mouse.GetPosition(this);
+
+				if (curPoint != _mouseDownPos)
+					_clickTrack = false;
+			}
+
+			switch (ModifierMode)
             {
                 case ZoomViewModifierMode.None:
                     return;
                 case ZoomViewModifierMode.Pan:
-                    var translate = _startTranslate + (e.GetPosition(this) - _mouseDownPos);
-                    TranslateX = translate.X;
-                    TranslateY = translate.Y;
-                    UpdateViewport();
+                    PanAction(_startTranslate, e.GetPosition(this) - _mouseDownPos);
                     break;
                 case ZoomViewModifierMode.ZoomIn:
                     break;
@@ -1271,7 +1306,8 @@ namespace GraphX.Controls
             e.Handled = false;
         }
 
-        private bool _startedAsAreaSelection;
+		private bool _clickTrack;
+		private bool _startedAsAreaSelection;
         private void OnMouseDown(MouseButtonEventArgs e, bool isPreview)
         {
             if (ModifierMode != ZoomViewModifierMode.None)
@@ -1281,7 +1317,17 @@ namespace GraphX.Controls
             {
                 case ModifierKeys.None:
                     if (!isPreview)
-                        ModifierMode = ZoomViewModifierMode.Pan;
+                    {
+                        if (IsDragSelectByDefault)
+                        {
+                            _startedAsAreaSelection = true;
+                            ModifierMode = ZoomViewModifierMode.ZoomBox;
+                        }
+                        else
+                        {
+                            ModifierMode = ZoomViewModifierMode.Pan;
+                        }
+                    }
                     break;
                 case ModifierKeys.Alt | ModifierKeys.Control:
                     _startedAsAreaSelection = true;
@@ -1301,31 +1347,48 @@ namespace GraphX.Controls
                     return;
             }
 
-            if (ModifierMode == ZoomViewModifierMode.None)
+			_clickTrack = true;
+			_mouseDownPos = e.GetPosition(this);
+
+			if (ModifierMode == ZoomViewModifierMode.None)
                 return;
 
-            _mouseDownPos = e.GetPosition(this);
             _startTranslate = new Vector(TranslateX, TranslateY);
             Mouse.Capture(this);
             PreviewMouseMove += ZoomControl_PreviewMouseMove;
         }
-        #endregion
 
-        #region Animation
+		public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ZoomControl));
+		public event RoutedEventHandler Click
+		{
+			add { AddHandler(ClickEvent, value); }
+			remove { RemoveHandler(ClickEvent, value); }
+		}
 
-        public event EventHandler ZoomAnimationCompleted;
+		#endregion
+
+		#region Animation
+
+		public event EventHandler ZoomAnimationCompleted;
 
         private void OnZoomAnimationCompleted()
         {
-            if (ZoomAnimationCompleted != null)
-                ZoomAnimationCompleted(this, EventArgs.Empty);
+            ZoomAnimationCompleted?.Invoke(this, EventArgs.Empty);
         }
 
         private void DoZoomAnimation(double targetZoom, double transformX, double transformY, bool isZooming = true)
         {
             if (targetZoom == 0d && double.IsNaN(transformX) && double.IsNaN(transformY)) return;
             _isZooming = isZooming;
-            var duration = !IsAnimationDisabled ? new Duration(AnimationLength) : new Duration(new TimeSpan(0,0,0,0,100));
+            if (!IsAnimationEnabled)
+            {
+                SetCurrentValue(TranslateXProperty, transformX);
+                SetCurrentValue(TranslateYProperty, transformY);
+                SetCurrentValue(ZoomProperty, targetZoom);
+                ZoomCompleted(this, null);
+                return;
+            }
+            var duration = new Duration(AnimationLength);
             var value = (double)GetValue(TranslateXProperty);
             if (double.IsNaN(value) || double.IsInfinity(value)) SetValue(TranslateXProperty, 0d);
             value = (double)GetValue(TranslateYProperty);
@@ -1348,6 +1411,8 @@ namespace GraphX.Controls
                 return;
             }
             var animation = new DoubleAnimation(toValue, duration);
+            Timeline.SetDesiredFrameRate(animation, 30);
+
             if (dp == ZoomProperty)
             {
                 _zoomAnimCount++;
@@ -1372,18 +1437,6 @@ namespace GraphX.Controls
         }
 
         #endregion
-
-        /// <summary>
-        /// Zoom to rectangle area (MAY BE DEPRECATED). Use ZoomToContent method instead.
-        /// </summary>
-        /// <param name="rect"></param>
-        /// <param name="setDelta"></param>
-        public void ZoomTo(Rect rect, bool setDelta = false)
-        {
-            ZoomToInternal(rect, setDelta);
-            UpdateViewFinderDisplayContentBounds();
-            UpdateViewport();
-        }
 
         /// <summary>
         /// Zoom to rectangle area of the content
@@ -1560,8 +1613,7 @@ namespace GraphX.Controls
 
             if (DesignerProperties.GetIsInDesignMode(this))
             {
-                if (ViewFinder != null)
-                    ViewFinder.SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
+                ViewFinder?.SetCurrentValue(VisibilityProperty, Visibility.Collapsed);
                 return;
             }
 
@@ -1569,34 +1621,32 @@ namespace GraphX.Controls
             Presenter = GetTemplateChild(PART_PRESENTER) as ZoomContentPresenter;
             if (Presenter != null)
             {
-                Presenter.SizeChanged += (s, a) =>
-                                             {
-                                                 //UpdateViewFinderDisplayContentBounds();
-                                                 UpdateViewport();
-                                                 if (Mode == ZoomControlModes.Fill)
-                                                     DoZoomToFill();
-                                             };
-                Presenter.ContentSizeChanged += (s, a) =>
-                {
-                    //UpdateViewFinderDisplayContentBounds();
-                    if (Mode == ZoomControlModes.Fill)
-                    {
-                        DoZoomToFill();
-                        //IsAnimationDisabled = false;
-                    }
-                };
+                Presenter.SizeChanged -= Presenter_SizeChanged;
+                Presenter.ContentSizeChanged -= Presenter_ContentSizeChanged;
+                Presenter.SizeChanged += Presenter_SizeChanged;
+                Presenter.ContentSizeChanged += Presenter_ContentSizeChanged;
             }
             if (Mode == ZoomControlModes.Fill)
-            {
                 DoZoomToFill();
-            }
+        }
+
+        private void Presenter_ContentSizeChanged(object sender, Size newSize)
+        {
+            if (Mode == ZoomControlModes.Fill)
+                DoZoomToFill();
+        }
+
+        private void Presenter_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateViewport();
+            if (Mode == ZoomControlModes.Fill)
+                DoZoomToFill();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 

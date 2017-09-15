@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Linq;
 #if WPF
-using SysRect = System.Windows.Rect;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shapes;
 #elif METRO
 using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
 using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
-using SysRect =Windows.Foundation.Rect;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
@@ -31,7 +27,7 @@ namespace GraphX.Controls
     {
         #region Dependency Properties
 
-        public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double),
+        public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register(nameof(StrokeThickness), typeof(double),
                                                                                               typeof(EdgeControl),
                                                                                               new PropertyMetadata(5.0));
 
@@ -46,10 +42,11 @@ namespace GraphX.Controls
        }
 
 
-       private static readonly DependencyProperty IsSelfLoopedProperty = DependencyProperty.Register("IsSelfLooped", typeof(bool), typeof(EdgeControl), new PropertyMetadata(false));
+       private static readonly DependencyProperty IsSelfLoopedProperty = DependencyProperty.Register(nameof(IsSelfLooped), typeof(bool), typeof(EdgeControl), new PropertyMetadata(false));
 
-       private bool IsSelfLoopedInternal { get { return Source != null && Target != null && Source.Vertex == Target.Vertex; } }
-       /// <summary>
+       private bool IsSelfLoopedInternal => Source != null && Target != null && Source.Vertex == Target.Vertex;
+
+        /// <summary>
        /// Gets if this edge is self looped (have same Source and Target)
        /// </summary>
        public override bool IsSelfLooped
@@ -63,35 +60,29 @@ namespace GraphX.Controls
         public event EdgeLabelEventHandler LabelMouseDown;
         protected void OnLabelMouseDown(MouseButtonEventArgs mArgs, ModifierKeys keys)
         {
-            if (LabelMouseDown != null)
-                LabelMouseDown(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
+            LabelMouseDown?.Invoke(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
         }
 
         protected override void OnEdgeLabelUpdated()
         {
-            if (EdgeLabelControl is Control)
-            {
-                var ctrl = (Control)EdgeLabelControl;
+            var ctrl = EdgeLabelControl as Control;
+            if (ctrl == null) return;
 #if WPF
-                MouseButtonEventHandler func = (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
-                ctrl.MouseDown -= func;
-                ctrl.MouseDown += func;
+            MouseButtonEventHandler func = (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
+            ctrl.MouseDown -= func;
+            ctrl.MouseDown += func;
 #elif METRO
-                PointerEventHandler func = (sender, args) => OnLabelMouseDown(args, null);
-                ctrl.PointerPressed -= func;
-                ctrl.PointerPressed += func;
-#endif                
-            }
-        }        
+            PointerEventHandler func = (sender, args) => OnLabelMouseDown(args, null);
+            ctrl.PointerPressed -= func;
+            ctrl.PointerPressed += func;
+#endif
+        }
 
         #region public Clean()
         public override void Clean()
         {
-            //TODO rename to _sourceWatcher _targetWatcher
-            if (_sourceWatcher != null)
-                _sourceWatcher.Dispose();
-            if (_targetWatcher != null)
-                _targetWatcher.Dispose();
+            _sourceWatcher?.Dispose();
+            _targetWatcher?.Dispose();
             if (Source != null)
                 Source.PositionChanged -= source_PositionChanged;
             if (Target != null)
@@ -103,7 +94,7 @@ namespace GraphX.Controls
             RootArea = null;
             HighlightBehaviour.SetIsHighlightEnabled(this, false);
             DragBehaviour.SetIsDragEnabled(this, false);
-            _linegeometry = null;
+            Linegeometry = null;
             LinePathObject = null;
             SelfLoopIndicator = null;
             if (EdgeLabelControl != null)
@@ -122,8 +113,7 @@ namespace GraphX.Controls
                 EdgePointerForTarget.Dispose();
                 EdgePointerForTarget = null;
             }
-            if (EventOptions != null)
-                EventOptions.Clean();
+            EventOptions?.Clean();
         }
         #endregion
 
@@ -220,7 +210,7 @@ namespace GraphX.Controls
         private void source_PositionChanged(object sender, EventArgs e)
         {
             //update edge on any connected vertex position changes
-            UpdateEdge(true);
+            UpdateEdge();
         }
 
         void Source_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -235,13 +225,24 @@ namespace GraphX.Controls
         private VertexControl _oldTarget;
         #endregion
 
+        private bool _clickTrack;
+        private Point _clickTrackPoint;
+
         internal void UpdateEventhandling(EventType typ)
         {
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled) MouseDown += GraphEdge_MouseDown;
-                    else MouseDown -= GraphEdge_MouseDown;
+                    if (EventOptions.MouseClickEnabled)
+                    {
+                        MouseDown += EdgeControl_MouseDown;
+                        PreviewMouseMove += EdgeControl_PreviewMouseMove;
+                    }
+                    else
+                    {
+                        MouseDown -= EdgeControl_MouseDown;
+                        PreviewMouseMove -= EdgeControl_PreviewMouseMove;
+                    }
                     break;
                 case EventType.MouseDoubleClick:
                     if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
@@ -261,6 +262,8 @@ namespace GraphX.Controls
                     else MouseMove -= EdgeControl_MouseMove;
                     break;
             }
+            MouseUp -= EdgeControl_MouseUp;
+            MouseUp += EdgeControl_MouseUp;
         }
 #elif METRO
         #region Position tracing
@@ -306,8 +309,8 @@ namespace GraphX.Controls
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled) PointerPressed += GraphEdge_MouseDown;
-                    else PointerPressed -= GraphEdge_MouseDown;
+                    if (EventOptions.MouseClickEnabled) PointerPressed += EdgeControl_MouseDown;
+                    else PointerPressed -= EdgeControl_MouseDown;
                     break;
                 case EventType.MouseDoubleClick:
                     //if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
@@ -370,6 +373,33 @@ namespace GraphX.Controls
 
         #region Event handlers
 
+#if WPF
+        void EdgeControl_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_clickTrack)
+                return;
+
+            var curPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
+
+            if (curPoint != _clickTrackPoint)
+                _clickTrack = false;
+        }
+
+        void EdgeControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (RootArea != null && Visibility == Visibility.Visible)
+            {
+                if (_clickTrack)
+                {
+                    RaiseEvent(new RoutedEventArgs(ClickEvent, this));
+                    RootArea.OnEdgeClicked(this, e, Keyboard.Modifiers);
+                }
+            }
+            _clickTrack = false;
+            e.Handled = true;
+        }
+#endif
+
         void EdgeControl_MouseLeave(object sender, MouseEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
@@ -388,23 +418,38 @@ namespace GraphX.Controls
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeMouseMove(this, null, Keyboard.Modifiers);
-            e.Handled = true;
+            // e.Handled = true;
         }
 
-        void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void EdgeControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeDoubleClick(this, e, Keyboard.Modifiers);
-            e.Handled = true;
+            //e.Handled = true;
         }
 
-        void GraphEdge_MouseDown(object sender, MouseButtonEventArgs e)
+        void EdgeControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (RootArea != null && Visibility == Visibility.Visible)
                 RootArea.OnEdgeSelected(this, e, Keyboard.Modifiers);
+#if WPF
+            _clickTrack = true;
+            _clickTrackPoint = RootArea != null ? Mouse.GetPosition(RootArea) : new Point();
+#endif
             e.Handled = true;
         }
 
+        #endregion
+
+        #region Click Event
+#if WPF
+        public static readonly RoutedEvent ClickEvent = EventManager.RegisterRoutedEvent(nameof(Click), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(EdgeControl));
+        public event RoutedEventHandler Click
+        {
+            add { AddHandler(ClickEvent, value); }
+            remove { RemoveHandler(ClickEvent, value); }
+        }
+#endif
         #endregion
 
         public override void Dispose()

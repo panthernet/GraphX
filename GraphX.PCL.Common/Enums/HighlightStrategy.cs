@@ -1,6 +1,6 @@
 namespace GraphX.PCL.Common.Enums
 {
-    public enum HighlightStrategy
+   /* public enum HighlightStrategy
     {
         /// <summary>
         /// Use existing vertex and edge controls
@@ -12,5 +12,5 @@ namespace GraphX.PCL.Common.Enums
         /// Useful when edges is not created by default
         /// </summary>
         CreateControls
-    }
+    }*/
 }

@@ -24,7 +24,7 @@ namespace GraphX.Controls.Animations
             Centered = centered;
         }
 
-        public void AnimateVertex(VertexControl target)
+        public void AnimateVertex(VertexControl target, bool removeDataVertex = false)
         {
             //get scale transform or create new one
             var transform = CustomHelper.GetScaleTransform(target);
@@ -37,20 +37,23 @@ namespace GraphX.Controls.Animations
             //create and run animation
 #if WPF
             var scaleAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromSeconds(Duration)));
-            scaleAnimation.Completed += (sender, e) =>  OnCompleted(target);
+            Timeline.SetDesiredFrameRate(scaleAnimation, 30);
+            scaleAnimation.Completed += (sender, e) => OnCompleted(target, removeDataVertex);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);            
 #elif METRO
             var sb = new Storyboard();
             //create and run animation
             var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0  };
-            //scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
+            scaleAnimation.SetDesiredFrameRate(30);
+            //scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl, removeDataVertex);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
             sb.Children.Add(scaleAnimation);
 
             scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = 0 };
-            scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl);
+            scaleAnimation.Completed += (sender, e) => OnCompleted(target as IGraphControl, removeDataVertex);
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
             sb.Children.Add(scaleAnimation);
@@ -61,10 +64,10 @@ namespace GraphX.Controls.Animations
 #endif
         }
 
-        public void AnimateEdge(EdgeControl target)
+        public void AnimateEdge(EdgeControl target, bool removeDataEdge = false)
         {
             //ALWAYS fire completed event to init delete procedure after the animation process
-            OnCompleted(target);
+            OnCompleted(target, removeDataEdge);
         }
 
         /// <summary>
@@ -72,10 +75,9 @@ namespace GraphX.Controls.Animations
         /// </summary>
         public event RemoveControlEventHandler Completed;
 
-        public void OnCompleted(IGraphControl target)
+        private void OnCompleted(IGraphControl target, bool removeDataObject)
         {
-            if (Completed != null)
-                Completed(this, new ControlEventArgs(target));
+            Completed?.Invoke(this, new ControlEventArgs(target, removeDataObject));
         }
     }
 }

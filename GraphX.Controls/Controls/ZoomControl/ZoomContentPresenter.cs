@@ -5,16 +5,12 @@ using System.Windows.Media;
 
 namespace GraphX.Controls
 {
-    public sealed class ZoomContentPresenter : ContentPresenter, INotifyPropertyChanged
+    public class ZoomContentPresenter : ContentPresenter, INotifyPropertyChanged
     {
         public event ContentSizeChangedHandler ContentSizeChanged;
 
         private Size _contentSize;
 
-       /* public Point ContentTopLeft { get; private set; }
-        public Point ContentBottomRight { get; private set; }
-        public Point ContentActualSize { get; private set; }
-        */
         public Size ContentSize
         {
             get { return _contentSize; }
@@ -23,8 +19,7 @@ namespace GraphX.Controls
                     return;
 
                 _contentSize = value;
-                if (ContentSizeChanged != null)
-                    ContentSizeChanged(this, _contentSize);
+                ContentSizeChanged?.Invoke(this, _contentSize);
             }
         }
 
@@ -39,7 +34,7 @@ namespace GraphX.Controls
 
         protected override Size ArrangeOverride(Size arrangeBounds)
         {
-            UIElement child = VisualChildrenCount > 0
+            var child = VisualChildrenCount > 0
                                   ? VisualTreeHelper.GetChild(this, 0) as UIElement
                                   : null;
             if (child == null)
@@ -48,12 +43,6 @@ namespace GraphX.Controls
             //set the ContentSize
             ContentSize = child.DesiredSize;
             child.Arrange(new Rect(child.DesiredSize));
-           /* if (child is GraphAreaBase)
-            {
-                ContentBottomRight = (child as GraphAreaBase).BottomRight;
-                ContentTopLeft = (child as GraphAreaBase).TopLeft;
-                ContentActualSize = new Point((child as GraphAreaBase).ActualWidth, (child as GraphAreaBase).ActualHeight);
-            }*/
 
             return arrangeBounds;
         }
@@ -61,8 +50,7 @@ namespace GraphX.Controls
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

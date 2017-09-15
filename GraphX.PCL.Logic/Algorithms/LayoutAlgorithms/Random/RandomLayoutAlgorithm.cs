@@ -15,7 +15,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         where TEdge : IGraphXEdge<TVertex>
         where TGraph : IVertexAndEdgeListGraph<TVertex, TEdge>, IMutableVertexAndEdgeSet<TVertex, TEdge>
     {
-        private readonly Random _rnd = new Random(Guid.NewGuid().GetHashCode());
         private readonly RandomLayoutAlgorithmParams _parameters;
 
         public RandomLayoutAlgorithm(TGraph graph, IDictionary<TVertex, Point> positions, RandomLayoutAlgorithmParams prms)
@@ -34,8 +33,10 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
         {
             VertexPositions.Clear();
             var bounds = _parameters == null ? new RandomLayoutAlgorithmParams().Bounds : _parameters.Bounds;
-            int boundsWidth = (int)bounds.Width;
-            int boundsHeight = (int)bounds.Height;
+            var boundsWidth = (int)bounds.Width;
+            var boundsHeight = (int)bounds.Height;
+            var seed = _parameters == null ? Guid.NewGuid().GetHashCode() : _parameters.Seed;
+            var rnd = new Random(seed);
             foreach (var item in VisitedGraph.Vertices)
             {
                 if (item.SkipProcessing != ProcessingOptionEnum.Freeze || VertexPositions.Count == 0)
@@ -44,15 +45,9 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
                     var y = (int) bounds.Y;
                     var size = VertexSizes.FirstOrDefault(a => a.Key == item).Value;
                     VertexPositions.Add(item,
-                        new Point(_rnd.Next(x, x + boundsWidth - (int) size.Width),
-                            _rnd.Next(y, y + boundsHeight - (int) size.Height)));
+                        new Point(rnd.Next(x, x + boundsWidth - (int) size.Width),
+                            rnd.Next(y, y + boundsHeight - (int) size.Height)));
                 }
-                /*else if (VertexPositions != null)
-                {
-                    var res = VertexPositions.FirstOrDefault(a => a.Key == item);
-                    if (res.Key != null)
-                        VertexPositions.Add(res.Key, res.Value);
-                }*/
             }
            
         }

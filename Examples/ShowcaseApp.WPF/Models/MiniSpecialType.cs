@@ -5,6 +5,7 @@
         None,
         LayoutVCP,
         EdgesParallel,
-        LayoutGrouped
+        LayoutGrouped,
+        DataFiltering
     }
 }

@@ -15,17 +15,17 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
-    <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NETFX_CORE, METRO</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE, METRO;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <GenerateLibraryLayout>false</GenerateLibraryLayout>
@@ -34,14 +34,14 @@
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE, METRO</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE, METRO;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
@@ -51,7 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
     <OutputPath>bin\ARM\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -63,7 +63,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -73,7 +73,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -85,7 +85,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -95,7 +95,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_APP</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -109,10 +109,6 @@
     <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
       <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
       <Name>GraphX.PCL.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
-      <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
-      <Name>GraphX.PCL.Logic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +190,9 @@
     <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphArea.cs">
       <Link>Controls\Misc\IGraphArea.cs</Link>
     </Compile>
+    <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphAreaBase.cs">
+      <Link>Controls\Misc\IGraphAreaBase.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Controls\Misc\IGraphControl.cs">
       <Link>Controls\Misc\IGraphControl.cs</Link>
     </Compile>
@@ -242,8 +241,8 @@
     <Compile Include="..\GraphX.Controls\Models\AnimationFactory.cs">
       <Link>Models\AnimationFactory.cs</Link>
     </Compile>
-    <Compile Include="..\GraphX.Controls\Models\ContentSizeChangedEventArgs.cs">
-      <Link>Models\ContentSizeChangedEventArgs.cs</Link>
+    <Compile Include="..\GraphX.Controls\Models\ContentSizeChangedEventHandler.cs">
+      <Link>Models\ContentSizeChangedEventHandler.cs</Link>
     </Compile>
     <Compile Include="..\GraphX.Controls\Models\ControlEventArgs.cs">
       <Link>Models\ControlEventArgs.cs</Link>
@@ -290,10 +289,6 @@
     <Compile Include="..\GraphX.Controls\TypeExtensions.cs">
       <Link>TypeExtensions.cs</Link>
     </Compile>
-    <Compile Include="Controls\EdgeControl_.cs" />
-    <Compile Include="Controls\GraphArea_.cs" />
-    <Compile Include="Controls\GraphAreaBase_.cs" />
-    <Compile Include="Controls\VertexControl_.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\EqualityToBooleanConverter.cs" />
     <Compile Include="Controls\ZoomControl\Converters\RoundedValueConverter.cs" />
@@ -329,7 +324,6 @@
     <Compile Include="Models\XamlTypes\XamlTypeProvider.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeExtensions_.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\cross-icon.png" />
@@ -345,20 +339,27 @@
     <Content Include="Images\help_black.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <None Include="METRO.SimpleGraph_TemporaryKey.pfx" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Reference Include="QuickGraph">
+      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz">
+      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>METRO.SimpleGraph_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

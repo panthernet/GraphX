@@ -2,6 +2,21 @@
 {
 	public class SimpleTreeLayoutParameters : LayoutParametersBase
 	{
+		private double _componentGap = 10;
+		/// <summary>
+		/// Gets or sets the gap between the connected components.
+		/// </summary>
+		public double ComponentGap
+		{
+			get { return _componentGap; }
+			set
+			{
+				if (_componentGap == value) return;
+				_componentGap = value;
+				NotifyPropertyChanged("ComponentGap");
+			}
+		}
+
 		private double _vertexGap = 10;
 		/// <summary>
 		/// Gets or sets the gap between the vertices.

@@ -5,6 +5,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
+using GraphX.Controls.Models;
+using GraphX.PCL.Logic.Algorithms.EdgeRouting;
+using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using Microsoft.Win32;
 using QuickGraph;
 using ShowcaseApp.WPF.FileSerialization;
@@ -45,6 +48,8 @@ namespace ShowcaseApp.WPF.Pages
             gg_async.Unchecked += gg_async_Checked;
             gg_Area.RelayoutFinished += gg_Area_RelayoutFinished;
             gg_Area.GenerateGraphFinished += gg_Area_GenerateGraphFinished;
+            gg_Area.VertexLabelFactory = new DefaultVertexlabelFactory();
+            gg_Area.SetEdgesDrag(true);
 
             ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             ggLogic.EdgeCurvingEnabled = true;                  
@@ -52,8 +57,8 @@ namespace ShowcaseApp.WPF.Pages
 
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
 
-            gg_zoomctrl.IsAnimationDisabled = false;
-            gg_zoomctrl.MaximumZoomStep = 2;
+            gg_zoomctrl.IsAnimationEnabled = true;
+            gg_zoomctrl.ZoomStep = 2;
 
             Loaded += GG_Loaded;
         }
@@ -176,7 +181,7 @@ namespace ShowcaseApp.WPF.Pages
 
         private void gg_saveAsPngImage_Click(object sender, RoutedEventArgs e)
         {
-            gg_Area.ExportAsImage(ImageType.PNG, true, 96D, 100);
+            gg_Area.ExportAsImageDialog(ImageType.PNG, true, 96D, 100);
         }
 
         private void gg_printlay_Click(object sender, RoutedEventArgs e)
@@ -193,6 +198,19 @@ namespace ShowcaseApp.WPF.Pages
         {
             var late = (LayoutAlgorithmTypeEnum)gg_layalgo.SelectedItem;
             gg_Area.LogicCore.DefaultLayoutAlgorithm = late;
+            if (late == LayoutAlgorithmTypeEnum.EfficientSugiyama)
+            {
+                var prms = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.EfficientSugiyama) as EfficientSugiyamaLayoutParameters;
+                prms.EdgeRouting = SugiyamaEdgeRoutings.Orthogonal;
+                prms.LayerDistance = prms.VertexDistance = 100;
+                gg_Area.LogicCore.EdgeCurvingEnabled = false;
+                gg_Area.LogicCore.DefaultLayoutAlgorithmParams = prms;
+                gg_eralgo.SelectedItem = EdgeRoutingAlgorithmTypeEnum.None;
+            }
+            else
+            {
+                gg_Area.LogicCore.EdgeCurvingEnabled = true;
+            }
             if (late == LayoutAlgorithmTypeEnum.BoundedFR)
                 gg_Area.LogicCore.DefaultLayoutAlgorithmParams
                     = gg_Area.LogicCore.AlgorithmFactory.CreateLayoutParameters(LayoutAlgorithmTypeEnum.BoundedFR);
@@ -236,6 +254,16 @@ namespace ShowcaseApp.WPF.Pages
         private void gg_eralgo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             gg_Area.LogicCore.DefaultEdgeRoutingAlgorithm = (EdgeRoutingAlgorithmTypeEnum)gg_eralgo.SelectedItem;
+            if ((EdgeRoutingAlgorithmTypeEnum) gg_eralgo.SelectedItem == EdgeRoutingAlgorithmTypeEnum.Bundling)
+            {
+                BundleEdgeRoutingParameters prm = new BundleEdgeRoutingParameters();
+                gg_Area.LogicCore.DefaultEdgeRoutingAlgorithmParams = prm;
+                prm.Iterations = 200;
+                prm.SpringConstant = 5;
+                prm.Threshold = .1f;
+                gg_Area.LogicCore.EdgeCurvingEnabled = true;
+            }else 
+                gg_Area.LogicCore.EdgeCurvingEnabled = false;
         }
 
         private void gg_useExternalERAlgo_Checked(object sender, RoutedEventArgs e)
@@ -274,8 +302,27 @@ namespace ShowcaseApp.WPF.Pages
         private void gg_but_randomgraph_Click(object sender, RoutedEventArgs e)
         {
             gg_Area.ClearLayout();
-            var graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text));
+            var mult = 25;
+            GraphExample graph;
+            switch (gg_Area.LogicCore.DefaultLayoutAlgorithm)
+            {
+                case LayoutAlgorithmTypeEnum.LinLog:
+                    mult = 45;
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    break;
+                case LayoutAlgorithmTypeEnum.EfficientSugiyama:
+                case LayoutAlgorithmTypeEnum.Sugiyama:
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    //graph = ShowcaseHelper.GenerateSugiDataGraph();
+                    break;
+                default:
+                    graph = ShowcaseHelper.GenerateDataGraph(Convert.ToInt32(gg_vertexCount.Text), true, mult);
+                    break;
+            }
+            //add self loop
             graph.AddEdge(new DataEdge(graph.Vertices.First(), graph.Vertices.First()));
+
+
             //assign graph again as we need to update Graph param inside and i have no independent examples
             if (gg_Area.LogicCore.ExternalLayoutAlgorithm != null)
                 AssignExternalLayoutAlgorithm(graph);

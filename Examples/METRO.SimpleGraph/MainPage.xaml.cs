@@ -12,8 +12,6 @@ using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
-using METRO.SimpleGraph.Models;
-using QuickGraph.Graphviz.Dot;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -145,7 +143,7 @@ namespace METRO.SimpleGraph
             igraph.AddEdge(dataEdge);
         }
 
-        private readonly Random _rnd = new Random();
+        private readonly Random _rnd = new Random(Guid.NewGuid().GetHashCode());
         private GraphExample GraphExample_Setup()
         {
             var dataGraph = new GraphExample();

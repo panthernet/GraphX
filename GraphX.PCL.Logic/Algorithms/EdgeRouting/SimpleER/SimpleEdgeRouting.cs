@@ -18,10 +18,11 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
         public SimpleEdgeRouting(TGraph graph, IDictionary<TVertex, Point> vertexPositions, IDictionary<TVertex, Rect> vertexSizes, IEdgeRoutingParameters parameters = null)
             : base(graph, vertexPositions, vertexSizes, parameters)
         {
-            if (parameters is SimpleERParameters)
+            var erParameters = parameters as SimpleERParameters;
+            if (erParameters != null)
             {
-                drawback_distance = (parameters as SimpleERParameters).BackStep;
-                side_distance = (parameters as SimpleERParameters).SideStep;
+                drawback_distance = erParameters.BackStep;
+                side_distance = erParameters.SideStep;
             }
         }
 
@@ -61,12 +62,14 @@ namespace GraphX.PCL.Logic.Algorithms.EdgeRouting
             //bad edge data check
             if (ctrl.Source.ID == -1 || ctrl.Target.ID == -1)
                 throw new GX_InvalidDataException("SimpleEdgeRouting() -> You must assign unique ID for each vertex to use SimpleER algo!");
-            if (ctrl.Source.ID == ctrl.Target.ID || !VertexPositions.ContainsKey(ctrl.Target)) return;
+            if (ctrl.Source.ID == ctrl.Target.ID || !VertexSizes.ContainsKey(ctrl.Source) || !VertexSizes.ContainsKey(ctrl.Target)) return;
 
-            var startPoint = VertexPositions[ctrl.Source];// new Point(GraphAreaBase.GetX(ctrl.Source), GraphAreaBase.GetY(ctrl.Source));
-            var endPoint = VertexPositions[ctrl.Target];// new Point(GraphAreaBase.GetX(ctrl.Target), GraphAreaBase.GetY(ctrl.Target));
+			var ss = VertexSizes[ctrl.Source];
+			var es = VertexSizes[ctrl.Target];
+            var startPoint = new Point(ss.X + ss.Width * 0.5, ss.Y + ss.Height * 0.5);
+            var endPoint = new Point(es.X + es.Width * 0.5, es.Y + es.Height * 0.5);
 
-            if (startPoint == endPoint) return;
+			if (startPoint == endPoint) return;
 
             var originalSizes = getSizesCollection(ctrl, endPoint);
             var checklist = new Dictionary<TVertex, KeyValuePair<TVertex, Rect>>(originalSizes);

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using GraphX.PCL.Common.Interfaces;
 
@@ -5,13 +6,19 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 {
 	public abstract class LayoutParametersBase : ILayoutParameters
 	{
-		#region ICloneable Members
+	    protected LayoutParametersBase()
+        {
+            Seed = Guid.NewGuid().GetHashCode();
+        }
 
-		public object Clone()
+        #region ICloneable Members
+
+        public object Clone()
 		{
 			return MemberwiseClone();
 		}
 
+        public int Seed { get; set; }
 		#endregion
 
 		#region INotifyPropertyChanged Members

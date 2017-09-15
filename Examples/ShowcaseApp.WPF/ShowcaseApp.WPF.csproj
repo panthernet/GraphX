@@ -18,7 +18,7 @@
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -26,6 +26,7 @@
     <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,19 +36,21 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accordion">
+    <Reference Include="Accordion, Version=3.5.40128.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Accordion.1.0.0\lib\Accordion.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="FirstFloor.ModernUI">
       <HintPath>..\..\ExternalDlls\FirstFloor.ModernUI.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Windows.Shell">
@@ -82,9 +85,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="YAXLib, Version=2.13.0.0, Culture=neutral, PublicKeyToken=7cc39f8266ad1835, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\YAXLib.2.13\lib\YAXLib.dll</HintPath>
+    <Reference Include="YAXLib, Version=2.14.0.0, Culture=neutral, PublicKeyToken=15c43682c986900f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\YAXLib.2.14\lib\YAXLib.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +128,7 @@
     <Compile Include="ExampleModels\ExampleExternalLayoutAlgorithm.cs" />
     <Compile Include="ExampleModels\ExampleExternalOverlapRemovalAlgorithm.cs" />
     <Compile Include="ExampleModels\ExampleMoveAnimation.cs" />
+    <Compile Include="ExampleModels\Filters\BlueVertexFilter.cs" />
     <Compile Include="ExampleModels\GraphAreaExample.cs" />
     <Compile Include="ExampleModels\GraphExample.cs" />
     <Compile Include="ExampleModels\LogicCoreExample.cs" />
@@ -174,6 +178,11 @@
     <Page Include="Controls\MiniContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Mini\DataFiltering.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Page>
     <Page Include="Pages\Mini\EdgesParallel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -243,6 +252,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Templates\MiniFeatures.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Templates\Mini\LayoutDataFiltering.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -318,6 +331,10 @@
     </Compile>
     <Compile Include="Controls\MiniContentPage.xaml.cs">
       <DependentUpon>MiniContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Mini\DataFiltering.xaml.cs">
+      <DependentUpon>DataFiltering.xaml</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Pages\Mini\EdgesParallel.xaml.cs">
       <DependentUpon>EdgesParallel.xaml</DependentUpon>

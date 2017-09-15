@@ -47,15 +47,18 @@ namespace GraphX.Controls.Animations
 
 #if WPF
             var scaleAnimation =new DoubleAnimation(1, ScaleTo, new Duration(TimeSpan.FromSeconds(Duration)));
+            Timeline.SetDesiredFrameRate(scaleAnimation, 30);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
 #elif METRO
             var sb = new Storyboard();
             var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
             sb.Children.Add(scaleAnimation);
             scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
             sb.Children.Add(scaleAnimation);
@@ -80,15 +83,18 @@ namespace GraphX.Controls.Animations
 
 #if WPF
             var scaleAnimation = new DoubleAnimation(transform.ScaleX, 1, new Duration(TimeSpan.FromSeconds(Duration)));
+            Timeline.SetDesiredFrameRate(scaleAnimation, 30);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
 #elif METRO
             var sb = new Storyboard();
             var scaleAnimation = new DoubleAnimation{ Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
             sb.Children.Add(scaleAnimation);
             scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
+            scaleAnimation.SetDesiredFrameRate(30);
             Storyboard.SetTarget(scaleAnimation, target);
             Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
             sb.Children.Add(scaleAnimation);

@@ -105,11 +105,12 @@ namespace GraphX.Controls.Animations
                 To = end,
                 Duration = new Duration(Duration)
             };
+            fadeAnimation.SetDesiredFrameRate(30);
             if (callback != null) story.Completed += callback;
             story.Children.Add(fadeAnimation);
             Storyboard.SetTarget(fadeAnimation, control);
 #if WPF
-            Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath(Control.OpacityProperty));
+            Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath(UIElement.OpacityProperty));
 #elif METRO
             Storyboard.SetTargetProperty(fadeAnimation, "Opacity");
 #endif

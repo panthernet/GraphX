@@ -74,7 +74,7 @@ namespace GraphX.Controls
 
 
 
-        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle",
+        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register(nameof(Angle),
                                                                                        typeof(double),
                                                                                        typeof(EdgeLabelControl),
                                                                                        new PropertyMetadata(0.0, AngleChanged));
@@ -125,7 +125,7 @@ namespace GraphX.Controls
         public void Show()
         {
             if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
- #if WPF
+#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
 #else
             SetValue(UIElement.VisibilityProperty, Visibility.Visible);
@@ -265,7 +265,7 @@ namespace GraphX.Controls
 
         internal SysRect LastKnownRectSize;
 
-        protected EdgeControl EdgeControl { get { return _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent())); } }
+        protected EdgeControl EdgeControl => _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent()));
 
         private void SetSelfLoopedSize(Point pt, SysSize idesiredSize)
         {

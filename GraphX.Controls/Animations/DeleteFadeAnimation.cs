@@ -19,12 +19,13 @@ namespace GraphX.Controls.Animations
             Duration = duration;
         }
 
-        private void RunAnimation(IGraphControl target)
+        private void RunAnimation(IGraphControl target, bool removeDataObject)
         {
             //create and run animation
             var story = new Storyboard();
             var fadeAnimation = new DoubleAnimation {Duration = new Duration(TimeSpan.FromSeconds(Duration)), FillBehavior = FillBehavior.Stop, From = 1, To = 0};
-            fadeAnimation.Completed += (sender, e) => OnCompleted(target);
+            fadeAnimation.SetDesiredFrameRate(30);
+            fadeAnimation.Completed += (sender, e) => OnCompleted(target, removeDataObject);
             story.Children.Add(fadeAnimation);
             Storyboard.SetTarget(fadeAnimation, target as FrameworkElement);
 #if WPF
@@ -38,22 +39,21 @@ namespace GraphX.Controls.Animations
 #endif
         }
 
-        public void AnimateVertex(VertexControl target)
+        public void AnimateVertex(VertexControl target, bool removeDataVertex = false)
         {
-            RunAnimation(target);
+            RunAnimation(target, removeDataVertex);
         }
 
-        public void AnimateEdge(EdgeControl target)
+        public void AnimateEdge(EdgeControl target, bool removeDataEdge = false)
         {
-            RunAnimation(target);
+            RunAnimation(target, removeDataEdge);
         }
 
         public event RemoveControlEventHandler Completed;
 
-        public void OnCompleted(IGraphControl target)
+        public void OnCompleted(IGraphControl target, bool removeDataObject)
         {
-            if (Completed != null)
-                Completed(this, new ControlEventArgs(target));
+            Completed?.Invoke(this, new ControlEventArgs(target, removeDataObject));
         }
     }
 }

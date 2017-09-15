@@ -6,6 +6,11 @@ namespace GraphX.PCL.Common.Models
     public abstract class VertexBase: IGraphXVertex
     {
         /// <summary>
+        /// Gets or sets custom angle associated with the vertex
+        /// </summary>
+        public double Angle { get; set; }
+
+        /// <summary>
         /// Gets or sets optional group identificator
         /// </summary>
         public int GroupId { get; set; }

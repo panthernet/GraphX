@@ -158,13 +158,14 @@ namespace ShowcaseApp.WPF.Models
             return EditorImages[imageId >= 1 ? 1 : 0];
         }
 
-        public static void FillDataVertex(DataVertex item)
+        public static DataVertex FillDataVertex(DataVertex item)
         {
             item.Age = ShowcaseHelper.Rand.Next(18, 75);
             item.Gender = Gender[ShowcaseHelper.Rand.Next(0, 1)];
            // item.ImageId = item.Gender == ThemedDataStorage.Gender[0] ? 0 : 1;
             item.Profession = Professions[ShowcaseHelper.Rand.Next(0, Professions.Count - 1)];
             item.Name = Names[ShowcaseHelper.Rand.Next(0, Names.Count - 1)];
+            return item;
         }
     }
 }

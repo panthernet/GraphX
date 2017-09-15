@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 #if METRO
+using GraphX.Measure;
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
+using Size = Windows.Foundation.Size;
 using Windows.ApplicationModel;
-using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 #elif WPF
+using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -16,6 +21,18 @@ namespace GraphX.Controls
 {
     public static class TypeExtensions
     {
+        public static Vector ToVector(this Point v)
+        {
+            return new Vector(v.X, v.Y);
+        }
+
+        public static void SetDesiredFrameRate(this Timeline tl, int fps)
+        {
+#if WPF
+            Timeline.SetDesiredFrameRate(tl, fps);
+#endif
+        }
+
 #if METRO
         public static void SetCurrentValue(this FrameworkElement el, DependencyProperty p, object value)
         {
@@ -51,6 +68,12 @@ namespace GraphX.Controls
         }
 
 #elif WPF
+
+        public static Point ToPoint(this Vector v)
+        {
+            return new Point(v.X, v.Y);
+        }
+
         public static bool IsInDesignMode(this FrameworkElement el)
         {
             return DesignerProperties.GetIsInDesignMode(el);
@@ -110,6 +133,15 @@ namespace GraphX.Controls
             return list;
         }
 
+        public static Measure.Point[] ToGraphX(this Point[] points)
+        {
+            if (points == null) return null;
+            var list = new Measure.Point[points.Length];
+            for (int i = 0; i < points.Length; i++)
+                list[i] = points[i].ToGraphX();
+            return list;
+        }
+
         public static Size Size(this Rect rect)
         {
             return new Size(rect.Width, rect.Height);
@@ -162,12 +194,23 @@ namespace GraphX.Controls
 
         public static Point TopLeft(this Rect rect)
         {
-            return new Point(rect.Top, rect.Left);
+            return new Point(rect.Left, rect.Top);
+        }
+
+        public static Point TopRight(this Rect rect)
+        {
+            return new Point(rect.Right, rect.Top);
         }
 
         public static Point BottomRight(this Rect rect)
         {
-            return new Point(rect.Bottom, rect.Right);
+            return new Point(rect.Right, rect.Bottom);
         }
+
+        public static Point BottomLeft(this Rect rect)
+        {
+            return new Point(rect.Left, rect.Bottom);
+        }
+
     }
 }

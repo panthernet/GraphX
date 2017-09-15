@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using GraphX;
 using GraphX.PCL.Common.Enums;
 using GraphX.Controls;
 using GraphX.Controls.Models;
@@ -17,14 +14,9 @@ namespace ShowcaseApp.WPF.Pages
     /// </summary>
     public partial class EditorGraph: IDisposable
     {
-        /// <summary>
-        /// tmp collection to speedup selected vertices search
-        /// </summary>
-        private readonly List<VertexControl> _selectedVertices = new List<VertexControl>();
-
         private EditorOperationMode _opMode = EditorOperationMode.Select;
         private VertexControl _ecFrom;
-        private EditorObjectManager _editorManager;
+        private readonly EditorObjectManager _editorManager;
 
         public EditorGraph()
         {
@@ -35,74 +27,63 @@ namespace ShowcaseApp.WPF.Pages
             graphArea.VertexSelected += graphArea_VertexSelected;
             graphArea.EdgeSelected += graphArea_EdgeSelected;
             graphArea.SetVerticesMathShape(VertexShape.Circle);
-           // addVertexButton.Click += addVertexButton_Click;
-           // addEdgeButton.Click += addEdgeButton_Click;
+            graphArea.VertexLabelFactory = new DefaultVertexlabelFactory();
 
             dgLogic.DefaultLayoutAlgorithm = LayoutAlgorithmTypeEnum.Custom;
             dgLogic.DefaultOverlapRemovalAlgorithm = OverlapRemovalAlgorithmTypeEnum.None;
             dgLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.None;
             dgLogic.EdgeCurvingEnabled = true;
-            
 
-            //graphArea.MoveAnimation = AnimationFactory.CreateMoveAnimation(MoveAnimation.Move, TimeSpan.FromSeconds(0.5));
-            //graphArea.MoveAnimation.Completed += MoveAnimation_Completed;
-            //graphArea.VertexSelected += dg_Area_VertexSelected;
-            
-            
-
-            zoomCtrl.IsAnimationDisabled = true;
+            zoomCtrl.IsAnimationEnabled = false;
             ZoomControl.SetViewFinderVisibility(zoomCtrl, Visibility.Visible);
             zoomCtrl.Zoom = 2;
             zoomCtrl.MinZoom = .5;
             zoomCtrl.MaxZoom = 50;
             zoomCtrl.ZoomSensitivity = 25;
             zoomCtrl.MouseDown += zoomCtrl_MouseDown;
-            var tb = new TextBlock() {Text = "AAAA"};
-
-
-            //zoomCtrl.ZoomToContent(new System.Windows.Rect(0,0, 500, 500));
 
             butDelete.Checked += ToolbarButton_Checked;
             butSelect.Checked += ToolbarButton_Checked;
             butEdit.Checked += ToolbarButton_Checked;
 
             butSelect.IsChecked = true;
-
         }
 
         void graphArea_EdgeSelected(object sender, EdgeSelectedEventArgs args)
         {
             if (args.MouseArgs.LeftButton == MouseButtonState.Pressed && _opMode == EditorOperationMode.Delete)
-            {
-                graphArea.LogicCore.Graph.RemoveEdge(args.EdgeControl.Edge as DataEdge);
-                graphArea.RemoveEdge(args.EdgeControl.Edge as DataEdge);
-            }
+                graphArea.RemoveEdge(args.EdgeControl.Edge as DataEdge, true);
         }
 
         void graphArea_VertexSelected(object sender, VertexSelectedEventArgs args)
         {
              if(args.MouseArgs.LeftButton == MouseButtonState.Pressed)            
              {
-                 if (_opMode == EditorOperationMode.Edit)
-                    CreateEdgeControl(args.VertexControl);
-                 else if(_opMode == EditorOperationMode.Delete)
-                     SafeRemoveVertex(args.VertexControl);
-                 else if (_opMode == EditorOperationMode.Select && args.Modifiers == ModifierKeys.Control)
-                     SelectVertex(args.VertexControl);
+                 switch (_opMode)
+                 {
+                     case EditorOperationMode.Edit:
+                         CreateEdgeControl(args.VertexControl);
+                         break;
+                     case EditorOperationMode.Delete:
+                         SafeRemoveVertex(args.VertexControl);
+                         break;
+                     default:
+                         if (_opMode == EditorOperationMode.Select && args.Modifiers == ModifierKeys.Control)
+                             SelectVertex(args.VertexControl);
+                         break;
+                 }
              }
         }
 
-        private void SelectVertex(VertexControl vc)
+        private static void SelectVertex(DependencyObject vc)
         {
-            if (_selectedVertices.Contains(vc))
+            if (DragBehaviour.GetIsTagged(vc))
             {
-                _selectedVertices.Remove(vc);
                 HighlightBehaviour.SetHighlighted(vc, false);
                 DragBehaviour.SetIsTagged(vc, false);
             }
             else
             {
-                _selectedVertices.Add(vc);
                 HighlightBehaviour.SetHighlighted(vc, true);
                 DragBehaviour.SetIsTagged(vc, true);
             }
@@ -157,25 +138,24 @@ namespace ShowcaseApp.WPF.Pages
                 _opMode = EditorOperationMode.Select;
                 ClearEditMode();
                 graphArea.SetVerticesDrag(true, true);
+                graphArea.SetEdgesDrag(true);
                 return;
             }
         }
 
         private void ClearSelectMode(bool soft = false)
         {
-            if (_selectedVertices != null && _selectedVertices.Any())
-            {
-                _selectedVertices.ForEach(a =>
+            graphArea.VertexList.Values
+                .Where(DragBehaviour.GetIsTagged)
+                .ToList()
+                .ForEach(a =>
                 {
                     HighlightBehaviour.SetHighlighted(a, false);
                     DragBehaviour.SetIsTagged(a, false);
                 });
-                _selectedVertices.Clear();
-            }
+
             if (!soft)
-            {
                 graphArea.SetVerticesDrag(false);
-            }
         }
 
         private void ClearEditMode()
@@ -188,11 +168,9 @@ namespace ShowcaseApp.WPF.Pages
         private VertexControl CreateVertexControl(Point position)
         {
             var data = new DataVertex("Vertex " + (graphArea.VertexList.Count + 1)) { ImageId = ShowcaseHelper.Rand.Next(0, ThemedDataStorage.EditorImages.Count) };
-            graphArea.LogicCore.Graph.AddVertex(data);
             var vc = new VertexControl(data);
-            graphArea.AddVertex(data, vc);
-            GraphAreaBase.SetX(vc, position.X, true);
-            GraphAreaBase.SetY(vc, position.Y, true);
+            vc.SetPosition(position);
+            graphArea.AddVertexAndData(data, vc, true);
             return vc;
         }
 
@@ -208,27 +186,18 @@ namespace ShowcaseApp.WPF.Pages
             if(_ecFrom == vc) return;
 
             var data = new DataEdge((DataVertex)_ecFrom.Vertex, (DataVertex)vc.Vertex);
-            graphArea.LogicCore.Graph.AddEdge(data);
             var ec = new EdgeControl(_ecFrom, vc, data);
-            graphArea.InsertEdge(data, ec);
+            graphArea.InsertEdgeAndData(data, ec, 0, true);
 
             HighlightBehaviour.SetHighlighted(_ecFrom, false);
             _ecFrom = null;
             _editorManager.DestroyVirtualEdge();
         }
 
-        private void SafeRemoveVertex(VertexControl vc, bool removeFromSelected = false)
+        private void SafeRemoveVertex(VertexControl vc)
         {
-            //remove all adjacent edges
-            foreach (var ec in graphArea.GetRelatedControls(vc, GraphControlType.Edge, EdgesType.All).OfType<EdgeControl>())
-            {
-                graphArea.LogicCore.Graph.RemoveEdge(ec.Edge as DataEdge);
-                graphArea.RemoveEdge(ec.Edge as DataEdge);
-            }
-            graphArea.LogicCore.Graph.RemoveVertex(vc.Vertex as DataVertex);
-            graphArea.RemoveVertex(vc.Vertex as DataVertex);
-            if (removeFromSelected && _selectedVertices.Contains(vc))
-                _selectedVertices.Remove(vc);
+            //remove vertex and all adjacent edges from layout and data graph
+            graphArea.RemoveVertexAndEdges(vc.Vertex as DataVertex);
         }
 
         public void Dispose()

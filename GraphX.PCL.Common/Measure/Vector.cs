@@ -31,11 +31,7 @@ namespace GraphX.Measure
 
         public Vector(double x, double y) { _x = x; _y = y; }
 
-        private static readonly Vector ZeroVector = new Vector();
-        public static Vector Zero
-        {
-            get { return ZeroVector; }
-        }
+        public static Vector Zero { get; } = new Vector();
 
         #region Overloaded operators
 
@@ -134,20 +130,9 @@ namespace GraphX.Measure
             return (X.GetHashCode() ^ Y.GetHashCode());
         }
 
-        public double Length
-        {
-            get
-            {
-                return Math.Sqrt((_x * _x) + (_y * _y));
-            }
-        }
-        public double LengthSquared
-        {
-            get
-            {
-                return ((_x * _x) + (_y * _y));
-            }
-        }
+        public double Length => Math.Sqrt((_x * _x) + (_y * _y));
+        public double LengthSquared => ((_x * _x) + (_y * _y));
+
         public void Normalize()
         {
             var v = this / Math.Max(Math.Abs(_x), Math.Abs(_y));
@@ -176,7 +161,9 @@ namespace GraphX.Measure
 
         public override string ToString()
         {
-            return string.Format("{0}:{1}", _x, _y);
+            return $"{_x}:{_y}";
         }
+
+        public Point ToPoint => new Point(_x, _y);
     }
 }

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GraphX.Controls</RootNamespace>
-    <AssemblyName>GraphX.Controls</AssemblyName>
+    <AssemblyName>GraphX.WPF.Controls</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -34,21 +34,22 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>bin\Release\GraphX.Controls.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;WPF</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;WPF</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -82,9 +83,11 @@
       <HintPath>..\packages\QuickGraphPCL.3.6.61114.2\lib\net40-client\QuickGraph.Serialization.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -107,6 +110,7 @@
     <Compile Include="Behaviours\HighlightBehaviour.cs" />
     <Compile Include="Controls\EdgeControlBase.cs" />
     <Compile Include="Controls\EdgeLabels\AttachableEdgeLabelControl.cs" />
+    <Compile Include="Controls\Misc\IGraphAreaBase.cs" />
     <Compile Include="Controls\Misc\ControlDrawOrder.cs" />
     <Compile Include="Controls\Misc\IPositionChangeNotify.cs" />
     <Compile Include="Controls\Misc\IVertexConnectionPoint.cs" />
@@ -114,6 +118,7 @@
     <Compile Include="Controls\EdgePointers\DefaultEdgePointer.cs" />
     <Compile Include="Controls\VertexControlBase.cs" />
     <Compile Include="Controls\VertexLabels\AttachableVertexLabelControl.cs" />
+    <Compile Include="Models\ContentSizeChangedEventHandler.cs" />
     <Compile Include="Models\Interfaces\IAttachableControl.cs" />
     <Compile Include="Controls\VertexLabels\VertexLabelControl.cs" />
     <Compile Include="ExceptionExtensions.cs" />
@@ -146,7 +151,6 @@
     <Compile Include="GeometryHelper.cs" />
     <Compile Include="MathHelper.cs" />
     <Compile Include="Models\AnimationFactory.cs" />
-    <Compile Include="Models\ContentSizeChangedEventArgs.cs" />
     <Compile Include="Models\ControlEventArgs.cs" />
     <Compile Include="Models\EdgeEventOptions.cs" />
     <Compile Include="Models\EdgeSelectedEventArgs.cs" />
@@ -162,6 +166,7 @@
     <Compile Include="Models\PropertyChangeNotifier.cs" />
     <Compile Include="Models\RemoveControlEventHandler.cs" />
     <Compile Include="Models\StateStorage.cs" />
+    <Compile Include="Models\ControlClickedEventArgs.cs" />
     <Compile Include="Models\VertexEventOptions.cs" />
     <Compile Include="Models\DefaultLabelFactory.cs" />
     <Compile Include="Models\VertexMovedEventArgs.cs" />
@@ -199,12 +204,7 @@
       <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
       <Name>GraphX.PCL.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphX.PCL.Logic\GraphX.PCL.Logic.csproj">
-      <Project>{a30d218b-aaa4-483a-99f7-eaeb1b8b4610}</Project>
-      <Name>GraphX.PCL.Logic</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>

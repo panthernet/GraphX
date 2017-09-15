@@ -43,5 +43,14 @@ namespace ShowcaseApp.WPF.ExampleModels
 
             }
         }
+
+        /// <summary>
+        /// Compute edge routing for single edge
+        /// </summary>
+        /// <param name="edge">Supplied edge data</param>
+        public override Point[] ComputeSingle(TEdge edge)
+        {
+            return null;
+        }
     }
 }

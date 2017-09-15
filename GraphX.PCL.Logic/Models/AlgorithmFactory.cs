@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 using GraphX.PCL.Logic.Algorithms;
@@ -13,7 +14,7 @@ namespace GraphX.PCL.Logic.Models
     public sealed class AlgorithmFactory<TVertex, TEdge, TGraph> : IAlgorithmFactory<TVertex, TEdge, TGraph>
         where TVertex : class, IGraphXVertex
         where TEdge : class, IGraphXEdge<TVertex>
-        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>
+        where TGraph : class, IMutableBidirectionalGraph<TVertex, TEdge>, new()
     {
         #region Layout factory
         /// <summary>
@@ -28,42 +29,38 @@ namespace GraphX.PCL.Logic.Models
         {
             if (iGraph == null) return null;
             if (parameters == null) parameters = CreateLayoutParameters(newAlgorithmType);
-            IMutableBidirectionalGraph<TVertex, TEdge> graph = iGraph.CopyToBidirectionalGraph();
-            /*var dic = new Dictionary<TVertex, Point>();
-            if (Positions != null)
-            {
-                dic = Positions.Where(a => a.Key.SkipProcessing == ProcessingOptionEnum.Freeze).ToDictionary(a=> a.Key, a=> a.Value);
-            }*/
+            var graph = iGraph.CopyToGraph<TGraph, TVertex, TEdge>();
+
             graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
             graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {
                 case LayoutAlgorithmTypeEnum.Tree:
-                    return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as SimpleTreeLayoutParameters);
+                    return new SimpleTreeLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, sizes, parameters as SimpleTreeLayoutParameters);
                 case LayoutAlgorithmTypeEnum.SimpleRandom:
-                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as RandomLayoutAlgorithmParams);
+                    return new RandomLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as RandomLayoutAlgorithmParams);
                 case LayoutAlgorithmTypeEnum.Circular:
-                    return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, sizes, parameters as CircularLayoutParameters);
+                    return new CircularLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, sizes, parameters as CircularLayoutParameters);
                 case LayoutAlgorithmTypeEnum.FR:
-                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as FRLayoutParametersBase);
+                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as FRLayoutParametersBase);
                 case LayoutAlgorithmTypeEnum.BoundedFR:
-                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as BoundedFRLayoutParameters);
+                    return new FRLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as BoundedFRLayoutParameters);
                 case LayoutAlgorithmTypeEnum.KK:
-                    return new KKLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as KKLayoutParameters);
+                    return new KKLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as KKLayoutParameters);
                 case LayoutAlgorithmTypeEnum.ISOM:
-                    return new ISOMLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as ISOMLayoutParameters);
+                    return new ISOMLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as ISOMLayoutParameters);
                 case LayoutAlgorithmTypeEnum.LinLog:
-                    return new LinLogLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, positions, parameters as LinLogLayoutParameters);
+                    return new LinLogLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, positions, parameters as LinLogLayoutParameters);
                 case LayoutAlgorithmTypeEnum.EfficientSugiyama:
-                    return new EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, parameters as EfficientSugiyamaLayoutParameters, positions, sizes);
+                    return new EfficientSugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, parameters as EfficientSugiyamaLayoutParameters, positions, sizes);
                 case LayoutAlgorithmTypeEnum.Sugiyama:
-                    return new SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, sizes, positions, parameters as SugiyamaLayoutParameters,
+                    return new SugiyamaLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, sizes, positions, parameters as SugiyamaLayoutParameters,
                                                                                    e => (e is TypedEdge<TVertex>
                                                                                         ? (e as TypedEdge<TVertex>).Type
                                                                                         : EdgeTypes.Hierarchical));
                 case LayoutAlgorithmTypeEnum.CompoundFDP:
-                    return new CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>((TGraph)graph, sizes, new Dictionary<TVertex, Thickness>(), new Dictionary<TVertex, CompoundVertexInnerLayoutType>(),
+                    return new CompoundFDPLayoutAlgorithm<TVertex, TEdge, TGraph>(graph, sizes, new Dictionary<TVertex, Thickness>(), new Dictionary<TVertex, CompoundVertexInnerLayoutType>(),
                         positions, parameters as CompoundFDPLayoutParameters);
 
                 /*case LayoutAlgorithmTypeEnum.BalloonTree:
@@ -116,9 +113,18 @@ namespace GraphX.PCL.Logic.Models
         /// <param name="algorithmType">Layout algorithm type</param>
         public bool NeedSizes(LayoutAlgorithmTypeEnum algorithmType)
         {
-            return (algorithmType == LayoutAlgorithmTypeEnum.Tree) /*|| (algorithmType == LayoutAlgorithmTypeEnum.BalloonTree)*/ || (algorithmType == LayoutAlgorithmTypeEnum.Circular) ||
-                (algorithmType == LayoutAlgorithmTypeEnum.EfficientSugiyama) || (algorithmType == LayoutAlgorithmTypeEnum.Sugiyama)
-                 || (algorithmType == LayoutAlgorithmTypeEnum.CompoundFDP);
+            switch (algorithmType)
+            {
+                case LayoutAlgorithmTypeEnum.Tree:
+                case LayoutAlgorithmTypeEnum.Circular:
+                case LayoutAlgorithmTypeEnum.EfficientSugiyama:
+                case LayoutAlgorithmTypeEnum.Sugiyama:
+                case LayoutAlgorithmTypeEnum.CompoundFDP:
+                case LayoutAlgorithmTypeEnum.SimpleRandom:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// <summary>
@@ -220,18 +226,18 @@ namespace GraphX.PCL.Logic.Models
         {
             //if (Rectangles == null) return null;
             if (parameters == null) parameters = CreateEdgeRoutingParameters(newAlgorithmType);
-            IMutableBidirectionalGraph<TVertex, TEdge> graph = iGraph.CopyToBidirectionalGraph();
+			var graph = iGraph.CopyToGraph<TGraph, TVertex, TEdge>();
             graph.RemoveEdgeIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
             graph.RemoveVertexIf(a => a.SkipProcessing == ProcessingOptionEnum.Exclude);
 
             switch (newAlgorithmType)
             {
                 case EdgeRoutingAlgorithmTypeEnum.SimpleER:
-                    return new SimpleEdgeRouting<TVertex, TEdge,  TGraph>((TGraph)graph, positions, rectangles, parameters);
+                    return new SimpleEdgeRouting<TVertex, TEdge,  TGraph>(graph, positions, rectangles, parameters);
                 case EdgeRoutingAlgorithmTypeEnum.Bundling:
-                    return new BundleEdgeRouting<TVertex, TEdge, TGraph>(graphArea, (TGraph)graph, positions, rectangles, parameters);
+                    return new BundleEdgeRouting<TVertex, TEdge, TGraph>(graphArea, graph, positions, rectangles, parameters);
                 case EdgeRoutingAlgorithmTypeEnum.PathFinder:
-                    return new PathFinderEdgeRouting<TVertex, TEdge, TGraph>((TGraph)graph, positions, rectangles, parameters);
+                    return new PathFinderEdgeRouting<TVertex, TEdge, TGraph>(graph, positions, rectangles, parameters);
                 default:
                     return null;
             }

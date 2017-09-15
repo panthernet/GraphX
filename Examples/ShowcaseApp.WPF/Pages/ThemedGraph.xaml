@@ -105,8 +105,6 @@
                                 <CheckBox Name="tg_highlightEnabled" Content="Highlight enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
                                 <TextBlock DockPanel.Dock="Top" Text="Affected control type" HorizontalAlignment="Center"/>
                                 <ComboBox x:Name="tg_highlightType"  Margin="3" SelectionChanged="tg_highlightType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                                <TextBlock DockPanel.Dock="Top" Text="Strategy" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_highlightStrategy"  Margin="3" SelectionChanged="tg_highlightStrategy_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
                                 <TextBlock DockPanel.Dock="Top" Text="Edge directions" HorizontalAlignment="Center"/>
                                 <ComboBox x:Name="tg_highlightEdgeType"  Margin="3" SelectionChanged="tg_highlightEdgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
                             </DockPanel>

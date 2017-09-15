@@ -40,6 +40,7 @@ namespace GraphX.Controls.Animations
                     item.Value.X,
                     Duration,
                     FillBehavior.HoldEnd);
+                Timeline.SetDesiredFrameRate(animationX, 30);
                 animationX.Completed += (s, e) =>
                 {
                     control.BeginAnimation(GraphAreaBase.XProperty, null);
@@ -58,6 +59,7 @@ namespace GraphX.Controls.Animations
                     from, item.Value.Y,
                     Duration,
                     FillBehavior.HoldEnd);
+                Timeline.SetDesiredFrameRate(animationY, 30);
                 animationY.Completed += (s, e) =>
                 {
                     control.BeginAnimation(GraphAreaBase.YProperty, null);

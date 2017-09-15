@@ -19,10 +19,7 @@ namespace ShowcaseApp.WPF.Pages
     /// </summary>
     public partial class DynamicGraph
     {
-        /// <summary>
-        /// tmp collection to speedup selected vertices search
-        /// </summary>
-        private readonly List<VertexControl> _dgSelectedVertices = new List<VertexControl>();
+        private int _selIndex;
 
         public DynamicGraph()
         {
@@ -46,7 +43,6 @@ namespace ShowcaseApp.WPF.Pages
             dg_Area.MoveAnimation.Completed += MoveAnimation_Completed;
             dg_Area.VertexSelected += dg_Area_VertexSelected;
             dg_test.Visibility = Visibility.Collapsed;
-            dg_test.Click += dg_test_Click;
             dg_zoomctrl.AreaSelected += dg_zoomctrl_AreaSelected;
 
             dg_dragsource.PreviewMouseLeftButtonDown += dg_dragsource_PreviewMouseLeftButtonDown;
@@ -54,13 +50,39 @@ namespace ShowcaseApp.WPF.Pages
             dg_zoomctrl.PreviewDrop += dg_Area_Drop;
             dg_zoomctrl.DragEnter += dg_Area_DragEnter;
 
-            dg_zoomctrl.IsAnimationDisabled = true;
-            //ZoomControl.SetViewFinderVisibility(dg_zoomctrl, Visibility.Visible);
-
-            dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
+            dg_zoomctrl.IsAnimationEnabled = false;
+           /* dg_Area.VertexSelected += dg_Area_VertexSelectedForED;
             dg_zoomctrl.PreviewMouseMove += dg_Area_MouseMove;
-            dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;
+            dg_zoomctrl.MouseDown += dg_zoomctrl_MouseDown;*/
             dg_Area.SetVerticesDrag(true, true);
+
+            Loaded += DynamicGraph_Loaded;
+            Unloaded += DynamicGraph_Unloaded;
+        }
+
+        private bool loaded = false;
+        private Predicate<DependencyObject> _originalGlobalIsSnapping = null;
+        private Predicate<DependencyObject> _originalGlobalIsSnappingIndividually = null;
+
+        private void DynamicGraph_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (loaded)
+                return;
+            loaded = true;
+
+            _originalGlobalIsSnapping = DragBehaviour.GlobalIsSnappingPredicate;
+            _originalGlobalIsSnappingIndividually = DragBehaviour.GlobalIsIndividualSnappingPredicate;
+
+            DragBehaviour.GlobalIsSnappingPredicate = IsSnapping;
+            DragBehaviour.GlobalIsIndividualSnappingPredicate = IsSnappingIndividually;
+        }
+
+        private void DynamicGraph_Unloaded(object sender, RoutedEventArgs e)
+        {
+            loaded = false;
+
+            DragBehaviour.GlobalIsSnappingPredicate = _originalGlobalIsSnapping;
+            DragBehaviour.GlobalIsIndividualSnappingPredicate = _originalGlobalIsSnappingIndividually;
         }
 
         void MoveAnimation_Completed(object sender, EventArgs e)
@@ -70,7 +92,7 @@ namespace ShowcaseApp.WPF.Pages
 
         #region Manual edge drawing
 
-        private bool _isInEdMode;
+      /*  private bool _isInEdMode;
         private PathGeometry _edGeo;
         private VertexControl _edVertex;
         private EdgeControl _edEdge;
@@ -182,11 +204,9 @@ namespace ShowcaseApp.WPF.Pages
             }
             _isInEdMode = !_isInEdMode;
         }
-
+        */
         #endregion
 
-
-        private int _selIndex;
         private void dg_findrandom_Click(object sender, RoutedEventArgs e)
         {
             if (!dg_Area.VertexList.Any()) return;
@@ -228,45 +248,13 @@ namespace ShowcaseApp.WPF.Pages
             if (!e.Data.GetDataPresent(typeof (object))) return;
             //how to get dragged data by its type
             var pos = dg_zoomctrl.TranslatePoint(e.GetPosition(dg_zoomctrl), dg_Area);
-            var data = new DataVertex();
-            ThemedDataStorage.FillDataVertex(data);
-            dg_Area.LogicCore.Graph.AddVertex(data);
+            var data = ThemedDataStorage.FillDataVertex(new DataVertex());
             var vc = new VertexControl(data);
-            dg_Area.AddVertex(data, vc);
-            GraphAreaBase.SetX(vc, pos.X);
-            GraphAreaBase.SetY(vc, pos.Y, true);
-            /*if (dg_Area.VertexList.Count() == 1)
-            {
-                var of = VisualTreeHelper.GetOffset(vc);
-                const int offset = 400;
-                dg_zoomctrl.ZoomTo(new Rect(of.X - offset, of.Y - offset, vc.ActualWidth + offset * 2, vc.ActualHeight + offset * 2));
-            }
-            else dg_zoomctrl.ZoomToFill();*/
+            vc.SetPosition(pos);
+            dg_Area.AddVertexAndData(data, vc);
         }
 
         #endregion
-
-        static void dg_test_Click(object sender, RoutedEventArgs e)
-        {
-            //dg_zoomctrl.Zoom(50);
-            //dg_zoomctrl.ZoomOn = Xceed.Wpf.Toolkit.Zoombox.ZoomboxZoomOn.View;
-        }
-
-        private void SelectVertex(VertexControl vc)
-        {
-            if (_dgSelectedVertices.Contains(vc))
-            {
-                _dgSelectedVertices.Remove(vc);
-                HighlightBehaviour.SetHighlighted(vc, false);
-                DragBehaviour.SetIsTagged(vc, false);
-            }
-            else
-            {
-                _dgSelectedVertices.Add(vc);
-                HighlightBehaviour.SetHighlighted(vc, true);
-                DragBehaviour.SetIsTagged(vc, true);
-            }
-        }
 
         void dg_Area_VertexSelected(object sender, VertexSelectedEventArgs args)
         {
@@ -277,10 +265,13 @@ namespace ShowcaseApp.WPF.Pages
             }
             else if (args.MouseArgs.RightButton == MouseButtonState.Pressed)
             {
+                var countTagged = dg_Area.VertexList.Values.Count(DragBehaviour.GetIsTagged);
+                var isTagged = DragBehaviour.GetIsTagged(args.VertexControl);
                 args.VertexControl.ContextMenu = new ContextMenu();
-                var mi = new MenuItem { Header = "Delete item", Tag = args.VertexControl };
+                var mi = new MenuItem { Header = "Delete item" + (isTagged && countTagged > 1 ? "s" : ""), Tag = args.VertexControl, Margin = new Thickness(5) };
                 mi.Click += mi_Click;
                 args.VertexControl.ContextMenu.Items.Add(mi);
+                args.VertexControl.ContextMenu.IsOpen = true;
             }
         }
 
@@ -289,69 +280,124 @@ namespace ShowcaseApp.WPF.Pages
             var menuItem = sender as MenuItem;
             if (menuItem == null) return;
             var vc = menuItem.Tag as VertexControl;
-            if (vc != null) SafeRemoveVertex(vc, true);
+            //if clicked vertex is tagged then remove all tagged vertices
+            if (DragBehaviour.GetIsTagged(vc))
+                dg_remvertex_Click(null, null);
+            else //else remove only selected vertex
+                if (vc != null) SafeRemoveVertex(vc);
         }
 
         void dg_remedge_Click(object sender, RoutedEventArgs e)
         {
             if (!dg_Area.EdgesList.Any()) return;
-            dg_Area.LogicCore.Graph.RemoveEdge(dg_Area.EdgesList.Last().Key);
-            dg_Area.RemoveEdge(dg_Area.EdgesList.Last().Key);
+            //remove visual and data edge
+            dg_Area.RemoveEdge(dg_Area.EdgesList.Last().Key, true);
         }
 
         void dg_addedge_Click(object sender, RoutedEventArgs e)
         {
-            if (dg_Area.VertexList.Count() < 2) return;
-            var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
-            var rnd1 = vlist[ShowcaseHelper.Rand.Next(0, vlist.Count -1)];
-            vlist.Remove(rnd1);
-            var rnd2 = vlist[ShowcaseHelper.Rand.Next(0, vlist.Count - 1)];
-            var data = new DataEdge(rnd1, rnd2);
-            dg_Area.LogicCore.Graph.AddEdge(data);
-            var ec = new EdgeControl(dg_Area.VertexList.FirstOrDefault(a => a.Key == rnd1).Value, dg_Area.VertexList.FirstOrDefault(a => a.Key == rnd2).Value, data) { DataContext = data };
-            dg_Area.InsertEdge(data, ec);
-            //dg_Area.RelayoutGraph(true);
+            //add new edge between random vertices
+            var dataEdge = GenerateRandomEdge();
+            if (dataEdge == null) return;
+            var ec = new EdgeControl(dg_Area.VertexList.FirstOrDefault(a => a.Key == dataEdge.Source).Value, dg_Area.VertexList.FirstOrDefault(a => a.Key == dataEdge.Target).Value, dataEdge);
+            dg_Area.InsertEdgeAndData(dataEdge, ec);
         }
 
         void dg_remvertex_Click(object sender, RoutedEventArgs e)
         {
-            if (_dgSelectedVertices.Count <= 0) return;
-            foreach (var vc in _dgSelectedVertices)
-                SafeRemoveVertex(vc);
-            _dgSelectedVertices.Clear();
-        }
-
-        private void SafeRemoveVertex(VertexControl vc, bool removeFromSelected = false)
-        {
-            //remove all adjacent edges
-            foreach (var ec in dg_Area.GetRelatedControls(vc, GraphControlType.Edge, EdgesType.All).OfType<EdgeControl>()) {
-                dg_Area.LogicCore.Graph.RemoveEdge(ec.Edge as DataEdge);
-                dg_Area.RemoveEdge(ec.Edge as DataEdge);
-            }
-            dg_Area.LogicCore.Graph.RemoveVertex(vc.Vertex as DataVertex);
-            dg_Area.RemoveVertex(vc.Vertex as DataVertex);
-            if (removeFromSelected && _dgSelectedVertices.Contains(vc))
-                _dgSelectedVertices.Remove(vc);
-            dg_zoomctrl.ZoomToFill();
-
+            //remove all tagged vertices from the graph entirely
+            dg_Area.VertexList.Values
+                .Where(DragBehaviour.GetIsTagged)
+                .ToList()
+                .ForEach(SafeRemoveVertex);
         }
 
         void dg_addvertex_Click(object sender, RoutedEventArgs e)
         {
-            var data = new DataVertex();
-            ThemedDataStorage.FillDataVertex(data);
-
-            dg_Area.LogicCore.Graph.AddVertex(data);
-            dg_Area.AddVertex(data, new VertexControl(data));
+            var data = ThemedDataStorage.FillDataVertex(new DataVertex());
+            dg_Area.AddVertexAndData(data, new VertexControl(data));
 
             //we have to check if there is only one vertex and set coordinates manulay 
             //because layout algorithms skip all logic if there are less than two vertices
-            if (dg_Area.VertexList.Count() == 1)
+            if (dg_Area.VertexList.Count == 1)
             {
                 dg_Area.VertexList.First().Value.SetPosition(0, 0);
                 dg_Area.UpdateLayout(); //update layout to update vertex size
             } else dg_Area.RelayoutGraph(true);
             dg_zoomctrl.ZoomToFill();
+        }
+
+        /// <summary>
+        /// Remove vertex and do all cleanup necessary for current demo
+        /// </summary>
+        /// <param name="vc">vertexControl object</param>
+        private void SafeRemoveVertex(VertexControl vc)
+        {
+            dg_Area.RemoveVertexAndEdges(vc.Vertex as DataVertex);
+            dg_zoomctrl.ZoomToFill();
+        }
+
+        /// <summary>
+        /// generates random edge based on the current vertices data in the graph
+        /// </summary>
+        private DataEdge GenerateRandomEdge()
+        {
+            if (dg_Area.VertexList.Count < 2) return null;
+            var vlist = dg_Area.LogicCore.Graph.Vertices.ToList();
+            var rnd1 = vlist[ShowcaseHelper.Rand.Next(0, vlist.Count - 1)];
+            vlist.Remove(rnd1);
+            var rnd2 = vlist[ShowcaseHelper.Rand.Next(0, vlist.Count - 1)];
+            return new DataEdge(rnd1, rnd2);
+        }
+
+        /// <summary>
+        /// Select vertex by setting its tag and highlight value
+        /// </summary>
+        /// <param name="vc">VertexControl object</param>
+        private void SelectVertex(DependencyObject vc)
+        {
+            if (DragBehaviour.GetIsTagged(vc))
+            {
+                HighlightBehaviour.SetHighlighted(vc, false);
+                DragBehaviour.SetIsTagged(vc, false);
+                vc.ClearValue(DragBehaviour.XSnapModifierProperty);
+                vc.ClearValue(DragBehaviour.YSnapModifierProperty);
+            }
+            else
+            {
+                HighlightBehaviour.SetHighlighted(vc, true);
+                DragBehaviour.SetIsTagged(vc, true);
+                DragBehaviour.SetXSnapModifier(vc, ExaggeratedSnappingXModifier);
+                DragBehaviour.SetYSnapModifier(vc, ExaggeratedSnappingYModifier);
+            }
+        }
+
+        private bool IsSnapping(DependencyObject obj)
+        {
+            return dg_snap.IsChecked ?? false;
+        }
+
+        private bool IsSnappingIndividually(DependencyObject obj)
+        {
+            return dg_snapIndividually.IsChecked ?? false;
+        }
+
+        private double ExaggeratedSnappingXModifier(GraphAreaBase area, DependencyObject obj, double val)
+        {
+            if (dg_snapExaggerate.IsChecked ?? false)
+            {
+                return System.Math.Round(val * 0.01) * 100.0;
+            }
+            return DragBehaviour.GlobalXSnapModifier(area, obj, val);
+        }
+
+        private double ExaggeratedSnappingYModifier(GraphAreaBase area, DependencyObject obj, double val)
+        {
+            if (dg_snapExaggerate.IsChecked ?? false)
+            {
+                return System.Math.Round(val * 0.01) * 100.0;
+            }
+            return DragBehaviour.GlobalYSnapModifier(area, obj, val);
         }
     }
 }

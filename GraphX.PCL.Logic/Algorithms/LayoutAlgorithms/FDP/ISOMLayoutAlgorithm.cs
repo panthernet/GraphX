@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using GraphX.Measure;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Exceptions;
 using QuickGraph;
 
@@ -16,7 +17,6 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 		#region Private fields
 		private Queue<TVertex> _queue;
 		private Dictionary<TVertex, ISOMData> _isomDataDict;
-		private readonly System.Random _rnd = new System.Random( DateTime.Now.Millisecond );
 		private Point _tempPos;
 		private double _adaptation;
 		private int _radius;
@@ -52,7 +52,8 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 		{
             if (VisitedGraph.VertexCount == 1)
             {
-                VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
+                if(!VertexPositions.ContainsKey(VisitedGraph.Vertices.First()))
+                    VertexPositions.Add(VisitedGraph.Vertices.First(), new Point(0, 0));
                 return;
             }
 
@@ -71,11 +72,12 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 			}
 
 			_radius = Parameters.InitialRadius;
+            var rnd = new Random(Parameters.Seed);
 			for ( var epoch = 0; epoch < Parameters.MaxEpoch; epoch++ )
 			{
                 cancellationToken.ThrowIfCancellationRequested();
 
-				Adjust(cancellationToken);
+				Adjust(cancellationToken,rnd);
 
 				//Update Parameters
 				var factor = Math.Exp( -1 * Parameters.CoolingFactor * ( 1.0 * epoch / Parameters.MaxEpoch ) );
@@ -105,11 +107,11 @@ namespace GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
 	    /// <summary>
 		/// Rántsunk egyet az összes ponton.
 		/// </summary>
-		protected void Adjust(CancellationToken cancellationToken)
+		protected void Adjust(CancellationToken cancellationToken, System.Random rnd)
 		{
 		    _tempPos = new Point {
-                X = 0.1 * Parameters.Width + (_rnd.NextDouble() * 0.8 * Parameters.Width), 
-                Y = 0.1 * Parameters.Height + (_rnd.NextDouble() * 0.8 * Parameters.Height)
+                X = 0.1 * Parameters.Width + (rnd.NextDouble() * 0.8 * Parameters.Width), 
+                Y = 0.1 * Parameters.Height + (rnd.NextDouble() * 0.8 * Parameters.Height)
             };
 
 		    //get a random point in the container

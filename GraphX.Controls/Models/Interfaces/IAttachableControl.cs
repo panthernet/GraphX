@@ -11,5 +11,9 @@ namespace GraphX.Controls.Models
         /// </summary>
         /// <param name="control">Parent entity</param>
         void Attach(T control);
+        /// <summary>
+        /// Detach label from control
+        /// </summary>
+        void Detach();
     }
 }
