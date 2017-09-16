@@ -30,7 +30,7 @@ And library showcase uses:
 We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
 Our library supports following platforms:
 * Windows Desktop (WPF & WinForms on Windows XP SP3 using .NET4.0)
-* Universal Windows Application (UWA) using .NET 4.5
+* Universal Windows Platform (UWP) using .NET 4.5
 * Windows Metro 8.1 using .NET 4.5
 * Microsoft Silverlight 5 (WIP, only logic core is available)
 * Windows Phone 8/10 (WIP, only logic core is available)
