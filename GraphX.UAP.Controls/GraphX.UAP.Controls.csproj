@@ -4,26 +4,26 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66F33708-C1C7-4385-8235-7201784D184C}</ProjectGuid>
+    <ProjectGuid>{4BEBC41E-2710-4613-80B1-198E08D10619}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphX.Controls</RootNamespace>
-    <AssemblyName>GraphX.Controls</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <RootNamespace>GraphX.UAP.Controls</RootNamespace>
+    <AssemblyName>GraphX.UAP.Controls</AssemblyName>
+    <DefaultLanguage>ru-RU</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.14393.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
-   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;METRO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP;METRO</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -106,16 +106,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
-      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
-      <Name>GraphX.PCL.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\Documents\AIV.cs">
-      <Link>Properties\AIV.cs</Link>
-    </Compile>
     <Compile Include="..\GraphX.Controls\Animations\DeleteFadeAnimation.cs">
       <Link>Animations\DeleteFadeAnimation.cs</Link>
     </Compile>
@@ -325,33 +315,36 @@
     <Compile Include="Models\XamlTypes\XamlTypeProvider.cs" />
     <Compile Include="PrintHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Properties\GraphX.UAP.Controls.rd.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>6.0.6</Version>
+    </PackageReference>
+    <PackageReference Include="QuickGraphPCL">
+      <Version>3.6.61114.2</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GraphX.PCL.Common\GraphX.PCL.Common.csproj">
+      <Project>{3644d44b-dec0-4b65-bba0-c68e34821aae}</Project>
+      <Name>GraphX.PCL.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\cross-icon.png" />
+    <Content Include="Images\help_black.png" />
     <Content Include="Images\round1.png" />
     <Content Include="Images\round2.png" />
-    <Content Include="port.txt" />
-    <Content Include="Themes\Generic.xaml">
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Content>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\help_black.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="METRO.SimpleGraph_TemporaryKey.pfx" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="QuickGraph">
-      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="QuickGraph.Graphviz">
-      <HintPath>..\..\GraphX PRO\Sources\packages\QuickGraphPCL.3.6.61114.2\lib\portable-win+net4+sl5+wp8+win8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\QuickGraph.Graphviz.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <None Include="uap_graphx.controls.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
@@ -360,19 +353,12 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>METRO.SimpleGraph_TemporaryKey.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>uap_graphx.controls.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(SolutionDir)bin\$(ConfigurationName)"
-copy  /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)bin\$(ConfigurationName)\GraphX.METRO.Controls.dll"</PostBuildEvent>
+copy  /Y "$(TargetDir)$(TargetName).dll" "$(SolutionDir)bin\$(ConfigurationName)\GraphX.UAP.Controls.dll"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

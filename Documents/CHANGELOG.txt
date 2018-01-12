@@ -1,8 +1,11 @@
-﻿WIP 2.3.7
+﻿RELEASE 2.3.7
 - Added edge drag functionality to be able to reattach edge to another vertex (thanks to LaborJos)
 - Fixed SimpleTreeLayout vertex sizes supplement (thanks to edgardozoppi)
 - Fixed and improved parallel edge handling (thanks to perturbare)
 - Fixed RemoveEdge() method were not removing edges from data graph (thanks to perturbare)
+- Removed METRO support and example
+- Added UAP (UWP) support for Windows 10+ platform (VS2017)
+- Minor bugfixes
 
 RELEASE 2.3.6
 DETAILED CHANGELOG:

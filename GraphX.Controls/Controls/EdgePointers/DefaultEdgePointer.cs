@@ -1,9 +1,11 @@
 ﻿#if WPF
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using DefaultEventArgs = System.EventArgs;
 #elif METRO
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -32,9 +34,13 @@ namespace GraphX.Controls
 		/// </summary>
 		static DefaultEdgePointer()
 		{
+#if WPF
 			var oldPmd = VisibilityProperty.GetMetadata(typeof(DefaultEdgePointer).BaseType);
 			var newPmd = new PropertyMetadata(oldPmd.DefaultValue, oldPmd.PropertyChangedCallback, CoerceVisibility);
 			VisibilityProperty.OverrideMetadata(typeof(DefaultEdgePointer), newPmd);
+#else
+
+#endif
 		}
 
 		#region Common part
@@ -101,10 +107,17 @@ namespace GraphX.Controls
 			IsSuppressed = false;
 		}
 
+#if WPF
 		private static readonly DependencyPropertyKey IsSuppressedPropertyKey =
 			DependencyProperty.RegisterReadOnly("IsSuppressed", typeof(bool), typeof(DefaultEdgePointer), new PropertyMetadata(false, OnSuppressChanged));
-
 		public static readonly DependencyProperty IsSuppressedProperty = IsSuppressedPropertyKey.DependencyProperty;
+#else
+        private static readonly DependencyProperty IsSuppressedPropertyKey =
+            DependencyProperty.Register("IsSuppressed", typeof(bool), typeof(DefaultEdgePointer), new PropertyMetadata(false, OnSuppressChanged));
+
+        public static readonly DependencyProperty IsSuppressedProperty = IsSuppressedPropertyKey;
+#endif
+
 
 		/// <summary>
 		/// Gets a value indicating whether the pointer is suppressed. A suppressed pointer won't be displayed, but
@@ -121,8 +134,10 @@ namespace GraphX.Controls
 		/// </summary>
 		private static void OnSuppressChanged(object source, DependencyPropertyChangedEventArgs args)
 		{
+#if WPF
 			var dep = source as DefaultEdgePointer;
 			dep?.CoerceValue(VisibilityProperty);
+#endif
 		}
 
 		/// <summary>
@@ -177,8 +192,16 @@ namespace GraphX.Controls
                 Arrange(LastKnownRectSize);
             }
 
-            if(NeedRotation)
-                RenderTransform = new RotateTransform { Angle = angle, CenterX = 0, CenterY = 0 };
+            try
+            {
+                if (NeedRotation)
+                    RenderTransform = new RotateTransform {Angle = double.IsNaN(angle) ? 0 : angle, CenterX = 0, CenterY = 0};
+            }
+            catch (Exception ex)
+            {
+                //TODO ex handling and reason
+            }
+
             return new Point(direction.X * ActualWidth, direction.Y * ActualHeight);
         }
 

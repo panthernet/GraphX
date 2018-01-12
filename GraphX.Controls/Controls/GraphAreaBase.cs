@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 #if WPF
 using System.Windows;
 using System.Windows.Controls;
@@ -512,7 +513,12 @@ namespace GraphX
 
         public abstract VertexControl GetVertexControlAt(Point position);
 
+#if WPF
         public abstract void RelayoutGraph(bool generateAllEdges = false);
+#else
+        public abstract Task RelayoutGraphAsync(bool generateAllEdges = false);
+
+#endif
 
         // INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY
         internal abstract bool IsEdgeRoutingEnabled { get; }

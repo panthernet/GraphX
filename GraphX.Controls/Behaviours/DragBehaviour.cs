@@ -390,7 +390,7 @@ namespace GraphX.Controls
         }
 
         #endregion PropertyChanged callbacks
-
+#if WPF
         private static void OnEdgeDrageStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             DependencyObject obj = sender as DependencyObject;
@@ -469,7 +469,7 @@ namespace GraphX.Controls
                 }
             }
         }
-
+#endif
 #if WPF
 
         private static void OnVertexDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)

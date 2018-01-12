@@ -708,15 +708,23 @@ namespace GraphX.Controls
             //get the size of the target
             var targetSize = new Size
             {
+#if WPF
                 Width = SystemParameters.CursorWidth,
                 Height = SystemParameters.CursorHeight
+#else
+#endif
             };
 
             //get the position center of the target
             var targetPos = new Point
             {
+#if WPF
                 X = Mouse.GetPosition(this.RootArea).X,/* + targetSize.Width * 0.5,*/
                 Y = Mouse.GetPosition(this.RootArea).Y/* + targetSize.Height * 0.5*/
+#else
+                X=0,
+                Y=0
+#endif
             };
 
             var routedEdge = this.Edge as IRoutingInfo;
@@ -736,8 +744,11 @@ namespace GraphX.Controls
             // Get the TopLeft position of the Target Vertex.
             var targetPos1 = new Point
             {
+#if WPF
                 X = Mouse.GetPosition(this.RootArea).X,
                 Y = Mouse.GetPosition(this.RootArea).Y
+#else
+#endif
             };
 
             var hasEpSource = EdgePointerForSource != null;
@@ -1009,7 +1020,8 @@ namespace GraphX.Controls
                 // to route information or simply the center of the target vertex.
                 if (needParallelCalc())
                 {
-                    targetCenter = sourceCpCenter + (targetCenter - sourceCenter);
+                    var m = new Point(targetCenter.X - sourceCenter.X, targetCenter.Y - sourceCenter.Y);
+                    targetCenter = new Point(sourceCpCenter.X + m.X, sourceCpCenter.Y + m.Y);
                 }
                 else if (hasRouteInfo)
                 {
@@ -1028,7 +1040,8 @@ namespace GraphX.Controls
                 // to route information or simply the center of the source vertex.
                 if (needParallelCalc())
                 {
-                    sourceCenter = targetCpCenter + (sourceCenter - targetCenter);
+                    var m = new Point(sourceCenter.X - targetCenter.X, sourceCenter.Y - targetCenter.Y);
+                    sourceCenter = new Point(targetCpCenter.X + m.X, targetCpCenter.Y + m.Y);
                 }
                 else if (hasRouteInfo)
                 {

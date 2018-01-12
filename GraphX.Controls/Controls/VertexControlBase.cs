@@ -10,6 +10,7 @@ using Point = System.Windows.Point;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
+using USize = Windows.Foundation.Size;
 #endif
 using GraphX.Controls.Models;
 using GraphX.PCL.Common;

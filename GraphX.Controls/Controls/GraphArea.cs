@@ -1026,7 +1026,7 @@ namespace GraphX.Controls
         }
 
 #elif METRO
-        public Task RelayoutGraphAsync(bool generateAllEdges = false)
+        public override Task RelayoutGraphAsync(bool generateAllEdges = false)
         {
             return RelayoutGraphAsync(CancellationToken.None, generateAllEdges);
         }
