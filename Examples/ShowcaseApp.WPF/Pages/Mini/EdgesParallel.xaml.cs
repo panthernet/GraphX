@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using GraphX.Controls;
+using GraphX.Controls.Models;
 using GraphX.PCL.Common.Enums;
 using ShowcaseApp.WPF.Annotations;
 using ShowcaseApp.WPF.Models;
@@ -35,6 +37,7 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
             cbEnablePE.Checked += CbMathShapeOnChecked;
             cbEnablePE.Unchecked += CbMathShapeOnChecked;
+            graphArea.EdgeLabelFactory = new DefaultEdgelabelFactory();
         }
 
         private void CbMathShapeOnChecked(object sender, RoutedEventArgs routedEventArgs)
@@ -88,12 +91,12 @@ namespace ShowcaseApp.WPF.Pages.Mini
             zoomControl.MaxZoom = 50;
             //manual edge corrections
             var eList = graphArea.EdgesList.Values.ToList();
-            eList[0].LabelVerticalOffset = 12;
-            eList[1].LabelVerticalOffset = 12;
+            eList[0].GetLabelControls().FirstOrDefault().LabelVerticalOffset = 12;
+            eList[1].GetLabelControls().FirstOrDefault().LabelVerticalOffset = 12;
 
-            eList[2].ShowLabel = false;
-            eList[3].LabelVerticalOffset = 12;
-            eList[4].LabelVerticalOffset = 12;
+            eList[2].GetLabelControls().FirstOrDefault().ShowLabel = false;
+           // eList[3].GetLabelControls().FirstOrDefault().LabelVerticalOffset = 12;
+           // eList[4].GetLabelControls().FirstOrDefault().LabelVerticalOffset = -12;
 
             //PS: to see how parallel edges logic works go to GraphArea::UpdateParallelEdgesData() method
 

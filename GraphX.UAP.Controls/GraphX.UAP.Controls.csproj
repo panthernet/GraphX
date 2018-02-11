@@ -106,6 +106,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Documents\AIV.cs">
+      <Link>Properties\AIV.cs</Link>
+    </Compile>
     <Compile Include="..\GraphX.Controls\Animations\DeleteFadeAnimation.cs">
       <Link>Animations\DeleteFadeAnimation.cs</Link>
     </Compile>

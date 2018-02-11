@@ -57,6 +57,7 @@ namespace GraphX.Controls
             AttachNode.IsVisibleChanged += AttachNode_IsVisibleChanged;
 #elif METRO
             AttachNode = node;
+
 #endif
             node.AttachLabel(this);
         }
@@ -76,7 +77,7 @@ namespace GraphX.Controls
 #if WPF
         void AttachNode_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(AttachNode.IsVisible && AttachNode.ShowLabel)
+            if(AttachNode.IsVisible && ShowLabel)
                 base.Show();
             else if (!AttachNode.IsVisible)
             {

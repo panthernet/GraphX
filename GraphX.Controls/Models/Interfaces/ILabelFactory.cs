@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 #if METRO
 using Windows.UI.Xaml;
 #endif
@@ -15,6 +16,6 @@ namespace GraphX.Controls.Models
         /// Returns newly generated label for parent control. Attachable labels will be auto attached if derived from IAttachableControl<T>
         /// </summary>
         /// <param name="control">Parent control</param>
-        TResult CreateLabel<TCtrl>(TCtrl control);
+        IEnumerable<TResult> CreateLabel<TCtrl>(TCtrl control);
     }
 }

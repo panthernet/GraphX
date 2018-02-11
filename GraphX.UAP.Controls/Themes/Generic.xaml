@@ -163,7 +163,6 @@
                         <ctrls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Black" Stretch="Uniform" Width="10" Height="10"/>
                         </ctrls:DefaultEdgePointer>
-                        <ctrls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}}" />
                         <Path x:Name="PART_SelfLoopedEdge"
                               Width="10" 
                               Height="10" 
@@ -175,7 +174,6 @@
             </Setter.Value>
         </Setter>
 
-        <Setter Property="LabelVerticalOffset" Value="0"/>
         <Setter Property="MinWidth"
                 Value="1" />
         <Setter Property="MinHeight"
@@ -189,23 +187,9 @@
     </Style>
     <!-- ENDREGION -->
 
-    <!-- REGION EDGE LABEL CONTROL -->
-    <Style TargetType="ctrls:EdgeLabelControl">
-        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ctrls:EdgeLabelControl">
-                    <Grid>
-                        <Border BorderBrush="Black" BorderThickness="1" Background="LightCoral" CornerRadius="8">
-                            <ContentPresenter Margin="3"/>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <Style TargetType="ctrls:AttachableEdgeLabelControl">
+        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="LabelVerticalOffset" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctrls:AttachableEdgeLabelControl">

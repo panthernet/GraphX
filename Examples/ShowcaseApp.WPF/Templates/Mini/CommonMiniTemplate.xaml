@@ -35,15 +35,6 @@
                         <controls:DefaultEdgePointer NeedRotation="true" x:Name="PART_EdgePointerForTarget" >
                             <Path Data="M0,0.5 L1,1 1,0" Fill="{TemplateBinding Foreground}" Stretch="Uniform" Width="10" Height="10"/>
                         </controls:DefaultEdgePointer>
-                        <Path x:Name="PART_SelfLoopedEdge" 
-                              Width="10" 
-                              Height="10" 
-                              Stretch="Uniform" 
-                              Fill="Black" 
-                              IsHitTestVisible="True"
-                              ToolTip="This vertex has some self looped edges!"
-                              Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>
-                        <controls:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.ToolTipText, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -51,13 +42,21 @@
     </Style>
 
     <!--EDGE LABLE CONTROL -->
-    <Style TargetType="{x:Type controls:EdgeLabelControl}">
+    <Style TargetType="{x:Type controls:AttachableEdgeLabelControl}">
+        <Setter Property="LabelVerticalOffset" Value="0"/>
+        <Setter Property="ShowLabel" Value="true"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:EdgeLabelControl}">
-                    <TextBlock Text="{TemplateBinding Content}" FontSize="8" FontStyle="Italic" Margin="1" VerticalAlignment="Center"/>
+                <ControlTemplate TargetType="{x:Type controls:AttachableEdgeLabelControl}">
+                    <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" FontSize="8" Text="ToolTip: " Foreground="Black" Margin="1"/>
+                            <TextBlock FontSize="8" Text="{Binding AttachNode.Edge.ToolTipText}" Foreground="Black" Margin="1"/>
+                        </StackPanel>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
     </Style>
 </ResourceDictionary>

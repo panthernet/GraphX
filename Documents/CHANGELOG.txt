@@ -1,4 +1,36 @@
-﻿RELEASE 2.3.7
+﻿RELEASE 2.3.8
+- Implemented multiple labels logic for edges. Now you can display multiple labels across the edge
+- Added LabelHorizontalOffset property for labels which offsets labels along the edge given some offset value in total edge length percent
+
+CODE CHANGES:
+- Properties ShowLabel,LabelVerticalOffset,AlignLabelsToEdges moved from EdgeControlBase to EdgeLabelControl class
+	- Property AlignLabelsToEdges renamed to AlignToEdge
+- Property EdgeControlBase.EdgeLabelControl renamed to EdgeLabelControls and now has IList<IEdgeLabelControl> type
+- Added new method IList<SysRect> EdgeControlBase.GetLabelSizes()
+- Added new method IList<IEdgeLabelControl> EdgeControlBase.GetLabelControls()
+- GraphArea.ShowAllEdgesLabels() method now has one-time effect and will not be reapplied after relayout
+- GraphArea.ShowAllEdgesLabels() method now has one-time effect and will not be reapplied after relayout
+- GraphArea.EdgeLabelFactory is now setup up with default factory generating one AttachableEdgeLabelControl
+- Label factory method CreateLabel() now returns IEnumerable<TResult> to accomodate multiple labels generation during single factory pass
+
+OBSOLETE AND REMOVED STUFF:
+General
+- Old style arrows are now not supported
+- Old style edge labels (EdgeLabelControl) are now not supported, make sure to remove it from XAML templates and update your code to use AttachableEdgeLabelControl
+
+EdgeControlBase
+- LabelAngle
+- GetLabelSize()
+- SetCustomLabelSize()
+
+EdgeControl
+- LabelMouseDown event removed
+
+Other:
+- showLabel parameter has been removed from all EdgeControl constructors and factories
+
+
+RELEASE 2.3.7
 - Added edge drag functionality to be able to reattach edge to another vertex (thanks to LaborJos)
 - Fixed SimpleTreeLayout vertex sizes supplement (thanks to edgardozoppi)
 - Fixed and improved parallel edge handling (thanks to perturbare)

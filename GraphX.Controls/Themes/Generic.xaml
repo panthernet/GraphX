@@ -503,7 +503,6 @@
                                   Height="10"/>
                         </graphx:DefaultEdgePointer>
                         
-                        <graphx:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge, RelativeSource={RelativeSource TemplatedParent}}" />
                         <Path x:Name="PART_SelfLoopedEdge" 
                               Width="10" 
                               Height="10" 
@@ -517,9 +516,8 @@
 
         <!-- AVAILABLE CUSTOM PROPERTIES -->
         <!-- 
-        <Setter Property="LabelVerticalOffset" Value="30"/>
         <Setter Property="DashStyle" Value="Solid"/>
-        <Setter Property="ShowLabel" Value="True"/> -->
+        -->
 
         <Setter Property="Foreground"
                 Value="Black" />
@@ -529,23 +527,10 @@
     <!-- ENDREGION -->
     
     <!-- REGION EDGE LABLE CONTROL -->
-    <Style TargetType="{x:Type graphx:EdgeLabelControl}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type graphx:EdgeLabelControl}">
-                    <Grid>
-                        <Border BorderBrush="Black" BorderThickness="1" Background="White" CornerRadius="8">
-                            <ContentPresenter Margin="3"/>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-
-        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
-    </Style>
 
     <Style TargetType="{x:Type graphx:AttachableEdgeLabelControl}">
+        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="LabelVerticalOffset" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type graphx:AttachableEdgeLabelControl}">

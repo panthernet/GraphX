@@ -169,7 +169,8 @@ namespace GraphX.Controls
         /// <param name="control"></param>
         public virtual void AddCustomChildControl(UIElement control)
         {
-            Children.Add(control);
+            if(!Children.Contains(control))
+                Children.Add(control);
             SetX(control, 0);
             SetY(control, 0);
         }
@@ -242,7 +243,7 @@ namespace GraphX.Controls
         {
             EnableVisualPropsRecovery = true;
             EnableVisualPropsApply = true;
-            //EdgeLabelFactory = new DefaultLabelFactory<AttachableEdgeLabelControl, IEdgeLabelControl>();
+            EdgeLabelFactory = new DefaultEdgelabelFactory();
             //VertexLabelFactory = new DefaultLabelFactory<AttachableVertexLabelControl, IVertexLabelControl>();
 
             #region Designer Data
@@ -434,11 +435,8 @@ namespace GraphX.Controls
 
         private void RemoveEdgeInternal(EdgeControlBase ctrl, bool removeEdgeFromDataGraph = false)
         {
-            if (ctrl.EdgeLabelControl != null)
-            {
-                Children.Remove((UIElement)ctrl.EdgeLabelControl);
-                ctrl.DetachLabel();
-            }
+            ctrl.DetachLabels();
+
             Children.Remove(ctrl);
             if (removeEdgeFromDataGraph && LogicCore?.Graph != null && LogicCore.Graph.ContainsEdge(ctrl.Edge as TEdge))
                 LogicCore.Graph.RemoveEdge(ctrl.Edge as TEdge);
@@ -659,14 +657,18 @@ namespace GraphX.Controls
 
         protected virtual void GenerateVertexLabel(VertexControl vertexControl)
         {
-            var label = VertexLabelFactory.CreateLabel(vertexControl);
-            if (!(label is IVertexLabelControl))
+            var labels = VertexLabelFactory.CreateLabel(vertexControl);
+            if (labels == null) return;
+            if (labels.Any(l=> !(l is IVertexLabelControl)))
                 throw new GX_InvalidDataException("Generated vertex label should implement IVertexLabelControl interface");
-            if (_svVertexLabelShow == false || vertexControl.Visibility != Visibility.Visible)
-                label.Visibility = Visibility.Collapsed;
-            AddCustomChildControl(label);
-            label.Measure(new USize(double.MaxValue, double.MaxValue));
-            ((IVertexLabelControl)label).UpdatePosition();
+            labels.ForEach(l =>
+            {
+                if (_svVertexLabelShow == false || vertexControl.Visibility != Visibility.Visible)
+                    l.Visibility = Visibility.Collapsed;
+                AddCustomChildControl(l);
+                l.Measure(new USize(double.MaxValue, double.MaxValue));
+                ((IVertexLabelControl)l).UpdatePosition();
+            });
         }
 
         protected virtual void GenerateEdgeLabels()
@@ -681,14 +683,17 @@ namespace GraphX.Controls
 
         protected virtual void GenerateEdgeLabel(EdgeControl edgeControl)
         {
-            var label = EdgeLabelFactory.CreateLabel(edgeControl);
-            if (!(label is IEdgeLabelControl))
+            var labels = EdgeLabelFactory.CreateLabel(edgeControl);
+            if (labels == null) return;
+            if (labels.Any(a=> !(a is IEdgeLabelControl)))
                 throw new GX_InvalidDataException("Generated edge label should implement IEdgeLabelControl interface");
-            if (_svShowEdgeLabels == false || edgeControl.Visibility != Visibility.Visible)
-                label.Visibility = Visibility.Collapsed;
-            AddCustomChildControl(label);
-            label.Measure(new USize(double.MaxValue, double.MaxValue));
-            ((IEdgeLabelControl)label).UpdatePosition();
+            
+            labels.ForEach(l =>
+            {
+                AddCustomChildControl(l);
+                l.Measure(new USize(double.MaxValue, double.MaxValue));
+                ((IEdgeLabelControl)l).UpdatePosition();
+            });
         }
 
         #endregion
@@ -1330,8 +1335,8 @@ namespace GraphX.Controls
             if (this._edgesDragEnabled != null) DragBehaviour.SetIsDragEnabled(item, this._edgesDragEnabled.Value);
             if (_svEdgeDashStyle != null) item.DashStyle = _svEdgeDashStyle.Value;
             if (_svShowEdgeArrows != null) item.SetCurrentValue(EdgeControlBase.ShowArrowsProperty, _svShowEdgeArrows.Value);
-            if (_svShowEdgeLabels != null) item.ShowLabel = _svShowEdgeLabels.Value;
-            if (_svAlignEdgeLabels != null) item.AlignLabelsToEdges = _svAlignEdgeLabels.Value;
+            //if (_svShowEdgeLabels != null) item.ShowLabel = _svShowEdgeLabels.Value;
+            //if (_svAlignEdgeLabels != null) item.AlignLabelsToEdges = _svAlignEdgeLabels.Value;
             if (_svUpdateLabelPosition != null) item.UpdateLabelPosition = _svUpdateLabelPosition.Value;
             if (_svEdgeHlEnabled != null) HighlightBehaviour.SetIsHighlightEnabled(item, _svEdgeHlEnabled.Value);
             if (_svEdgeHlObjectType != null) HighlightBehaviour.SetHighlightControl(item, _svEdgeHlObjectType.Value);
@@ -1371,16 +1376,16 @@ namespace GraphX.Controls
                 item.SetCurrentValue(EdgeControlBase.ShowArrowsProperty, isEnabled);
         }
 
-        private bool? _svShowEdgeLabels;
+        //private bool? _svShowEdgeLabels;
         /// <summary>
         /// Show or hide all edges labels
         /// </summary>
         /// <param name="isEnabled">Boolean value</param>
         public void ShowAllEdgesLabels(bool isEnabled = true)
         {
-            _svShowEdgeLabels = isEnabled;
+            //_svShowEdgeLabels = isEnabled;
             foreach (var item in _edgeslist.Values)
-                item.SetCurrentValue(EdgeControlBase.ShowLabelProperty, isEnabled);
+                item.EdgeLabelControls.Cast<FrameworkElement>().ForEach(l=> l.SetCurrentValue(EdgeLabelControl.ShowLabelProperty, isEnabled));
 #if WPF
             InvalidateVisual();
 #endif
@@ -1401,18 +1406,16 @@ namespace GraphX.Controls
 #endif
         }
 
-        private bool? _svAlignEdgeLabels;
+        //private bool? _svAlignEdgeLabels;
         /// <summary>
         /// Aligns all labels with edges or displays them horizontaly
         /// </summary>
         /// <param name="isEnabled">Boolean value</param>
         public void AlignAllEdgesLabels(bool isEnabled = true)
         {
-            _svAlignEdgeLabels = isEnabled;
+            //_svAlignEdgeLabels = isEnabled;
             foreach (var item in _edgeslist.Values)
-            {
-                item.AlignLabelsToEdges = isEnabled;
-            }
+                item.EdgeLabelControls.ForEach(l=> l.AlignToEdge = isEnabled);
 #if WPF
             InvalidateVisual();
 #endif
@@ -1541,11 +1544,9 @@ namespace GraphX.Controls
                 if (item.Source == null || item.Target == null) continue;
                 if (!_vertexlist.ContainsKey(item.Source) || !_vertexlist.ContainsKey(item.Target)) continue;
                 var edgectrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], _vertexlist[item.Target],
-                                                                    item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true, defaultVisibility);
+                                                                    item, _svShowEdgeArrows ?? true, defaultVisibility);
                 InternalInsertEdge(item, edgectrl);
                 //setup path
-                if (_svShowEdgeLabels == true)
-                    edgectrl.SetCurrentValue(EdgeControlBase.ShowLabelProperty, true);
             }
 
             if (LogicCore.EnableParallelEdges)
@@ -1659,7 +1660,7 @@ namespace GraphX.Controls
                 foreach (var item in inlist)
                 {
                     if (gotSelfLoop) continue;
-                    var ctrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], vc, item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true,
+                    var ctrl = ControlFactory.CreateEdgeControl(_vertexlist[item.Source], vc, item, _svShowEdgeArrows ?? true,
                                                                      defaultVisibility);
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
@@ -1669,7 +1670,7 @@ namespace GraphX.Controls
                 foreach (var item in outlist)
                 {
                     if (gotSelfLoop) continue;
-                    var ctrl = ControlFactory.CreateEdgeControl(vc, _vertexlist[item.Target], item, _svShowEdgeLabels ?? false, _svShowEdgeArrows ?? true,
+                    var ctrl = ControlFactory.CreateEdgeControl(vc, _vertexlist[item.Target], item, _svShowEdgeArrows ?? true,
                                                  defaultVisibility);
                     InsertEdge(item, ctrl);
                     ctrl.PrepareEdgePath();
@@ -1866,7 +1867,7 @@ namespace GraphX.Controls
             foreach (var item in EdgesList)
             {
                 // item.Key.RoutingPoints = new Point[] { new Point(0, 123), new Point(12, 12), new Point(10, 234.5) };
-                dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key, IsVisible = item.Value.Visibility == Visibility.Visible, HasLabel = item.Value.EdgeLabelControl != null });
+                dlist.Add(new GraphSerializationData { Position = new Measure.Point(), Data = item.Key, IsVisible = item.Value.Visibility == Visibility.Visible, HasLabel = item.Value.EdgeLabelControls.Count > 0 });
                 if (item.Key.ID == -1) throw new GX_InvalidDataException("ExtractSerializationData() -> All edge datas must have positive unique ID!");
             }
             return dlist;
@@ -1916,7 +1917,7 @@ namespace GraphX.Controls
 
                 if (datasource == null || datatarget == null)
                     throw new GX_SerializationException("DeserializeFromFile() -> Serialization logic is broken! Vertex not found. All vertices must be processed before edges!");
-                var ecc = ControlFactory.CreateEdgeControl(_vertexlist[datasource], _vertexlist[datatarget], edgedata, false, true, item.IsVisible ? Visibility.Visible : Visibility.Collapsed);
+                var ecc = ControlFactory.CreateEdgeControl(_vertexlist[datasource], _vertexlist[datatarget], edgedata, true, item.IsVisible ? Visibility.Visible : Visibility.Collapsed);
                 InsertEdge(edgedata, ecc);
                 LogicCore.Graph.AddEdge(edgedata);
                 if (item.HasLabel)
@@ -2214,9 +2215,19 @@ namespace GraphX.Controls
                 UIElement element = null;
                 if (vResult?.VertexLabelControl != null)
                     element = (UIElement)vResult.VertexLabelControl;
-                if (eResult?.EdgeLabelControl != null)
-                    element = (UIElement)eResult.EdgeLabelControl;
-                if (element != null && Children.Contains(element))
+                if (eResult?.EdgeLabelControls.Count > 0)
+                {
+                    eResult.EdgeLabelControls.ForEach(l =>
+                    {
+                        if (Children.Contains((UIElement)l))
+                        {
+                            Children.Remove((UIElement)l);
+                            if (toFront) Children.Add((UIElement)l);
+                            else Children.Insert(0, (UIElement)l);
+                        }
+                    });
+                }
+                else if (element != null && Children.Contains(element))
                 {
                     Children.Remove(element);
                     if (toFront) Children.Add(element);

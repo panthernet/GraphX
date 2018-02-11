@@ -13,6 +13,8 @@ GraphX for .NET is an advanced open-source graph layout and visualization librar
 **Any Requirements?**
 
 Due to C#6.0 compliance GraphX requires **Visual Studio 2015 Comunity Edition** or above.
+For UAP development Visual Studio 2017 Community Edition is required.
+
 **QuickGraphPCL** nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from:
 * Graph#
 * WPFExtensions
@@ -29,9 +31,8 @@ And library showcase uses:
 
 We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
 Our library supports following platforms:
-* Windows Desktop (WPF & WinForms on Windows XP SP3 using .NET4.0)
-* Universal Windows Platform (UWP) using .NET 4.5
-* Windows Metro 8.1 using .NET 4.5
+* Windows Desktop (WPF & WinForms on Windows XP SP3 using .NET4.0+)
+* Universal Windows Platform (UWP or UAP) using .NET 4.5
 * Microsoft Silverlight 5 (WIP, only logic core is available)
 * Windows Phone 8/10 (WIP, only logic core is available)
 * Xamarin (WIP, only logic core is available)

@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 #endif
 using GraphX.Controls.Models;
+using GraphX.PCL.Common;
 using GraphX.PCL.Common.Enums;
 using GraphX.PCL.Common.Interfaces;
 
@@ -57,26 +58,6 @@ namespace GraphX.Controls
 
         #endregion
 
-        public event EdgeLabelEventHandler LabelMouseDown;
-        protected void OnLabelMouseDown(MouseButtonEventArgs mArgs, ModifierKeys keys)
-        {
-            LabelMouseDown?.Invoke(this, new EdgeLabelSelectedEventArgs(EdgeLabelControl, this, mArgs, keys));
-        }
-
-        protected override void OnEdgeLabelUpdated()
-        {
-            var ctrl = EdgeLabelControl as Control;
-            if (ctrl == null) return;
-#if WPF
-            MouseButtonEventHandler func = (sender, args) => OnLabelMouseDown(args, Keyboard.Modifiers);
-            ctrl.MouseDown -= func;
-            ctrl.MouseDown += func;
-#elif METRO
-            PointerEventHandler func = (sender, args) => OnLabelMouseDown(args, null);
-            ctrl.PointerPressed -= func;
-            ctrl.PointerPressed += func;
-#endif
-        }
 
         #region public Clean()
         public override void Clean()
@@ -97,11 +78,8 @@ namespace GraphX.Controls
             Linegeometry = null;
             LinePathObject = null;
             SelfLoopIndicator = null;
-            if (EdgeLabelControl != null)
-            {
-                EdgeLabelControl.Dispose();
-                EdgeLabelControl = null;
-            }
+            EdgeLabelControls.ForEach(l=> l.Dispose());
+            EdgeLabelControls.Clear();
 
             if (EdgePointerForSource != null)
             {
@@ -338,13 +316,12 @@ namespace GraphX.Controls
         {
         }
 
-        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showLabels = false, bool showArrows = true)
+        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showArrows = true)
         {
             DataContext = edge;
             Source = source; Target = target;
             Edge = edge; DataContext = edge;
             this.SetCurrentValue(ShowArrowsProperty, showArrows);
-            this.SetCurrentValue(ShowLabelProperty, showLabels);
             IsHiddenEdgesUpdated = true;
 
 #if METRO

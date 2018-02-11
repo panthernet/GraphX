@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D9664367-2C2C-46B2-81A6-26CDCD087B29}"
 EndProject
@@ -156,6 +156,7 @@ Global
 		{4BEBC41E-2710-4613-80B1-198E08D10619}.Release|x86.ActiveCfg = Release|x86
 		{4BEBC41E-2710-4613-80B1-198E08D10619}.Release|x86.Build.0 = Release|x86
 		{51C7122B-AAD1-4C49-B2E9-1B09B367952F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{51C7122B-AAD1-4C49-B2E9-1B09B367952F}.Debug|Any CPU.Build.0 = Debug|x86
 		{51C7122B-AAD1-4C49-B2E9-1B09B367952F}.Debug|ARM.ActiveCfg = Debug|ARM
 		{51C7122B-AAD1-4C49-B2E9-1B09B367952F}.Debug|ARM.Build.0 = Debug|ARM
 		{51C7122B-AAD1-4C49-B2E9-1B09B367952F}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -188,7 +189,7 @@ Global
 		{51C7122B-AAD1-4C49-B2E9-1B09B367952F} = {D9664367-2C2C-46B2-81A6-26CDCD087B29}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9548CBF3-9C1D-4132-B928-475E2AA6A99B}
 		VisualSVNWorkingCopyRoot = .
+		SolutionGuid = {9548CBF3-9C1D-4132-B928-475E2AA6A99B}
 	EndGlobalSection
 EndGlobal

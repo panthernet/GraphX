@@ -163,14 +163,11 @@
                         <controls1:DefaultEdgePointer x:Name="PART_EdgePointerForTarget" Opacity="239">
                             <Path Data="M0,0.5 L1,1 1,0" Fill="Yellow" Stretch="Uniform" Width="15" Height="15"/>
                         </controls1:DefaultEdgePointer>
-                        
-                        <controls1:EdgeLabelControl x:Name="PART_edgeLabel" Content="{Binding Edge.Text, RelativeSource={RelativeSource TemplatedParent}}" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 
-        <Setter Property="LabelVerticalOffset" Value="0"/>
         <Setter Property="MinWidth"
                 Value="1" />
         <Setter Property="MinHeight"
@@ -185,19 +182,23 @@
     <!-- ENDREGION -->
 
     <!-- REGION LABLE CONTROLS -->
-    <Style TargetType="controls1:EdgeLabelControl">
-        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
+
+    <Style TargetType="controls1:AttachableEdgeLabelControl">
+        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="LabelVerticalOffset" Value="10"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Opacity" Value="{Binding AttachNode.Edge.VisualEdgeTransparency}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls1:EdgeLabelControl">
-                    <Grid>
+                <ControlTemplate TargetType="controls1:AttachableEdgeLabelControl">
                         <Border BorderBrush="Black" BorderThickness="1" Background="LightCoral" CornerRadius="8">
-                            <ContentPresenter Margin="3"/>
+                            <ContentPresenter Margin="3" Content="{Binding AttachNode.Edge.Text}"/>
                         </Border>
-                    </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
     </Style>
 
     <!--VERTEX LABEL CONTROL -->

@@ -12,70 +12,6 @@
                     <Grid>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="PointerOver">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1.5" Duration="00:00:1" 
-                                             Storyboard.TargetName="bigEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="2" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1.5" Duration="00:00:1" 
-                                             Storyboard.TargetName="bigEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="2" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1.5" Duration="00:00:1" 
-                                             Storyboard.TargetName="smallEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="4" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1.5" Duration="00:00:1" 
-                                             Storyboard.TargetName="smallEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="4" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="PointerLeave">
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="00:00:1" 
-                                             Storyboard.TargetName="bigEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="2" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1" Duration="00:00:1" 
-                                             Storyboard.TargetName="bigEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="2" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1" Duration="00:00:1" 
-                                             Storyboard.TargetName="smallEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleX)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="4" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                        <DoubleAnimation To="1" Duration="00:00:1" 
-                                             Storyboard.TargetName="smallEllipse" 
-                                             Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.ScaleY)">
-                                            <DoubleAnimation.EasingFunction>
-                                                <BounceEase Bounces="4" EasingMode="EaseOut"  Bounciness="2" />
-                                            </DoubleAnimation.EasingFunction>
-                                        </DoubleAnimation>
-                                    </Storyboard>
-                                </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Ellipse Name="bigEllipse" Width="{Binding VisualDiameter}" Height="{Binding VisualDiameter}" 
@@ -98,7 +34,6 @@
     </Style>
 
     <Style TargetType="controls1:EdgeControl">
-        <Setter Property="LabelVerticalOffset" Value="10" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="controls1:EdgeControl">
@@ -122,11 +57,6 @@
                               Stretch="Uniform" 
                               Fill="{TemplateBinding Foreground}" 
                               Data="F1 M 17.4167,32.25L 32.9107,32.25L 38,18L 43.0893,32.25L 58.5833,32.25L 45.6798,41.4944L 51.4583,56L 38,48.0833L 26.125,56L 30.5979,41.7104L 17.4167,32.25 Z "/>
-
-                        <controls1:EdgeLabelControl x:Name="PART_edgeLabel" 
-                          Content="{Binding Text}"
-                          Opacity="{Binding VisualEdgeTransparency}"
-                        />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -135,19 +65,23 @@
     </Style>
 
     <!--EDGE LABLE CONTROL -->
-    <Style TargetType="controls1:EdgeLabelControl">
+    <Style TargetType="controls1:AttachableEdgeLabelControl">
+        <Setter Property="ShowLabel" Value="True"/>
+        <Setter Property="AlignToEdge" Value="True"/>
+        <Setter Property="LabelVerticalOffset" Value="10"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
-
+        <Setter Property="Opacity" Value="{Binding AttachNode.Edge.VisualEdgeTransparency}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="controls1:EdgeLabelControl">
+                <ControlTemplate TargetType="controls1:AttachableEdgeLabelControl">
                     <Grid>
-                        <ContentPresenter Margin="3" />
+                        <ContentPresenter Margin="3" Content="{Binding AttachNode.Edge.Text}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="DisplayForSelfLoopedEdges" Value="False"/>
     </Style>
 
 
