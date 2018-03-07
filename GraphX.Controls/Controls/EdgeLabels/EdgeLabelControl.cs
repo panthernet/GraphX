@@ -77,7 +77,7 @@ namespace GraphX.Controls
 
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as EdgeControlBase)?.UpdateEdge();
+            (d as EdgeLabelControl)?.EdgeControl.UpdateEdge();
         }
 
         /// <summary>

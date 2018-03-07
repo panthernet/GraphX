@@ -11,7 +11,12 @@ using Windows.UI.Xaml;
 namespace GraphX.Controls
 {  
     public interface IEdgePointer: IDisposable
-    {                                                                                             
+    {   
+        /// <summary>
+        /// Returns edge pointer center position coordinates
+        /// </summary>
+        Point GetPosition();
+
         /// <summary>
         /// Gets or sets if image has to be rotated according to edge directions
         /// </summary>

@@ -64,13 +64,17 @@ namespace GraphX.Controls
                                                                                        typeof(bool),
                                                                                        typeof(EdgeControl),
                                                                                        new PropertyMetadata(true));
-        /// <summary>
-        /// Gets or sets if image has to be rotated according to edge directions
-        /// </summary>
+        /// <inheritdoc />
         public bool NeedRotation
         {
             get { return (bool)GetValue(NeedRotationProperty); }
             set { SetValue(NeedRotationProperty, value); }
+        }
+
+        /// <inheritdoc />
+        public Point GetPosition()
+        {
+            return LastKnownRectSize.IsEmpty ? new Point() : LastKnownRectSize.Center();
         }
 
         public void Show()
