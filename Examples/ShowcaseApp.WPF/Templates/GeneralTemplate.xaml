@@ -53,13 +53,13 @@
                                   Fill="Black"
                                   Stretch="Uniform" />
                         </controls:DefaultEdgePointer>
-                        <controls:DefaultEdgePointer x:Name="PART_EdgePointerForSource" NeedRotation="true">
+                        <!--<controls:DefaultEdgePointer x:Name="PART_EdgePointerForSource" NeedRotation="true">
                             <Path Width="15"
                                   Height="15"
                                   Data="M2,0.5 L1,1 1,0"
                                   Fill="Red"
                                   Stretch="Uniform" />
-                        </controls:DefaultEdgePointer>
+                        </controls:DefaultEdgePointer>-->
                         <Path x:Name="PART_SelfLoopedEdge"
                               Width="10"
                               Height="10"

@@ -277,10 +277,11 @@ namespace GraphX.Controls
             if (ctrl == null)
                 return;
 
-            if (ctrl.EdgePointerForSource != null && !ctrl.IsSelfLooped)
+            /*if (ctrl.EdgePointerForSource != null && !ctrl.IsSelfLooped)
                 if (ctrl.ShowArrows) ctrl.EdgePointerForSource.Show(); else ctrl.EdgePointerForSource.Hide();
             if (ctrl.EdgePointerForTarget != null && !ctrl.IsSelfLooped)
-                if (ctrl.ShowArrows) ctrl.EdgePointerForTarget.Show(); else ctrl.EdgePointerForTarget.Hide();
+                if (ctrl.ShowArrows) ctrl.EdgePointerForTarget.Show(); else ctrl.EdgePointerForTarget.Hide();*/
+            //calcs will be later
             ctrl.UpdateEdge(false);
         }
 
@@ -563,6 +564,16 @@ namespace GraphX.Controls
         {
             if (!IsTemplateLoaded)
                 ApplyTemplate();
+            if (ShowArrows)
+            {
+                EdgePointerForSource?.Show();
+                EdgePointerForTarget?.Show();
+            }
+            else
+            {
+                EdgePointerForSource?.Hide();
+                EdgePointerForTarget?.Hide();
+            }
             PrepareEdgePath(true, null, updateLabel);
             if (LinePathObject == null) return;
             LinePathObject.Data = Linegeometry;
@@ -865,6 +876,17 @@ namespace GraphX.Controls
 #endif
             if (_updateLabelPosition)
                 EdgeLabelControls.Where(l => l.ShowLabel).ForEach(l => l.UpdatePosition());
+
+            if (ShowArrows)
+            {
+                EdgePointerForSource?.Show();
+                EdgePointerForTarget?.Show();
+            }
+            else
+            {
+                EdgePointerForSource?.Hide();
+                EdgePointerForTarget?.Hide();
+            }
 
             if (LinePathObject == null) return;
             LinePathObject.Data = Linegeometry;

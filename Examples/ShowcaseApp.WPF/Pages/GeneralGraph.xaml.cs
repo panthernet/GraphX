@@ -53,7 +53,7 @@ namespace ShowcaseApp.WPF.Pages
 
             ggLogic.DefaultEdgeRoutingAlgorithm = EdgeRoutingAlgorithmTypeEnum.SimpleER;
             ggLogic.EdgeCurvingEnabled = true;                  
-            gg_Area.ShowAllEdgesArrows(true);
+            gg_Area.ShowAllEdgesArrows();
 
             ZoomControl.SetViewFinderVisibility(gg_zoomctrl, Visibility.Visible);
 
