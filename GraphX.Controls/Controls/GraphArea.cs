@@ -1740,11 +1740,11 @@ namespace GraphX.Controls
             if (ec == null) return list;
             
             var edge = (TEdge)ec.Edge;
-            if (_vertexlist.ContainsKey(edge.Target) && edge.Target != null)
+            if (edge.Target != null && _vertexlist.ContainsKey(edge.Target))
             {
                 list.Add(_vertexlist[edge.Target]);
             }
-            if (_vertexlist.ContainsKey(edge.Source) && edge.Source != null)
+            if (edge.Source != null && _vertexlist.ContainsKey(edge.Source))
             {
                 list.Add(_vertexlist[edge.Source]);
             }
