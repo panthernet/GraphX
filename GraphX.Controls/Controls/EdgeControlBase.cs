@@ -566,9 +566,13 @@ namespace GraphX.Controls
                 ApplyTemplate();
             if (ShowArrows)
             {
-                EdgePointerForSource?.Show();
-                EdgePointerForTarget?.Show();
-            }
+                // Note: Do not override a possible WPF Binding or Converter for the Visibility property.
+                if (EdgePointerForSource?.Visibility == Visibility.Visible)
+                    EdgePointerForSource?.Show();
+
+                // Note: Do not override a possible WPF Binding or Converter for the Visibility property.
+                if (EdgePointerForTarget?.Visibility == Visibility.Visible)
+                    EdgePointerForTarget?.Show();            }
             else
             {
                 EdgePointerForSource?.Hide();
