@@ -31,7 +31,7 @@ namespace GraphX.Controls
         /// <param name="imgdpi">Desired DPI</param>
         /// <param name="dpiStep">DPI decrease step while estimating</param>
         /// <param name="estPixelCount">Pixel quantity threshold</param>
-        public static double CalculateEstimatedDPI(IGraphAreaBase vis, double imgdpi, double dpiStep, int estPixelCount)
+        public static double CalculateEstimatedDPI(IGraphAreaBase vis, double imgdpi, double dpiStep, ulong estPixelCount)
         {
             bool result = false;
             double currentDPI = imgdpi;
@@ -46,10 +46,10 @@ namespace GraphX.Controls
         }
 
 
-        private static int CalulateSize(Size desiredSize, double dpi)
+        private static ulong CalulateSize(Size desiredSize, double dpi)
         {
-            return (int) (desiredSize.Width*(dpi/DEFAULT_DPI) + 100) *
-                   (int) (desiredSize.Height*(dpi/DEFAULT_DPI) + 100);
+            return (ulong) (desiredSize.Width*(dpi/DEFAULT_DPI) + 100) *
+                   (ulong) (desiredSize.Height*(dpi/DEFAULT_DPI) + 100);
         }
 
         /// <summary>

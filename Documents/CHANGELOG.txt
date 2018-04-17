@@ -1,6 +1,7 @@
 ﻿RELEASE 2.3.8
 - Implemented multiple labels logic for edges. Now you can display multiple labels across the edge
 - Added LabelHorizontalOffset property for labels which offsets labels along the edge given some offset value in total edge length percent
+- Improved graph print logic to work with ulong dimensions instead of int
 
 CODE CHANGES:
 - Properties ShowLabel,LabelVerticalOffset,AlignLabelsToEdges moved from EdgeControlBase to EdgeLabelControl class
