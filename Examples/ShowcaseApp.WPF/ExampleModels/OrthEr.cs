@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Logic.Algorithms.EdgeRouting;
+using GraphX.Common.Interfaces;
+using GraphX.Logic.Algorithms.EdgeRouting;
 using QuickGraph;
 
 namespace ShowcaseApp.WPF.ExampleModels

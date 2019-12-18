@@ -1,5 +1,5 @@
 ﻿using GraphX;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Models;
 
 namespace WindowsFormsProject
 {

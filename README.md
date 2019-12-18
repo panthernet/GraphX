@@ -1,3 +1,12 @@
+
+### Panthernet **GraphX** with libraries migrated from PCL to **netstandard2.0**
+
+* This is a fork from panthernet/GraphX
+* The migration is done in branch NetStandard
+* It is using QuickGraphCore (https://www.nuget.org/packages/QuickGraphCore/) instead of QuickGraphPCL
+
+---
+
 **GraphX for .NET (Core Branch)**
 http://panthernet.org 
 

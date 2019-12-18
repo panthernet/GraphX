@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using GraphX;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 using GraphX.Controls;
 using GraphX.Controls.Models;
 using ShowcaseApp.WPF.Models;

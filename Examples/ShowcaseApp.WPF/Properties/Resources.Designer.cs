@@ -19,7 +19,7 @@ namespace ShowcaseApp.WPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -129,11 +129,11 @@ namespace ShowcaseApp.WPF.Properties {
         ///   Looks up a localized string similar to &lt;UserControl x:Class=&quot;ShowcaseApp.WPF.Pages.Mini.LayoutVCP&quot;
         ///             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-        ///             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot; 
-        ///             xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
-        ///             xmlns:wpf=&quot;clr-namespace:ShowcaseApp.WPF&quot;
         ///             xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
-        ///             xmln [rest of string was truncated]&quot;;.
+        ///             xmlns:d=&quot;http://schemas.microsoft.com/expression/blend/2008&quot;
+        ///             xmlns:mc=&quot;http://schemas.openxmlformats.org/markup-compatibility/2006&quot;
+        ///             xmlns:models=&quot;clr-namespace:ShowcaseApp.WPF.Models&quot;
+        ///         [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LayoutVCP {
             get {
@@ -144,15 +144,16 @@ namespace ShowcaseApp.WPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to &lt;ResourceDictionary xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///                    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-        ///                    xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;
-        ///                    &gt;
+        ///                    xmlns:controls=&quot;http://schemas.panthernet.ru/graphx/&quot;&gt;
         ///
-        ///    &lt;Style TargetType=&quot;controls:StaticVertexConnectionPoint&quot; x:Shared=&quot;False&quot;&gt;
-        ///        &lt;Setter Property=&quot;Shape&quot; Value=&quot;Circle&quot;/&gt;
+        ///    &lt;Style x:Shared=&quot;False&quot; TargetType=&quot;controls:StaticVertexConnectionPoint&quot;&gt;
+        ///        &lt;Setter Property=&quot;Shape&quot; Value=&quot;Circle&quot; /&gt;
         ///
         ///        &lt;Setter Property=&quot;Content&quot;&gt;
         ///            &lt;Setter.Value&gt;
-        ///                &lt;Path Stroke=&quot;{DynamicResource Butt [rest of string was truncated]&quot;;.
+        ///                &lt;Path Width=&quot;10&quot;
+        ///                      Height=&quot;10&quot;
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string LayoutVCPTemplate {
             get {

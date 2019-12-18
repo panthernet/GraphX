@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Media;
 
 namespace GraphX.Controls
 {
-    [Bindable]
+    [Windows.UI.Xaml.Data.Bindable]
     public sealed class ZCP : ContentPresenter, INotifyPropertyChanged
     {
         public event ContentSizeChangedHandler ContentSizeChanged;

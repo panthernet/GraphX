@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Interfaces;
+using GraphX.Common.Models;
 
 namespace GraphX.Controls.Models
 {

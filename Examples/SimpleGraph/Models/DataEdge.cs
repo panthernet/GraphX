@@ -1,4 +1,4 @@
-﻿using GraphX.PCL.Common.Models;
+﻿using GraphX.Common.Models;
 
 namespace SimpleGraph.Models
 {

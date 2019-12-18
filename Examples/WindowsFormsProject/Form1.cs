@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
-using GraphX.PCL.Logic.Models;
+using GraphX.Common.Enums;
+using GraphX.Logic.Algorithms.OverlapRemoval;
+using GraphX.Logic.Models;
 using GraphX.Controls;
 using GraphX.Controls.Models;
 using QuickGraph;

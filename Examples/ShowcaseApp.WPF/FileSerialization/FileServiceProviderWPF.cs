@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Models;
 using YAXLib;
 
 namespace ShowcaseApp.WPF.FileSerialization

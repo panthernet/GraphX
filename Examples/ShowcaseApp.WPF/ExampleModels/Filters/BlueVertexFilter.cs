@@ -1,4 +1,4 @@
-﻿using GraphX.PCL.Common.Interfaces;
+﻿using GraphX.Common.Interfaces;
 using QuickGraph;
 
 namespace ShowcaseApp.WPF.Filters

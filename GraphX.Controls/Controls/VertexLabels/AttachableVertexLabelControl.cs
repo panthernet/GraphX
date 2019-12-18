@@ -12,12 +12,12 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using DefaultEventArgs = System.Object;
 #endif
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Exceptions;
 
 namespace GraphX.Controls
 {
 #if METRO
-    [Bindable]
+    [Windows.UI.Xaml.Data.Bindable]
 #endif
     public class AttachableVertexLabelControl : VertexLabelControl, IAttachableControl<VertexControl>, INotifyPropertyChanged
     {

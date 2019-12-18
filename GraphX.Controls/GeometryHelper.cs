@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 #if WPF
 using System.Windows.Data;
 using System.Windows;

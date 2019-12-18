@@ -1,9 +1,9 @@
 ﻿Imports System.Windows
 Imports WindowsDesktop_VB.NET_WinForms_Example.Models
-Imports GraphX.PCL.Common.Enums
-Imports GraphX.PCL.Logic.Algorithms.LayoutAlgorithms
-Imports GraphX.PCL.Logic.Algorithms.OverlapRemoval
-Imports GraphX.PCL.Logic.Models
+Imports GraphX.Common.Enums
+Imports GraphX.Logic.Algorithms.LayoutAlgorithms
+Imports GraphX.Logic.Algorithms.OverlapRemoval
+Imports GraphX.Logic.Models
 Imports GraphX.Controls
 Imports QuickGraph
 

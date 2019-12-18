@@ -15,8 +15,8 @@ using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
 using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
 using Windows.ApplicationModel;
 #endif
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common.Enums;
+using GraphX.Common.Interfaces;
 using GraphX.Controls;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;

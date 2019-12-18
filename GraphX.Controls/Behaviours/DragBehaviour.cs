@@ -12,9 +12,9 @@ using Windows.Foundation;
 using System.Linq;
 #endif
 
-using GraphX.PCL.Common.Exceptions;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Exceptions;
+using GraphX.Common.Interfaces;
+using GraphX.Common.Models;
 
 namespace GraphX.Controls
 {

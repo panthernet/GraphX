@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.Common.Enums;
+using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.Controls;
 using SimpleGraph.Models;
 

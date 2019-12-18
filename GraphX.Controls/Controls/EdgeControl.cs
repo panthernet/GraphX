@@ -12,9 +12,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 #endif
 using GraphX.Controls.Models;
-using GraphX.PCL.Common;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common;
+using GraphX.Common.Enums;
+using GraphX.Common.Interfaces;
 
 namespace GraphX.Controls
 {

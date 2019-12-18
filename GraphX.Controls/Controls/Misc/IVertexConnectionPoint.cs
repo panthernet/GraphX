@@ -5,7 +5,7 @@ using System.Windows;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 #endif
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 
 namespace GraphX.Controls
 {

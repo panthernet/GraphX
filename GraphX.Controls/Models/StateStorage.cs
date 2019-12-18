@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using GraphX.PCL.Common;
-using GraphX.PCL.Common.Exceptions;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Common.Models;
+using GraphX.Common;
+using GraphX.Common.Exceptions;
+using GraphX.Common.Interfaces;
+using GraphX.Common.Models;
 using QuickGraph;
 #if WPF
 using System.Windows;

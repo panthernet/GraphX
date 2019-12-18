@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphX.Controls.Models;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Exceptions;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common.Enums;
+using GraphX.Common.Exceptions;
+using GraphX.Common.Interfaces;
 using System.Windows.Input;
-using GraphX.PCL.Common;
+using GraphX.Common;
 #if WPF
 
 using System.Windows.Controls;

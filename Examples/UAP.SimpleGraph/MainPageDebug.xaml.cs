@@ -7,9 +7,9 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using GraphX.Controls.Animations;
 using GraphX.Controls.Models;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
-using GraphX.PCL.Logic.Algorithms.OverlapRemoval;
+using GraphX.Common.Enums;
+using GraphX.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.Logic.Algorithms.OverlapRemoval;
 using UAP.SimpleGraph.Models;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238

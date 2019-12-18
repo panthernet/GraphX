@@ -5,8 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Enums;
+using GraphX.Common.Exceptions;
 using Brushes = System.Windows.Media.Brushes;
 using Size = System.Windows.Size;
 

@@ -1,5 +1,5 @@
 ﻿
-Imports GraphX.PCL.Common.Models
+Imports GraphX.Common.Models
 
 Namespace Models
 

@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 #endif
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Exceptions;
 
 namespace GraphX.Controls.Animations
 {
