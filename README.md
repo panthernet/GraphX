@@ -1,8 +1,4 @@
 **GraphX for .NET (Core Branch)**
-http://panthernet.org 
-
-For **GraphX for .NET PRO version** please visit http://graphx.pro
-
 
 **What Is This?**
 
