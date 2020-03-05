@@ -1,38 +1,21 @@
-**GraphX for .NET**
+# GraphX for .NET
+[![Build status](https://ci.appveyor.com/api/projects/status/6s7bkthpq14lqb5s?svg=true)](https://ci.appveyor.com/project/panthernet/graphx)[![GraphX](https://buildstats.info/nuget/GraphX)](https://www.nuget.org/packages/GraphX/)
 
-**What Is This?**
+### Introduction 
 
 GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
 
-
-
-**Any Requirements?**
-
+### Requirements
 GraphX requires **Visual Studio 2019 Comunity Edition** or above to build manually.
+[**QuickGraphCore**](https://www.nuget.org/packages/QuickGraphCore/) nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from: Graph#, WPFExtensions, NodeXL, Extended WPF Toolkit, YAXLib and ModernUI.
 
-[**QuickGraphCore**](https://www.nuget.org/packages/QuickGraphCore/) nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from:
-* Graph#
-* WPFExtensions
-* NodeXL
-* Extended WPF Toolkit
-  
-And library showcase uses:
-* YAXLib
-* ModernUI
-
-
-
-**How Flexible It Is?**
-
-We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
+### Platform Support
 Our library supports following platforms:
 * Windows Desktop (.NET Core/WPF/WinForms on Windows 7+ using .NET4.6.1+ or .NET Core 3.1)
 * Universal Windows Platform (UWP or UAP) on Windows 10
 * Xamarin/Uno (WIP, only logic core is available)
 
-
-
-**What Exactly I Can Do With It?**
+### Features
 
 * GraphX is a performance oriented library coded with modular design in mind optimized for:
   * Large amount of templated graph vertices rendering
