@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 #endif
 
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 
 namespace GraphX.Controls
 {

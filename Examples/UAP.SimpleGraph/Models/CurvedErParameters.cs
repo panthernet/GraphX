@@ -1,4 +1,4 @@
-﻿using GraphX.PCL.Logic.Algorithms.EdgeRouting;
+﻿using GraphX.Logic.Algorithms.EdgeRouting;
 
 namespace UAP.SimpleGraph.Models
 {

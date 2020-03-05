@@ -9,7 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 #endif
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 
 namespace GraphX.Controls
 {

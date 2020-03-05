@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Collections.Generic;
 using GraphX.Measure;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common.Interfaces;
 
 namespace ShowcaseApp.WPF
 {

@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Media;
 using DefaultEventArgs = System.Object;
 #endif
 using System.Linq;
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Exceptions;
 
 namespace GraphX.Controls
 {

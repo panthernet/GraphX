@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 using ShowcaseApp.WPF.Annotations;
 using ShowcaseApp.WPF.Filters;
 using ShowcaseApp.WPF.Models;

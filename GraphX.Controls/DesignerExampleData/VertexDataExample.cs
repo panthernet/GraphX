@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Models;
 
 namespace GraphX.Controls.DesignerExampleData
 {

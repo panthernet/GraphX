@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using GraphX.Controls;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages.Mini

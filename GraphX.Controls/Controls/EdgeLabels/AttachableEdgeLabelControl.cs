@@ -10,7 +10,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using DefaultEventArgs = System.Object;
 #endif
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Exceptions;
 
 namespace GraphX.Controls
 {

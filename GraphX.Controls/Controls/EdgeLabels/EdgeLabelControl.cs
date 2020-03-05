@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common.Interfaces;
 #if WPF
 using System.Windows;
 using System.Windows.Controls;

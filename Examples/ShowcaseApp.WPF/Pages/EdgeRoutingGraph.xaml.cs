@@ -6,11 +6,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using GraphX;
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Logic.Algorithms.EdgeRouting;
+using GraphX.Common.Enums;
+using GraphX.Logic.Algorithms.EdgeRouting;
 using GraphX.Controls;
 using GraphX.Controls.Models;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 

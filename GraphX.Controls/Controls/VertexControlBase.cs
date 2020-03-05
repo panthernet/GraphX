@@ -13,8 +13,8 @@ using Windows.Foundation;
 using USize = Windows.Foundation.Size;
 #endif
 using GraphX.Controls.Models;
-using GraphX.PCL.Common;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common;
+using GraphX.Common.Enums;
 using Rect = GraphX.Measure.Rect;
 
 namespace GraphX.Controls

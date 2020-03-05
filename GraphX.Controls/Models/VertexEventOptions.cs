@@ -1,4 +1,4 @@
-﻿using GraphX.PCL.Common.Enums;
+﻿using GraphX.Common.Enums;
 
 namespace GraphX.Controls.Models
 {

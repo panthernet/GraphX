@@ -16,10 +16,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Controls;
 #endif
 
-using GraphX.PCL.Common.Enums;
-using GraphX.PCL.Common.Exceptions;
+using GraphX.Common.Enums;
+using GraphX.Common.Exceptions;
 using GraphX.Controls.Models;
-using GraphX.PCL.Common.Interfaces;
+using GraphX.Common.Interfaces;
 
 namespace GraphX.Controls
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using GraphX.PCL.Common.Enums;
+using GraphX.Common.Enums;
 
 namespace GraphX.Controls
 {

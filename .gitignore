@@ -115,3 +115,6 @@ UpgradeLog*.XML
 .localhistory/
 .settings/launch.json
 /.vs/GraphX for .NET/v15/Server/sqlite3
+
+.ionide
+.vs

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using GraphX.PCL.Common.Models;
+using GraphX.Common.Models;
 
 namespace UAP.SimpleGraph.Models
 {

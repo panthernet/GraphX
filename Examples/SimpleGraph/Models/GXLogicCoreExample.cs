@@ -1,4 +1,4 @@
-using GraphX.PCL.Logic.Models;
+using GraphX.Logic.Models;
 using QuickGraph;
 
 namespace SimpleGraph.Models

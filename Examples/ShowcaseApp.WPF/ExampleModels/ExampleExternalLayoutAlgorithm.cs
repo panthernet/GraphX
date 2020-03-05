@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
-using GraphX.PCL.Common.Interfaces;
-using GraphX.PCL.Logic.Algorithms.LayoutAlgorithms;
+using GraphX.Common.Interfaces;
+using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using QuickGraph;
 
 /*
