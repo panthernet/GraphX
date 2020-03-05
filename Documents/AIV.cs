@@ -2,11 +2,11 @@ using System.Reflection;
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("panthernet dev works")]
+[assembly: AssemblyCompany("White Thunder Software")]
 [assembly: AssemblyProduct("GraphX for .NET")]
-[assembly: AssemblyCopyright("Copyright www.panthernet.ru © 2018")]
+[assembly: AssemblyCopyright("Copyright White Thunder Software © 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("2.3.8.0")]
-[assembly: AssemblyFileVersion("2.3.8.0")]
+[assembly: AssemblyVersion("3.0.0.0")]
+[assembly: AssemblyFileVersion("3.0.0.0")]
