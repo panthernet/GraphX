@@ -1,13 +1,4 @@
-
-### Panthernet **GraphX** with libraries migrated from PCL to **netstandard2.0**
-
-* This is a fork from panthernet/GraphX
-* The migration is done in branch NetStandard
-* It is using QuickGraphCore (https://www.nuget.org/packages/QuickGraphCore/) instead of QuickGraphPCL
-
----
-
-**GraphX for .NET (Core Branch)**
+**GraphX for .NET**
 
 **What Is This?**
 
@@ -17,10 +8,9 @@ GraphX for .NET is an advanced open-source graph layout and visualization librar
 
 **Any Requirements?**
 
-Due to C#6.0 compliance GraphX requires **Visual Studio 2015 Comunity Edition** or above.
-For UAP development Visual Studio 2017 Community Edition is required.
+GraphX requires **Visual Studio 2019 Comunity Edition** or above to build manually.
 
-**QuickGraphPCL** nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from:
+[**QuickGraphCore**](https://www.nuget.org/packages/QuickGraphCore/) nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from:
 * Graph#
 * WPFExtensions
 * NodeXL
@@ -36,8 +26,8 @@ And library showcase uses:
 
 We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
 Our library supports following platforms:
-* Windows Desktop (WPF & WinForms on Windows XP SP3 using .NET4.0+)
-* Universal Windows Platform (UWP or UAP) using .NET 4.5
+* Windows Desktop (.NET Core/WPF/WinForms on Windows 7 using .NET4.5.2+ or .NET Core 3.1)
+* Universal Windows Platform (UWP or UAP) using .NET 4.5.2
 * Microsoft Silverlight 5 (WIP, only logic core is available)
 * Windows Phone 8/10 (WIP, only logic core is available)
 * Xamarin (WIP, only logic core is available)
