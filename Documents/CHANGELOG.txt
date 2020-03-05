@@ -1,4 +1,9 @@
-﻿RELEASE 2.3.8
+﻿RELEASE 3.0.0
+- Added .NET Core library version
+- Upgraded codebase to .NET Standard 2.0 (thanks to honza77)
+- Upgraded codebase to use QUickGraphCore library
+
+RELEASE 2.3.8
 - Implemented multiple labels logic for edges. Now you can display multiple labels across the edge
 - Added LabelHorizontalOffset property for labels which offsets labels along the edge given some offset value in total edge length percent
 - Improved graph print logic to work with ulong dimensions instead of int
