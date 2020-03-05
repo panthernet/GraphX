@@ -26,11 +26,9 @@ And library showcase uses:
 
 We're aim to support as much platforms as possible and we already made our logic core with algorithms to support wide range of platforms.
 Our library supports following platforms:
-* Windows Desktop (.NET Core/WPF/WinForms on Windows 7 using .NET4.5.2+ or .NET Core 3.1)
-* Universal Windows Platform (UWP or UAP) using .NET 4.5.2
-* Microsoft Silverlight 5 (WIP, only logic core is available)
-* Windows Phone 8/10 (WIP, only logic core is available)
-* Xamarin (WIP, only logic core is available)
+* Windows Desktop (.NET Core/WPF/WinForms on Windows 7+ using .NET4.6.1+ or .NET Core 3.1)
+* Universal Windows Platform (UWP or UAP) on Windows 10
+* Xamarin/Uno (WIP, only logic core is available)
 
 
 
