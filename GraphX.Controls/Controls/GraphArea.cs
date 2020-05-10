@@ -26,7 +26,7 @@ using GraphX.Common.Interfaces;
 using GraphX.Common.Models;
 using GraphX.Controls.Models;
 using GraphX.Common;
-using QuickGraph;
+using QuikGraph;
 using Rect = GraphX.Measure.Rect;
 using Size = GraphX.Measure.Size;
 

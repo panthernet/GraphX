@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using GraphX.Measure;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {

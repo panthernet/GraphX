@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Exceptions;
-using QuickGraph;
-using QuickGraph.Algorithms.Search;
-using QuickGraph.Collections;
+using QuikGraph;
+using QuikGraph.Algorithms.Search;
+using QuikGraph.Collections;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {
@@ -46,7 +46,7 @@ namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 			//DoWidthAndHeightOptimization();
 
 			var graph = new UndirectedBidirectionalGraph<TVertex, TEdge>(VisitedGraph);
-			var scca = new QuickGraph.Algorithms.ConnectedComponents.ConnectedComponentsAlgorithm<TVertex, TEdge>(graph);
+			var scca = new QuikGraph.Algorithms.ConnectedComponents.ConnectedComponentsAlgorithm<TVertex, TEdge>(graph);
 			scca.Compute();
 
 			// Order connected components by their vertices count

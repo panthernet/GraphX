@@ -5,7 +5,7 @@ Imports GraphX.Logic.Algorithms.LayoutAlgorithms
 Imports GraphX.Logic.Algorithms.OverlapRemoval
 Imports GraphX.Logic.Models
 Imports GraphX.Controls
-Imports QuickGraph
+Imports QuikGraph
 
 Public Class Form1
 

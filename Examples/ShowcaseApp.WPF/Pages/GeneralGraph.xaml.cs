@@ -9,7 +9,7 @@ using GraphX.Controls.Models;
 using GraphX.Logic.Algorithms.EdgeRouting;
 using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using Microsoft.Win32;
-using QuickGraph;
+using QuikGraph;
 using ShowcaseApp.WPF.FileSerialization;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;

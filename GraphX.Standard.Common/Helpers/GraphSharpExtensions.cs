@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphX.Common.Interfaces;
-using QuickGraph;
-using QuickGraph.Algorithms.ShortestPath;
+using QuikGraph;
+using QuikGraph.Algorithms.ShortestPath;
 
 namespace GraphX.Common
 {
@@ -199,7 +199,7 @@ where TEdge : IEdge<TVertex>
             {
                 //compute the distances from the 'source'
                 var spaDijkstra =
-                    new UndirectedDijkstraShortestPathAlgorithm<TVertex, TEdge>(undirected, edge => weights[edge], QuickGraph.Algorithms.DistanceRelaxers.ShortestDistance);
+                    new UndirectedDijkstraShortestPathAlgorithm<TVertex, TEdge>(undirected, edge => weights[edge], QuikGraph.Algorithms.DistanceRelaxers.ShortestDistance);
                 spaDijkstra.Compute(source);
 
                 var j = 0;

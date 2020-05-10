@@ -16,7 +16,7 @@ using GraphX.Common.Enums;
 using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.Logic.Algorithms.LayoutAlgorithms.Grouped;
 using GraphX.Logic.Algorithms.OverlapRemoval;
-using QuickGraph;
+using QuikGraph;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 

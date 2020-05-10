@@ -8,7 +8,7 @@ using GraphX.Common;
 using GraphX.Common.Enums;
 using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.Logic.Algorithms.LayoutAlgorithms.Grouped;
-using QuickGraph;
+using QuikGraph;
 using ShowcaseApp.WPF.Models;
 using Rect = GraphX.Measure.Rect;
 

@@ -5,7 +5,7 @@ using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Interfaces;
 using GraphX.Common.Models.Semaphore;
-using QuickGraph;
+using QuikGraph;
 
 /* Code here is partially used from NodeXL (https://nodexl.codeplex.com/)
  * 

@@ -3,7 +3,7 @@ using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Interfaces;
 using GraphX.Logic.Algorithms.LayoutAlgorithms;
-using QuickGraph;
+using QuikGraph;
 
 /*
  External layout algorithm implementation example

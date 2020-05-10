@@ -7,7 +7,7 @@ using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
 using GraphX.Logic.Algorithms.OverlapRemoval;
 using GraphX.Logic.Helpers;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms.Grouped
 {

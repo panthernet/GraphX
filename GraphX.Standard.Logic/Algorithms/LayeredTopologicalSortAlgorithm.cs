@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphX.Common;
-using QuickGraph;
-using QuickGraph.Algorithms;
+using QuikGraph;
+using QuikGraph.Algorithms;
 
 namespace GraphX.Logic.Algorithms
 {

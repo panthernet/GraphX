@@ -1,5 +1,5 @@
 ﻿using GraphX.Common.Interfaces;
-using QuickGraph;
+using QuikGraph;
 
 namespace ShowcaseApp.WPF.Filters
 {

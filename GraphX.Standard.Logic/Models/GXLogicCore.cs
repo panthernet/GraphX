@@ -6,7 +6,7 @@ using GraphX.Common;
 using GraphX.Common.Enums;
 using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Models
 {
