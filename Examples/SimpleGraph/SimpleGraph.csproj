@@ -75,8 +75,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="QuikGraph, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuikGraph.2.0.0\lib\net40\QuikGraph.dll</HintPath>
+    <Reference Include="QuikGraph, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\QuikGraph.2.1.0\lib\net40\QuikGraph.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
