@@ -6,7 +6,7 @@
 GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
 
 ### Requirements
-GraphX requires **Visual Studio 2019 Comunity Edition** or above to build manually.
+GraphX requires **Visual Studio 2019 Community Edition** or above to build manually.
 [**QuickGraphCore**](https://www.nuget.org/packages/QuickGraphCore/) nuget project is required for GraphX to operate. Also it is worth noting that it uses partial code from: Graph#, WPFExtensions, NodeXL, Extended WPF Toolkit, YAXLib and ModernUI.
 
 ### Platform Support
