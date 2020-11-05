@@ -3,7 +3,7 @@
 
 ### Introduction 
 
-GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceble.
+GraphX for .NET is an advanced open-source graph layout and visualization library that supports different layout algorithms and provides many means for visual customizations It is capable of rendering large amount of vertices and steadily moves to support the most popular .NET platforms. GraphX already served well as the foundation for many other projects where its functionality was irreplaceable.
 
 ### Requirements
 GraphX requires **Visual Studio 2019 Comunity Edition** or above to build manually.
@@ -36,7 +36,7 @@ Our library supports following platforms:
   * Rich usability documentation and sample projects
 
 * It supports following edge related features:
-  * Support for parametrized edge routing algorithms (SimpleER, EdgeBundling, PathFinder)
+  * Support for parameterized edge routing algorithms (SimpleER, EdgeBundling, PathFinder)
   * Support for dynamic and/or single edge routing calculation (for ex. for dragged vertex)
   * Edges curving (smoothing) technique that can be applied to any ER algorithm
   * Dynamic templated edge labels with edge alignment support
