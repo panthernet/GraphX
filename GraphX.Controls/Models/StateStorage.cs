@@ -6,7 +6,7 @@ using GraphX.Common;
 using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
 using GraphX.Common.Models;
-using QuickGraph;
+using QuikGraph;
 #if WPF
 using System.Windows;
 #elif METRO

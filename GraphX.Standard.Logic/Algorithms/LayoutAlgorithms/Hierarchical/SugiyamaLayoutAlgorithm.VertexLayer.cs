@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using GraphX.Common;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {

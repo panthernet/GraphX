@@ -1,4 +1,4 @@
-﻿Imports QuickGraph
+﻿Imports QuikGraph
 
 Namespace Models
 

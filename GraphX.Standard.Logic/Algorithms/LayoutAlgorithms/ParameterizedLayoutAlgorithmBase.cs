@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using GraphX.Measure;
 using GraphX.Common.Interfaces;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {

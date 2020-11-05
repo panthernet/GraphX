@@ -1,5 +1,5 @@
 ﻿Imports GraphX.Controls
-Imports QuickGraph
+Imports QuikGraph
 
 Namespace Models
 

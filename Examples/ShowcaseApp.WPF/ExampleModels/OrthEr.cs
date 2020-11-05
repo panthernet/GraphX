@@ -3,7 +3,7 @@ using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Interfaces;
 using GraphX.Logic.Algorithms.EdgeRouting;
-using QuickGraph;
+using QuikGraph;
 
 namespace ShowcaseApp.WPF.ExampleModels
 {

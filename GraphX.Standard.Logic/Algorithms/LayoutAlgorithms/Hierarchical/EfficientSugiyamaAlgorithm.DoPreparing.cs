@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using QuickGraph;
-using QuickGraph.Algorithms.Search;
+using QuikGraph;
+using QuikGraph.Algorithms.Search;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {

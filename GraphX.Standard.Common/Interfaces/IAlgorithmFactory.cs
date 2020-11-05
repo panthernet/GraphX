@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GraphX.Measure;
 using GraphX.Common.Enums;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Common.Interfaces
 {

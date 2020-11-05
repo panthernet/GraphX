@@ -5,7 +5,7 @@ using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Exceptions;
 using GraphX.Common.Models;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Algorithms.LayoutAlgorithms
 {

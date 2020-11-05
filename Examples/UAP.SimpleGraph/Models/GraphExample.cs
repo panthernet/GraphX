@@ -1,4 +1,4 @@
-using QuickGraph;
+using QuikGraph;
 
 namespace UAP.SimpleGraph.Models
 {

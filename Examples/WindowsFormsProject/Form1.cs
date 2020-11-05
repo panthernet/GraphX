@@ -7,7 +7,7 @@ using GraphX.Logic.Algorithms.OverlapRemoval;
 using GraphX.Logic.Models;
 using GraphX.Controls;
 using GraphX.Controls.Models;
-using QuickGraph;
+using QuikGraph;
 
 namespace WindowsFormsProject
 {

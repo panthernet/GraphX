@@ -7,7 +7,7 @@ using GraphX.Logic.Algorithms;
 using GraphX.Logic.Algorithms.EdgeRouting;
 using GraphX.Logic.Algorithms.LayoutAlgorithms;
 using GraphX.Logic.Algorithms.OverlapRemoval;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Logic.Models
 {

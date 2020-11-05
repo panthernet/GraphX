@@ -1,5 +1,5 @@
 using GraphX.Logic.Models;
-using QuickGraph;
+using QuikGraph;
 
 namespace SimpleGraph.Models
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using GraphX.Measure;
 using GraphX.Common.Enums;
-using QuickGraph;
+using QuikGraph;
 
 namespace GraphX.Common.Interfaces
 {
