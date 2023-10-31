@@ -1,476 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C054C423-7284-46A6-9738-B82E2237E9C7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ShowcaseApp.WPF</RootNamespace>
-    <AssemblyName>ShowcaseApp.WPF</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <UseWPF>true</UseWPF>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET4</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <NoWarn>1591</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+  
   <PropertyGroup>
-    <ApplicationIcon>app.ico</ApplicationIcon>
+    <AssemblyTitle>GraphX ShowcaseApp.WPF</AssemblyTitle>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Accordion, Version=3.5.40128.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Accordion.1.0.0\lib\Accordion.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FirstFloor.ModernUI">
-      <HintPath>..\..\ExternalDlls\FirstFloor.ModernUI.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.3.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AvalonEdit.5.0.3\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Windows.Shell">
-      <HintPath>..\..\ExternalDlls\Microsoft.Windows.Shell.dll</HintPath>
-    </Reference>
-    <Reference Include="QuikGraph, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\QuikGraph.2.2.0\lib\net40\QuikGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="YAXLib, Version=2.14.0.0, Culture=neutral, PublicKeyToken=15c43682c986900f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\YAXLib.2.14\lib\YAXLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="ModernUI.CoreWPF" Version="3.1.2" />
+    <PackageReference Include="YAXLib" Version="4.2.0" />
   </ItemGroup>
+
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="Assets\ModernUI.Snowflakes.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Content\SettingsAppearance.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SpecialWindowControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Content\SettingsAppearance.xaml.cs">
-      <DependentUpon>SettingsAppearance.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Content\SettingsAppearanceViewModel.cs" />
-    <Compile Include="Controls\SpecialWindowControl.xaml.cs">
-      <DependentUpon>SpecialWindowControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ExampleModels\DataEdge.cs" />
-    <Compile Include="ExampleModels\DataVertex.cs" />
-    <Compile Include="ExampleModels\ExampleExternalEdgeRoutingAlgorithm.cs" />
-    <Compile Include="ExampleModels\ExampleExternalLayoutAlgorithm.cs" />
-    <Compile Include="ExampleModels\ExampleExternalOverlapRemovalAlgorithm.cs" />
-    <Compile Include="ExampleModels\ExampleMoveAnimation.cs" />
-    <Compile Include="ExampleModels\Filters\BlueVertexFilter.cs" />
-    <Compile Include="ExampleModels\GraphAreaExample.cs" />
-    <Compile Include="ExampleModels\GraphExample.cs" />
-    <Compile Include="ExampleModels\LogicCoreExample.cs" />
-    <Compile Include="ExampleModels\OrthEr.cs" />
-    <Compile Include="External\WindowGlow\GlowManager.cs" />
-    <Compile Include="External\WindowGlow\GlowWindow.cs" />
-    <Compile Include="External\WindowGlow\Win32.cs" />
-    <Compile Include="FileSerialization\FileServiceProviderWPF.cs" />
-    <Compile Include="FileSerialization\YAXPointArraySerializer.cs" />
-    <Compile Include="FileSerialization\YAXPointSerializer.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Pages\FeatureLists\FeaturesPageEdges.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\FeatureLists\FeaturesPageLayouts.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\FeatureLists\FeaturesPageData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\FeatureLists\FeaturesPageTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Debug\DebugGraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\GeneralGraph.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MiniXamlTemplatePage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MiniXamlPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\MiniContentPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Mini\DataFiltering.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Pages\Mini\EdgesParallel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Pages\Mini\LayoutGrouped.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Pages\NNGraph.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\EditorGraph.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\DynamicGraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\EdgeRoutingGraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Mini\LayoutVCP.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Page>
-    <Page Include="Pages\Introduction.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\Settings.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Pages\ThemedGraph.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\Accordion.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\EditorGraphXTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\DynamicGraphXTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\ERGraphXTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\ExpanderTemplates.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\GeneralTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\MiniFeatures.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\Mini\LayoutDataFiltering.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\Mini\LayoutGroupedTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\Mini\LayoutVCPTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\Mini\CommonMiniTemplate.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Templates\Debug\TestTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\ThemedGraphXTemplates.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Templates\TransparentTooltips.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\Generic.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <ProjectReference Include="..\..\GraphX.Controls\GraphX.WPF.Controls.csproj" />
+    <ProjectReference Include="..\..\GraphX.Standard.Logic\GraphX.Standard.Logic.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\..\Documents\AIV.cs">
-      <Link>Properties\AIV.cs</Link>
-    </Compile>
-    <Compile Include="Models\ColorModel.cs" />
-    <Compile Include="Models\DataItem.cs" />
-    <Compile Include="Models\EditorObjectManager.cs" />
-    <Compile Include="Models\EditorOperationMode.cs" />
-    <Compile Include="Models\ImageLoader.cs" />
-    <Compile Include="Models\LinkCommands.cs" />
-    <Compile Include="Models\MiniSpecialType.cs" />
-    <Compile Include="Models\ShadowChrome.cs" />
-    <Compile Include="Models\ShowcaseHelper.cs" />
-    <Compile Include="Models\SimpleCommand.cs" />
-    <Compile Include="Models\ThemedDataStorage.cs" />
-    <Compile Include="Models\ValueToImageConverter.cs" />
-    <Compile Include="Models\VCTemplateBehaviour.cs" />
-    <Compile Include="Pages\FeatureLists\FeaturesPageEdges.xaml.cs">
-      <DependentUpon>FeaturesPageEdges.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\FeatureLists\FeaturesPageLayouts.xaml.cs">
-      <DependentUpon>FeaturesPageLayouts.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\FeatureLists\FeaturesPageData.xaml.cs">
-      <DependentUpon>FeaturesPageData.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\FeatureLists\FeaturesPageTemplates.xaml.cs">
-      <DependentUpon>FeaturesPageTemplates.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Debug\DebugGraph.xaml.cs">
-      <DependentUpon>DebugGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\GeneralGraph.xaml.cs">
-      <DependentUpon>GeneralGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MiniXamlTemplatePage.xaml.cs">
-      <DependentUpon>MiniXamlTemplatePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MiniXamlPage.xaml.cs">
-      <DependentUpon>MiniXamlPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\MiniContentPage.xaml.cs">
-      <DependentUpon>MiniContentPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Mini\DataFiltering.xaml.cs">
-      <DependentUpon>DataFiltering.xaml</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Pages\Mini\EdgesParallel.xaml.cs">
-      <DependentUpon>EdgesParallel.xaml</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Pages\Mini\LayoutGrouped.xaml.cs">
-      <DependentUpon>LayoutGrouped.xaml</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Pages\NNGraph.xaml.cs">
-      <DependentUpon>NNGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\EditorGraph.xaml.cs">
-      <DependentUpon>EditorGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\DynamicGraph.xaml.cs">
-      <DependentUpon>DynamicGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\EdgeRoutingGraph.xaml.cs">
-      <DependentUpon>EdgeRoutingGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Mini\LayoutVCP.xaml.cs">
-      <DependentUpon>LayoutVCP.xaml</DependentUpon>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Pages\Introduction.xaml.cs">
-      <DependentUpon>Introduction.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Settings.xaml.cs">
-      <DependentUpon>Settings.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ThemedGraph.xaml.cs">
-      <DependentUpon>ThemedGraph.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\GraphX.Controls\GraphX.WPF.Controls.csproj">
-      <Project>{d2e33fee-6689-4bb4-a95c-1b5c327a1e8f}</Project>
-      <Name>GraphX.WPF.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GraphX.Standard.Common\GraphX.Standard.Common.csproj">
-      <Project>{a03c3866-8f38-4f1d-8d08-6b187f418d51}</Project>
-      <Name>GraphX.Standard.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GraphX.Standard.Logic\GraphX.Standard.Logic.csproj">
-      <Project>{7e4599ab-9a9a-4185-b651-20331153ce7a}</Project>
-      <Name>GraphX.Standard.Logic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\background.snowflakes.jpg" />
     <Resource Include="Assets\background.snowflakes.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\female.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="readme.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\male.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\SplashScreen.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\blackCircle.png" />
+    <Resource Include="Assets\blackCircle.png" />
+    <None Remove="Assets\blackCircleFilled.png" />
+    <Resource Include="Assets\blackCircleFilled.png" />
+    <None Remove="Assets\board_hd.png" />
     <Resource Include="Assets\board_hd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\carpet.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\brick_16.png" />
     <Resource Include="Assets\brick_16.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\carpet.png" />
+    <Resource Include="Assets\carpet.png" />
+    <None Remove="Assets\circle_blue.png" />
     <Resource Include="Assets\circle_blue.png" />
+    <None Remove="Assets\circle_green.png" />
     <Resource Include="Assets\circle_green.png" />
+    <None Remove="Assets\circle_red.png" />
     <Resource Include="Assets\circle_red.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\dice.png" />
     <Resource Include="Assets\dice.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Documents\CHANGELOG.txt">
-      <Link>CHANGELOG.txt</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\hand_comp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\hand_comp2.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\female.png" />
+    <Resource Include="Assets\female.png" />
+    <None Remove="Assets\grid_paper.png" />
     <Resource Include="Assets\grid_paper.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\hand_comp.png" />
+    <Resource Include="Assets\hand_comp.png" />
+    <None Remove="Assets\hand_comp2.png" />
+    <Resource Include="Assets\hand_comp2.png" />
+    <None Remove="Assets\hand_comp3.png" />
     <Resource Include="Assets\hand_comp3.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\male.png" />
+    <Resource Include="Assets\male.png" />
+    <None Remove="Assets\SplashScreen.png" />
+    <Resource Include="Assets\SplashScreen.png" />
+    <None Remove="Assets\tr_grren.png" />
     <Resource Include="Assets\tr_grren.png" />
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Assets\tr_red.png" />
     <Resource Include="Assets\tr_red.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\blackCircle.png" />
-    <Resource Include="Assets\blackCircleFilled.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+
 </Project>

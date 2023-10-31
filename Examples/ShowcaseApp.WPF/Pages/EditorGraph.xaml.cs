@@ -111,7 +111,7 @@ namespace ShowcaseApp.WPF.Pages
 
         void ToolbarButton_Checked(object sender, RoutedEventArgs e)
         {
-            if(butDelete.IsChecked == true && sender == butDelete)
+            if(butDelete.IsChecked == true && ReferenceEquals(sender, butDelete))
             {
                 butEdit.IsChecked = false;
                 butSelect.IsChecked = false;
@@ -121,7 +121,7 @@ namespace ShowcaseApp.WPF.Pages
                 ClearSelectMode();
                 return;
             }
-            if (butEdit.IsChecked == true && sender == butEdit)
+            if (butEdit.IsChecked == true && ReferenceEquals(sender, butEdit))
             {
                 butDelete.IsChecked = false;
                 butSelect.IsChecked = false;
@@ -130,7 +130,7 @@ namespace ShowcaseApp.WPF.Pages
                 ClearSelectMode();
                 return;
             }
-            if (butSelect.IsChecked == true && sender == butSelect)
+            if (butSelect.IsChecked == true && ReferenceEquals(sender, butSelect))
             {
                 butEdit.IsChecked = false;
                 butDelete.IsChecked = false;

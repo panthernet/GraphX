@@ -200,9 +200,6 @@ namespace ShowcaseApp.WPF.Pages
                     erg_recalculate.IsEnabled = false;
                 }
             }
-            //(Accordion.Items[1] as AccordionItem).IsSelected = true;
-            Accordion.UpdateLayout();
-            (Accordion.Items[0] as AccordionItem).UpdateLayout();
         }
 
         void erg_useExternalERAlgo_Checked(object sender, RoutedEventArgs e)

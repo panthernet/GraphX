@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
-             xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
              xmlns:controls1="http://schemas.panthernet.ru/graphx/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
@@ -85,42 +84,39 @@
                 </Button>
             </StackPanel>
             <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="SETTINGS" FontWeight="Bold"/>
-            
             <ScrollViewer DockPanel.Dock="Top">
-                <acc:Accordion HorizontalAlignment="Stretch">
-                    <acc:Accordion.Items>
-                        <acc:AccordionItem Header="Edge options">
-                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
-                                <TextBlock DockPanel.Dock="Top" Text="Edge display mode" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_edgeMode"  Margin="3" SelectionChanged="tg_edgeMode_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                                <TextBlock DockPanel.Dock="Top" Text="Edge display type" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_edgeType"  Margin="3" SelectionChanged="tg_edgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                            </DockPanel>
-                        </acc:AccordionItem>
-                        <acc:AccordionItem Header="Behaviours">
-                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
-                                <CheckBox Name="tg_dragEnabled" Content="Vertex drag enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_dragEnabled_Checked" Unchecked="tg_dragEnabled_Checked"/>
-                                <CheckBox Name="tg_dragMoveEdges" Content="Update edges on move" Margin="3" DockPanel.Dock="Top"/>
+                <ItemsControl>
+                    <Expander IsExpanded="True" Header="Edge options">
+                        <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Top" Text="Edge display mode" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_edgeMode"  Margin="3" SelectionChanged="tg_edgeMode_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            <TextBlock DockPanel.Dock="Top" Text="Edge display type" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_edgeType"  Margin="3" SelectionChanged="tg_edgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                        </DockPanel>
+                    </Expander>
+                    <Expander Header="Behaviours">
+                        <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                            <CheckBox Name="tg_dragEnabled" Content="Vertex drag enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_dragEnabled_Checked" Unchecked="tg_dragEnabled_Checked"/>
+                            <CheckBox Name="tg_dragMoveEdges" Content="Update edges on move" Margin="3" DockPanel.Dock="Top"/>
 
-                                <CheckBox Name="tg_highlightEnabled" Content="Highlight enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
-                                <TextBlock DockPanel.Dock="Top" Text="Affected control type" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_highlightType"  Margin="3" SelectionChanged="tg_highlightType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                                <TextBlock DockPanel.Dock="Top" Text="Edge directions" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_highlightEdgeType"  Margin="3" SelectionChanged="tg_highlightEdgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                            </DockPanel>
-                        </acc:AccordionItem>
-                        <acc:AccordionItem Header="Animation">
-                            <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
-                                <TextBlock DockPanel.Dock="Top" Text="Move animation" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_moveAnimation"  Margin="3" SelectionChanged="tg_moveAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                                <TextBlock DockPanel.Dock="Top" Text="Delete animation" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_deleteAnimation"  Margin="3" SelectionChanged="tg_deleteAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                                <TextBlock DockPanel.Dock="Top" Text="MouseOver animation" HorizontalAlignment="Center"/>
-                                <ComboBox x:Name="tg_mouseoverAnimation"  Margin="3" SelectionChanged="tg_mouseoverAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
-                            </DockPanel>
-                        </acc:AccordionItem>
-                    </acc:Accordion.Items>
-                </acc:Accordion>
+                            <CheckBox Name="tg_highlightEnabled" Content="Highlight enabled" Margin="3" DockPanel.Dock="Top" Checked="tg_highlightEnabled_Checked" Unchecked="tg_highlightEnabled_Checked"/>
+                            <TextBlock DockPanel.Dock="Top" Text="Affected control type" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_highlightType"  Margin="3" SelectionChanged="tg_highlightType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            <TextBlock DockPanel.Dock="Top" Text="Edge directions" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_highlightEdgeType"  Margin="3" SelectionChanged="tg_highlightEdgeType_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                        </DockPanel>
+                    </Expander>
+                    <Expander Header="Animation">
+                        <DockPanel LastChildFill="False" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Top" Text="Move animation" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_moveAnimation"  Margin="3" SelectionChanged="tg_moveAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            <TextBlock DockPanel.Dock="Top" Text="Delete animation" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_deleteAnimation"  Margin="3" SelectionChanged="tg_deleteAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                            <TextBlock DockPanel.Dock="Top" Text="MouseOver animation" HorizontalAlignment="Center"/>
+                            <ComboBox x:Name="tg_mouseoverAnimation"  Margin="3" SelectionChanged="tg_mouseoverAnimation_SelectionChanged" DockPanel.Dock="Top" IsReadOnly="True"/>
+                        </DockPanel>
+                    </Expander>
+                </ItemsControl>
             </ScrollViewer>
         </DockPanel>
     </Grid>

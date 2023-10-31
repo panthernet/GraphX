@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpf="clr-namespace:ShowcaseApp.WPF"
-             xmlns:acc="clr-namespace:System.Windows.Controls;assembly=Accordion"
              xmlns:controls1="http://schemas.panthernet.ru/graphx/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
@@ -53,52 +52,48 @@
                 </Button>
             </StackPanel>
             <TextBlock DockPanel.Dock="Top" TextAlignment="Center" Text="SETTINGS" FontWeight="Bold"/>
-        
-            <ScrollViewer >
-                <acc:Accordion  DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-                    <acc:Accordion.Items>
-                        <acc:AccordionItem Header="Algorithms">
-                            <DockPanel LastChildFill="False">
-                                <TextBlock Text="Common settings" DockPanel.Dock="Top" FontWeight="Bold" HorizontalAlignment="Center"/>
-                                <DockPanel DockPanel.Dock="Top">
-                                    <TextBlock Text="Vertex count" DockPanel.Dock="Left" TextAlignment="Center" VerticalAlignment="Center"/>
-                                    <TextBox Name="gg_vertexCount" Margin="3" PreviewTextInput="gg_vertexCount_PreviewTextInput"/>
-                                </DockPanel>
-                                <CheckBox Name="gg_async" Margin="3" Content="Use async computation" DockPanel.Dock="Top"/>
-                                <TextBlock Text="Layout" DockPanel.Dock="Top" HorizontalAlignment="Center"  FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_layalgo" Margin="3" DockPanel.Dock="Top"/>
-                                <CheckBox DockPanel.Dock="Top" Name="gg_useExternalLayAlgo" Checked="gg_useExternalLayAlgo_Checked" Unchecked="gg_useExternalLayAlgo_Checked" Margin="3" Content="Use external algorithm"/>
-                                <TextBlock Text="Overlap removal" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_oralgo" Margin="3" DockPanel.Dock="Top"/>
-                                <CheckBox DockPanel.Dock="Top" Name="gg_useExternalORAlgo" Checked="gg_useExternalORAlgo_Checked" Unchecked="gg_useExternalORAlgo_Checked" Margin="3" Content="Use external algorithm"/>
-                                <TextBlock Text="Edge routing" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
-                                <ComboBox IsReadOnly="True" Name="gg_eralgo" Margin="3" DockPanel.Dock="Top"/>
-                                <CheckBox  DockPanel.Dock="Top" Name="gg_useExternalERAlgo" Checked="gg_useExternalERAlgo_Checked" Unchecked="gg_useExternalERAlgo_Checked" Margin="3" Content="Use external algorithm"/>
-                            </DockPanel>
-                        </acc:AccordionItem>
-                        <acc:AccordionItem Header="Layout serialization">
-                            <DockPanel LastChildFill="False">
-                                <TextBlock Text="Export to file" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
-                                <DockPanel DockPanel.Dock="Top">
-                                    <Button Margin="3" DockPanel.Dock="Left" Width="80" Content="SAVE" Name="gg_saveLayout"/>
-                                    <Button Margin="3" DockPanel.Dock="Right" Width="80" Content="LOAD" Name="gg_loadLayout"/>
-                                </DockPanel>
-                                <TextBlock Text="State management" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
-                                <DockPanel DockPanel.Dock="Top">
-                                    <Button Margin="3" DockPanel.Dock="Left" Width="80" Content="SAVE" Name="gg_saveState"/>
-                                    <Button Margin="3" DockPanel.Dock="Right" Width="80" Content="LOAD" Name="gg_loadState"/>
-                                </DockPanel>
-                            </DockPanel>
-                        </acc:AccordionItem>
-                        <acc:AccordionItem Header="Imaging and printing">
-                            <DockPanel LastChildFill="False">
-                                <Button Margin="3" DockPanel.Dock="Top" Content="Save as PNG image" Click="gg_saveAsPngImage_Click"/>
-                                <Button Margin="3" DockPanel.Dock="Top" Content="Print layout" Click="gg_printlay_Click" />
-                            </DockPanel>
-                        </acc:AccordionItem>
-                    </acc:Accordion.Items>
-                </acc:Accordion>
-            </ScrollViewer>
+            
+            <ItemsControl DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+                <Expander IsExpanded="True" Header="Algorithms">
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Common settings" DockPanel.Dock="Top" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock Text="Vertex count" DockPanel.Dock="Left" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBox Name="gg_vertexCount" Margin="3" PreviewTextInput="gg_vertexCount_PreviewTextInput"/>
+                        </DockPanel>
+                        <CheckBox Name="gg_async" Margin="3" Content="Use async computation" DockPanel.Dock="Top"/>
+                        <TextBlock Text="Layout" DockPanel.Dock="Top" HorizontalAlignment="Center"  FontWeight="Bold"/>
+                        <ComboBox IsReadOnly="True" Name="gg_layalgo" Margin="3" DockPanel.Dock="Top"/>
+                        <CheckBox DockPanel.Dock="Top" Name="gg_useExternalLayAlgo" Checked="gg_useExternalLayAlgo_Checked" Unchecked="gg_useExternalLayAlgo_Checked" Margin="3" Content="Use external algorithm"/>
+                        <TextBlock Text="Overlap removal" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <ComboBox IsReadOnly="True" Name="gg_oralgo" Margin="3" DockPanel.Dock="Top"/>
+                        <CheckBox DockPanel.Dock="Top" Name="gg_useExternalORAlgo" Checked="gg_useExternalORAlgo_Checked" Unchecked="gg_useExternalORAlgo_Checked" Margin="3" Content="Use external algorithm"/>
+                        <TextBlock Text="Edge routing" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold"/>
+                        <ComboBox IsReadOnly="True" Name="gg_eralgo" Margin="3" DockPanel.Dock="Top"/>
+                        <CheckBox  DockPanel.Dock="Top" Name="gg_useExternalERAlgo" Checked="gg_useExternalERAlgo_Checked" Unchecked="gg_useExternalERAlgo_Checked" Margin="3" Content="Use external algorithm"/>
+                    </DockPanel>
+                </Expander>
+                <Expander Header="Layout serialization">
+                    <DockPanel LastChildFill="False">
+                        <TextBlock Text="Export to file" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
+                        <DockPanel DockPanel.Dock="Top">
+                            <Button Margin="3" DockPanel.Dock="Left" Width="80" Content="SAVE" Name="gg_saveLayout"/>
+                            <Button Margin="3" DockPanel.Dock="Right" Width="80" Content="LOAD" Name="gg_loadLayout"/>
+                        </DockPanel>
+                        <TextBlock Text="State management" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
+                        <DockPanel DockPanel.Dock="Top">
+                            <Button Margin="3" DockPanel.Dock="Left" Width="80" Content="SAVE" Name="gg_saveState"/>
+                            <Button Margin="3" DockPanel.Dock="Right" Width="80" Content="LOAD" Name="gg_loadState"/>
+                        </DockPanel>
+                    </DockPanel>
+                </Expander>
+                <Expander Header="Imaging and printing">
+                    <DockPanel LastChildFill="False">
+                        <Button Margin="3" DockPanel.Dock="Top" Content="Save as PNG image" Click="gg_saveAsPngImage_Click"/>
+                        <Button Margin="3" DockPanel.Dock="Top" Content="Print layout" Click="gg_printlay_Click" />
+                    </DockPanel>
+                </Expander>
+            </ItemsControl>
         </DockPanel>
     </Grid>
 </UserControl>

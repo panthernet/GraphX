@@ -4,7 +4,7 @@ using System;
 using GraphX.Measure;
 using GraphX.Common.Models;
 using ShowcaseApp.WPF.FileSerialization;
-using YAXLib;
+using YAXLib.Attributes;
 
 namespace ShowcaseApp.WPF
 {

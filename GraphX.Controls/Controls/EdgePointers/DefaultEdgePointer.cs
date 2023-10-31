@@ -201,7 +201,7 @@ namespace GraphX.Controls
                 if (NeedRotation)
                     RenderTransform = new RotateTransform {Angle = double.IsNaN(angle) ? 0 : angle, CenterX = 0, CenterY = 0};
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO ex handling and reason
             }

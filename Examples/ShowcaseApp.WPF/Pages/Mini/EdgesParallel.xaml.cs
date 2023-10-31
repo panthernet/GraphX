@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using GraphX.Controls;
 using GraphX.Controls.Models;
 using GraphX.Common.Enums;
-using ShowcaseApp.WPF.Annotations;
 using ShowcaseApp.WPF.Models;
 
 namespace ShowcaseApp.WPF.Pages.Mini
@@ -105,7 +104,6 @@ namespace ShowcaseApp.WPF.Pages.Mini
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged(string propertyName)
         {
             var handler = PropertyChanged;

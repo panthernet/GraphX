@@ -1,6 +1,7 @@
 ﻿using System;
 using GraphX.Measure;
 using YAXLib;
+using YAXLib.Customization;
 
 namespace ShowcaseApp.WPF.FileSerialization
 {
@@ -14,32 +15,32 @@ namespace ShowcaseApp.WPF.FileSerialization
             else return new Point();
         }
 
-        public Point DeserializeFromAttribute(System.Xml.Linq.XAttribute attrib)
+        public Point DeserializeFromAttribute(System.Xml.Linq.XAttribute attrib, ISerializationContext serializationContext)
         {
             return Deserialize(attrib.Value);
         }
 
-        public Point DeserializeFromElement(System.Xml.Linq.XElement element)
+        public Point DeserializeFromElement(System.Xml.Linq.XElement element, ISerializationContext serializationContext)
         {
             return Deserialize(element.Value);
         }
 
-        public Point DeserializeFromValue(string value)
+        public Point DeserializeFromValue(string value, ISerializationContext serializationContext)
         {
             return Deserialize(value);
         }
 
-        public void SerializeToAttribute(Point objectToSerialize, System.Xml.Linq.XAttribute attrToFill)
+        public void SerializeToAttribute(Point objectToSerialize, System.Xml.Linq.XAttribute attrToFill, ISerializationContext serializationContext)
         {
             attrToFill.Value = String.Format("{0}|{1}", objectToSerialize.X.ToString(), objectToSerialize.Y.ToString());
         }
 
-        public void SerializeToElement(Point objectToSerialize, System.Xml.Linq.XElement elemToFill)
+        public void SerializeToElement(Point objectToSerialize, System.Xml.Linq.XElement elemToFill, ISerializationContext serializationContext)
         {
             elemToFill.Value = String.Format("{0}|{1}", objectToSerialize.X.ToString(), objectToSerialize.Y.ToString());
         }
 
-        public string SerializeToValue(Point objectToSerialize)
+        public string SerializeToValue(Point objectToSerialize, ISerializationContext serializationContext)
         {
             return String.Format("{0}|{1}", objectToSerialize.X.ToString(), objectToSerialize.Y.ToString());
         }

@@ -3,8 +3,6 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Markup;
 
-[assembly: AssemblyTitle("GraphX Controls Library")]
-
 [assembly: ComVisible(false)]
 [assembly: Guid("d8511b14-512b-46ec-ad4f-8f14f46a466c")]
 
