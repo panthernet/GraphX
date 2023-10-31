@@ -13,7 +13,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets label attach node
         /// </summary>
-        public EdgeControl AttachNode { get { return (EdgeControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
+        public EdgeControl? AttachNode { get { return (EdgeControl) GetValue(AttachNodeProperty); } private set {SetValue(AttachNodeProperty, value);} }
 
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register(nameof(AttachNode), typeof(EdgeControl), typeof(AttachableEdgeLabelControl), 
             new PropertyMetadata(null));
@@ -53,7 +53,7 @@ namespace GraphX.Controls
 
         void AttachNode_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if(AttachNode.IsVisible && ShowLabel)
+            if(AttachNode!.IsVisible && ShowLabel)
                 base.Show();
             else if (!AttachNode.IsVisible)
             {
@@ -61,7 +61,7 @@ namespace GraphX.Controls
             }
         }
 
-        protected override EdgeControl GetEdgeControl(DependencyObject parent)
+        protected override EdgeControl GetEdgeControl(DependencyObject? parent)
         {
             if(AttachNode == null)
                 throw new GX_InvalidDataException("AttachableEdgeLabelControl node is not attached!");

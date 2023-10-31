@@ -40,7 +40,7 @@ namespace GraphX.Controls.Models
         #endregion // Constructor
 
         #region PropertySource
-        public DependencyObject PropertySource
+        public DependencyObject? PropertySource
         {
             get
             {
@@ -95,7 +95,7 @@ namespace GraphX.Controls.Models
         #endregion //Value
 
         #region Events
-        public event EventHandler ValueChanged;
+        public event EventHandler? ValueChanged;
         #endregion // Events
 
         #region IDisposable Members

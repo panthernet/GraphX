@@ -59,7 +59,7 @@ namespace GraphX.Controls
 
         private static void showlabel_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as EdgeLabelControl)?.EdgeControl.UpdateEdge();
+            (d as EdgeLabelControl)?.EdgeControl?.UpdateEdge();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace GraphX.Controls
                 ctrl.RenderTransform = new RotateTransform {Angle = (double) e.NewValue, CenterX = .5, CenterY = .5};
             else
             {
-                var rt = (RotateTransform)tg.Children.FirstOrDefault(a => a is RotateTransform);
+                var rt = (RotateTransform?)tg.Children.FirstOrDefault(a => a is RotateTransform);
                 if (rt == null)
                     tg.Children.Add(new RotateTransform {Angle = (double) e.NewValue, CenterX = .5, CenterY = .5});
                 else rt.Angle = (double) e.NewValue;
@@ -142,9 +142,9 @@ namespace GraphX.Controls
             }
         }
 
-        private EdgeControl _edgeControl;
+        private EdgeControl? _edgeControl;
 
-        protected virtual EdgeControl GetEdgeControl(DependencyObject parent)
+        protected virtual EdgeControl? GetEdgeControl(DependencyObject? parent)
         {
             while (parent != null)
             {
@@ -157,7 +157,7 @@ namespace GraphX.Controls
 
         public void Show()
         {
-            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
+            if (EdgeControl != null && EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) return;
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
         }
 
@@ -299,11 +299,11 @@ namespace GraphX.Controls
 
         internal SysRect LastKnownRectSize;
 
-        protected EdgeControl EdgeControl => _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent()));
+        protected EdgeControl? EdgeControl => _edgeControl ??= GetEdgeControl(GetParent());
 
         private void SetSelfLoopedSize(Point pt, SysSize idesiredSize)
         {
-            pt.Offset(-idesiredSize.Width / 2, (EdgeControl.Source.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
+            pt.Offset(-idesiredSize.Width / 2, (EdgeControl!.Source!.DesiredSize.Height * .5) + 2 + (idesiredSize.Height * .5));
             LastKnownRectSize = new SysRect(pt.X, pt.Y, idesiredSize.Width, idesiredSize.Height);
         }
 
@@ -330,13 +330,13 @@ namespace GraphX.Controls
             Arrange(LastKnownRectSize);
         }
 
-        void EdgeLabelControl_Loaded(object sender, RoutedOrCommonArgs e)
+        void EdgeLabelControl_Loaded(object? sender, RoutedOrCommonArgs e)
         {
-            if (EdgeControl.IsSelfLooped && !DisplayForSelfLoopedEdges) Hide();
+            if (EdgeControl is {IsSelfLooped: true} && !DisplayForSelfLoopedEdges) Hide();
             else Show();
         }
 
-        void EdgeLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
+        void EdgeLabelControl_LayoutUpdated(object? sender, DefaultEventArgs e)
         {
             if (EdgeControl == null || !ShowLabel) return;
             if (LastKnownRectSize == SysRect.Empty || double.IsNaN(LastKnownRectSize.Width) || LastKnownRectSize.Width == 0)

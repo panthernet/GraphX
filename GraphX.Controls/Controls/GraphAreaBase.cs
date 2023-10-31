@@ -160,7 +160,7 @@ namespace GraphX
         /// <summary>
         /// Gets or sets vertex and edge controls animation
         /// </summary>
-        public MoveAnimationBase MoveAnimation
+        public MoveAnimationBase? MoveAnimation
         {
             get { return (MoveAnimationBase)GetValue(MoveAnimationProperty); }
             set { SetValue(MoveAnimationProperty, value); }
@@ -172,9 +172,9 @@ namespace GraphX
         /// <summary>
         /// Gets or sets vertex and edge controls delete animation
         /// </summary>
-        public IOneWayControlAnimation DeleteAnimation
+        public IOneWayControlAnimation? DeleteAnimation
         {
-            get { return (IOneWayControlAnimation)GetValue(DeleteAnimationProperty); }
+            get { return (IOneWayControlAnimation?)GetValue(DeleteAnimationProperty); }
             set { SetValue(DeleteAnimationProperty, value); }
         }
 
@@ -183,14 +183,13 @@ namespace GraphX
 
         private static void DeleteAnimationPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var animation = e.OldValue as IOneWayControlAnimation;
-            if (animation != null)
+            if (e.OldValue is IOneWayControlAnimation animation)
             {
                 var old = animation;
                 old.Completed -= GraphAreaBase_Completed;
             }
-            var newone = e.NewValue as IOneWayControlAnimation;
-            if (newone != null)
+
+            if (e.NewValue is IOneWayControlAnimation newone)
                 newone.Completed += GraphAreaBase_Completed;
 
         }
@@ -210,7 +209,7 @@ namespace GraphX
         /// <summary>
         /// Gets or sets vertex and edge controls mouse over animation
         /// </summary>
-        public IBidirectionalControlAnimation MouseOverAnimation
+        public IBidirectionalControlAnimation? MouseOverAnimation
         {
             get { return (IBidirectionalControlAnimation)GetValue(MouseOverAnimationProperty); }
             set { SetValue(MouseOverAnimationProperty, value); }
@@ -233,7 +232,7 @@ namespace GraphX
         /// <summary>
         /// Fires when ContentSize property is changed
         /// </summary>
-        public event ContentSizeChangedEventHandler ContentSizeChanged;
+        public event ContentSizeChangedEventHandler? ContentSizeChanged;
 
         protected void OnContentSizeChanged(Rect oldSize, Rect newSize)
         {
@@ -243,7 +242,7 @@ namespace GraphX
         /// <summary>
         /// Fires when vertex is double clicked
         /// </summary>
-        public event VertexSelectedEventHandler VertexDoubleClick;
+        public event VertexSelectedEventHandler? VertexDoubleClick;
 
         internal virtual void OnVertexDoubleClick(VertexControl vc, MouseButtonEventArgs e)
         {
@@ -253,7 +252,7 @@ namespace GraphX
         /// <summary>
         /// Fires when vertex is selected
         /// </summary>
-        public event VertexSelectedEventHandler VertexSelected;
+        public event VertexSelectedEventHandler? VertexSelected;
 
         internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
@@ -263,7 +262,7 @@ namespace GraphX
         /// <summary>
         /// Fires when vertex is clicked
         /// </summary>
-        public event VertexClickedEventHandler VertexClicked;
+        public event VertexClickedEventHandler? VertexClicked;
 
         internal virtual void OnVertexClicked(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
@@ -273,7 +272,7 @@ namespace GraphX
         /// <summary>
         /// Fires when mouse up on vertex
         /// </summary>
-        public event VertexSelectedEventHandler VertexMouseUp;
+        public event VertexSelectedEventHandler? VertexMouseUp;
 
         internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
@@ -283,7 +282,7 @@ namespace GraphX
         /// <summary>
         /// Fires when mouse is over the vertex control
         /// </summary>
-        public event VertexSelectedEventHandler VertexMouseEnter;
+        public event VertexSelectedEventHandler? VertexMouseEnter;
 
         internal virtual void OnVertexMouseEnter(VertexControl vc, MouseEventArgs e)
         {
@@ -294,7 +293,7 @@ namespace GraphX
         /// <summary>
         /// Fires when mouse is moved over the vertex control
         /// </summary>
-        public event VertexMovedEventHandler VertexMouseMove;
+        public event VertexMovedEventHandler? VertexMouseMove;
 
         internal virtual void OnVertexMouseMove(VertexControl vc, MouseEventArgs e)
         {
@@ -304,7 +303,7 @@ namespace GraphX
         /// <summary>
         /// Fires when mouse leaves vertex control
         /// </summary>
-        public event VertexSelectedEventHandler VertexMouseLeave;
+        public event VertexSelectedEventHandler? VertexMouseLeave;
 
         internal virtual void OnVertexMouseLeave(VertexControl vc, MouseEventArgs e)
         {
@@ -315,59 +314,59 @@ namespace GraphX
         /// <summary>
         /// Fires when layout algorithm calculation is finished
         /// </summary>
-        public event EventHandler LayoutCalculationFinished;
+        public event EventHandler? LayoutCalculationFinished;
 
         protected virtual void OnLayoutCalculationFinished()
         {
-            LayoutCalculationFinished?.Invoke(this, null);
+            LayoutCalculationFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Fires when overlap removal algorithm calculation is finished
         /// </summary>
-        public event EventHandler OverlapRemovalCalculationFinished;
+        public event EventHandler? OverlapRemovalCalculationFinished;
 
         protected virtual void OnOverlapRemovalCalculationFinished()
         {
-            OverlapRemovalCalculationFinished?.Invoke(this, null);
+            OverlapRemovalCalculationFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Fires when edge routing algorithm calculation is finished
         /// </summary>
-        public event EventHandler EdgeRoutingCalculationFinished;
+        public event EventHandler? EdgeRoutingCalculationFinished;
 
         protected virtual void OnEdgeRoutingCalculationFinished()
         {
-            EdgeRoutingCalculationFinished?.Invoke(this, null);
+            EdgeRoutingCalculationFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Fires when relayout operation is finished
         /// </summary>
-        public event EventHandler RelayoutFinished;
+        public event EventHandler? RelayoutFinished;
 
         protected virtual void OnRelayoutFinished()
         {
-            RelayoutFinished?.Invoke(this, null);
+            RelayoutFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Fires when graph generation operation is finished
         /// </summary>
-        public event EventHandler GenerateGraphFinished;
+        public event EventHandler? GenerateGraphFinished;
 
         protected virtual void OnGenerateGraphFinished()
         {
-            GenerateGraphFinished?.Invoke(this, null);
+            GenerateGraphFinished?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Fires when edge is selected
         /// </summary>
-        public event EdgeSelectedEventHandler EdgeSelected;
+        public event EdgeSelectedEventHandler? EdgeSelected;
 
-        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs? e, ModifierKeys keys)
         {
             EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e, keys));
         }
@@ -375,35 +374,34 @@ namespace GraphX
         /// <summary>
         /// Fires when edge is clicked
         /// </summary>
-        public event EdgeClickedEventHandler EdgeClicked;
+        public event EdgeClickedEventHandler? EdgeClicked;
 
-        internal virtual void OnEdgeClicked(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
+        internal virtual void OnEdgeClicked(EdgeControl ec, MouseButtonEventArgs? e, ModifierKeys keys)
         {
-            EdgeClicked?.Invoke(this, new EdgeClickedEventArgs(ec, e
-                , keys));
+            EdgeClicked?.Invoke(this, new EdgeClickedEventArgs(ec, e, keys));
         }
 
-        public event EdgeSelectedEventHandler EdgeDoubleClick;
-        internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        public event EdgeSelectedEventHandler? EdgeDoubleClick;
+        internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs? e, ModifierKeys keys)
         {
             EdgeDoubleClick?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
-        public event EdgeSelectedEventHandler EdgeMouseMove;
-        internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        public event EdgeSelectedEventHandler? EdgeMouseMove;
+        internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs? e, ModifierKeys keys)
         {
             EdgeMouseMove?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
-        public event EdgeSelectedEventHandler EdgeMouseEnter;
-        internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        public event EdgeSelectedEventHandler? EdgeMouseEnter;
+        internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs? e, ModifierKeys keys)
         {
             EdgeMouseEnter?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             MouseOverAnimation?.AnimateEdgeForward(edgeControl);
         }
 
-        public event EdgeSelectedEventHandler EdgeMouseLeave;
-        internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
+        public event EdgeSelectedEventHandler? EdgeMouseLeave;
+        internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs? e, ModifierKeys keys)
         {
             EdgeMouseLeave?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             MouseOverAnimation?.AnimateEdgeBackward(edgeControl);
@@ -427,7 +425,7 @@ namespace GraphX
         /// <returns></returns>
         public abstract VertexControl[] GetAllVertexControls();
 
-        public abstract VertexControl GetVertexControlAt(Point position);
+        public abstract VertexControl? GetVertexControlAt(Point position);
 
         public abstract void RelayoutGraph(bool generateAllEdges = false);
 

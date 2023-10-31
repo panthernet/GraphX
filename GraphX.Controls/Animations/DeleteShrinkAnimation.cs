@@ -23,8 +23,7 @@ namespace GraphX.Controls.Animations
             var transform = CustomHelper.GetScaleTransform(target);
             if (transform == null)
             {
-                target.RenderTransform = new ScaleTransform();
-                transform = target.RenderTransform as ScaleTransform;
+                target.RenderTransform = transform = new ScaleTransform();
                 target.RenderTransformOrigin = Centered ? new Point(.5, .5) : new Point(0, 0);
             }
             //create and run animation
@@ -44,7 +43,7 @@ namespace GraphX.Controls.Animations
         /// <summary>
         /// Completed event that fires when animation is complete. Must be fired for correct object removal when animation ends.
         /// </summary>
-        public event RemoveControlEventHandler Completed;
+        public event RemoveControlEventHandler? Completed;
 
         private void OnCompleted(IGraphControl target, bool removeDataObject)
         {

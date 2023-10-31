@@ -124,12 +124,11 @@ namespace GraphX.Controls
 			return Visibility.Collapsed;
 		}
 
-		private static EdgeControl GetEdgeControl(DependencyObject parent)
+		private static EdgeControl? GetEdgeControl(DependencyObject? parent)
         {
             while (parent != null)
             {
-                var control = parent as EdgeControl;
-                if (control != null) return control;
+	            if (parent is EdgeControl control) return control;
                 parent = VisualTreeHelper.GetParent(parent);
             }
             return null;
@@ -137,8 +136,8 @@ namespace GraphX.Controls
 
         #endregion
 
-        private EdgeControl _edgeControl;
-        protected EdgeControl EdgeControl => _edgeControl ?? (_edgeControl = GetEdgeControl(GetParent()));
+        private EdgeControl? _edgeControl;
+        protected EdgeControl? EdgeControl => _edgeControl ??= GetEdgeControl(GetParent());
 
         public DefaultEdgePointer()
         {
@@ -187,7 +186,7 @@ namespace GraphX.Controls
             _edgeControl = null;
         }
 
-        void EdgePointer_LayoutUpdated(object sender, DefaultEventArgs e)
+        void EdgePointer_LayoutUpdated(object? sender, DefaultEventArgs e)
         {
             if (LastKnownRectSize != Rect.Empty && !double.IsNaN(LastKnownRectSize.Width) && LastKnownRectSize.Width != 0
                 && EdgeControl != null)

@@ -7,7 +7,7 @@ namespace GraphX.Controls
 {
     public class ZoomContentPresenter : ContentPresenter, INotifyPropertyChanged
     {
-        public event ContentSizeChangedHandler ContentSizeChanged;
+        public event ContentSizeChangedHandler? ContentSizeChanged;
 
         private Size _contentSize;
 
@@ -47,7 +47,7 @@ namespace GraphX.Controls
             return arrangeBounds;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

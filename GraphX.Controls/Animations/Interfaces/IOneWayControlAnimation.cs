@@ -24,6 +24,6 @@ namespace GraphX.Controls.Animations
         /// <summary>
         /// Completed event that fires when animation is complete. Must be fired for correct object removal when animation ends.
         /// </summary>
-        event RemoveControlEventHandler Completed;
+        event RemoveControlEventHandler? Completed;
     }
 }

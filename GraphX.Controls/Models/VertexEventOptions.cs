@@ -73,7 +73,7 @@ namespace GraphX.Controls.Models
 
         public void Clean()
         {
-            _vc = null;
+            _vc = null!;
         }
 
     }

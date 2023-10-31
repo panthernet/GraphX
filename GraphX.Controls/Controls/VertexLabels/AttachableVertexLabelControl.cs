@@ -14,7 +14,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets label attach node
         /// </summary>
-        public VertexControl AttachNode { get { return (VertexControl)GetValue(AttachNodeProperty); } private set { SetValue(AttachNodeProperty, value); OnPropertyChanged("AttachNode"); } }
+        public VertexControl? AttachNode { get { return (VertexControl)GetValue(AttachNodeProperty); } private set { SetValue(AttachNodeProperty, value); OnPropertyChanged("AttachNode"); } }
 
         public static readonly DependencyProperty AttachNodeProperty = DependencyProperty.Register(nameof(AttachNode), typeof(VertexControl), typeof(AttachableVertexLabelControl), 
             new PropertyMetadata(null));
@@ -55,7 +55,7 @@ namespace GraphX.Controls
 
         void AttachNode_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (AttachNode.IsVisible && AttachNode.ShowLabel)
+            if (AttachNode!.IsVisible && AttachNode.ShowLabel)
                 Show();
             else if (!AttachNode.IsVisible)
             {
@@ -63,7 +63,7 @@ namespace GraphX.Controls
             }
         }
 
-        protected override VertexControl GetVertexControl(DependencyObject parent)
+        protected override VertexControl? GetVertexControl(DependencyObject? parent)
         {
             //if(AttachNode == null)
             //    throw new GX_InvalidDataException("AttachableVertexLabelControl node is not attached!");
@@ -117,7 +117,7 @@ namespace GraphX.Controls
             Arrange(LastKnownRectSize);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

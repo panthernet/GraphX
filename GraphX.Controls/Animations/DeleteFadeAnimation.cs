@@ -37,7 +37,7 @@ namespace GraphX.Controls.Animations
             RunAnimation(target, removeDataEdge);
         }
 
-        public event RemoveControlEventHandler Completed;
+        public event RemoveControlEventHandler? Completed;
 
         public void OnCompleted(IGraphControl target, bool removeDataObject)
         {

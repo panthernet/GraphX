@@ -24,7 +24,7 @@ namespace GraphX.Controls.Animations
             _counter = 0;
             foreach (var item in VertexStorage)
             {
-                var control = item.Key as Control;
+                var control = (Control) item.Key;
                 var from = GraphAreaBase.GetX(control);
                 from = double.IsNaN(from) ? 0.0 : from;
 

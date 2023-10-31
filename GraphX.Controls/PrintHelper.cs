@@ -66,12 +66,11 @@ namespace GraphX.Controls
             if (!useZoomControlSurface)
                 surface.SetPrintMode(true, true, 100);
             //Create a render bitmap and push the surface to it
-            var vis = surface as UIElement;
+            var vis = (UIElement) surface;
             if (useZoomControlSurface)
             {
-                var canvas = (surface as Canvas);
-                var zoomControl = canvas.Parent as IZoomControl;
-                if (zoomControl != null)
+                var canvas = (Canvas) surface;
+                if (canvas.Parent is IZoomControl zoomControl)
                     vis = zoomControl.PresenterVisual;
                 else
                 {
@@ -174,7 +173,7 @@ namespace GraphX.Controls
 
         public static void PrintToFit(IGraphAreaBase ga, string description, int margin = 0)
         {
-            var visual = ga as Canvas;
+            var visual = (Canvas) ga;
             var pd = new PrintDialog();
             if (pd.ShowDialog() == true)
             {
@@ -207,7 +206,7 @@ namespace GraphX.Controls
 
         public static void PrintWithDPI(IGraphAreaBase ga, string description, double dpi, int margin = 0)
         {
-            var visual = ga as Canvas;
+            var visual = (Canvas) ga;
             var pd = new PrintDialog();
             if (pd.ShowDialog() == true)
             {

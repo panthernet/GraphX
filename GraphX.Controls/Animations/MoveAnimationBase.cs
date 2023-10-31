@@ -93,13 +93,13 @@ namespace GraphX.Controls.Animations
         /// <summary>
         /// Event raised on animation completion
         /// </summary>
-        public event EventHandler Completed;
+        public event EventHandler? Completed;
         /// <summary>
         /// Raise on animation completion event
         /// </summary>
         protected void OnCompleted()
         {
-            Completed?.Invoke(this, null);
+            Completed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

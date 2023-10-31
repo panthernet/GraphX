@@ -40,7 +40,7 @@ namespace GraphX.Controls.Models
 
         public void Clean()
         {
-            _ec = null;
+            _ec = null!;
         }
     }
 }

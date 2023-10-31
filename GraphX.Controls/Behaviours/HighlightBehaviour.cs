@@ -100,9 +100,9 @@ namespace GraphX.Controls
             var ctrl = sender as IGraphControl;
             if (ctrl == null) return;
 
-            var type = GetHighlightControl(sender as DependencyObject);
-            var edgesType = GetHighlightEdges(sender as DependencyObject);
-            SetHighlighted(sender as DependencyObject, false);
+            var type = GetHighlightControl((DependencyObject) sender);
+            var edgesType = GetHighlightEdges((DependencyObject) sender);
+            SetHighlighted((DependencyObject) sender, false);
 
             if (type == GraphControlType.Vertex || type == GraphControlType.VertexAndEdge)
                 foreach (var item in ctrl.RootArea.GetRelatedVertexControls(ctrl, edgesType).Cast<DependencyObject>())
@@ -122,9 +122,9 @@ namespace GraphX.Controls
             var ctrl = sender as IGraphControl;
             if(ctrl == null) return;
 
-            var type = GetHighlightControl(sender as DependencyObject);
-            var edgesType = GetHighlightEdges(sender as DependencyObject);
-            SetHighlighted(sender as DependencyObject, true);
+            var type = GetHighlightControl((DependencyObject) sender);
+            var edgesType = GetHighlightEdges((DependencyObject) sender);
+            SetHighlighted((DependencyObject) sender, true);
 
             //highlight related vertices
             if(type == GraphControlType.Vertex || type == GraphControlType.VertexAndEdge)

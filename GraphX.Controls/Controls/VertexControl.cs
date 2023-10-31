@@ -48,12 +48,12 @@ namespace GraphX.Controls
 
         #region Position trace feature
 
-        private ChangeMonitor _xChangeMonitor;
-        private ChangeMonitor _yChangeMonitor;
+        private ChangeMonitor? _xChangeMonitor;
+        private ChangeMonitor? _yChangeMonitor;
 
         internal void UpdatePositionTraceState()
         {
-            if (EventOptions.PositionChangeNotification)
+            if (EventOptions is {PositionChangeNotification: true})
             {
                 if (_xChangeMonitor == null)
                 {
@@ -109,7 +109,7 @@ namespace GraphX.Controls
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled)
+                    if (EventOptions is {MouseClickEnabled: true})
                     {
                         MouseDown += VertexControl_Down;
                         PreviewMouseMove += VertexControl_PreviewMouseMove;
@@ -122,22 +122,22 @@ namespace GraphX.Controls
                     break;
 
                 case EventType.MouseDoubleClick:
-                    if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += VertexControl_MouseDoubleClick;
+                    if (EventOptions is {MouseDoubleClickEnabled: true}) MouseDoubleClick += VertexControl_MouseDoubleClick;
                     else MouseDoubleClick -= VertexControl_MouseDoubleClick;
                     break;
 
                 case EventType.MouseMove:
-                    if (EventOptions.MouseMoveEnabled) MouseMove += VertexControl_MouseMove;
+                    if (EventOptions is {MouseMoveEnabled: true}) MouseMove += VertexControl_MouseMove;
                     else MouseMove -= VertexControl_MouseMove;
                     break;
 
                 case EventType.MouseEnter:
-                    if (EventOptions.MouseEnterEnabled) MouseEnter += VertexControl_MouseEnter;
+                    if (EventOptions is {MouseEnterEnabled: true}) MouseEnter += VertexControl_MouseEnter;
                     else MouseEnter -= VertexControl_MouseEnter;
                     break;
 
                 case EventType.MouseLeave:
-                    if (EventOptions.MouseLeaveEnabled) MouseLeave += VertexControl_MouseLeave;
+                    if (EventOptions is {MouseLeaveEnabled: true}) MouseLeave += VertexControl_MouseLeave;
                     else MouseLeave -= VertexControl_MouseLeave;
                     break;
 
@@ -229,7 +229,7 @@ namespace GraphX.Controls
 
             public delegate void Changed(object source, EventArgs args);
 
-            public event Changed ChangeDetected;
+            public event Changed? ChangeDetected;
 
             public static readonly DependencyProperty MonitorForChangeProperty =
                 DependencyProperty.Register(nameof(MonitorForChange), typeof(object), typeof(ChangeMonitor), new PropertyMetadata(null, MonitoredPropertyChanged));
@@ -258,7 +258,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets the root element which hosts VCPs so you can add them at runtime. Requires Panel-descendant template item defined named PART_vcproot.
         /// </summary>
-        public Panel VCPRoot { get; protected set; }
+        public Panel? VCPRoot { get; protected set; }
 
         public override void OnApplyTemplate()
         {
@@ -267,7 +267,7 @@ namespace GraphX.Controls
             if (Template == null) return;
             VertexLabelControl = VertexLabelControl ?? FindDescendant<IVertexLabelControl>("PART_vertexLabel");
 
-            VCPRoot = VCPRoot ?? FindDescendant<Panel>("PART_vcproot");
+            VCPRoot ??= FindDescendant<Panel>("PART_vcproot");
 
             if (VertexLabelControl != null)
             {
@@ -311,7 +311,7 @@ namespace GraphX.Controls
         public override void Clean()
         {
             Vertex = null;
-            RootArea = null;
+            RootArea = null!;
             HighlightBehaviour.SetIsHighlightEnabled(this, false);
             DragBehaviour.SetIsDragEnabled(this, false);
             VertexLabelControl = null;
@@ -329,7 +329,7 @@ namespace GraphX.Controls
         /// <typeparam name="T">Class</typeparam>
         public T GetDataVertex<T>() where T : IGraphXVertex
         {
-            return (T)Vertex;
+            return (T)Vertex!;
         }
     }
 }

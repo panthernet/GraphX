@@ -31,7 +31,7 @@ namespace GraphX.Controls
                 var rt = tg.Children.FirstOrDefault(a => a is RotateTransform);
                 if (rt == null)
                     tg.Children.Add(new RotateTransform {Angle = (double) e.NewValue, CenterX = .5, CenterY = .5});
-                else (rt as RotateTransform).Angle = (double) e.NewValue;
+                else (rt as RotateTransform)!.Angle = (double) e.NewValue;
             }
         }
 
@@ -94,7 +94,7 @@ namespace GraphX.Controls
             VerticalAlignment = VerticalAlignment.Top;
         }
 
-        protected virtual VertexControl GetVertexControl(DependencyObject parent)
+        protected virtual VertexControl? GetVertexControl(DependencyObject? parent)
         {
             while (parent != null)
             {
@@ -162,7 +162,7 @@ namespace GraphX.Controls
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
         }
 
-        void VertexLabelControl_LayoutUpdated(object sender, DefaultEventArgs e)
+        void VertexLabelControl_LayoutUpdated(object? sender, DefaultEventArgs e)
         {
             var vc = GetVertexControl(GetParent());
             if (vc == null || !vc.ShowLabel) return;

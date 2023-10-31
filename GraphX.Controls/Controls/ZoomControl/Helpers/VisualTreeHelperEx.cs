@@ -15,9 +15,7 @@
   ***********************************************************************************/
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 
@@ -25,7 +23,7 @@ namespace GraphX.Controls
 {
     public static class VisualTreeHelperEx
     {
-        public static DependencyObject FindAncestorByType(DependencyObject element, Type type, bool specificTypeOnly)
+        public static DependencyObject? FindAncestorByType(DependencyObject? element, Type type, bool specificTypeOnly)
         {
             if (element == null)
                 return null;
@@ -37,7 +35,7 @@ namespace GraphX.Controls
             return VisualTreeHelperEx.FindAncestorByType(VisualTreeHelper.GetParent(element), type, specificTypeOnly);
         }
 
-        public static T FindAncestorByType<T>(DependencyObject depObj) where T : DependencyObject
+        public static T? FindAncestorByType<T>(DependencyObject? depObj) where T : DependencyObject
         {
             if (depObj == null)
             {
@@ -48,25 +46,25 @@ namespace GraphX.Controls
                 return (T) depObj;
             }
 
-            T parent = default(T);
+            T? parent = default(T);
 
             parent = VisualTreeHelperEx.FindAncestorByType<T>(VisualTreeHelper.GetParent(depObj));
 
             return parent;
         }
 
-        public static Visual FindDescendantByName(Visual element, string name)
+        public static Visual? FindDescendantByName(Visual? element, string name)
         {
-            if (element != null && (element is FrameworkElement) && (element as FrameworkElement).Name == name)
+            if (element is FrameworkElement frameworkElement && frameworkElement.Name == name)
                 return element;
 
-            Visual foundElement = null;
-            if (element is FrameworkElement)
-                (element as FrameworkElement).ApplyTemplate();
+            Visual? foundElement = null;
+            if (element is FrameworkElement frameworkElementWithTemplate)
+                frameworkElementWithTemplate.ApplyTemplate();
 
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
-                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+                Visual? visual = VisualTreeHelper.GetChild(element, i) as Visual;
                 foundElement = VisualTreeHelperEx.FindDescendantByName(visual, name);
                 if (foundElement != null)
                     break;
@@ -75,12 +73,12 @@ namespace GraphX.Controls
             return foundElement;
         }
 
-        public static Visual FindDescendantByType(Visual element, Type type)
+        public static Visual? FindDescendantByType(Visual element, Type type)
         {
             return VisualTreeHelperEx.FindDescendantByType(element, type, true);
         }
 
-        public static Visual FindDescendantByType(Visual element, Type type, bool specificTypeOnly)
+        public static Visual? FindDescendantByType(Visual? element, Type type, bool specificTypeOnly)
         {
             if (element == null)
                 return null;
@@ -89,13 +87,13 @@ namespace GraphX.Controls
                 : (element.GetType() == type) || (element.GetType().IsSubclassOf(type)))
                 return element;
 
-            Visual foundElement = null;
-            if (element is FrameworkElement)
-                (element as FrameworkElement).ApplyTemplate();
+            Visual? foundElement = null;
+            if (element is FrameworkElement frameworkElement)
+                frameworkElement.ApplyTemplate();
 
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
-                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+                Visual? visual = VisualTreeHelper.GetChild(element, i) as Visual;
                 foundElement = VisualTreeHelperEx.FindDescendantByType(visual, type, specificTypeOnly);
                 if (foundElement != null)
                     break;
@@ -106,11 +104,11 @@ namespace GraphX.Controls
 
         #region Find descendants of type
 
-        public static IEnumerable<T> FindDescendantsOfType<T>(this Visual element) where T: class
+        public static IEnumerable<T> FindDescendantsOfType<T>(this Visual? element) where T: class
         {
             if (element == null)  yield break;
             if (element is T)
-                yield return element as T;
+                yield return (T)(object)element;
 
             var frameworkElement = element as FrameworkElement;
             if (frameworkElement != null)
@@ -127,15 +125,14 @@ namespace GraphX.Controls
 
         #endregion
 
-        public static T FindDescendantByType<T>(Visual element) where T : Visual
+        public static T? FindDescendantByType<T>(Visual element) where T : Visual
         {
-            Visual temp = VisualTreeHelperEx.FindDescendantByType(element, typeof (T));
+            Visual? temp = VisualTreeHelperEx.FindDescendantByType(element, typeof (T));
 
-            return (T) temp;
+            return (T?) temp;
         }
 
-        public static Visual FindDescendantWithPropertyValue(Visual element,
-            DependencyProperty dp, object value)
+        public static Visual? FindDescendantWithPropertyValue(Visual? element, DependencyProperty dp, object value)
         {
             if (element == null)
                 return null;
@@ -143,13 +140,13 @@ namespace GraphX.Controls
             if (element.GetValue(dp).Equals(value))
                 return element;
 
-            Visual foundElement = null;
-            if (element is FrameworkElement)
-                (element as FrameworkElement).ApplyTemplate();
+            Visual? foundElement = null;
+            if (element is FrameworkElement frameworkElement)
+                frameworkElement.ApplyTemplate();
 
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(element); i++)
             {
-                Visual visual = VisualTreeHelper.GetChild(element, i) as Visual;
+                Visual? visual = VisualTreeHelper.GetChild(element, i) as Visual;
                 foundElement = VisualTreeHelperEx.FindDescendantWithPropertyValue(visual, dp, value);
                 if (foundElement != null)
                     break;

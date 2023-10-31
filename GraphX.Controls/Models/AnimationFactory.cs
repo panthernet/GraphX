@@ -10,7 +10,7 @@ namespace GraphX.Controls.Models
         /// </summary>
         /// <param name="type">Animation type</param>
         /// <param name="duration">Animation duration</param>
-        public static MoveAnimationBase CreateMoveAnimation(MoveAnimation type, TimeSpan duration)
+        public static MoveAnimationBase? CreateMoveAnimation(MoveAnimation type, TimeSpan duration)
         {
             switch (type)
             {
@@ -25,7 +25,7 @@ namespace GraphX.Controls.Models
             return null;
         }
 
-        public static IOneWayControlAnimation CreateDeleteAnimation(DeleteAnimation type, double duration = .3)
+        public static IOneWayControlAnimation? CreateDeleteAnimation(DeleteAnimation type, double duration = .3)
         {
             switch (type)
             {
@@ -40,7 +40,7 @@ namespace GraphX.Controls.Models
             return null;
         }
 
-        public static IBidirectionalControlAnimation CreateMouseOverAnimation(MouseOverAnimation type, double duration = .3)
+        public static IBidirectionalControlAnimation? CreateMouseOverAnimation(MouseOverAnimation type, double duration = .3)
         {
             switch (type)
             {

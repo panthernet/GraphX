@@ -18,7 +18,7 @@ namespace GraphX.Controls
             return text != "\r" && new Regex("[^0-9.]+").IsMatch(text);
         }
 
-        public static ScaleTransform GetScaleTransform(FrameworkElement target)
+        public static ScaleTransform? GetScaleTransform(FrameworkElement target)
         {
             var transform = target.RenderTransform as ScaleTransform;
             if (transform != null) return transform;
@@ -30,7 +30,7 @@ namespace GraphX.Controls
             return transform;
         }
 
-        public static FrameworkElement FindDescendantByName(this FrameworkElement element, string name)
+        public static FrameworkElement? FindDescendantByName(this FrameworkElement? element, string name)
         {
             if (element == null || string.IsNullOrWhiteSpace(name)) { return null; }
 
@@ -48,7 +48,7 @@ namespace GraphX.Controls
             return null;
         }
 
-        public static bool IsInDesignMode(DependencyObject ctrl = null)
+        public static bool IsInDesignMode(DependencyObject? ctrl = null)
         {
             return ctrl != null && DesignerProperties.GetIsInDesignMode(ctrl);
         }

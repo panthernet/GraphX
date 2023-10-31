@@ -12,7 +12,7 @@ namespace GraphX.Controls
                 "InternalPreserveStackTrace",
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
-            preserveStackTrace.Invoke(exception, null);
+            preserveStackTrace?.Invoke(exception, null);
         }
     }
 }

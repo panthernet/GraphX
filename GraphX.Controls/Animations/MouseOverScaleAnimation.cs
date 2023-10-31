@@ -33,8 +33,7 @@ namespace GraphX.Controls.Animations
             var transform = CustomHelper.GetScaleTransform(target);
             if (transform == null)
             {
-                target.RenderTransform = new ScaleTransform();
-                transform = target.RenderTransform as ScaleTransform;
+                target.RenderTransform = transform = new ScaleTransform();
                 target.RenderTransformOrigin = CenterScale ? new Point(.5, .5) : new Point(0, 0);
             }
 

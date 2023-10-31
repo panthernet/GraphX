@@ -25,16 +25,16 @@ namespace GraphX.Controls
 
         #endregion
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is EllipseGeometry) return null;
-            return _inverted ? (Geometry)value : (PathGeometry)value;
+            return _inverted ? (Geometry?) value : (PathGeometry?) value;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is EllipseGeometry) return null;
-            return _inverted ? (PathGeometry)value : (Geometry)value;
+            return _inverted ? (PathGeometry?) value : (Geometry?) value;
         }
     }
 }

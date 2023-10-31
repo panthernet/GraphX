@@ -54,12 +54,11 @@ namespace GraphX.Controls
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
         }
 
-        private static VertexControl GetVertexControl(DependencyObject parent)
+        private static VertexControl? GetVertexControl(DependencyObject? parent)
         {
             while (parent != null)
             {
-                var control = parent as VertexControl;
-                if (control != null) return control;
+                if (parent is VertexControl control) return control;
                 parent = VisualTreeHelper.GetParent(parent);
             }
             return null;
@@ -67,8 +66,8 @@ namespace GraphX.Controls
 
         #endregion Common part
 
-        private VertexControl _vertexControl;
-        protected VertexControl VertexControl => _vertexControl ?? (_vertexControl = GetVertexControl(GetParent()));
+        private VertexControl? _vertexControl;
+        protected VertexControl? VertexControl => _vertexControl ??= GetVertexControl(GetParent());
 
         public StaticVertexConnectionPoint()
         {
@@ -93,10 +92,10 @@ namespace GraphX.Controls
             return VisualParent;
         }
 
-        protected virtual void OnLayoutUpdated(object sender, EventArgs e)
+        protected virtual void OnLayoutUpdated(object? sender, EventArgs e)
         {
             var position = TranslatePoint(new Point(), VertexControl);
-            var vPos = VertexControl.GetPosition();
+            var vPos = VertexControl!.GetPosition();
             position = new Point(position.X + vPos.X, position.Y + vPos.Y);
             RectangularSize = new Rect(position, new Size(ActualWidth, ActualHeight));
         }

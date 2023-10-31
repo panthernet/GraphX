@@ -114,11 +114,11 @@ namespace GraphX.Controls
 
         private static readonly DependencyPropertyKey VisualBrushPropertyKey =
             DependencyProperty.RegisterReadOnly(nameof(VisualBrush), typeof (VisualBrush), typeof (ViewFinderDisplay),
-                new FrameworkPropertyMetadata((VisualBrush) null));
+                new FrameworkPropertyMetadata((VisualBrush?) null));
 
         public static readonly DependencyProperty VisualBrushProperty = VisualBrushPropertyKey.DependencyProperty;
 
-        internal VisualBrush VisualBrush
+        internal VisualBrush? VisualBrush
         {
             get { return (VisualBrush) GetValue(VisualBrushProperty); }
             set { SetValue(VisualBrushPropertyKey, value); }

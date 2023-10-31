@@ -12,11 +12,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="- Removed unused METRO code&#10;- Renamed library to GraphX.Controls as we only support WPF now">
+    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="- Removed all METRO dependent code">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/DeleteFadeAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/DeleteFadeAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/DeleteShrinkAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/DeleteShrinkAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/Interfaces/IOneWayControlAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/Interfaces/IOneWayControlAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/MouseOverScaleAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/MouseOverScaleAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveAnimationBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveAnimationBase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveFadeAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveFadeAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveSimpleAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Animations/MoveSimpleAnimation.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Behaviours/DragBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Behaviours/DragBehaviour.cs" afterDir="false" />
@@ -28,32 +30,31 @@
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/EdgePointers/DefaultEdgePointer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/EdgePointers/DefaultEdgePointer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/GraphArea.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/GraphArea.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/GraphAreaBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/GraphAreaBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IEdgeLabelControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IEdgeLabelControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IEdgePointer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IEdgePointer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IGraphAreaBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IGraphAreaBase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IGraphControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IGraphControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IPositionChangeNotify.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IPositionChangeNotify.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/ITrackableContent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/ITrackableContent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IVertexConnectionPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IVertexConnectionPoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IZoomControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/Misc/IZoomControl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexConnectionPoints/StaticVertexConnectionPoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexConnectionPoints/StaticVertexConnectionPoint.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexControl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexControlBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexControlBase.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexLabels/AttachableVertexLabelControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexLabels/AttachableVertexLabelControl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexLabels/VertexLabelControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/VertexLabels/VertexLabelControl.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/Converters/GeometryToPathGeometryConverter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/Converters/GeometryToPathGeometryConverter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/Helpers/VisualTreeHelperEx.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/Helpers/VisualTreeHelperEx.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ViewFinderDisplay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ViewFinderDisplay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ZoomContentPresenter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ZoomContentPresenter.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ZoomControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/ZoomControl/ZoomControl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/CustomHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/CustomHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/GeometryHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/GeometryHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/DesignerExampleData/EdgeDataExample.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/DesignerExampleData/EdgeDataExample.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/ExceptionExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/ExceptionExtensions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/GraphX.Controls.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/GraphX.Controls.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/MathHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/MathHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/ContentSizeChangedEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/ContentSizeChangedEventHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/DefaultLabelFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/DefaultLabelFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeSelectedEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeSelectedEventHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/GraphControlFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/GraphControlFactory.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/Interfaces/ILabelFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/Interfaces/ILabelFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/AnimationFactory.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/AnimationFactory.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/ControlClickedEventArgs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/ControlClickedEventArgs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeEventOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeEventOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeSelectedEventArgs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/EdgeSelectedEventArgs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/PropertyChangeNotifier.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/PropertyChangeNotifier.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/StateStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/StateStorage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/VertexEventOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/VertexEventOptions.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/VertexPositionEventArgs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/VertexPositionEventArgs.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/VertexSelectedEventHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/VertexSelectedEventHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Models/VertexSelectedEventArgs.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Models/VertexSelectedEventArgs.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Controls/PrintHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/PrintHelper.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX.Controls/TypeExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/TypeExtensions.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,10 +78,44 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/Documents/AIV.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Projects/GraphX/Examples/ShowcaseApp.WPF/Pages/EdgeRoutingGraph.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Examples/SimpleGraph/obj/Debug/net6.0-windows/SimpleGraph_0a4ksmn0_wpftmp.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/GraphX.Controls/obj/Debug/net6.0-windows/GraphX.WPF.Controls_45uga2h0_wpftmp.AssemblyInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f6b189ed73fe4437a1c3161511562a715aa00/af/c853f9e4/IEdge`1.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/c6c70d283b9343458631eaca8b2ef8a216510/_d965b/INotifyPropertyChanged.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -224,7 +259,7 @@
       <workItem from="1698735955254" duration="2544000" />
       <workItem from="1698738546258" duration="930000" />
       <workItem from="1698739517082" duration="3000" />
-      <workItem from="1698739664840" duration="1567000" />
+      <workItem from="1698739664840" duration="6036000" />
     </task>
     <task id="LOCAL-00001" summary="- .NET 6:ified&#10;- UAP removed">
       <option name="closed" value="true" />
@@ -250,7 +285,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698739887323</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="- Removed all METRO dependent code">
+      <option name="closed" value="true" />
+      <created>1698741274173</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1698741274173</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,6 +305,7 @@
     <MESSAGE value="- .NET 6:ified&#10;- UAP removed" />
     <MESSAGE value="Updated CHANGELOG.txt" />
     <MESSAGE value="- Removed unused METRO code&#10;- Renamed library to GraphX.Controls as we only support WPF now" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Removed unused METRO code&#10;- Renamed library to GraphX.Controls as we only support WPF now" />
+    <MESSAGE value="- Removed all METRO dependent code" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Removed all METRO dependent code" />
   </component>
 </project>

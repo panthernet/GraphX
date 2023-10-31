@@ -74,7 +74,7 @@ namespace GraphX.Controls
         }
 
 
-        public static Point[] ToWindows(this Measure.Point[] points)
+        public static Point[]? ToWindows(this Measure.Point[]? points)
         {
             if (points == null) return null;
             var list = new Point[points.Length];
@@ -83,7 +83,7 @@ namespace GraphX.Controls
             return list;
         }
 
-        public static Measure.Point[] ToGraphX(this Point[] points)
+        public static Measure.Point[]? ToGraphX(this Point[]? points)
         {
             if (points == null) return null;
             var list = new Measure.Point[points.Length];

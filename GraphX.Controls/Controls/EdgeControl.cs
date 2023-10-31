@@ -55,7 +55,7 @@ namespace GraphX.Controls
             Source = null;
             Target = null;
             Edge = null;
-            RootArea = null;
+            RootArea = null!;
             HighlightBehaviour.SetIsHighlightEnabled(this, false);
             DragBehaviour.SetIsDragEnabled(this, false);
             Linegeometry = null;
@@ -81,8 +81,8 @@ namespace GraphX.Controls
         #region Vertex position tracing
         private bool _sourceTrace;
         private bool _targetTrace;
-        private VertexControl _oldSource;
-        private VertexControl _oldTarget;
+        private VertexControl? _oldSource;
+        private VertexControl? _oldTarget;
 
         protected override void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -104,13 +104,18 @@ namespace GraphX.Controls
             {
                 _oldSource.PositionChanged -= source_PositionChanged;
                 _oldSource.SizeChanged -= Source_SizeChanged;
-                _oldSource.EventOptions.PositionChangeNotification = _sourceTrace;
+                if (_oldSource.EventOptions != null)
+                    _oldSource.EventOptions.PositionChangeNotification = _sourceTrace;
             }
             _oldSource = Source;
             if (Source != null) 
             {
-                _sourceTrace = Source.EventOptions.PositionChangeNotification;
-                Source.EventOptions.PositionChangeNotification = true;
+                if (Source.EventOptions != null)
+                {
+                    _sourceTrace = Source.EventOptions.PositionChangeNotification;
+                    Source.EventOptions.PositionChangeNotification = true;
+                }
+
                 Source.PositionChanged += source_PositionChanged;
                 Source.SizeChanged += Source_SizeChanged;
             }
@@ -127,13 +132,18 @@ namespace GraphX.Controls
             {
                 _oldTarget.PositionChanged -= source_PositionChanged;
                 _oldTarget.SizeChanged -= Source_SizeChanged;
-                _oldTarget.EventOptions.PositionChangeNotification = _targetTrace;
+                if (_oldTarget.EventOptions != null)
+                    _oldTarget.EventOptions.PositionChangeNotification = _targetTrace;
             }
             _oldTarget = Target;
             if (Target != null)
             {
-                _targetTrace = Target.EventOptions.PositionChangeNotification;
-                Target.EventOptions.PositionChangeNotification = true;
+                if (Target.EventOptions != null)
+                {
+                    _targetTrace = Target.EventOptions.PositionChangeNotification;
+                    Target.EventOptions.PositionChangeNotification = true;
+                }
+
                 Target.PositionChanged += source_PositionChanged;
                 Target.SizeChanged += Source_SizeChanged;
             }
@@ -167,7 +177,7 @@ namespace GraphX.Controls
             switch (typ)
             {
                 case EventType.MouseClick:
-                    if (EventOptions.MouseClickEnabled)
+                    if (EventOptions is {MouseClickEnabled: true})
                     {
                         MouseDown += EdgeControl_MouseDown;
                         PreviewMouseMove += EdgeControl_PreviewMouseMove;
@@ -179,20 +189,20 @@ namespace GraphX.Controls
                     }
                     break;
                 case EventType.MouseDoubleClick:
-                    if (EventOptions.MouseDoubleClickEnabled) MouseDoubleClick += EdgeControl_MouseDoubleClick;
+                    if (EventOptions is {MouseDoubleClickEnabled: true}) MouseDoubleClick += EdgeControl_MouseDoubleClick;
                     else MouseDoubleClick -= EdgeControl_MouseDoubleClick;
                     break;
                 case EventType.MouseEnter:
-                    if (EventOptions.MouseEnterEnabled) MouseEnter += EdgeControl_MouseEnter;
+                    if (EventOptions is {MouseEnterEnabled: true}) MouseEnter += EdgeControl_MouseEnter;
                     else MouseEnter -= EdgeControl_MouseEnter;
                     break;
                 case EventType.MouseLeave:
-                    if (EventOptions.MouseLeaveEnabled) MouseLeave += EdgeControl_MouseLeave;
+                    if (EventOptions is {MouseLeaveEnabled: true}) MouseLeave += EdgeControl_MouseLeave;
                     else MouseLeave -= EdgeControl_MouseLeave;
                     break;
 
                 case EventType.MouseMove:
-                    if (EventOptions.MouseMoveEnabled) MouseMove += EdgeControl_MouseMove;
+                    if (EventOptions is {MouseMoveEnabled: true}) MouseMove += EdgeControl_MouseMove;
                     else MouseMove -= EdgeControl_MouseMove;
                     break;
             }
@@ -205,7 +215,7 @@ namespace GraphX.Controls
         {
         }
 
-        public EdgeControl(VertexControl source, VertexControl target, object edge, bool showArrows = true)
+        public EdgeControl(VertexControl? source, VertexControl? target, object? edge, bool showArrows = true)
         {
             DataContext = edge;
             Source = source; Target = target;
@@ -311,9 +321,9 @@ namespace GraphX.Controls
         /// Gets Edge data as specified class
         /// </summary>
         /// <typeparam name="T">Class</typeparam>
-        public T GetDataEdge<T>() where T : IGraphXCommonEdge
+        public T? GetDataEdge<T>() where T : IGraphXCommonEdge
         {
-            return (T)Edge;
+            return (T?)Edge;
         }   
     }
 }

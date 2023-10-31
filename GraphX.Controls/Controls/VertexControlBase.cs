@@ -16,11 +16,11 @@ namespace GraphX.Controls
     [TemplatePart(Name = "PART_vcproot", Type = typeof(Panel))]
     public abstract class VertexControlBase : Control, IGraphControl
     {
-        protected internal IVertexLabelControl VertexLabelControl;
+        protected internal IVertexLabelControl? VertexLabelControl;
         /// <summary>
         /// Fires when new label is attached to VertexControl
         /// </summary>
-        public event EventHandler<EventArgs> LabelAttached;
+        public event EventHandler<EventArgs?>? LabelAttached;
 
         protected void OnLabelAttached()
         {
@@ -30,7 +30,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when new label is detached from VertexControl
         /// </summary>
-        public event EventHandler<EventArgs> LabelDetached;
+        public event EventHandler<EventArgs?>? LabelDetached;
 
         protected void OnLabelDetached()
         {
@@ -40,7 +40,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Fires when IsPositionTraceEnabled property set and object changes its coordinates.
         /// </summary>
-        public event VertexPositionChangedEH PositionChanged;
+        public event VertexPositionChangedEH? PositionChanged;
 
         protected void OnPositionChanged(Point offset, Point pos)
         {
@@ -93,7 +93,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Provides settings for event calls within single vertex control
         /// </summary>
-        public VertexEventOptions EventOptions { get; protected set; }
+        public VertexEventOptions? EventOptions { get; protected set; } = null!;
 
         private double _labelAngle;
         /// <summary>
@@ -128,7 +128,7 @@ namespace GraphX.Controls
         /// <summary>
         /// Gets or sets vertex data object
         /// </summary>
-        public object Vertex
+        public object? Vertex
         {
             get { return GetValue(VertexProperty); }
             set { SetValue(VertexProperty, value); }
@@ -154,7 +154,7 @@ namespace GraphX.Controls
 
         private static void ShowLabelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var obj = d as VertexControlBase;
+            var obj = (VertexControlBase) d;
             if (obj.VertexLabelControl == null) return;
             if ((bool)e.NewValue) obj.VertexLabelControl.Show(); else obj.VertexLabelControl.Hide();
         }
@@ -224,14 +224,14 @@ namespace GraphX.Controls
         /// </summary>
         /// <param name="id">Connection point identifier</param>
         /// <param name="runUpdate">Update connection point if found</param>
-        public IVertexConnectionPoint GetConnectionPointById(int id, bool runUpdate = false)
+        public IVertexConnectionPoint? GetConnectionPointById(int id, bool runUpdate = false)
         {
             var result = VertexConnectionPointsList.FirstOrDefault(a => a.Id == id);
             result?.Update();
             return result;
         }
 
-        public IVertexConnectionPoint GetConnectionPointAt(Point position)
+        public IVertexConnectionPoint? GetConnectionPointAt(Point position)
         {
             Measure(new USize(double.PositiveInfinity, double.PositiveInfinity));
 

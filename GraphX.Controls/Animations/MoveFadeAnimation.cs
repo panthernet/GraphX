@@ -34,7 +34,7 @@ namespace GraphX.Controls.Animations
             {
                 if (item.Key is EdgeControl) throw new GX_InvalidDataException("AnimateVertex() -> Got edge control instead vertex control!");
 
-                var control = item.Key as Control;
+                var control = (Control) item.Key;
                 if (defaultValues)
                 {
                     GraphAreaBase.SetX(control, GraphAreaBase.GetFinalX(control));
@@ -72,7 +72,7 @@ namespace GraphX.Controls.Animations
             foreach(var item in EdgeStorage)
             {
                 if (item is VertexControl) throw new GX_InvalidDataException("AnimateEdge() -> Got vertex control instead edge control!");
-                var control = item as Control;
+                var control = (Control) item;
                 CreateStory(control, 1, 0, (o, e) => CreateStory(control, 0, 1).Begin()).Begin();
             }
         }
@@ -85,7 +85,7 @@ namespace GraphX.Controls.Animations
         /// <param name="end">End Param value</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-        private Storyboard CreateStory(Control control, double start, double end, EventHandler callback = null)
+        private Storyboard CreateStory(Control control, double start, double end, EventHandler? callback = null)
         {
             var story = new Storyboard();
             var fadeAnimation = new DoubleAnimation()
