@@ -7,7 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{C6ACB65E-A76D-44E4-9B20-022C0E3498B7}"
 	ProjectSection(SolutionItems) = preProject
-		Documents\AIV.cs = Documents\AIV.cs
 		Documents\CHANGELOG.txt = Documents\CHANGELOG.txt
 		README.md = README.md
 		Documents\TODO.txt = Documents\TODO.txt

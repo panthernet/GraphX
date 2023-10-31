@@ -1,4 +1,8 @@
-﻿RELEASE 3.0.0
+﻿NOT YET RELEASED
+- Removed UAP support
+- Converted project to .NET 6
+
+RELEASE 3.0.0
 - Added .NET Core library version
 - Upgraded codebase to .NET Standard 2.0 (thanks to honza77)
 - Upgraded codebase to use QUickGraphCore library

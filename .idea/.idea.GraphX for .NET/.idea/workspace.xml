@@ -12,179 +12,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/GitlabLint.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/global.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/App.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/App.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/ExampleModels/DataEdge.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/ExampleModels/DataEdge.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/FileSerialization/YAXPointArraySerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/FileSerialization/YAXPointArraySerializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/FileSerialization/YAXPointSerializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/FileSerialization/YAXPointSerializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/EdgeRoutingGraph.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/EdgeRoutingGraph.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/EdgeRoutingGraph.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/EdgeRoutingGraph.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/GeneralGraph.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/GeneralGraph.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/Mini/DataFiltering.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/Mini/DataFiltering.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/Mini/EdgesParallel.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/Mini/EdgesParallel.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/ThemedGraph.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Pages/ThemedGraph.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Properties/Annotations.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Properties/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Properties/Settings.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Properties/Settings.settings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/ShowcaseApp.WPF.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/ShowcaseApp.WPF.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/Templates/Accordion.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/ShowcaseApp.WPF/packages.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph.DotNetCore/App.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph.DotNetCore/App.xaml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph.DotNetCore/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph.DotNetCore/SimpleGraph.DotNetCore.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/App.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/Properties/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/Properties/Resources.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/Properties/Resources.resx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/Properties/Settings.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/Properties/Settings.settings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/SimpleGraph.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Examples/SimpleGraph/SimpleGraph.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/SimpleGraph/packages.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/App.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/App.xaml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/150.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/300.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/44.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/50.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/88.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/Logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/Logo.scale-100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/Logo.scale-200.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/MidLogo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/SmallLogo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/SplashScreen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/SplashScreen.scale-100.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/SplashScreen.scale-200.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/StoreLogo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/newlogo_big.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/play.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/refresh.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/tr_grren.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Assets/tr_red.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Common/StandardStyles.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Common/templates.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Common/templates2.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/MainPage.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/MainPage.xaml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/MainPageDebug.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/MainPageDebug.xaml.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/CurvedEr.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/CurvedErParameters.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/DataEdge.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/DataVertex.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/DebugItems.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/GXLogicCoreExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/GraphAreaExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/GraphExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Models/MouseOverScaleAnimation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Package.appxmanifest" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Properties/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/Properties/Default.rd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/UAP.SimpleGraph.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/UAP.SimpleGraph.nuget.props" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/UAP.SimpleGraph.nuget.targets" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/UAP.SimpleGraph/project.lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/App.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Form1.Designer.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Form1.resx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Form1.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Models/DataEdge.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Models/DataVertex.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Models/GraphAreaExample.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Models/GraphExample.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Application.Designer.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Application.myapp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/AssemblyInfo.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Resources.Designer.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Resources.resx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Settings.Designer.vb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/My Project/Settings.settings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/Templates/template.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/WindowsDesktop_VB.NET_WinForms_Example.vbproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsDesktop_VB.NET_WinForms_Example/packages.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Form1.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Form1.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Form1.resx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Images/dice.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Images/update.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Models/DataEdge.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Models/DataVertex.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Models/GraphAreaExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Models/GraphExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Properties/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Properties/Resources.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Properties/Resources.resx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Properties/Settings.Designer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Properties/Settings.settings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/Templates/template.xaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/WindowsFormsProject.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/app.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples/WindowsFormsProject/packages.config" beforeDir="false" />
+    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="- .NET 6:ified&#10;- UAP removed">
+      <change beforePath="$PROJECT_DIR$/Documents/AIV.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Documents/CHANGELOG.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Documents/CHANGELOG.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GraphX for .NET.sln" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX for .NET.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Controls/EdgePointers/DefaultEdgePointer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Controls/EdgePointers/DefaultEdgePointer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/GraphX.WPF.Controls.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/GraphX.WPF.Controls.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/GraphX.WPF.Controls.nuspec" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/PrintHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/PrintHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/Properties/AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Controls/Properties/AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Controls/packages.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Core.Controls/GraphX.Core.Controls.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Core.Controls/GraphX.Core.Controls.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Standard.Common/GraphX.Standard.Common.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Standard.Common/GraphX.Standard.Common.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.Standard.Logic/GraphX.Standard.Logic.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Standard.Logic/GraphX.Standard.Logic.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Converters/DoubleToLog10Converter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Converters/EqualityToBooleanConverter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Converters/RoundedValueConverter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Converters/VisibilityToBoolConverter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Helpers/DoubleHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Helpers/PointHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/Helpers/VisualTreeHelperEx.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/AreaSelectedEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/AreaSelectedEventHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/ContentSizeChangedHandler.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/MouseWheelZoomingMode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/ZoomControlModes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/SupportClasses/ZoomViewModifierMode.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/ZoomContentPresenter.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Controls/ZoomControl/ZoomControl.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/DesignerExampleData/EdgeDataExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/DesignerExampleData/VertexDataExample.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/DpExtensions.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/GraphX.UAP.Controls.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Images/cross-icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Images/help_black.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Images/round1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Images/round2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/AnimationHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/DelegateCommand.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/DispatcherHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/EdgeSelectedEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/FileServiceProviderMETRO.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/ModifierKeys.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/MouseButtonEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/VertexMovedEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/VertexSelectedEventArgs.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/ViewModelBase.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/ViewModelXamlMember.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/ViewModelXamlMetadataProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/ViewModelXamlType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/XamlSystemType.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Models/XamlTypes/XamlTypeProvider.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/PrintHelper.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Properties/AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Properties/GraphX.UAP.Controls.rd.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX.UAP.Controls/Themes/Generic.xaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -352,7 +183,17 @@
       <workItem from="1698730100999" duration="484000" />
       <workItem from="1698731482385" duration="3114000" />
       <workItem from="1698735955254" duration="2544000" />
+      <workItem from="1698738546258" duration="374000" />
     </task>
+    <task id="LOCAL-00001" summary="- .NET 6:ified&#10;- UAP removed">
+      <option name="closed" value="true" />
+      <created>1698738811015</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1698738811015</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,5 +202,7 @@
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="- .NET 6:ified&#10;- UAP removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="- .NET 6:ified&#10;- UAP removed" />
   </component>
 </project>
