@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\GraphX.Core.Controls\GraphX.Core.Controls.csproj" />
+        <ProjectReference Include="..\..\GraphX.Controls\GraphX.Controls.csproj" />
         <ProjectReference Include="..\..\GraphX.Standard.Common\GraphX.Standard.Common.csproj" />
         <ProjectReference Include="..\..\GraphX.Standard.Logic\GraphX.Standard.Logic.csproj" />
     </ItemGroup>

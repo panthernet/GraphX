@@ -12,10 +12,55 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="- .NET 6:ified&#10;- UAP removed">
-      <change beforePath="$PROJECT_DIR$/Documents/AIV.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Documents/CHANGELOG.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Documents/CHANGELOG.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GraphX for .NET.sln" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX for .NET.sln" afterDir="false" />
+    <list default="true" id="318d0491-2dda-4779-99c9-72aaeeadb713" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.GraphX for .NET/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.Core.Controls/GraphX.Core.Controls.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/GraphX.Core.Controls/GraphX.Core.Controls.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Converters/DoubleToLog10Converter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Converters/EqualityToBooleanConverter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Converters/RoundedValueConverter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Converters/VisibilityToBoolConverter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Helpers/DoubleHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Helpers/PointHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/Helpers/VisualTreeHelperEx.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/AreaSelectedEventArgs.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/AreaSelectedEventHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/ContentSizeChangedHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/MouseWheelZoomingMode.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/ZoomControlModes.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/SupportClasses/ZoomViewModifierMode.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/ZoomContentPresenter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Controls/ZoomControl/ZoomControl.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/DesignerExampleData/EdgeDataExample.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/DesignerExampleData/VertexDataExample.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/DpExtensions.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/GraphX.METRO.Controls.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/GraphX.METRO.Controls.csproj.DotSettings" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Images/cross-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Images/help_black.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Images/round1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Images/round2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/METRO.SimpleGraph_TemporaryKey.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/MathHelper.cs.bak" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/AnimationHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/DelegateCommand.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/DispatcherHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/EdgeSelectedEventArgs.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/FileServiceProviderMETRO.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/ModifierKeys.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/MouseButtonEventArgs.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/VertexMovedEventArgs.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/VertexSelectedEventArgs.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/ViewModelBase.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/ViewModelXamlMember.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/ViewModelXamlMetadataProvider.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/ViewModelXamlType.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/XamlSystemType.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Models/XamlTypes/XamlTypeProvider.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/PrintHelper.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Properties/AssemblyInfo.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/Themes/Generic.xaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/packages.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/GraphX.METRO.Controls/port.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +228,8 @@
       <workItem from="1698730100999" duration="484000" />
       <workItem from="1698731482385" duration="3114000" />
       <workItem from="1698735955254" duration="2544000" />
-      <workItem from="1698738546258" duration="374000" />
+      <workItem from="1698738546258" duration="930000" />
+      <workItem from="1698739517082" duration="3000" />
     </task>
     <task id="LOCAL-00001" summary="- .NET 6:ified&#10;- UAP removed">
       <option name="closed" value="true" />
@@ -193,7 +239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1698738811015</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Updated CHANGELOG.txt">
+      <option name="closed" value="true" />
+      <created>1698738940620</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1698738940620</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,6 +257,7 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="- .NET 6:ified&#10;- UAP removed" />
-    <option name="LAST_COMMIT_MESSAGE" value="- .NET 6:ified&#10;- UAP removed" />
+    <MESSAGE value="Updated CHANGELOG.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated CHANGELOG.txt" />
   </component>
 </project>

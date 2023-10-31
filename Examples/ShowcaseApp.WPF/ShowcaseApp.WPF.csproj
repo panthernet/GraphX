@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GraphX.Controls\GraphX.WPF.Controls.csproj" />
+    <ProjectReference Include="..\..\GraphX.Controls\GraphX.Controls.csproj" />
     <ProjectReference Include="..\..\GraphX.Standard.Logic\GraphX.Standard.Logic.csproj" />
   </ItemGroup>
 
