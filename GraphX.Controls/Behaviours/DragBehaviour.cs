@@ -1,17 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-
-#if WPF
-
 using System.Windows;
-
-#elif METRO
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Input;
-using Windows.Foundation;
-using System.Linq;
-#endif
-
 using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
 using GraphX.Common.Models;
@@ -60,11 +49,7 @@ namespace GraphX.Controls
 
         private static readonly Predicate<DependencyObject> _builtinIsSnappingPredicate = obj =>
         {
-#if WPF
             return System.Windows.Input.Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift;
-#elif METRO
-            return Window.Current.CoreWindow.GetKeyState(Windows.System.VirtualKey.Shift) == Windows.UI.Core.CoreVirtualKeyStates.Down;
-#endif
         };
 
         private static readonly Predicate<DependencyObject> _builtinIsIndividualSnappingPredicate = obj => false;
@@ -336,13 +321,7 @@ namespace GraphX.Controls
 
         private static void OnIsDragEnabledPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-#if WPF
             var element = obj as IInputElement;
-#elif METRO
-            var element = obj as FrameworkElement;
-#else
-            throw new NotImplementedException();
-#endif
             if (element == null)
                 return;
 
@@ -352,7 +331,6 @@ namespace GraphX.Controls
             if ((bool)e.NewValue)
             {
                 //register the event handlers
-#if WPF
                 if (element is VertexControl)
                 {
                     element.MouseLeftButtonDown += OnVertexDragStarted;
@@ -363,15 +341,10 @@ namespace GraphX.Controls
                     element.MouseLeftButtonDown += OnEdgeDrageStarted;
                     element.PreviewMouseLeftButtonUp += OnEdgeDragFinished;
                 }
-#elif METRO
-                element.PointerPressed += OnDragStarted;
-                element.PointerReleased += OnDragFinished;
-#endif
             }
             else
             {
                 //unregister the event handlers
-#if WPF
                 if (element is VertexControl)
                 {
                     element.MouseLeftButtonDown -= OnVertexDragStarted;
@@ -382,15 +355,10 @@ namespace GraphX.Controls
                     element.MouseLeftButtonDown -= OnEdgeDrageStarted;
                     element.PreviewMouseLeftButtonUp -= OnEdgeDragFinished;
                 }
-#elif METRO
-                element.PointerPressed -= OnDragStarted;
-                element.PointerReleased -= OnDragFinished;
-#endif
             }
         }
 
         #endregion PropertyChanged callbacks
-#if WPF
         private static void OnEdgeDrageStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             DependencyObject obj = sender as DependencyObject;
@@ -469,13 +437,8 @@ namespace GraphX.Controls
                 }
             }
         }
-#endif
-#if WPF
 
         private static void OnVertexDragStarted(object sender, System.Windows.Input.MouseButtonEventArgs e)
-#elif METRO
-        private static void OnDragStarted( object sender, PointerRoutedEventArgs e )
-#endif
         {
             var obj = sender as DependencyObject;
             //we are starting the drag
@@ -500,7 +463,6 @@ namespace GraphX.Controls
                 }
 
             //capture the mouse
-#if WPF
             var element = obj as IInputElement;
             if (element != null)
             {
@@ -510,23 +472,9 @@ namespace GraphX.Controls
             }
             //else throw new GX_InvalidDataException("The control must be a descendent of the FrameworkElement or FrameworkContentElement!");
             e.Handled = false;
-#elif METRO
-            var element = obj as FrameworkElement;
-            if ( element != null )
-            {
-                element.CapturePointer(e.Pointer);
-                element.PointerMoved += OnDragging;
-            }
-            e.Handled = true;
-#endif
         }
 
-#if WPF
-
         private static void OnVertexDragFinished(object sender, System.Windows.Input.MouseButtonEventArgs e)
-#elif METRO
-        private static void OnDragFinished( object sender, PointerRoutedEventArgs e )
-#endif
         {
             UpdateVertexEdges(sender as VertexControl);
 
@@ -548,29 +496,15 @@ namespace GraphX.Controls
             }
 
             //we finished the drag, release the mouse
-#if WPF
             var element = sender as IInputElement;
             if (element != null)
             {
                 element.MouseMove -= OnVertexDragging;
                 element.ReleaseMouseCapture();
             }
-#elif METRO
-            var element = sender as FrameworkElement;
-            if ( element != null )
-            {
-                element.PointerMoved -= OnDragging;
-                element.ReleasePointerCapture(e.Pointer);
-            }
-#endif
         }
 
-#if WPF
-
         private static void OnVertexDragging(object sender, System.Windows.Input.MouseEventArgs e)
-#elif METRO
-        private static void OnDragging( object sender, PointerRoutedEventArgs e )
-#endif
         {
             var obj = sender as DependencyObject;
             if (!GetIsDragging(obj))
@@ -652,11 +586,7 @@ namespace GraphX.Controls
                 if (ra.IsEdgeRoutingEnabled)
                 {
                     ra.ComputeEdgeRoutesByVertex(vc);
-#if WPF
                     vc.InvalidateVisual();
-#elif METRO
-                    vc.InvalidateArrange();
-#endif
                 }
             }
         }
@@ -685,20 +615,11 @@ namespace GraphX.Controls
             //Debug.WriteLine("({0:##0.00000}, {1:##0.00000})", x, y);
         }
 
-#if WPF
-
         private static Point GetPositionInArea(GraphAreaBase area, System.Windows.Input.MouseEventArgs e)
-#elif METRO
-        private static Windows.Foundation.Point GetPositionInArea(GraphAreaBase area, PointerRoutedEventArgs e)
-#endif
         {
             if (area != null)
             {
-#if WPF
                 var pos = e.GetPosition(area);
-#elif METRO
-                var pos = e.GetCurrentPoint(area as UIElement).Position;
-#endif
                 return pos;
             }
             throw new GX_InvalidDataException("DragBehavior.GetPositionInArea() - The input element must be a child of a GraphAreaBase.");

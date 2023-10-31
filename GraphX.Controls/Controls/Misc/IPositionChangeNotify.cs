@@ -5,11 +5,5 @@
     /// </summary>
     public interface IPositionChangeNotify
     {
-#if METRO
-        /// <summary>
-        /// Notify object that it's position within container has been changed
-        /// </summary>
-        void OnPositionChanged();
-#endif
     }
 }

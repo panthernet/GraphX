@@ -1,16 +1,7 @@
-﻿#if WPF
-
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-
-#elif METRO
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-#endif
 
 using GraphX.Common.Enums;
 
@@ -55,20 +46,12 @@ namespace GraphX.Controls
 
         public void Show()
         {
-#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Visible);
-#else
-            SetValue(UIElement.VisibilityProperty, Visibility.Visible);
-#endif
         }
 
         public void Hide()
         {
-#if WPF
             SetCurrentValue(UIElement.VisibilityProperty, Visibility.Collapsed);
-#else
-            SetValue(UIElement.VisibilityProperty, Visibility.Collapsed);
-#endif
         }
 
         private static VertexControl GetVertexControl(DependencyObject parent)
@@ -105,8 +88,6 @@ namespace GraphX.Controls
             _vertexControl = null;
         }
 
-#if WPF
-
         public DependencyObject GetParent()
         {
             return VisualParent;
@@ -119,20 +100,5 @@ namespace GraphX.Controls
             position = new Point(position.X + vPos.X, position.Y + vPos.Y);
             RectangularSize = new Rect(position, new Size(ActualWidth, ActualHeight));
         }
-
-#elif METRO
-        public DependencyObject GetParent()
-        {
-            return Parent;
-        }
-
-        protected virtual void OnLayoutUpdated(object sender, object o)
-        {
-            var position = TransformToVisual(VertexControl).TransformPoint(new Point());
-            var vPos = VertexControl.GetPosition();
-            position = new Point(position.X + vPos.X, position.Y + vPos.Y);
-            RectangularSize = new Rect(position, DesiredSize);
-        }
-#endif
     }
 }

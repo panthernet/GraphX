@@ -7,11 +7,7 @@ using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
 using GraphX.Common.Models;
 using QuikGraph;
-#if WPF
 using System.Windows;
-#elif METRO
-using Windows.UI.Xaml;
-#endif
 
 namespace GraphX.Controls.Models
 {

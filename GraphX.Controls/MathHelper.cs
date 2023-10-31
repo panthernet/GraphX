@@ -1,11 +1,5 @@
 ﻿using System;
-#if WPF
 using System.Windows;
-#elif METRO
-using GraphX.Measure;
-using Point = Windows.Foundation.Point;
-using Rect = Windows.Foundation.Rect;
-#endif
 
 namespace GraphX.Controls
 {

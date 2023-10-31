@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using USize = System.Windows.Size;
 using Point = System.Windows.Point;
-#elif METRO
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.Foundation;
-using USize = Windows.Foundation.Size;
-#endif
 using GraphX.Controls.Models;
 using GraphX.Common;
 using GraphX.Common.Enums;
@@ -281,14 +274,5 @@ namespace GraphX.Controls
                 if (isVisible) item.Show(); else item.Hide();
             }
         }
-
-#if METRO
-        void IPositionChangeNotify.OnPositionChanged()
-        {
-            if (ShowLabel && VertexLabelControl != null)
-                VertexLabelControl.UpdatePosition();
-            OnPositionChanged(new Point(), GetPosition());
-        }
-#endif
     }
 }

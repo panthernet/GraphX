@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Linq;
-#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-#elif METRO
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
-#endif
 using GraphX.Common.Exceptions;
 
 namespace GraphX.Controls.Animations
@@ -92,11 +85,7 @@ namespace GraphX.Controls.Animations
         /// <param name="end">End Param value</param>
         /// <param name="callback"></param>
         /// <returns></returns>
-#if WPF
         private Storyboard CreateStory(Control control, double start, double end, EventHandler callback = null)
-#elif METRO
-        private Storyboard CreateStory(Control control, double start, double end, EventHandler<object> callback = null)
-#endif
         {
             var story = new Storyboard();
             var fadeAnimation = new DoubleAnimation()
@@ -109,11 +98,7 @@ namespace GraphX.Controls.Animations
             if (callback != null) story.Completed += callback;
             story.Children.Add(fadeAnimation);
             Storyboard.SetTarget(fadeAnimation, control);
-#if WPF
             Storyboard.SetTargetProperty(fadeAnimation, new PropertyPath(UIElement.OpacityProperty));
-#elif METRO
-            Storyboard.SetTargetProperty(fadeAnimation, "Opacity");
-#endif
             return story;
         }
 

@@ -1,14 +1,7 @@
 ﻿using System;
-#if WPF
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-#elif METRO
-using Windows.Foundation;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-#endif
 
 namespace GraphX.Controls.Animations
 {
@@ -45,28 +38,10 @@ namespace GraphX.Controls.Animations
                 target.RenderTransformOrigin = CenterScale ? new Point(.5, .5) : new Point(0, 0);
             }
 
-#if WPF
             var scaleAnimation =new DoubleAnimation(1, ScaleTo, new Duration(TimeSpan.FromSeconds(Duration)));
             Timeline.SetDesiredFrameRate(scaleAnimation, 30);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
-#elif METRO
-            var sb = new Storyboard();
-            var scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
-            scaleAnimation.SetDesiredFrameRate(30);
-            Storyboard.SetTarget(scaleAnimation, target);
-            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
-            sb.Children.Add(scaleAnimation);
-            scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = 1, To = ScaleTo };
-            scaleAnimation.SetDesiredFrameRate(30);
-            Storyboard.SetTarget(scaleAnimation, target);
-            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
-            sb.Children.Add(scaleAnimation);
-            sb.Begin();
-#else
-            throw new NotImplementedException();
-#endif
-
         }
 
         public void AnimateVertexBackward(VertexControl target)
@@ -81,27 +56,10 @@ namespace GraphX.Controls.Animations
 
             if (transform.ScaleX <= 1 || transform.ScaleY <= 1) return;
 
-#if WPF
             var scaleAnimation = new DoubleAnimation(transform.ScaleX, 1, new Duration(TimeSpan.FromSeconds(Duration)));
             Timeline.SetDesiredFrameRate(scaleAnimation, 30);
             transform.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             transform.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
-#elif METRO
-            var sb = new Storyboard();
-            var scaleAnimation = new DoubleAnimation{ Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
-            scaleAnimation.SetDesiredFrameRate(30);
-            Storyboard.SetTarget(scaleAnimation, target);
-            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleX)");
-            sb.Children.Add(scaleAnimation);
-            scaleAnimation = new DoubleAnimation { Duration = new Duration(TimeSpan.FromSeconds(Duration)), From = transform.ScaleX, To = 1 };
-            scaleAnimation.SetDesiredFrameRate(30);
-            Storyboard.SetTarget(scaleAnimation, target);
-            Storyboard.SetTargetProperty(scaleAnimation, "(UIElement.RenderTransform).(CompositeTransform.ScaleY)");
-            sb.Children.Add(scaleAnimation);
-            sb.Begin();
-#else
-            throw new NotImplementedException();
-#endif
         }
 
         public void AnimateEdgeForward(EdgeControl target)

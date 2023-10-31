@@ -45,7 +45,6 @@ namespace GraphX.Controls.Models
         } }
         private bool _mousedblclick = true;
 
-#if WPF
         /// <summary>
         /// Gets or sets if position trace enabled. If enabled then PositionChanged event will be rised on each X or Y property change.
         /// True by default. 
@@ -64,7 +63,6 @@ namespace GraphX.Controls.Models
             } 
         }
         private bool _poschange = true;
-#endif
 
         private VertexControl _vc;
 

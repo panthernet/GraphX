@@ -1,20 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.ComponentModel;
-#elif METRO
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.Foundation;
-using MouseButtonEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
-using MouseEventArgs = Windows.UI.Xaml.Input.PointerRoutedEventArgs;
-using Windows.ApplicationModel;
-#endif
 using GraphX.Common.Enums;
 using GraphX.Common.Interfaces;
 using GraphX.Controls;
@@ -58,7 +48,6 @@ namespace GraphX
 
         public static readonly DependencyProperty XProperty =
             DependencyProperty.RegisterAttached("X", typeof (double), typeof (GraphAreaBase),
-#if WPF
                                                  new FrameworkPropertyMetadata(double.NaN,
                                                                                 FrameworkPropertyMetadataOptions.AffectsMeasure |
                                                                                 FrameworkPropertyMetadataOptions.AffectsArrange |
@@ -66,9 +55,6 @@ namespace GraphX
                                                                                 FrameworkPropertyMetadataOptions.AffectsParentMeasure |
                                                                                 FrameworkPropertyMetadataOptions.AffectsParentArrange |
                                                                                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, x_changed));
-#elif METRO
-                                                 new PropertyMetadata(double.NaN, x_changed));
-#endif
 
         private static void x_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -86,7 +72,6 @@ namespace GraphX
 
         public static readonly DependencyProperty YProperty =
             DependencyProperty.RegisterAttached("Y", typeof(double), typeof(GraphAreaBase),
-#if WPF
                                                  new FrameworkPropertyMetadata(double.NaN,
                                                    FrameworkPropertyMetadataOptions.AffectsMeasure |
                                                    FrameworkPropertyMetadataOptions.AffectsArrange |
@@ -95,9 +80,6 @@ namespace GraphX
                                                    FrameworkPropertyMetadataOptions.AffectsParentArrange |
                                                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault
                                                    , y_changed));
-#elif METRO
-                                                 new PropertyMetadata(double.NaN, y_changed));
-#endif
 
         private static void y_changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -106,11 +88,7 @@ namespace GraphX
 
         public static double GetX(DependencyObject obj)
         {
-#if WPF
             return (double)obj.GetValue(XProperty);
-#elif METRO
-            return (double)obj.GetValue(LeftProperty);
-#endif
         }
 
         public static void SetX(DependencyObject obj, double value, bool alsoSetFinal = true)
@@ -122,11 +100,7 @@ namespace GraphX
 
         public static double GetY(DependencyObject obj)
         {
-#if WPF
             return (double)obj.GetValue(YProperty);
-#elif METRO
-            return (double)obj.GetValue(TopProperty);
-#endif
         }
 
         public static void SetY(DependencyObject obj, double value, bool alsoSetFinal = false)
@@ -271,18 +245,10 @@ namespace GraphX
         /// </summary>
         public event VertexSelectedEventHandler VertexDoubleClick;
 
-#if WPF
         internal virtual void OnVertexDoubleClick(VertexControl vc, MouseButtonEventArgs e)
         {
             VertexDoubleClick?.Invoke(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
         }
-#elif METRO
-        internal virtual void OnVertexDoubleClick(VertexControl vc, PointerRoutedEventArgs e)
-        {
-            if (VertexDoubleClick != null)
-                VertexDoubleClick(this, new VertexSelectedEventArgs(vc, e));
-        }
-#endif
 
         /// <summary>
         /// Fires when vertex is selected
@@ -291,15 +257,9 @@ namespace GraphX
 
         internal virtual void OnVertexSelected(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            VertexSelected?.Invoke(this, new VertexSelectedEventArgs(vc, e
-#if WPF
-                , keys));
-#elif METRO
-                    ));
-#endif
+            VertexSelected?.Invoke(this, new VertexSelectedEventArgs(vc, e, keys));
         }
 
-#if WPF
         /// <summary>
         /// Fires when vertex is clicked
         /// </summary>
@@ -307,10 +267,8 @@ namespace GraphX
 
         internal virtual void OnVertexClicked(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            VertexClicked?.Invoke(this, new VertexClickedEventArgs(vc, e
-                , keys));
+            VertexClicked?.Invoke(this, new VertexClickedEventArgs(vc, e, keys));
         }
-#endif
 
         /// <summary>
         /// Fires when mouse up on vertex
@@ -319,12 +277,7 @@ namespace GraphX
 
         internal virtual void OnVertexMouseUp(VertexControl vc, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            VertexMouseUp?.Invoke(this, new VertexSelectedEventArgs(vc, e
-#if WPF
-                , keys));
-#elif METRO
-                    ));
-#endif
+            VertexMouseUp?.Invoke(this, new VertexSelectedEventArgs(vc, e, keys));
         }
 
         /// <summary>
@@ -334,12 +287,7 @@ namespace GraphX
 
         internal virtual void OnVertexMouseEnter(VertexControl vc, MouseEventArgs e)
         {
-            VertexMouseEnter?.Invoke(this, new VertexSelectedEventArgs(vc, e
-#if WPF
-                , Keyboard.Modifiers));
-#elif METRO
-                    ));
-#endif
+            VertexMouseEnter?.Invoke(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
             MouseOverAnimation?.AnimateVertexForward(vc);
         }
 
@@ -360,12 +308,7 @@ namespace GraphX
 
         internal virtual void OnVertexMouseLeave(VertexControl vc, MouseEventArgs e)
         {
-            VertexMouseLeave?.Invoke(this, new VertexSelectedEventArgs(vc, e
-#if WPF
-                , Keyboard.Modifiers));
-#elif METRO
-));
-#endif
+            VertexMouseLeave?.Invoke(this, new VertexSelectedEventArgs(vc, e, Keyboard.Modifiers));
             MouseOverAnimation?.AnimateVertexBackward(vc);
         }
 
@@ -426,15 +369,9 @@ namespace GraphX
 
         internal virtual void OnEdgeSelected(EdgeControl ec, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e
-#if WPF
-                , keys));
-#elif METRO
-                    ));
-#endif
+            EdgeSelected?.Invoke(this, new EdgeSelectedEventArgs(ec, e, keys));
         }
 
-#if WPF
         /// <summary>
         /// Fires when edge is clicked
         /// </summary>
@@ -445,51 +382,30 @@ namespace GraphX
             EdgeClicked?.Invoke(this, new EdgeClickedEventArgs(ec, e
                 , keys));
         }
-#endif
 
         public event EdgeSelectedEventHandler EdgeDoubleClick;
         internal void OnEdgeDoubleClick(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            EdgeDoubleClick?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
-#if WPF
-                , keys));
-#elif METRO
-                    ));
-#endif
+            EdgeDoubleClick?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
         public event EdgeSelectedEventHandler EdgeMouseMove;
         internal void OnEdgeMouseMove(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            EdgeMouseMove?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
-#if WPF
-                , keys));
-#elif METRO
-));
-#endif
+            EdgeMouseMove?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
         }
 
         public event EdgeSelectedEventHandler EdgeMouseEnter;
         internal void OnEdgeMouseEnter(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            EdgeMouseEnter?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
-#if WPF
-                , keys));
-#elif METRO
-));
-#endif
+            EdgeMouseEnter?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             MouseOverAnimation?.AnimateEdgeForward(edgeControl);
         }
 
         public event EdgeSelectedEventHandler EdgeMouseLeave;
         internal void OnEdgeMouseLeave(EdgeControl edgeControl, MouseButtonEventArgs e, ModifierKeys keys)
         {
-            EdgeMouseLeave?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e
-#if WPF
-                , keys));
-#elif METRO
-));
-#endif
+            EdgeMouseLeave?.Invoke(this, new EdgeSelectedEventArgs(edgeControl, e, keys));
             MouseOverAnimation?.AnimateEdgeBackward(edgeControl);
         }
 
@@ -513,12 +429,7 @@ namespace GraphX
 
         public abstract VertexControl GetVertexControlAt(Point position);
 
-#if WPF
         public abstract void RelayoutGraph(bool generateAllEdges = false);
-#else
-        public abstract Task RelayoutGraphAsync(bool generateAllEdges = false);
-
-#endif
 
         // INTERNAL VARIABLES FOR CONTROLS INTEROPERABILITY
         internal abstract bool IsEdgeRoutingEnabled { get; }
@@ -618,9 +529,6 @@ namespace GraphX
                         x = 0;
                         y = 0;
                     }
-#if METRO
-                    else continue;
-#endif
                     if (COUNT_ROUTE_PATHS && ec != null)
                     {
                         var routingInfo = ec.Edge as IRoutingInfo;
@@ -646,12 +554,8 @@ namespace GraphX
 
                 child.Arrange(new Rect(x, y, child.DesiredSize.Width, child.DesiredSize.Height));
             }
-#if WPF
 
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : (IsInPrintMode ? ContentSize.Size : new Size(10, 10));
-#elif METRO
-            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
-#endif
         }
 
         /// <summary>
@@ -666,11 +570,7 @@ namespace GraphX
             _topLeft = new Point(double.PositiveInfinity, double.PositiveInfinity);
             _bottomRight = new Point(double.NegativeInfinity, double.NegativeInfinity);
 
-#if WPF
             foreach (UIElement child in InternalChildren)
-#elif METRO
-            foreach (UIElement child in Children)
-#endif
             {
                 //measure the child
                 child.Measure(constraint);
@@ -720,11 +620,7 @@ namespace GraphX
             var newSize = ContentSize;
             if (oldSize != newSize)
                 OnContentSizeChanged(oldSize, newSize);
-#if WPF
             return DesignerProperties.GetIsInDesignMode(this) ? DesignSize : (IsInPrintMode ? ContentSize.Size : new Size(10, 10));
-#elif METRO
-            return DesignMode.DesignModeEnabled ? DesignSize : new Size(10, 10);
-#endif
         }
         #endregion
 

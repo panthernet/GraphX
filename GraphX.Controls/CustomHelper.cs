@@ -1,18 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-
-#if WPF
-
 using System.Windows;
 using System.Windows.Media;
 using System.ComponentModel;
-
-#elif METRO
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
-using Windows.ApplicationModel;
-using Windows.Foundation;
-#endif
 
 namespace GraphX.Controls
 {
@@ -31,16 +21,12 @@ namespace GraphX.Controls
         public static ScaleTransform GetScaleTransform(FrameworkElement target)
         {
             var transform = target.RenderTransform as ScaleTransform;
-#if WPF
             if (transform != null) return transform;
             var transformGroup = target.LayoutTransform as TransformGroup;
             if (transformGroup != null)
                 transform = transformGroup.Children[0] as ScaleTransform;
             if (transformGroup == null || transform == null)
                 transform = target.LayoutTransform as ScaleTransform;
-#elif METRO
-            //TODO COMMENTED IN METRO!!! ?
-#endif
             return transform;
         }
 
@@ -64,11 +50,7 @@ namespace GraphX.Controls
 
         public static bool IsInDesignMode(DependencyObject ctrl = null)
         {
-#if WPF
             return ctrl != null && DesignerProperties.GetIsInDesignMode(ctrl);
-#elif METRO
-            return DesignMode.DesignModeEnabled;
-#endif
         }
     }
 }

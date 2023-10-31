@@ -7,24 +7,11 @@ using GraphX.Common.Exceptions;
 using GraphX.Common.Interfaces;
 using System.Windows.Input;
 using GraphX.Common;
-#if WPF
-
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using SysRect = System.Windows.Rect;
-
-#elif METRO
-using GraphX.Measure;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
-using Point = Windows.Foundation.Point;
-using SysRect = Windows.Foundation.Rect;
-using Size = Windows.Foundation.Size;
-#endif
 
 namespace GraphX.Controls
 {
@@ -35,13 +22,6 @@ namespace GraphX.Controls
     [TemplatePart(Name = "PART_EdgePointerForTarget", Type = typeof(IEdgePointer))]
     public abstract class EdgeControlBase : Control, IGraphControl, IDisposable
     {
-#if METRO
-		void IPositionChangeNotify.OnPositionChanged()
-		{
-			//skip any actions on own position change
-		}
-#endif
-
         #region Properties & Fields
 
         /// <summary>
@@ -484,12 +464,7 @@ namespace GraphX.Controls
         {
         }
 
-#if WPF
-
         public override void OnApplyTemplate()
-#elif METRO
-		protected override void OnApplyTemplate()
-#endif
         {
             base.OnApplyTemplate();
 
@@ -693,23 +668,15 @@ namespace GraphX.Controls
             //get the size of the target
             var targetSize = new Size
             {
-#if WPF
                 Width = SystemParameters.CursorWidth,
                 Height = SystemParameters.CursorHeight
-#else
-#endif
             };
 
             //get the position center of the target
             var targetPos = new Point
             {
-#if WPF
                 X = Mouse.GetPosition(this.RootArea).X,/* + targetSize.Width * 0.5,*/
                 Y = Mouse.GetPosition(this.RootArea).Y/* + targetSize.Height * 0.5*/
-#else
-                X=0,
-                Y=0
-#endif
             };
 
             var routedEdge = this.Edge as IRoutingInfo;
@@ -729,11 +696,8 @@ namespace GraphX.Controls
             // Get the TopLeft position of the Target Vertex.
             var targetPos1 = new Point
             {
-#if WPF
                 X = Mouse.GetPosition(this.RootArea).X,
                 Y = Mouse.GetPosition(this.RootArea).Y
-#else
-#endif
             };
 
             var hasEpSource = EdgePointerForSource != null;
@@ -821,10 +785,8 @@ namespace GraphX.Controls
                     }
 
                     lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
-#if WPF
                     //freeze and create resulting geometry
                     GeometryHelper.TryFreeze(oPolyLineSegment);
-#endif
                 }
                 else
                 {
@@ -870,10 +832,8 @@ namespace GraphX.Controls
                 lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
             }
             ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
-#if WPF
             GeometryHelper.TryFreeze(lineFigure);
             GeometryHelper.TryFreeze(Linegeometry);
-#endif
             if (_updateLabelPosition)
                 EdgeLabelControls.Where(l => l.ShowLabel).ForEach(l => l.UpdatePosition());
 
@@ -1100,10 +1060,8 @@ namespace GraphX.Controls
                     }
 
                     lineFigure = GeometryHelper.GetPathFigureFromPathSegments(routePoints[0], true, true, oPolyLineSegment);
-#if WPF
                     //freeze and create resulting geometry
                     GeometryHelper.TryFreeze(oPolyLineSegment);
-#endif
                 }
                 else
                 {
@@ -1149,10 +1107,8 @@ namespace GraphX.Controls
                 lineFigure = new PathFigure { StartPoint = gEdge.ReversePath ? p2 : p1, Segments = new PathSegmentCollection { new LineSegment() { Point = gEdge.ReversePath ? p1 : p2 } }, IsClosed = false };
             }
             ((PathGeometry)Linegeometry).Figures.Add(lineFigure);
-#if WPF
             GeometryHelper.TryFreeze(lineFigure);
             GeometryHelper.TryFreeze(Linegeometry);
-#endif
             if (_updateLabelPosition && updateLabel)
                 EdgeLabelControls.Where(l => l.ShowLabel).ForEach(l => l.UpdatePosition());
         }
@@ -1192,11 +1148,7 @@ namespace GraphX.Controls
         /// <returns></returns>
         protected virtual object GetTemplatePart(string name)
         {
-#if WPF
             return Template.FindName(name, this);
-#elif METRO
-			return this.FindDescendantByName(name);
-#endif
         }
 
         public virtual IList<SysRect> GetLabelSizes()

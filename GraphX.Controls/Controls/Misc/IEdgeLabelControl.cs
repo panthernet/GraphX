@@ -1,9 +1,5 @@
 ﻿using System;
-#if WPF
 using System.Windows;
-#elif METRO
-using Windows.Foundation;
-#endif
 
 namespace GraphX.Controls
 {

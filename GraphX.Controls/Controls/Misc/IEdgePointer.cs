@@ -1,12 +1,5 @@
 ﻿using System;
-#if WPF
 using System.Windows;
-#elif METRO
-using Windows.Foundation;
-using Vector = GraphX.Measure.Vector;
-using Windows.UI.Xaml;
-#endif
-
 
 namespace GraphX.Controls
 {  

@@ -1,21 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-#if METRO
-using GraphX.Measure;
-using Point = Windows.Foundation.Point;
-using Rect = Windows.Foundation.Rect;
-using Size = Windows.Foundation.Size;
-using Windows.ApplicationModel;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media.Animation;
-#elif WPF
 using System.Windows.Media.Animation;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-#endif
 
 namespace GraphX.Controls
 {
@@ -28,46 +17,8 @@ namespace GraphX.Controls
 
         public static void SetDesiredFrameRate(this Timeline tl, int fps)
         {
-#if WPF
             Timeline.SetDesiredFrameRate(tl, fps);
-#endif
         }
-
-#if METRO
-        public static void SetCurrentValue(this FrameworkElement el, DependencyProperty p, object value)
-        {
-            el.SetValue(p, value);
-        }
-
-        public static void RotateAt(this Matrix imatrix, double angle, double centerX, double centerY)
-        {
-            angle %= 360.0;
-            var matrix = new Matrix();
-            double m12 = Math.Sin(angle * (Math.PI / 180.0));
-            double num = Math.Cos(angle * (Math.PI / 180.0));
-            double offsetX = centerX * (1.0 - num) + centerY * m12;
-            double offsetY = centerY * (1.0 - num) - centerX * m12;
-            matrix.M12 = m12;
-            matrix.OffsetX = offsetX;
-            matrix.OffsetY = offsetY;
-            //!!!!!TODO
-            //!!!imatrix *= matrix;
-            imatrix = matrix;
-        }
-
-        public static bool IsInDesignMode(this FrameworkElement el)
-        {
-            return DesignMode.DesignModeEnabled;
-        }
-
-        public static Point Offset(this Point pt, double offsetX, double offsetY)
-        {
-            pt.X += offsetX;
-            pt.Y += offsetY;
-            return pt;
-        }
-
-#elif WPF
 
         public static Point ToPoint(this Vector v)
         {
@@ -103,7 +54,6 @@ namespace GraphX.Controls
                                                .SelectMany(FindLogicalChildren<T>))
                 yield return c;
         }
-#endif
 
         public static Point ToWindows(this Measure.Point point)
         {

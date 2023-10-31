@@ -1,14 +1,8 @@
 ﻿
 using System.Linq;
-#if WPF
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-#elif METRO
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-#endif
 using GraphX.Common.Enums;
 
 namespace GraphX.Controls
@@ -79,13 +73,9 @@ namespace GraphX.Controls
         #region PropertyChanged callbacks
         private static void OnIsHighlightEnabledPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-#if WPF
             var element = obj as IInputElement;
-#elif METRO
-            var element = obj as FrameworkElement;
-#endif
             if (element == null)
-                    return;
+                return;
 
             if (e.NewValue is bool == false)
                 return;
@@ -93,34 +83,18 @@ namespace GraphX.Controls
             if ((bool)e.NewValue)
             {
                 //register the event handlers
-#if WPF
                 element.MouseEnter += element_MouseEnter;
                 element.MouseLeave += element_MouseLeave;
-#elif METRO
-                element.PointerEntered += element_MouseEnter;
-                element.PointerExited += element_MouseLeave;
-#endif
-
             }
             else
             {
                 //unregister the event handlers
-#if WPF
                 element.MouseEnter -= element_MouseEnter;
                 element.MouseLeave -= element_MouseLeave;
-#elif METRO
-                element.PointerEntered -= element_MouseEnter;
-                element.PointerExited -= element_MouseLeave;
-#endif
-
             }
         }
 
-#if WPF
         static void element_MouseLeave(object sender, MouseEventArgs e)
-#elif METRO
-        static void element_MouseLeave(object sender, PointerRoutedEventArgs e)
-#endif
         {
             if (sender is DependencyObject == false) return;
             var ctrl = sender as IGraphControl;
@@ -142,11 +116,7 @@ namespace GraphX.Controls
                 }
         }
 
-#if WPF
         static void element_MouseEnter(object sender, MouseEventArgs e)
-#elif METRO
-        static void element_MouseEnter(object sender, PointerRoutedEventArgs e)
-#endif
         {
             if(sender is DependencyObject == false) return;
             var ctrl = sender as IGraphControl;
